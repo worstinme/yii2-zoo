@@ -1,0 +1,22 @@
+{
+    "name": "worstinme/yii2-zoo",
+    "description": "Yii content construction kit",
+    "type": "yii2-extension",
+    "keywords": ["yii2"," content"," CCK"," zoo"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Evgeny Zakirov",
+            "email": "box@flyleaf.su"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+        "worstinme/yii2-uikit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "worstinme\\zoo\\": ""
+        }
+    }
+}
