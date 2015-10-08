@@ -7,5 +7,5 @@ namespace worstinme\zoo;
  */
 class Frontend extends \yii\base\Module
 {
-    public $controllerNamespace = 'worstinme\zoo\controllers';
+    public $controllerNamespace = 'worstinme\zoo\controllers\frontend';
 }
