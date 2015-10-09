@@ -24,6 +24,7 @@ class Categories extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'alias', 'app_id', 'created_at', 'updated_at'], 'required'],
+            ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
             [['type', 'parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'string'],
             [['name', 'alias'], 'string', 'max' => 255]

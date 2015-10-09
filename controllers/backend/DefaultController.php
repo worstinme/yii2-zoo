@@ -83,6 +83,48 @@ class DefaultController extends \worstinme\zoo\Controller
         ]);
     }
 
+    // save category sort
+    public function actionCategorySort() {
+        $request = Yii::$app->request;
+        if($request->isPost) {
+
+            if(($category = Categories::findOne($request->post('id'))) !== null) {
+                $category->parent_id = $request->post('parent_id');
+                $category->save();
+            }
+
+            $sort = $request->post('sort');
+
+            if(count($sort)) {
+                foreach ($sort as $key => $value) {
+                    if(($category = Categories::findOne($key)) !== null) {
+                        $category->sort = $value;
+                        $category->save();
+                    }
+                }
+            }
+
+        }
+    }
+
+    public function actionAliasCreate() {
+        $request = Yii::$app->request;
+        $alias = $request->post('alias');
+
+        if ($request->isPost && !empty($alias)) {
+            $d = [];
+            $str = explode(" ",$alias);
+            if (count($str)) {
+                foreach ($str as $s) {
+                    $d[] = $this->transliteration($s);
+                }
+            }
+            echo implode('-',$d);
+            //echo \yii\helpers\Inflector::slug($alias);
+        }
+        else echo '';
+    }
+
     public function getApplication($redirect = false) {
         
         $app = Yii::$app->request->get('app');
@@ -108,7 +150,7 @@ class DefaultController extends \worstinme\zoo\Controller
         
         $category_id = Yii::$app->request->get('category');
 
-        $category = Applications::findOne($category_id);
+        $category = Categories::findOne($category_id);
 
         if ($category === null && $redirect) {
             Yii::$app->getSession()->setFlash('warning', Yii::t('admin','Категория не существует'));
