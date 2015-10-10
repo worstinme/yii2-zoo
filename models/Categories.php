@@ -23,7 +23,7 @@ class Categories extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'alias', 'app_id', 'created_at', 'updated_at'], 'required'],
+            [['name', 'alias', 'app_id'], 'required'],
             ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
             [['type', 'parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'string'],
@@ -35,10 +35,10 @@ class Categories extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('admin', 'ID'),
-            'alias' => Yii::t('admin', 'Алиас категории'),
-            'name' => Yii::t('admin', 'Название категории'),
+            'alias' => Yii::t('admin', 'Алиас'),
+            'name' => Yii::t('admin', 'Название'),
             'type' => Yii::t('admin', 'Type'),
-            'parent_id' => Yii::t('admin', 'Родительская категория'),
+            'parent_id' => Yii::t('admin', 'Родитель'),
             'app_id' => Yii::t('admin', 'App ID'),
             'sort' => Yii::t('admin', 'Sort'),
             'state' => Yii::t('admin', 'State'),
@@ -62,4 +62,8 @@ class Categories extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Applications::className(), ['id' => 'app_id']);
     } 
+
+    public function getUrl() {
+        return yii\helpers\Url::toRoute(['/'.Yii::$app->controller->module->id.($this->type == 1 ?  '/default/update-type' : '/default/update-category'),'app'=>$this->app_id,'category'=>$this->id]);
+    }
 }

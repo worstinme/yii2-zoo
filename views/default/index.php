@@ -7,27 +7,27 @@ $this->title = Yii::t('admin','Приложения');
 
 ?>
 
-<div class="applications uk-margin-large-top">
+<div class="applications">
 
 <?php if (count($applications)): ?>
 
-	<div class="uk-grid">	
+	<div class="uk-grid">
+
 		<?php foreach ($applications as $app): ?>
-		<div class="uk-width-1-5">
+		<div class="uk-width-1-1 uk-width-medium-1-3 uk-width-large-1-4 uk-grid-margin">
 			<?=Html::a('<i class="uk-icon-cog"></i> '.$app->title,$app->url,
 								['class'=>'uk-panel uk-border-rounded uk-panel-box uk-text-center'])?>
 		</div>
 		<?php endforeach ?>	
-		<div class="uk-width-1-5">
+		<div class="uk-width-1-1 uk-width-medium-1-3 uk-width-large-1-4 uk-grid-margin">
 			<?=Html::a('<i class="uk-icon-plus"></i> '.Yii::t('admin','Создать приложение'),
 					['/'.Yii::$app->controller->module->id.'/default/update'],
 					['class'=>'uk-panel uk-panel-box uk-text-center uk-button-success uk-border-rounded'])?>
 		</div>
+		
 	</div>
 
 	<hr class="uk-margin-large-top">
-
-	<p></p>
 
 <?php else: ?>
 

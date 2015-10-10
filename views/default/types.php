@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use worstinme\uikit\ActiveForm;
 
-$this->title = Yii::t('admin','Категории');
+$this->title = Yii::t('admin','Типы материалов');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['application','app'=>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;
@@ -12,11 +12,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="applications applications-index">
 	<div class="uk-grid">
-
 		<div class="uk-width-medium-4-5">
 
-
-			<?php $form = ActiveForm::begin(['action'=>['/'.Yii::$app->controller->module->id.'/default/update-category','app'=>$app->id],
+			<?php $form = ActiveForm::begin(['action'=>['/'.Yii::$app->controller->module->id.'/default/update-type','app'=>$app->id],
 					'id' => 'login-form','layout'=>'stacked',
 					'field_width'=>'large']); ?>
 			                    
@@ -38,12 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			<hr>
 			
-			<?php if (count($app->parentCategories)): ?>
+			<?php if (count($app->parentTypes)): ?>
 			
 				<?= $this->render('_categories', [
-			        'categories' => $app->parentCategories,
+			        'categories' => $app->parentTypes,
 			        'parent_id'=> 0,
 			    ]) ?>
+			
 			
 			<?php endif ?>
 			

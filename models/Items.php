@@ -18,9 +18,8 @@ use Yii;
  */
 class Items extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    private $fields;
+
     public static function tableName()
     {
         return '{{%zoo_items}}';
@@ -53,5 +52,29 @@ class Items extends \yii\db\ActiveRecord
             'updated_at' => Yii::t('admin', 'Updated At'),
             'params' => Yii::t('admin', 'Params'),
         ];
+    }
+
+    /**
+     * @inheritdoc
+     * @return ItemsQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new ItemsQuery(get_called_class());
+    }
+
+    public function getFields() {
+        if(!count($this->fields)) {
+            $this->fields = Fields::find()
+                    ->leftJoin('{{@zoo_fields_categories}}','{{@zoo_fields_categories}}.field_id = id')
+                    ->where(['{{@zoo_fields_categories}}.category_id'=>array_push($this->categories,0)])
+                    ->indexBy("id")
+                    ->all();
+        }        
+        return $this->fields;
+    }
+
+    public function getElements() {
+        return $this->hasMany(ItemFields::className(), ['item_id' => 'id']);
     }
 }

@@ -3,14 +3,19 @@
 namespace worstinme\zoo;
 
 use Yii;
-
 class Backend extends \yii\base\Module
 {
     public $controllerNamespace = 'worstinme\zoo\controllers\backend';
     public $moduleViewPath = null;
     public $moduleDefaultViewPath = '@worstinme/zoo/views';
 
-
+    public $itemTemplates = [
+    	'form',
+    	'full',
+    	'teaser',
+    	'related',
+    ];
+    
     public function init()
     {
         parent::init();
@@ -26,6 +31,8 @@ class Backend extends \yii\base\Module
 	        'basePath' => '@worstinme/zoo/messages',
 	    ];
 	}
+
+	
 
 	public static function t($category, $message, $params = [], $language = null)
 	{

@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $app->title;
 	<div class="uk-width-medium-4-5">
 
 		<div class="uk-panel uk-panel-box">
-		тыц тыц
+		<p>TODO: Список материалов</p>
 		</div>
 
 	</div>

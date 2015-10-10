@@ -10,10 +10,16 @@ use yii\web\BadRequestHttpException;
 use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use worstinme\zoo\models\Applications;
+use yii\helpers\FileHelper;
 use Yii;
 
 class Controller extends \yii\web\Controller
 {
+
+    private $modelFields;
+    private $fields;
+
 	public function render($view, $params = [])
     {
     	$view = $this->findView($view);
@@ -35,6 +41,53 @@ class Controller extends \yii\web\Controller
     	
     	return $this->module->moduleDefaultViewPath.DIRECTORY_SEPARATOR.$this->id.DIRECTORY_SEPARATOR.$view;
     }	
+
+
+    public function getApplication($redirect = false) {
+        
+        $app = Yii::$app->request->get('app');
+
+        $application = Applications::findOne($app);
+
+        if ($application === null) {
+            $application = Applications::find()->where(['name'=>$app])->one();
+        }
+
+        if ($application === null && $redirect) {
+            Yii::$app->getSession()->setFlash('warning', Yii::t('admin','Приложение не существует'));
+            return $this->redirect(['/'.$this->module->id.'/default/index']);
+        }
+        elseif($application === null) {
+            return new Applications;
+        }
+
+        return $application;
+    }
+
+    public function getApp() {
+        return $this->application;
+    }
+
+    public function getModelFields() {
+        
+        if (!count($this->modelFields)) {
+            
+            $fields = FileHelper::findFiles(Yii::getAlias('@worstinme/zoo/fields'),['except'=>['_*.php']]);
+
+            $models = [];
+
+            foreach ($fields as $key => $value) {
+                $fileName = basename($value, ".php");
+                $className = '\worstinme\zoo\fields\\'.strtolower($fileName).'\\'.$fileName;
+                $models[$fileName] = new $className();
+            }
+
+            $this->modelFields = $models;
+        }
+
+        return $this->modelFields;
+    }
+
 
 
     public static function transliteration($str)

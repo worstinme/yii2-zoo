@@ -6,13 +6,17 @@
  */
 namespace worstinme\zoo\controllers\backend;
 
+use worstinme\zoo\models\Applications;
+use worstinme\zoo\models\ItemsSearch;
+use worstinme\zoo\models\Categories;
+use worstinme\zoo\models\Fields;
+use worstinme\zoo\models\Items;
+
 use yii\web\BadRequestHttpException;
 use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use Yii;
-use worstinme\zoo\models\Applications;
-use worstinme\zoo\models\Categories;
 
 class DefaultController extends \worstinme\zoo\Controller
 {
@@ -28,27 +32,14 @@ class DefaultController extends \worstinme\zoo\Controller
             ]);
     }
 
+    // список приложений
+
     public function actionApplication() {
-        
         $app = $this->getApplication(true);
-
-        return $this->render('application', [
-            'app' => $app,
-        ]);
+        return $this->redirect(['/'.$this->module->id.'/items/index','app'=>$app->id]);
     }
 
-    public function actionCategories() {
-        
-        $app = $this->getApplication(true);
-
-        $model = new Categories;
-
-        return $this->render('categories', [
-            'app' => $app,
-            'model'=> $model,
-        ]);
-        
-    }
+    // редактирование/создание приложения
 
     public function actionUpdate()
     {
@@ -64,6 +55,37 @@ class DefaultController extends \worstinme\zoo\Controller
         }
     }
 
+    // список категорий
+
+    public function actionCategories() {
+        
+        $app = $this->getApplication(true);
+
+        $model = new Categories;
+
+        return $this->render('categories', [
+            'app' => $app,
+            'model'=> $model,
+        ]);
+        
+    }
+
+    public function actionConfig() {
+        
+        $app = $this->getApplication(true);
+
+        if ($app->load(Yii::$app->request->post()) && $app->save()) {
+            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Настройки сохранены'));
+        }
+
+        return $this->render('config', [
+            'app' => $app,
+        ]);
+        
+    }
+
+    // редактирование/создание категории
+
     public function actionUpdateCategory() {
 
         $app = $this->getApplication(true);
@@ -74,10 +96,69 @@ class DefaultController extends \worstinme\zoo\Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('admin','Успешно'));
-            return $this->redirect(['categories', 'id' => $model->id]);
+            return $this->redirect(['categories','app'=>$app->id]);
         }
 
         return $this->render('updateCategory', [
+            'app' => $app,
+            'model'=> $model,
+        ]);
+    }
+
+    public function actionUpdateType() {
+
+        $app = $this->getApplication(true);
+
+        $model = $this->category;
+
+        $model->app_id = $app->id;
+        $model->parent_id = 0;
+        $model->type = 1;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Успешно'));
+        }
+
+        return $this->render('updateType', [
+            'app' => $app,
+            'model'=> $model,
+        ]);
+    }
+
+
+    public function actionFields() {
+        
+        $app = $this->getApplication(true);
+
+        return $this->render('fields', [
+            'app' => $app,
+        ]);
+
+    }
+
+    public function actionTemplates() {
+        
+        $app = $this->getApplication(true);
+
+        return $this->render('templates', [
+            'app' => $app,
+        ]);
+
+    }
+
+    // редактирование/создание категории
+
+    public function actionUpdateField() {
+
+        $app = $this->getApplication(true);
+
+        $model = $this->field;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Успешно'));
+        }
+
+        return $this->render('updateField', [
             'app' => $app,
             'model'=> $model,
         ]);
@@ -110,8 +191,10 @@ class DefaultController extends \worstinme\zoo\Controller
     public function actionAliasCreate() {
         $request = Yii::$app->request;
         $alias = $request->post('alias');
+        $nodelimiter = $request->post('nodelimiter');
 
         if ($request->isPost && !empty($alias)) {
+            
             $d = [];
             $str = explode(" ",$alias);
             if (count($str)) {
@@ -119,31 +202,18 @@ class DefaultController extends \worstinme\zoo\Controller
                     $d[] = $this->transliteration($s);
                 }
             }
-            echo implode('-',$d);
+
+            $string = implode('-',$d);
+
+            if ($nodelimiter == true) {
+                $string = str_replace("-", "", $string);
+            }
+            
+            echo $string;
+
             //echo \yii\helpers\Inflector::slug($alias);
         }
         else echo '';
-    }
-
-    public function getApplication($redirect = false) {
-        
-        $app = Yii::$app->request->get('app');
-
-        $application = Applications::findOne($app);
-
-        if ($application === null) {
-            $application = Applications::find()->where(['name'=>$app])->one();
-        }
-
-        if ($application === null && $redirect) {
-            Yii::$app->getSession()->setFlash('warning', Yii::t('admin','Приложение не существует'));
-            return $this->redirect(['index']);
-        }
-        elseif($application === null) {
-            return new Applications;
-        }
-
-        return $application;
     }
 
     public function getCategory($redirect = false) {
@@ -162,5 +232,17 @@ class DefaultController extends \worstinme\zoo\Controller
 
         return $category;
     }
+
+    public function getField() {
+
+        $field_name = Yii::$app->request->get('field_name');
+
+        $class = '\worstinme\zoo\fields\\'.strtolower($field_name).'\\'.$field_name;
+        
+        return new $class();
+
+    }
+
+
 
 }

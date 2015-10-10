@@ -28,8 +28,8 @@ class m151008_152629_zoo_migrations extends Migration
             'id' => $this->primaryKey(),            
             'name' => $this->string()->notNull(),
             'alias' => $this->string()->notNull(),
-            'type'=>$this->integer()->notNull()->defaultValue(0),
-            'parent_id' => $this->integer()->notNull()->defaultValue(0),
+            'type'=>$this->integer()->defaultValue(0),
+            'parent_id' => $this->integer()->defaultValue(0),
             'app_id' => $this->integer()->notNull(),            
             'sort' =>$this->integer()->notNull()->defaultValue(0),
             'state' => $this->smallInteger()->notNull()->defaultValue(0),
@@ -39,7 +39,8 @@ class m151008_152629_zoo_migrations extends Migration
         ], $tableOptions);
 
         $this->createTable('{{%zoo_items}}', [
-            'id' => $this->primaryKey(),      
+            'id' => $this->primaryKey(),   
+            'app_id' => $this->integer()->notNull(),   
             'user_id' => $this->integer()->notNull(),
             'flag' =>$this->integer()->notNull()->defaultValue(0),
             'sort' =>$this->integer()->notNull()->defaultValue(0),
@@ -75,6 +76,7 @@ class m151008_152629_zoo_migrations extends Migration
         $this->createTable('{{%zoo_fields_categories}}', [  
             'field_id' => $this->integer()->notNull(),
             'category_id' => $this->integer()->notNull(),
+            'app_id' => $this->integer()->notNull(),
         ], $tableOptions);
 
         $this->createTable('{{%zoo_items_categories}}', [  
@@ -85,9 +87,8 @@ class m151008_152629_zoo_migrations extends Migration
         $this->createTable('{{%zoo_items_fields}}', [  
             'item_id' => $this->integer()->notNull(),
             'field_id' => $this->integer()->notNull(),
-            'value' => $this->string(), 
+            'value' => $this->text(), 
             'variant' => $this->integer(),
-            'content' => $this->text(),
         ], $tableOptions);  
  
     }

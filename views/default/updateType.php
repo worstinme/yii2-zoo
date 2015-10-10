@@ -4,12 +4,15 @@ use worstinme\uikit\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$this->title = $model->isNewRecord ? Yii::t('admin','Создание категории') : $model->name;
+$this->title = $model->isNewRecord ? Yii::t('admin','Создание типа материала') : $model->name;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['application','app'=>$app->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Категории'), 'url' => ['categories','app'=>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;
+
+\worstinme\uikit\assets\Nestable::register($this);
+\worstinme\uikit\assets\Notify::register($this);
 
 ?>
 
@@ -17,17 +20,25 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="uk-grid">
 		
 		<div class="uk-width-medium-4-5">
+
+		<?php if (count($app->types)): ?>
+			
+			<?= $this->render('_categories', [
+			        'categories' => $app->types,
+			        'parent_id'=> 0,
+			]) ?>
+			
+		<?php endif ?>
+
+		<hr>
 		
-		<h2><?=Yii::t('admin','Создание категории')?></h2>
+		<h2><?=Yii::t('admin','Создание типа материала')?></h2>
 
 		<?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large','field_size'=>'large']); ?>
 		                    
 		    <?= $form->field($model, 'name')->textInput(["data-aliascreate"=>"#categories-alias"])  ?>
 
 		    <?= $form->field($model, 'alias')->textInput()  ?>
-
-		    <?= $form->field($model, 'parent_id')
-				    	->dropDownList($app->catlist,['prompt'=>Yii::t('admin','Корневая категория')]); ?> 
 
 		    <div class="uk-form-row uk-margin-large-top">
 		        <?= Html::submitButton($model->isNewRecord ? Yii::t('admin','Создать') : Yii::t('admin','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
