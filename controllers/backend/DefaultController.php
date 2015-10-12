@@ -146,7 +146,18 @@ class DefaultController extends \worstinme\zoo\Controller
 
     }
 
-    // редактирование/создание категории
+    public function actionTemplate() {
+        $request = Yii::$app->request;
+        $app = $this->getApplication();
+
+        if($request->isPost) {   
+            $app->setTemplate(Yii::$app->request->post('template'),Yii::$app->request->post('rows'));
+            $app->save();
+            echo 'шаблон сохранен';
+        }
+    }
+
+    // редактирование/создание полей
 
     public function actionUpdateField() {
 

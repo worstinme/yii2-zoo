@@ -32,10 +32,8 @@ class Applications extends \yii\db\ActiveRecord
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
 
-            ['types','each','rule'=>['string']],
-
             [['sort', 'state'], 'integer'],
-            [['params'], 'safe'],
+            [['params','template'], 'safe'],
         ];
     }
 
@@ -109,7 +107,7 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getTemplate($name = null) {
-        return isset($this->params[$name]) ? $this->params[$name] : null;
+        return isset($this->params[$name]) ? $this->params[$name] : [];
     }
 
     public function getFields() {

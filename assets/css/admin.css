@@ -1,0 +1,18 @@
+#rows .fieldset {
+	border:1px solid #eee;
+	padding:15px;
+}
+#rows .fieldset > .uk-nestable:empty:before {
+	content: 'Перетащите необходимые элементы в эту область';
+}
+#rows .fieldset .uk-nestable:empty {
+	border:1px dotted #eee;
+	text-align: center;
+    line-height: 30px;
+}
+#rows .fieldset+.fieldset {
+	margin-top:10px;
+}
+#rows .uk-grid-collapse input+input,#rows .uk-grid-collapse input+select {
+	border-left:none;
+}

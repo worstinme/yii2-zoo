@@ -20,7 +20,7 @@ class Backend extends \yii\base\Module
     {
         parent::init();
 
-        $this->registerTranslations();
+        $this->registerTranslations();      
     }
 
     public function registerTranslations()

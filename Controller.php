@@ -24,6 +24,8 @@ class Controller extends \yii\web\Controller
     {
     	$view = $this->findView($view);
 
+        \worstinme\zoo\AdminAssets::register($this->view);
+
     	return parent::render($view, $params);
     }
     
