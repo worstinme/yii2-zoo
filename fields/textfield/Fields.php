@@ -1,17 +1,17 @@
 <?php
 
-namespace worstinme\zoo\fields\select;
+namespace worstinme\zoo\fields\textfield;
 
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class Select extends \worstinme\zoo\models\Fields
+class Fields extends \worstinme\zoo\models\Fields
 {
-
-	public $iconClass = 'uk-icon-list';
+	public $iconClass = 'uk-icon-header';
+    public $alias = 'textfield';
 
 	public function getFieldName() {
-		return Yii::t('admin','Выбор из списка');
+		return Yii::t('admin','Строка');
 	}
 
 	public function rules()

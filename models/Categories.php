@@ -64,6 +64,6 @@ class Categories extends \yii\db\ActiveRecord
     } 
 
     public function getUrl() {
-        return yii\helpers\Url::toRoute(['/'.Yii::$app->controller->module->id.($this->type == 1 ?  '/default/update-type' : '/default/update-category'),'app'=>$this->app_id,'category'=>$this->id]);
+        return yii\helpers\Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/update-category','app'=>$this->app_id,'category'=>$this->id]);
     }
 }

@@ -28,7 +28,6 @@ class m151008_152629_zoo_migrations extends Migration
             'id' => $this->primaryKey(),            
             'name' => $this->string()->notNull(),
             'alias' => $this->string()->notNull(),
-            'type'=>$this->integer()->defaultValue(0),
             'parent_id' => $this->integer()->defaultValue(0),
             'app_id' => $this->integer()->notNull(),            
             'sort' =>$this->integer()->notNull()->defaultValue(0),
@@ -59,8 +58,7 @@ class m151008_152629_zoo_migrations extends Migration
             'required'=>$this->boolean()->notNull()->defaultValue(0),
             'filter'=>$this->boolean()->notNull()->defaultValue(0),
             'state' => $this->smallInteger()->notNull()->defaultValue(0),      
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'app_id' => $this->integer()->notNull(),
             'params' => $this->text(),
             
         ], $tableOptions);
@@ -76,7 +74,6 @@ class m151008_152629_zoo_migrations extends Migration
         $this->createTable('{{%zoo_fields_categories}}', [  
             'field_id' => $this->integer()->notNull(),
             'category_id' => $this->integer()->notNull(),
-            'app_id' => $this->integer()->notNull(),
         ], $tableOptions);
 
         $this->createTable('{{%zoo_items_categories}}', [  

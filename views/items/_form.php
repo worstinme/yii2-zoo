@@ -1,35 +1,55 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use worstinme\uikit\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model worstinme\zoo\models\Items */
-/* @var $form yii\widgets\ActiveForm */
-?>
+$template = $app->getTemplate('form');
+$fields = $model->fields;
+$expectedFields = $model->expectedFields;
 
-<div class="items-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+$form = ActiveForm::begin(['id'=>'form',
+                            'layout'=>'stacked',
+                            'enableClientValidation' => false,
+                            'options' => ['data-pjax' => true],
+                        ]);
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+if (count($template)) 
+    foreach ($template as $row) {
+        
+        $items = [];
 
-    <?= $form->field($model, 'flag')->textInput() ?>
+        if (count($row['items'])) 
+        foreach ($row['items'] as $key=>$r) {
+            foreach ($r as $k=>$d) {
+                if ($fields[$d] !== null && false) {
+                    $items[$key][] = $this->render('@worstinme/zoo/fields/'.$fields[$d]->type.'/_form.php',[
+                            'model'=>$model,
+                            'app'=>$app,
+                            'field'=>$fields[$d],
+                            'form'=>$form,
+                            'id'=>$d,
+                        ]);
+                }  
 
-    <?= $form->field($model, 'sort')->textInput() ?>
+                if(in_array($d, $expectedFields)) {
+                    $items[$key][] = '<div class="uk-form-row" data-field-place="'.$d.'"></div>';
+                }             
+            }
+        }
 
-    <?= $form->field($model, 'state')->textInput() ?>
 
-    <?= $form->field($model, 'created_at')->textInput() ?>
+        echo $this->render('rows/'.$row['type'],['name'=>$row['name'],'class'=>$row['class'],'items'=>$items]);
 
-    <?= $form->field($model, 'updated_at')->textInput() ?>
+    } ?>
 
-    <?= $form->field($model, 'params')->textarea(['rows' => 6]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('admin', 'Create') : Yii::t('admin', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <div class="uk-form-row">
+        <?=Html::submitButton('Продолжить',['class'=>'uk-button uk-button-success'])?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <hr>
+    <?php print_r(Yii::$app->request->post()); ?>
+    <hr>
+    <?php print_r($model->errors); 
 
-</div>
+    ActiveForm::end(); 

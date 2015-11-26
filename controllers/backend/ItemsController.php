@@ -8,6 +8,7 @@ use worstinme\zoo\models\ItemsSearch;
 use worstinme\zoo\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use worstinme\uikit\ActiveForm;
 
 /**
  * ItemsController implements the CRUD actions for Items model.
@@ -64,40 +65,71 @@ class ItemsController extends Controller
      */
     public function actionCreate()
     {
+        $app = $this->getApplication(true);
+        
         $model = new Items();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+        if (Yii::$app->request->post("reload") == 'true') {
 
-    public function actionForm() {
+            if ($model->load(Yii::$app->request->post()) && $model->validate() || true) {
+                $fields = Yii::$app->request->post('Field');
 
-        $app = $this->getApplication(true);
-
-        $model = new Items;
-
-        $request = Yii::$app->request;
-
-        if ($request->isPost) { 
-            if ($model->load($request->post())) {
-                $fields = $request->post('Fields');
-                foreach ($model->fields as $field) {
+                foreach ($model->fields as $key=>$field) {
                     $field->{$field->name} = $fields[$field->name];
+                    $field->reload = true;
+                    $field->validate();                    
+                }
+
+            }
+
+            $rendered_fields_ids = Yii::$app->request->post("rendered_fields_ids",[]);
+            $new_fields_ids = [];
+            $new_fields_renders = [];
+
+            if (count($model->fields)) {
+                foreach ($model->fields as $id=>$field) {                    
+                    $new_fields_ids[] = $id;
+                    if (!in_array($id, $rendered_fields_ids)) {
+                        $new_fields_renders[$id] = $this->renderAjax('@worstinme/zoo/fields/'.$field->type.'/_form.php', [
+                                'model'=>$model,
+                                'app'=>$app,
+                                'field'=>$field,
+                                'id'=>$id,
+                            ]);
+                    }
+                }
+            }
+
+            $fields_to_remove = array_diff($rendered_fields_ids, $new_fields_ids);             
+
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            
+            return [
+                'new_fields_renders' => $new_fields_renders,
+                'new_fields_ids' => $new_fields_ids,
+                'fields_to_remove'=> $fields_to_remove,
+            ];
+
+        }
+
+        if (Yii::$app->request->isPost) { 
+            if ($model->load(Yii::$app->request->post()) && $model->validate() || true) {
+                $fields = Yii::$app->request->post('Field');
+                foreach ($model->fields as $key=>$field) {
+                    $field->{$field->name} = $fields[$field->name];
+
+                        $field->reload = true;
+                    $field->validate();                    
                 }
             }
         }
-        
-        return $this->renderAjax('_form', [
-            'model' => $model,
-            'app'=>$app,
-        ]);
 
-    }
+        return $this->render('create',[
+            'app'=>$app,
+            'model'=>$model,
+        ]); 
+        
+    } 
 
     /**
      * Updates an existing Items model.

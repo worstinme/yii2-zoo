@@ -4,12 +4,28 @@ use worstinme\uikit\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$this->title = $model->isNewRecord ? Yii::t('admin','Создание элемента') : $model->name;
+$this->title = $model->isNewRecord ? Yii::t('admin','Создание элемента') : $model->title;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['application','app'=>$app->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Элементы'), 'url' => ['fields','app'=>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;
+
+$js = <<<JS
+
+	$("#fields-allcategories").on("click",function(){
+		console.log($(this).val());
+		if ($(this).is(":checked")) {
+			$('.field-fields-categories').addClass('uk-hidden')
+		}
+		else {
+			$('.field-fields-categories').removeClass('uk-hidden')
+		}
+	})
+
+JS;
+
+$this->registerJs($js, $this::POS_READY);
 
 ?>
 
@@ -18,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		
 		<div class="uk-width-medium-4-5">
 		
-		<h2><?=$this->title?>: <em><?=$model->fieldname?></em></h2>
+		<h2><?=$this->title?></h2>
 
 		<?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'full']); ?>    
 
@@ -26,9 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				<div class="uk-width-medium-2-3 uk-margin">
 
-					<?= $form->field($model, 'title')->textInput(["data-aliascreate"=>"#".$model->alias."-name"])  ?>
+					<?= $form->field($model, 'type')->dropdownlist(Yii::$app->controller->module->fields,['prompt'=>' ','disabled'=>'disabled'])?>
 
-				    <?= $form->field($model, 'name')->textInput()  ?>
+					<?= $form->field($model, 'title')->textInput(["data-aliascreate"=>"#fields-name"])  ?>
+
+				    <?= $form->field($model, 'name')->textInput(['placeholder'=>'^[\w_]+'])  ?>
 
 			    </div>
 
@@ -40,23 +58,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			    </div>
 
-			    <div class="uk-width-1-1 uk-margin">
-					
-					<?=$this->render($model->formview,[
-						'model'=>$model,
-						'form'=>$form,
-					])?>
+			    <div class="uk-width-medium-1-1 uk-margin">
 
-				</div>
+			    	<?=$this->render($model->settingsView,[
+			    			'model'=>$model,
+			    			'form'=>$form,
+			    		])?>
+
+			    </div>
+
 				<div class="uk-width-medium-2-3 uk-margin">
 
 					<legend>Зависимости:</legend>
 
-					<div class="uk-form-row uk-form-controls-text">Укажите при каких параметрах, данное поле будет появляться в формах и фильтрах.</div>
+					<?= $form->field($model, 'allcategories')->checkbox() ?>
 
-					<?= $form->field($model, 'categories')->dropdownlist(array_merge([0=>Yii::t('admin','Все категории')],$app->catlist),['multiple' => 'multiple','size'=>(count($app->catlist) > 9 ? 10 : count($app->catlist)+1)]) ?>
+					<?= $form->field($model, 'categories',['options'=>['class'=>$model->allcategories == 1?'uk-hidden':'']])->dropdownlist($app->catlist,['multiple' => 'multiple','size'=>(count($app->catlist) > 9 ? 10 : count($app->catlist)+3)]) ?>
 
-					<?= $form->field($model, 'categories')->dropdownlist($app->typelist,['multiple' => 'multiple','size'=>(count($app->typelist) > 10 ? 10 : count($app->typelist))]) ?>
+					<legend class="uk-margin-top">Данные для формы и фильтра:</legend>
 
 					<?= $form->field($model, 'placeholder')->textInput()  ?>
 				</div>
@@ -76,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		</div>
 		<div class="uk-width-medium-1-5">
-			<?=$this->render('_nav',['app'=>$app])?>
+			<?=$this->render('/_nav',['app'=>$app])?>
 		</div>
 	</div>
 </div>

@@ -130,10 +130,66 @@ class DefaultController extends \worstinme\zoo\Controller
         
         $app = $this->getApplication(true);
 
-        return $this->render('fields', [
+        return $this->render('fields/index', [
             'app' => $app,
         ]);
 
+    }
+
+    // редактирование/создание полей
+
+    public function actionCreateField() {
+
+        $app = $this->getApplication(true);
+
+        $model = new Fields;
+
+        $model->app_id = $app->id;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Элемент создан. Необходимо его настроить.'));
+            $this->redirect(['update-field','app'=>$app->id,'field'=>$model->id]);
+        }
+
+        return $this->render('fields/create', [
+            'app' => $app,
+            'model'=> $model,
+        ]);
+    }
+
+    public function actionUpdateField() {
+
+        $app = $this->getApplication(true);
+
+        if (($model = Fields::findOne(Yii::$app->request->get('field'))) === null) {
+            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Элемент не найден'));
+            $this->redirect(['fields','app'=>$app->id]);
+        }
+
+        $model->app_id = $app->id;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Настройка элемента сохранены'));
+           // $this->redirect(['fields','app'=>$app->id]);
+        }
+
+        return $this->render('fields/update', [
+            'app' => $app,
+            'model'=> $model,
+        ]);
+    }
+
+    public function actionDeleteField($field_id) {
+
+        $app = $this->getApplication(true);
+
+        if (Yii::$app->request->isPost) {
+            if (($field = Fields::findOne($field_id)) !== null) {
+                $field->delete();
+            }
+        }
+
+        return $this->redirect(['fields','app'=>$app->id]);
     }
 
     public function actionTemplates() {
@@ -155,24 +211,6 @@ class DefaultController extends \worstinme\zoo\Controller
             $app->save();
             echo 'шаблон сохранен';
         }
-    }
-
-    // редактирование/создание полей
-
-    public function actionUpdateField() {
-
-        $app = $this->getApplication(true);
-
-        $model = $this->field;
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Успешно'));
-        }
-
-        return $this->render('updateField', [
-            'app' => $app,
-            'model'=> $model,
-        ]);
     }
 
     // save category sort
@@ -246,11 +284,11 @@ class DefaultController extends \worstinme\zoo\Controller
 
     public function getField() {
 
-        $field_name = Yii::$app->request->get('field_name');
-
-        $class = '\worstinme\zoo\fields\\'.strtolower($field_name).'\\'.$field_name;
+        if (($model = Fields::findOne(Yii::$app->request->get('field_id'))) === null) {
+            $model = new Fields;
+        }
         
-        return new $class();
+        return $model;       
 
     }
 

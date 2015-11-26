@@ -48,7 +48,6 @@ class Applications extends \yii\db\ActiveRecord
             'created_at' => Yii::t('admin', 'Created At'),
             'updated_at' => Yii::t('admin', 'Updated At'),
             'params' => Yii::t('admin', 'Params'),
-            'types'=>Yii::t('admin', 'Типы материалов'),
         ];
     }
 
@@ -59,21 +58,12 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getCatlist() {
-        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0,'type'=>0])->orderBy('sort ASC')->all();
-        return $catlist = count($parents) ? $this->getRelatedList($parents,$catlist,'') : [];
-    }
-
-    public function getTypelist() {
-        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0,'type'=>1])->orderBy('sort ASC')->all();
+        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();
         return $catlist = count($parents) ? $this->getRelatedList($parents,$catlist,'') : [];
     }
 
     public function getParentCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0,'type'=>0])->orderBy('sort ASC');
-    }
-
-    public function getTypes() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0,'type'=>1])->orderBy('sort ASC'); 
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
     }
 
     public function getCategories() {
@@ -111,8 +101,7 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getFields() {
-        return $this->hasMany(Fields::className(), ['id' => 'field_id'])
-            ->viaTable('{{%zoo_fields_categories}}', ['app_id' => 'id'])->indexBy('id');
+        return $this->hasMany(Fields::className(), ['app_id' => 'id'])->indexBy('id');
     }
 
 

@@ -10,12 +10,13 @@ class Backend extends \yii\base\Module
     public $moduleDefaultViewPath = '@worstinme/zoo/views';
 
     public $itemTemplates = [
-    	'form',
-    	'full',
-    	'teaser',
-    	'related',
+        'form',
+        'user_form',
+        'full',
+        'teaser',
+        'related',
     ];
-    
+
     public function init()
     {
         parent::init();
@@ -32,6 +33,16 @@ class Backend extends \yii\base\Module
 	    ];
 	}
 
+    public function getFields() {
+
+        return [
+            'category'=>'Выбор категории',
+            'select'=>'Список вариантов',
+            'textarea'=>'Текст / Редактор',
+            'textfield'=>'Текстовое поле / Строка',
+        ];
+
+    }
 	
 
 	public static function t($category, $message, $params = [], $language = null)

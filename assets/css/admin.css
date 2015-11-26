@@ -16,3 +16,7 @@
 #rows .uk-grid-collapse input+input,#rows .uk-grid-collapse input+select {
 	border-left:none;
 }
+
+#form.update {
+	opacity: 0.1;
+}

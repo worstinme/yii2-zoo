@@ -7,22 +7,25 @@ use worstinme\uikit\GridView;
 /* @var $searchModel worstinme\zoo\models\ItemsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('admin', 'Items');
+$this->title = Yii::t('admin', 'Материалы');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
+$this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/default/application','app'=>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="items-index">
+<div class="applications items-index">
 
 <div class="uk-grid">
     
     <div class="uk-width-medium-4-5">
 
+    <hr>
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('admin', 'Create Items'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?=Html::a('<i class="uk-icon-plus"></i> '.Yii::t('admin','Создать материал'),
+                    ['/'.Yii::$app->controller->module->id.'/items/create','app'=>$app->id],
+                    ['class' => 'uk-button uk-button-success'])?>
     </p>
 
     <?= GridView::widget([
@@ -42,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <div class="uk-width-medium-1-5">
-        <?=$this->render('/default/_nav',['app'=>$app])?>
+        <?=$this->render('/_nav',['app'=>$app])?>
     </div>
 
 </div>

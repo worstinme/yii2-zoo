@@ -74,14 +74,15 @@ class Controller extends \yii\web\Controller
         
         if (!count($this->modelFields)) {
             
-            $fields = FileHelper::findFiles(Yii::getAlias('@worstinme/zoo/fields'),['except'=>['_*.php']]);
+            $fields = FileHelper::findFiles(Yii::getAlias('@worstinme/zoo/fields'),['only'=>['Fields.php']]);
 
             $models = [];
 
             foreach ($fields as $key => $value) {
-                $fileName = basename($value, ".php");
-                $className = '\worstinme\zoo\fields\\'.strtolower($fileName).'\\'.$fileName;
-                $models[$fileName] = new $className();
+                $parts = explode(DIRECTORY_SEPARATOR,$value);
+                $path = '\worstinme\zoo\fields\\'.$parts[count($parts)-2].'\Fields';
+                $class = new $path;
+                $models[$class->alias] = $class;
             }
 
             $this->modelFields = $models;

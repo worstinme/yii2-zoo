@@ -4,15 +4,15 @@ namespace worstinme\zoo\models;
 
 use Yii;
 use yii\helpers\Json;
+use yii\helpers\ArrayHelper;
 
 class Fields extends \yii\db\ActiveRecord
 {
 
-    protected $alias = null;
-    protected $params;
-    protected $categories = [];
 
-    public $iconClass = 'uk-icon-plus';
+    private $categories = [];
+
+    private $icon = 'uk-icon-plus';
 
     /**
      * @inheritdoc
@@ -23,40 +23,55 @@ class Fields extends \yii\db\ActiveRecord
         return '{{%zoo_fields}}';
     }
 
-    public function init()
-    {
-        $this->type = $this->getAlias();
-        parent::init();
-    }
-
     public function rules()
     {
-        return [
-            [['name', 'type'], 'required'],
-            ['name', 'string', 'max' => 255],
+        $rules = [
+            [['name', 'type','title'], 'required'],
+            [['name', 'type','title'], 'string', 'max' => 255],
+
             ['name', 'match', 'pattern' => '#^[\w_]+$#i'],
+            ['type', 'match', 'pattern' => '#^[\w_]+$#i'],
+
+            [['name', 'app_id'], 'unique', 'targetAttribute' => ['name', 'app_id']],
 
             ['placeholder', 'string', 'max' => 255],
 
-            ['categories','each','rule'=>['integer']],
+            ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
             ['types','each','rule'=>['number']],
 
-            [['title', 'type'], 'string', 'max' => 255],
+            [['filter', 'required', 'allcategories'], 'integer'],
 
-            [['filter', 'required'], 'integer'],
+            [['params'],'safe'],
 
         ];
+
+        if (isset($this->rules) && count($this->rules)) {
+            return ArrayHelper::merge($rules, $this->rules);
+        }
+        else {
+            return $rules;
+        }
+
+        
     }
 
     public function afterFind()
     {
         $this->params = Json::decode($this->params);
+
+        if ($this->type !== null  && is_file(Yii::getAlias('@worstinme/zoo').'/fields/'.$this->type.'/Element.php')) {
+            $element = '\worstinme\zoo\fields\\'.$this->type.'\Element';
+            $this->attachBehaviors([
+                $element::className()          // an anonymous behavior
+            ]);
+        }
+
         return parent::afterFind();
     }
 
     public function attributeLabels()
     {
-        return [
+        $labels = [
             'id' => Yii::t('admin', 'ID'),
             'title' => Yii::t('admin', 'Название поля (Label)'),
             'name' => Yii::t('admin', 'Системное название поля'),
@@ -69,15 +84,26 @@ class Fields extends \yii\db\ActiveRecord
             'params' => Yii::t('admin', 'Params'),
             'placeholder'=>Yii::t('admin', 'Placeholder'),
             'categories'=>Yii::t('admin', 'Категории'),
+            'allcategories'=>Yii::t('admin', 'Все категории'),
             'types'=>Yii::t('admin', 'Типы материалов'),
+            'type'=>Yii::t('admin', 'Тип элемента'),
         ];
+
+        if (isset($this->labels) && count($this->labels)) {
+            return ArrayHelper::merge($labels, $this->labels);
+        }
+        else {
+            return $labels;
+        }
     }
 
-    public function getAlias() {
-        if ($this->alias === null) {
-            $this->alias = strtolower(array_pop(explode('\\',$this->className())));
+    public function getIcon() {
+        if (isset($this->iconClass)) {
+            return \yii\helpers\Html::i('',['class'=>$this->iconClass]);
         }
-        return $this->alias;
+        else {
+            return \yii\helpers\Html::i('',['class'=>$this->icon]);
+        }
     }
 
     public function getFieldName() {
@@ -85,7 +111,11 @@ class Fields extends \yii\db\ActiveRecord
     }
 
     public function getFormView() {
-        return '@worstinme/zoo/fields/'.$this->alias.'/_form';
+        return '@worstinme/zoo/fields/'.$this->type.'/_form';
+    }
+
+    public function getSettingsView() {
+        return '@worstinme/zoo/fields/'.$this->type.'/_settings';
     }
 
 
@@ -98,6 +128,19 @@ class Fields extends \yii\db\ActiveRecord
     public function setPlaceholder($preview) { 
         $params = $this->params;
         $params['placeholder'] = $preview; 
+        return $this->params = $params;
+    }
+
+    //allcategories
+    public function getAllcategories()
+    {
+        return isset($this->params['allcategories'])?$this->params['allcategories']:1; 
+    }
+
+    public function setAllcategories($a)
+    {
+        $params = $this->params;
+        $params['allcategories'] = $a; 
         return $this->params = $params;
     }
 
@@ -144,18 +187,23 @@ class Fields extends \yii\db\ActiveRecord
 
         $db->createCommand()->delete('{{%zoo_fields_categories}}', ['field_id'=>$this->id])->execute();
 
-        if (count($this->categories)) {
+        $this->params = Json::decode($this->params);
+
+        if ($this->allcategories == 1) {
+            $db->createCommand()->insert('{{%zoo_fields_categories}}', [
+                    'field_id' => $this->id,
+                    'category_id' => 0,
+                ])->execute();
+        }
+        elseif (count($this->categories)) {
             foreach ($this->categories as $category) {
                 $db->createCommand()->insert('{{%zoo_fields_categories}}', [
                         'field_id' => $this->id,
                         'category_id' => (int)$category,
-                        'app_id' => Yii::$app->controller->module->app->id,
                     ])->execute();
             }    
         }
         
-        $this->params = Json::decode($this->params);
-
         return parent::afterSave($insert, $changedAttributes);
     } 
 

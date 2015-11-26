@@ -19,6 +19,8 @@ use Yii;
 class Items extends \yii\db\ActiveRecord
 {
     private $fields;
+    private $categories;
+    private $expectedFields;
 
     public static function tableName()
     {
@@ -28,12 +30,13 @@ class Items extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules() 
     {
         return [
-            [['user_id', 'created_at', 'updated_at'], 'required'],
+            [['user_id', 'created_at', 'updated_at','categories'], 'required'],
             [['user_id', 'flag', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
-            [['params'], 'string']
+            [['params'], 'string'],
+            ['categories','each','rule'=>['integer'],'message'=>'Выберите категорию'],
         ];
     }
 
@@ -65,16 +68,83 @@ class Items extends \yii\db\ActiveRecord
 
     public function getFields() {
         if(!count($this->fields)) {
-            $this->fields = Fields::find()
-                    ->leftJoin('{{@zoo_fields_categories}}','{{@zoo_fields_categories}}.field_id = id')
-                    ->where(['{{@zoo_fields_categories}}.category_id'=>array_push($this->categories,0)])
+            $categories = $this->getCategories();
+            array_push($categories, 0);
+            $this->fields = Field::find()
+                    ->leftJoin('{{%zoo_fields_categories}}','{{%zoo_fields_categories}}.field_id = id')
+                    ->where(['{{%zoo_fields_categories}}.category_id'=>$categories])
                     ->indexBy("id")
                     ->all();
         }        
         return $this->fields;
     }
 
+    public function getExpectedFields() {
+        if(!count($this->expectedFields)) {
+            $this->expectedFields = (new \yii\db\Query())
+                ->select(['id'])
+                ->from('{{%zoo_fields}}')
+                ->where(['app_id' => Yii::$app->controller->application->id])
+                ->column();
+        }
+        return $this->expectedFields;
+    }
+
     public function getElements() {
         return $this->hasMany(ItemFields::className(), ['item_id' => 'id']);
+    }
+
+     public function getCategories() {
+        if (!count($this->categories) && !$this->isNewRecord) {
+            $this->categories = (new \yii\db\Query())
+                    ->select('category_id')
+                    ->from('{{%zoo_items_categories}}')
+                    ->where(['item_id'=>$this->id])
+                    ->column();
+        }
+        if (!count($this->categories)) {
+            return [];
+        }
+        return $this->categories;
+    }
+
+    public function setCategories($array) {
+        if (count($array)) {
+            foreach ($array as $key => $value) {
+                if ($value == '' || $value == 0) {
+                    unset($array[$key]);
+                }
+            }
+        }
+        else {
+            $array = [];
+        }
+        $this->categories = $array;
+        return true;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $db = Yii::$app->db;
+        if (count($this->categories)) {
+            
+            $db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$this->id])->execute();
+
+            foreach ($this->categories as $category) {
+                $db->createCommand()->insert('{{%zoo_items_categories}}', [
+                        'item_id' => $this->id,
+                        'category_id' => (int)$category,
+                    ])->execute();
+            }    
+
+        }
+
+        return parent::afterSave($insert, $changedAttributes);
+    } 
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        Yii::$app->db->createCommand()->delete('items_categories', ['item_id'=>$this->id])->execute();
     }
 }

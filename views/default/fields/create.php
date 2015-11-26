@@ -4,15 +4,12 @@ use worstinme\uikit\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$this->title = $model->isNewRecord ? Yii::t('admin','Создание типа материала') : $model->name;
+$this->title = $model->isNewRecord ? Yii::t('admin','Создание элемента') : $model->title;
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['application','app'=>$app->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Категории'), 'url' => ['categories','app'=>$app->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Элементы'), 'url' => ['fields','app'=>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;
-
-\worstinme\uikit\assets\Nestable::register($this);
-\worstinme\uikit\assets\Notify::register($this);
 
 ?>
 
@@ -20,25 +17,24 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="uk-grid">
 		
 		<div class="uk-width-medium-4-5">
-
-		<?php if (count($app->types)): ?>
-			
-			<?= $this->render('_categories', [
-			        'categories' => $app->types,
-			        'parent_id'=> 0,
-			]) ?>
-			
-		<?php endif ?>
-
-		<hr>
 		
-		<h2><?=Yii::t('admin','Создание типа материала')?></h2>
+		<h2><?=$this->title?></h2>
 
-		<?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large','field_size'=>'large']); ?>
-		                    
-		    <?= $form->field($model, 'name')->textInput(["data-aliascreate"=>"#categories-alias"])  ?>
+		<?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'full']); ?>    
 
-		    <?= $form->field($model, 'alias')->textInput()  ?>
+			<div class="uk-grid">
+
+				<div class="uk-width-medium-2-3 uk-margin">
+
+					<?= $form->field($model, 'type')->dropdownlist(Yii::$app->controller->module->fields,['prompt'=>' '])?>
+
+					<?= $form->field($model, 'title')->textInput(["data-aliascreate"=>"#fields-name"])  ?>
+
+				    <?= $form->field($model, 'name')->textInput(['placeholder'=>'^[\w_]+'])  ?>
+
+			    </div>
+
+			</div>
 
 		    <div class="uk-form-row uk-margin-large-top">
 		        <?= Html::submitButton($model->isNewRecord ? Yii::t('admin','Создать') : Yii::t('admin','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
@@ -48,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		</div>
 		<div class="uk-width-medium-1-5">
-			<?=$this->render('_nav',['app'=>$app])?>
+			<?=$this->render('/_nav',['app'=>$app])?>
 		</div>
 	</div>
 </div>
@@ -63,7 +59,7 @@ $script = <<< JS
 
 	$("[data-aliascreate]").on('change',function(){
 		var item = $(this),aliastarget = $($(this).data('aliascreate'));
-		$.post('$alias_create_url',{alias:item.val()}, function(data) {
+		$.post('$alias_create_url',{alias:item.val(),'nodelimiter':'true'}, function(data) {
 				aliastarget.val(data);
 				aliastarget.trigger( "change" );
 		});

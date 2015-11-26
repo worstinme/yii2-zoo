@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		</div>
 		<div class="uk-width-medium-1-5">
-			<?=$this->render('_nav',['app'=>$app])?>
+			<?=$this->render('/_nav',['app'=>$app])?>
 		</div>
 	</div>
 </div>

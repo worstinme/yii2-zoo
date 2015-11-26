@@ -1,16 +1,19 @@
 <?php
 
-namespace worstinme\zoo\fields\textfield;
+namespace worstinme\zoo\fields\category;
 
 use Yii;
 use yii\helpers\ArrayHelper;
 
-class TextField extends \worstinme\zoo\models\Fields
+class Fields extends \worstinme\zoo\models\Fields
 {
-	public $iconClass = 'uk-icon-header';
+
+	public $iconClass = 'uk-icon-th-list';
+    
+    public $alias = 'category';
 
 	public function getFieldName() {
-		return Yii::t('admin','Строка');
+		return Yii::t('admin','Выбор категории');
 	}
 
 	public function rules()
