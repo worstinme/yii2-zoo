@@ -4,6 +4,7 @@ namespace worstinme\zoo\models;
 
 use Yii;
 use yii\helpers\Json;
+use yii\helpers\Html;
 
 class Field extends \yii\db\ActiveRecord
 {
@@ -26,10 +27,7 @@ class Field extends \yii\db\ActiveRecord
             $rules[] = [
                             $this->name, 'required',
                             'when' => function($model) { return $model->reload != true; }, 
-                            'whenClient' => "function (attribute, value) {
-                                console.log('чек');
-                                return $('#hidden-reload').val() != 'true';
-                            }"
+                            'whenClient' => "function (attribute, value) { if ($('#hidden-reload').val() != 'true') {console.log('Проверка поля ".$this->name."');return true; } else return false; }"
                         ];
         } 
 
@@ -84,33 +82,35 @@ class Field extends \yii\db\ActiveRecord
         else return null;        
     }
 
-    public function getLabel() {
-        $params = Json::decode($this->params);
+    public function addValidators($view) {
 
-        if (!empty($params['label_form'])) {
-            return $params['label_form'];
+        $inputID = Html::getInputId($this, $this->name);
+
+        foreach ($this->getActiveValidators($this->name) as $validator) {
+            $js = $validator->clientValidateAttribute($this, $this->name, $view); 
+            if ($js != '') {
+                if ($validator->whenClient !== null) {
+                    $js = "if (({$validator->whenClient})(attribute, value)) { $js }";
+                }
+                $validators[] = $js;
+            }   
         }
-        elseif (!empty($params['label_view'])) {
-            return $params['label_view'];
-        }
-        else {
-            return false;
-        }
+
+        $options = Json::htmlEncode([
+            'id' => $inputID,
+            'name' => $this->name,
+            'container' => ".field-".$this->id,
+            'input' => "#$inputID",
+            'validate' => new \yii\web\JsExpression("function (attribute, value, messages, deferred, \$form) {" . implode('', $validators) . '}'),
+            'validateOnChange' => true,
+            'validateOnBlur' => true,
+            'validateOnType' => false,
+            'validationDelay' => 500,
+            'encodeError' => true,
+            'error' => '.uk-form-help-block.uk-text-danger',
+        ]);
+
+        return "$('#form').yiiActiveForm('add', $options);";
     }
-
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'type' => 'Type',
-            'params' => 'Params',
-            'template' => 'Template',
-            'filter' => 'Filter',
-            'required' => 'Required',
-            'alias' => 'Alias',
-        ];
-    }
-
 
 }

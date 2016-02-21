@@ -48,26 +48,32 @@ $rows  = $app->getTemplate($at);
 							<ul class="uk-nestable" data-uk-nestable="{group:'fields',maxDepth:2}">
 								<?php foreach ($row['items'] as $items):  ?>
 									<? $item = array_shift($items); ?>
+									<?php if (array_key_exists($item, $fields)): ?>									
+									
 									<li class="uk-nestable-item" data-field-id="<?=$item?>">
 								        <div class="uk-nestable-panel">
 								            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-								            <?=$fields[$item]->name?>
+								            <?=$fields[$item]->title?>
 								            <? unset($fields[$item]); ?>
 								        </div>
 								        <?php if (count($items)): ?>
 								        <ul class="uk-nestable">
 								    	<?php foreach ($items as $key => $value):  ?>
+								    		<?php if (array_key_exists($value, $fields)): ?>	
 								    		<li class="uk-nestable-item" data-field-id="<?=$value?>">
 								    		<div class="uk-nestable-panel">
 									            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-									            <?=$fields[$value]->name?>
+									            <?=$fields[$value]->title?>
 									            <? unset($fields[$value]); ?>
 									        </div>
 								    		</li>
+								    		 <?php endif ?>
 								    	<?php endforeach ?>
 								    	</ul>
 								    	<?php endif ?>
 								    </li>
+
+								    <?php endif ?>
 
 								<?php endforeach ?>	
 							</ul>
@@ -106,10 +112,10 @@ $rows  = $app->getTemplate($at);
 					<?php if (count($fields)): ?>
 					<ul id="fields" class="uk-nestable">
 					<?php foreach ($fields as $field): ?>
-						<li class="uk-nestable-item" data-field-id="<?=$field->id?>">
+						<li class="uk-nestable-item" data-field-id="<?=$field->name?>">
 					        <div class="uk-nestable-panel">
 					            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-					            <?=$field->name?>
+					            <?=$field->title?>
 					        </div>
 					    </li>
 					<?php endforeach ?>	

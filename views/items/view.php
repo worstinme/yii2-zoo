@@ -1,42 +1,46 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\helpers\Json;
 
-/* @var $this yii\web\View */
-/* @var $model worstinme\zoo\models\Items */
-
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('admin', 'Items'), 'url' => ['index']];
+$this->title = Yii::t('admin', 'Создание материала');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/default/application','app'=>Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = $this->title;
+
+$template = Yii::$app->controller->app->getTemplate('full');
+
+
+
 ?>
-<div class="items-view">
+<div class="applications items-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="uk-grid">
+    
+    <div class="uk-width-medium-4-5">
 
-    <p>
-        <?= Html::a(Yii::t('admin', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('admin', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('admin', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+        <hr>
+    	
+    	<?php 
+    	if (count($template)) {
+		    foreach ($template as $row) {
+		        if (count($row['items'])) {
+		            echo $this->render('rows/'.$row['type'],[
+		                'row'=>$row,
+		                'model'=>$model,
+		                'view'=>'_view',
+		            ]);    
+		        }
+		    }
+		} ?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'user_id',
-            'flag',
-            'sort',
-            'state',
-            'created_at',
-            'updated_at',
-            'params:ntext',
-        ],
-    ]) ?>
+    </div>
+
+    <div class="uk-width-medium-1-5">
+        <?=$this->render('/_nav')?>
+    </div>
+
+
+</div>
 
 </div>

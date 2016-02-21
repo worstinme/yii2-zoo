@@ -4,18 +4,6 @@ namespace worstinme\zoo\models;
 
 use Yii;
 
-/**
- * This is the model class for table "{{%zoo_items}}".
- *
- * @property integer $id
- * @property integer $user_id
- * @property integer $flag
- * @property integer $sort
- * @property integer $state
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $params
- */
 class Items extends \yii\db\ActiveRecord
 {
     private $fields;
@@ -72,7 +60,7 @@ class Items extends \yii\db\ActiveRecord
             array_push($categories, 0);
             $this->fields = Field::find()
                     ->leftJoin('{{%zoo_fields_categories}}','{{%zoo_fields_categories}}.field_id = id')
-                    ->where(['{{%zoo_fields_categories}}.category_id'=>$categories])
+                    ->where(['app_id'=>Yii::$app->controller->application->id,'{{%zoo_fields_categories}}.category_id'=>$categories])
                     ->indexBy("id")
                     ->all();
         }        
@@ -91,7 +79,7 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function getElements() {
-        return $this->hasMany(ItemFields::className(), ['item_id' => 'id']);
+        return $this->hasMany(ItemsFields::className(), ['item_id' => 'id']);
     }
 
      public function getCategories() {

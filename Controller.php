@@ -19,6 +19,7 @@ class Controller extends \yii\web\Controller
 
     private $modelFields;
     private $fields;
+    private $application;
 
 	public function render($view, $params = [])
     {
@@ -67,6 +68,9 @@ class Controller extends \yii\web\Controller
     }
 
     public function getApp() {
+        if ($this->application === null) {
+            $this->application = $this->getApplication();
+        }
         return $this->application;
     }
 

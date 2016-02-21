@@ -56,6 +56,8 @@ $this->registerJs($js, $this::POS_READY);
 
 					<?= $form->field($model, 'filter')->checkbox() ?>
 
+					<?= $form->field($model, 'refresh')->checkbox() ?>
+
 			    </div>
 
 			    <div class="uk-width-medium-1-1 uk-margin">

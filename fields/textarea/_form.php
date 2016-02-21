@@ -1,28 +1,24 @@
 <?php
 
 use yii\helpers\Html;
-use yii\helpers\Json;
 
-/*if ($field->getParam('editor')) {
+$this->registerJs($model->addValidators($this,$attribute), 5);
 
-	$options = Json::htmlEncode($form->field($field, $field->name)->clientOptions);
+Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
 
-	echo "<script type=\"text/javascript\">jQuery(document).ready(function () { jQuery('#form').yiiActiveForm('add', $options);});</script>";
-
-	echo $form->field($field, $field->name)->widget(\dosamigos\ckeditor\CKEditor::className(), [
+<div class="uk-from-controls">
+    <?=\dosamigos\ckeditor\CKEditor::widget([
+        'model'=>$model,
+        'attribute'=> $attribute,
         'options' => ['rows' => '9'],
         'preset' => 'basic'
-    ])->label($field->title);
-    
-}
-else {
-	echo $form->field($field, $field->name)->textarea(['class'=>'uk-width-1-1'])->label($field->title);
-}*/ ?>
+    ])?>
+    <div class="uk-form-help-block uk-text-danger"></div>
+</div>
 
+<?//= Html::activeTextarea($field, $field->name, ['option' => $field->value]); ?>	
 
-<?= Html::activeTextarea($field, $field->name, ['option' => $field->value]); ?>	
-
-<?= \vova07\imperavi\Widget::widget([
+<?/*= \vova07\imperavi\Widget::widget([
     'selector' => '#field-opisanie',
     'settings' => [
         'lang' => 'ru',
@@ -32,4 +28,4 @@ else {
             'fullscreen'
         ]
     ]
-]);
+]); */

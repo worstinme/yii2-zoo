@@ -1,1 +1,9 @@
-view
+<?php
+
+echo $model->{$attribute};
+
+
+?>
+
+<hr>
+

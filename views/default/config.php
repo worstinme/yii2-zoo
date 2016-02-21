@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="uk-grid">
 		<div class="uk-width-medium-4-5">
 
-		
 		<h2>Типы материалов</h2>
 
 		<?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large']); ?>

@@ -17,26 +17,26 @@ use yii\helpers\Html;
         '<li class="uk-nav-divider"></li>',
 
         ['label' => '<i class="uk-icon-clipboard"></i> '.Yii::t('admin','Материалы'), 
-        	'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>$app->id],], 
+        	'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id],], 
         ['label' => '<i class="uk-icon-th-list"></i> '.Yii::t('admin','Категории'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/default/categories','app'=>$app->id],], 
+            'url' => ['/'.Yii::$app->controller->module->id.'/default/categories','app'=>Yii::$app->controller->app->id],], 
         ['label' => '<i class="uk-icon-cubes"></i> '.Yii::t('admin','Элементы'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/default/fields','app'=>$app->id],], 
+            'url' => ['/'.Yii::$app->controller->module->id.'/default/fields','app'=>Yii::$app->controller->app->id],], 
         ['label' => '<i class="uk-icon-object-group"></i> '.Yii::t('admin','Шаблоны'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/default/templates','app'=>$app->id],], 
+            'url' => ['/'.Yii::$app->controller->module->id.'/default/templates','app'=>Yii::$app->controller->app->id],], 
 
     	'<li class="uk-nav-divider"></li>',
 
         ['label' => '<i class="uk-icon-edit"></i> '.Yii::t('admin','Создать категорию'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/default/update-category','app'=>$app->id],],
+            'url' => ['/'.Yii::$app->controller->module->id.'/default/update-category','app'=>Yii::$app->controller->app->id],],
 
         ['label' => '<i class="uk-icon-plus"></i> '.Yii::t('admin','Создать материал'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/items/create','app'=>$app->id],],
+            'url' => ['/'.Yii::$app->controller->module->id.'/items/create','app'=>Yii::$app->controller->app->id],],
 
         '<li class="uk-nav-divider"></li>',
 
         ['label' => '<i class="uk-icon-cog"></i> '.Yii::t('admin','Настройки'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/default/config','app'=>$app->id],], 
+            'url' => ['/'.Yii::$app->controller->module->id.'/default/config','app'=>Yii::$app->controller->app->id],], 
 
 
     ],

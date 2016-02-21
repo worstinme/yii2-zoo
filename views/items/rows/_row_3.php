@@ -1,12 +1,13 @@
 <div class="uk-form-row row<?=$class?' '.$class:''?>">
-	<h2><?=$name?></h2>
-	<div class="uk-grid uk-grid-small">
-		<?php foreach ($items as $key => $value): ?>
-			<div class="uk-width-medium-1-3 uk-grid-margin">
-				<?php foreach ($value as $key => $v): ?>
-					<?=$v?>
-				<?php endforeach ?>
+	<?=!empty($row['name'])?'<h2>'.$row['name'].'</h2>':''?>
+	<div class="uk-grid">	
+	<?php foreach ($row['items'] as $items): ?>
+		<?php if (count($items)): ?>
+			<div class="uk-width-1-3">
+				<?php foreach ($items as $attribute)
+					echo $this->render('/item/_field',['model'=>$model,'attribute'=>$attribute, 'view'=>$view]) ?>
 			</div>
-		<?php endforeach ?>
+		<?php endif ?>
+	<?php endforeach ?>
 	</div>
 </div>

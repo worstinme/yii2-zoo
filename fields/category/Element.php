@@ -7,7 +7,5 @@ use yii\helpers\ArrayHelper;
 
 class Element extends \yii\base\Behavior
 {
-    public function getSomefield() {
-        return 'dfgdfgdfgdfg';
-    }
+
 }

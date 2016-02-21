@@ -1,15 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use worstinme\uikit\GridView; 
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel worstinme\zoo\models\ItemsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('admin', 'Материалы');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
-$this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/default/application','app'=>$app->id]];
+$this->title = Yii::t('admin', 'Items');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="applications items-index">
@@ -18,22 +16,20 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <div class="uk-width-medium-4-5">
 
-    <hr>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?=Html::a('<i class="uk-icon-plus"></i> '.Yii::t('admin','Создать материал'),
-                    ['/'.Yii::$app->controller->module->id.'/items/create','app'=>$app->id],
-                    ['class' => 'uk-button uk-button-success'])?>
-    </p>
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'state',
+
+            'id',
+            'app_id',
+            'user_id',
+            'flag',
+            'sort',
+            // 'state',
             // 'created_at',
             // 'updated_at',
             // 'params:ntext',
@@ -45,8 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <div class="uk-width-medium-1-5">
-        <?=$this->render('/_nav',['app'=>$app])?>
+        <?=$this->render('/_nav')?>
     </div>
+
 
 </div>
 

@@ -101,9 +101,12 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getFields() {
-        return $this->hasMany(Fields::className(), ['app_id' => 'id'])->indexBy('id');
+        return $this->hasMany(Fields::className(), ['app_id' => 'id'])->indexBy('name');
     }
 
+    public function getElements() {
+        return $this->hasMany(Fields::className(), ['app_id' => 'id'])->indexBy('name')->asArray();
+    }
 
     public function beforeSave($insert) {
         if (parent::beforeSave($insert)) {

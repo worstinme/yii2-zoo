@@ -9,14 +9,9 @@ use yii\helpers\ArrayHelper;
 class Fields extends \yii\db\ActiveRecord
 {
 
-
     private $categories = [];
 
     private $icon = 'uk-icon-plus';
-
-    /**
-     * @inheritdoc
-     */
 
     public static function tableName()
     {
@@ -39,7 +34,7 @@ class Fields extends \yii\db\ActiveRecord
             ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
             ['types','each','rule'=>['number']],
 
-            [['filter', 'required', 'allcategories'], 'integer'],
+            [['filter', 'required', 'allcategories','refresh'], 'integer'],
 
             [['params'],'safe'],
 
@@ -51,8 +46,6 @@ class Fields extends \yii\db\ActiveRecord
         else {
             return $rules;
         }
-
-        
     }
 
     public function afterFind()
@@ -87,6 +80,7 @@ class Fields extends \yii\db\ActiveRecord
             'allcategories'=>Yii::t('admin', 'Все категории'),
             'types'=>Yii::t('admin', 'Типы материалов'),
             'type'=>Yii::t('admin', 'Тип элемента'),
+            'refresh'=>Yii::t('admin', 'Обновлять поле?'),
         ];
 
         if (isset($this->labels) && count($this->labels)) {
@@ -118,9 +112,7 @@ class Fields extends \yii\db\ActiveRecord
         return '@worstinme/zoo/fields/'.$this->type.'/_settings';
     }
 
-
     //placeholder
-
     public function getPlaceholder() { 
         return isset($this->params['placeholder'])?$this->params['placeholder']:''; 
     }
@@ -128,6 +120,17 @@ class Fields extends \yii\db\ActiveRecord
     public function setPlaceholder($preview) { 
         $params = $this->params;
         $params['placeholder'] = $preview; 
+        return $this->params = $params;
+    }
+
+    //refresh
+    public function getRefresh() { 
+        return isset($this->params['refresh'])?$this->params['refresh']:0; 
+    }
+
+    public function setRefresh($refresh) { 
+        $params = $this->params;
+        $params['refresh'] = $refresh; 
         return $this->params = $params;
     }
 
