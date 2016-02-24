@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use worstinme\uikit\ActiveForm;
+use worstinme\zoo\models\Item;
 
 $this->title = Yii::t('admin','Настройки приложения');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['index']];
@@ -21,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			<?= $form->field($app, 'title')->textInput()  ?>
 			
-			<?= $form->field($app, 'name')->textInput()  ?>				
+			<?= $form->field($app, 'name')->textInput()  ?>	
+
+			<?= $form->field($app, 'frontpage')->dropDownList(Item::find()->where(['app_id'=>$app->id])->select(['name'])->indexBy('id')->column(),['prompt'=>Yii::t('admin','Выбрать материал')])  ?>			
 
 		<?php /*	<div class="uk-form-row">
 				<label class="uk-form-label"><?=$app->getAttributeLabel('types')?></label>
@@ -37,11 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					<?=Html::TextInput('Applications[types][]','',['class'=>'uk-form-width-large','size'=>'40'])?>
 					<a class="uk-form-help-inline add" data-add-row><i class="uk-icon-plus"></i></a>
 				</div>
-			</div>
+			</div> */ ?>
 
 			<div class="uk-form-row uk-margin-large-top">
 			    <?= Html::submitButton(Yii::t('admin','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
-			</div>  */ ?>
+			</div>  
  
 		<?php ActiveForm::end(); ?>
 			

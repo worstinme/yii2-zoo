@@ -32,7 +32,8 @@ class Applications extends \yii\db\ActiveRecord
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
 
-            [['sort', 'state'], 'integer'],
+            [['frontpage'], 'required'],
+            [['sort', 'state','frontpage'], 'integer'],
             [['params','template'], 'safe'],
         ];
     }
@@ -98,6 +99,17 @@ class Applications extends \yii\db\ActiveRecord
 
     public function getTemplate($name = null) {
         return isset($this->params[$name]) ? $this->params[$name] : [];
+    }
+
+    //frontpage
+    public function getFrontpage() { 
+        return isset($this->params['frontpage'])?$this->params['frontpage']:''; 
+    }
+
+    public function setFrontpage($preview) { 
+        $params = $this->params;
+        $params['frontpage'] = $preview; 
+        return $this->params = $params;
     }
 
     public function getFields() {

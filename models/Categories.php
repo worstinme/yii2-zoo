@@ -25,7 +25,7 @@ class Categories extends \yii\db\ActiveRecord
         return [
             [['name', 'alias', 'app_id'], 'required'],
             ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
-            [['type', 'parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
+            [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'string'],
             [['name', 'alias'], 'string', 'max' => 255]
         ];
@@ -37,7 +37,6 @@ class Categories extends \yii\db\ActiveRecord
             'id' => Yii::t('admin', 'ID'),
             'alias' => Yii::t('admin', 'Алиас'),
             'name' => Yii::t('admin', 'Название'),
-            'type' => Yii::t('admin', 'Type'),
             'parent_id' => Yii::t('admin', 'Родитель'),
             'app_id' => Yii::t('admin', 'App ID'),
             'sort' => Yii::t('admin', 'Sort'),

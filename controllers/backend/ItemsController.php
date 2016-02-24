@@ -8,12 +8,30 @@ use worstinme\zoo\models\ItemsSearch;
 use worstinme\zoo\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * ItemsController implements the CRUD actions for Items model.
  */
 class ItemsController extends Controller
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index','create','view'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $searchModel = new ItemsSearch();
@@ -25,16 +43,17 @@ class ItemsController extends Controller
         ]);
     }
 
-    public function actionCreate()
+    public function actionCreate($id = null)
     {
-        
-        $model = new Item();
-
-        $model->app_id = $this->app->id;
-
-        $model->registerElements();
-
-        $model->attachBehaviors();
+        if ($id === null) {
+            $model = new Item();
+            $model->app_id = $this->app->id;
+            $model->registerElements();
+            $model->attachBehaviors();
+        }
+        else {
+            $model = Item::findOne($id);
+        }   
 
         if (Yii::$app->request->post("reload") == 'true') {
             if ($model->load(Yii::$app->request->post()) && $model->validate() || true) {
@@ -74,7 +93,8 @@ class ItemsController extends Controller
             }
         }
         elseif ($model->load(Yii::$app->request->post()) && $model->save()) {
-        	$this->redirect(['view','id'=>$model->id]);
+            Yii::$app->getSession()->setFlash('success', Yii::t('admin','Материал сохранён'));
+        	$this->redirect(['create','id'=>$model->id,'app'=>$model->app_id]);
         }
 
         return $this->render('create',[

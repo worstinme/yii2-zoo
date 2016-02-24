@@ -1,31 +1,25 @@
 <?php
 
 use yii\helpers\Html;
+use mihaildev\elfinder\ElFinder;
+use mihaildev\ckeditor\CKEditor;
 
-$this->registerJs($model->addValidators($this,$attribute), 5);
+$this->registerJs($model->addValidators($this,$attribute), 5);  ?>
 
-Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
+<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
 
 <div class="uk-from-controls">
-    <?=\dosamigos\ckeditor\CKEditor::widget([
+    
+    <?=\mihaildev\ckeditor\CKEditor::widget([
         'model'=>$model,
-        'attribute'=> $attribute,
-        'options' => ['rows' => '9'],
-        'preset' => 'basic'
+        'attribute'=>$attribute,
+        'editorOptions' => ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
+                'preset' => 'basic',
+                'allowedContent' => true,
+                'height'=>'200px',
+        ])
     ])?>
+
     <div class="uk-form-help-block uk-text-danger"></div>
+
 </div>
-
-<?//= Html::activeTextarea($field, $field->name, ['option' => $field->value]); ?>	
-
-<?/*= \vova07\imperavi\Widget::widget([
-    'selector' => '#field-opisanie',
-    'settings' => [
-        'lang' => 'ru',
-        'minHeight' => 200,
-        'plugins' => [
-            'clips',
-            'fullscreen'
-        ]
-    ]
-]); */

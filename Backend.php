@@ -40,7 +40,9 @@ class Backend extends \yii\base\Module
             'select'=>'Список вариантов',
             'textarea'=>'Текст / Редактор',
             'textfield'=>'Текстовое поле / Строка',
-            'units'=>'Единицы измерения'
+            'units'=>'Единицы измерения',
+            'slug'=>'Alias/Slug',
+            'name'=>'Name',
         ];
 
     }

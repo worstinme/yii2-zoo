@@ -7,6 +7,8 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
 
 $parent_categories = ArrayHelper::map(Yii::$app->controller->app->parentCategories,'id','name');
 
+print_r($model->errors);
+
 ?>
 
 <?= Html::activeLabel($model, 'category',['class'=>'uk-form-label']); ?>

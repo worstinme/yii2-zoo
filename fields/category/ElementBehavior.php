@@ -13,10 +13,18 @@ class ElementBehavior extends \worstinme\zoo\fields\BaseElementBehavior
 	public function rules($attributes)
 	{
 		return [
-			[$attributes,'each','rule'=>['integer'],'message'=>'Выберите категорию'],
-			[$attributes,'required'],
+			['category','each','rule'=>['integer'],'message'=>'Выберите категорию'],
+			['category','required'],
 		];
 	}
+
+    public function attach($owner)
+    {
+        parent::attach($owner);
+        if (!$this->owner->isNewRecord) {
+            $this->owner->setElementValue('category', $this->owner->getCategories()->select('id')->column());
+        }
+    }
 
 	public function events()
 	{
@@ -39,8 +47,6 @@ class ElementBehavior extends \worstinme\zoo\fields\BaseElementBehavior
                         'category_id' => (int)$category,
                     ])->execute();
             }    
-
-            print_r($this->owner->category);
 
         }
     } 

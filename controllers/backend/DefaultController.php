@@ -20,7 +20,23 @@ use Yii;
 
 class DefaultController extends \worstinme\zoo\Controller
 {
-    
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['elfinder','index','application','config','update-category','templates','fields','categories'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
     	$model = new Applications;
@@ -54,6 +70,7 @@ class DefaultController extends \worstinme\zoo\Controller
             ]);
         }
     }
+
 
     // список категорий
 
@@ -179,13 +196,13 @@ class DefaultController extends \worstinme\zoo\Controller
         ]);
     }
 
-    public function actionDeleteField($field_id) {
+    public function actionDeleteField($field) {
 
         $app = $this->getApplication(true);
 
         if (Yii::$app->request->isPost) {
-            if (($field = Fields::findOne($field_id)) !== null) {
-                $field->delete();
+            if (($fi= Fields::findOne($field)) !== null) {
+                $fi->delete();
             }
         }
 
@@ -235,6 +252,11 @@ class DefaultController extends \worstinme\zoo\Controller
             }
 
         }
+    }
+
+    public function actionElfinder() {
+        return $this->render('elfinder', [
+        ]);
     }
 
     public function actionAliasCreate() {

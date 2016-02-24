@@ -3,10 +3,6 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $searchModel worstinme\zoo\models\ItemsSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
 $this->title = Yii::t('admin', 'Items');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -16,16 +12,23 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <div class="uk-width-medium-4-5">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-bordered'],
+        'options'=> ['class' => 'items'],
+        'layout' => '{items}{pager}',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'app_id',
+            [
+                'attribute'=>'name',
+                'label'=>'name',
+                'format' => 'html',
+                'value' => function ($model, $index, $widget) {
+                    return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id]);
+                },
+                //'headerOptions'=>['class'=>'uk-text-center'],
+                //'contentOptions'=>['class'=>'uk-text-center'],
+            ],//'contentOptions'=>['class'=>'uk-text-center'],
             'user_id',
             'flag',
             'sort',

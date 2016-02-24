@@ -6,11 +6,6 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
-//TODO:  
-// 1    активные атрибуты
-// 2    новые активные атрибуты
-// 3    снятые атрибуты
-// 4    валидаторы
 
 class Item extends \yii\db\ActiveRecord
 {
@@ -33,11 +28,10 @@ class Item extends \yii\db\ActiveRecord
      */
     public function rules() 
     {
-        
         $rules  = [
-           // [['user_id'], 'required'],
+           // ['user_id','required'],
         ];
-
+        
         $behaviors = array_unique(ArrayHelper::getColumn($this->elements,'type'));
 
         foreach ($behaviors as $behavior_name) {
@@ -89,7 +83,7 @@ class Item extends \yii\db\ActiveRecord
 
     public function __get($name)
     {
-        if (isset($this->elements[$name])) {
+        if (isset($this->elements[$name]) && !in_array($name, $this->attributes())) {
             return $this->getElementValue($name);
         } else {
             return parent::__get($name);
@@ -98,7 +92,7 @@ class Item extends \yii\db\ActiveRecord
     
     public function __set($name, $value)
     {
-        if (isset($this->elements[$name])) {
+        if (isset($this->elements[$name]) && !in_array($name, $this->attributes())) {
             $this->setElementValue($name, $value);
         } else {
             parent::__set($name, $value);
@@ -153,11 +147,21 @@ class Item extends \yii\db\ActiveRecord
 
     public function getElementParam($element,$param,$default = null)
     {
-        if (is_array($this->elements[$name]) && array_key_exists($param, $this->elements[$name])) {
-            return $this->elements[$name][$param];
+        if (is_array($this->elements[$element]) && array_key_exists($param, $this->elements[$element])) {
+            return $this->elements[$element][$param];
         }
+
+        if (is_array($this->elements[$element]) && array_key_exists('params', $this->elements[$element])) {
+            $params = \yii\helpers\Json::decode($this->elements[$element]['params']);
+        }
+
+        if (is_array($params) && array_key_exists($param, $params)) {
+            return $params[$param];
+        }
+
         return $default;
     }
+
 
     public function getRenderedElements() 
     {
@@ -230,16 +234,22 @@ class Item extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         foreach ($this->elements as $attribute => $element) {
-            if (($item = ItemsFields::find()->where(['element'=>$element])->one()) === null) {
-                $item = new ItemsFields;
-                $item->element = $attribute;
-                $item->item_id = $this->id;
+
+            if (!in_array($attribute, $this->attributes()) && $attribute != 'category') {
+
+                if (($item = ItemsFields::find()->where(['item_id'=>$this->id,'element'=>$attribute])->one()) === null) {
+                    $item = new ItemsFields;
+                    $item->element = $attribute;
+                    $item->item_id = $this->id;
+                }
+
+                $item->value_text = $element['value'];
+                $item->save();
+
             }
-            $item->value_text = $element['value'];
-            $item->save();
+
         }
 
-        print_r($this->elements);
         return parent::afterSave($insert, $changedAttributes);
     } 
 

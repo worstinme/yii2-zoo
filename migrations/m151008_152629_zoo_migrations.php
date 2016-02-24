@@ -77,15 +77,17 @@ class m151008_152629_zoo_migrations extends Migration
         ], $tableOptions);
 
         $this->createTable('{{%zoo_items_categories}}', [  
-            'field_id' => $this->integer()->notNull(),
+            'item_id' => $this->integer()->notNull(),
             'category_id' => $this->integer()->notNull(),
         ], $tableOptions);
 
         $this->createTable('{{%zoo_items_fields}}', [  
             'item_id' => $this->integer()->notNull(),
-            'field_id' => $this->integer()->notNull(),
-            'value' => $this->text(), 
-            'variant' => $this->integer(),
+            'element' => $this->string()->notNull(),   
+            'value_text' => $this->text(), 
+            'value_int' => $this->integer(),
+            'value_string' => $this->string()->notNull(),  
+            'value_float'=>$this->float(),
         ], $tableOptions);  
  
     }

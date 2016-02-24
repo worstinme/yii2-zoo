@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 use yii\helpers\Json;
 
-$this->title = Yii::t('admin', 'Создание материала');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/default/application','app'=>Yii::$app->controller->app->id]];
+$this->title = Yii::t('admin', 'Созадние пункта меню');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('admin','Настройка меню'), 'url' => ['/'.Yii::$app->controller->module->id.'/menu/index']];
 $this->params['breadcrumbs'][] = $this->title;
+
 
 ?>
 <div class="applications items-create">
