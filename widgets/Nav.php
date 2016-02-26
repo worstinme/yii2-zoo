@@ -2,7 +2,7 @@
 namespace worstinme\zoo\widgets;
 
 use Yii;
-use worstinme\zoo\models\Menu;
+use worstinme\zoo\backend\models\Menu;
 
 class Nav extends \worstinme\uikit\Nav
 {
