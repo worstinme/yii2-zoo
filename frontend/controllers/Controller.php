@@ -15,18 +15,25 @@ use yii\web\NotFoundHttpException;
 class Controller extends \yii\web\Controller
 {
 
+	public function render($view, $app, $params = [])
+    {
+    	return parent::render($this->findView($view,$app), $params);
+    }
 
-    private $application;
+    public function findView($view,$app) {
+	
+    	if ($app !== null && !empty($app->viewPath)) {
 
-    public function getApp() {
+    		$path  = '@app'.DIRECTORY_SEPARATOR.trim($app->viewPath,"/").DIRECTORY_SEPARATOR.ltrim($view, '/');
 
-        if ($this->application === null) 
-
-            if (($this->application = Applications::findOne(Yii::$app->request->get('app'))) === null)
-
-                throw new NotFoundHttpException('The requested page does not exist.');
-            
-        return $this->application;
+    		echo $path;
+    		
+        	if (is_file(Yii::getAlias($path).'.php')) {
+        		return $path;
+        	}	
+    	}
+    	
+    	return $view;
     }
 
 }

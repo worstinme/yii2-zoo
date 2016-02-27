@@ -28,6 +28,8 @@ class Applications extends \yii\db\ActiveRecord
             ['name', 'match', 'pattern' => '#^[\w_]+$#i'],
             ['name', 'unique', 'targetClass' => Applications::className(), 'message' => Yii::t('backend', 'Такое приложение уже есть')],
             ['name', 'string', 'min' => 2, 'max' => 255],
+
+            ['viewPath', 'string', 'max' => 255],
             
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
@@ -108,6 +110,17 @@ class Applications extends \yii\db\ActiveRecord
     public function setFrontpage($preview) { 
         $params = $this->params;
         $params['frontpage'] = $preview; 
+        return $this->params = $params;
+    }
+
+    //view Path
+    public function getViewPath() { 
+        return isset($this->params['viewPath'])?$this->params['viewPath']:''; 
+    }
+
+    public function setViewPath($preview) { 
+        $params = $this->params;
+        $params['viewPath'] = $preview; 
         return $this->params = $params;
     }
 

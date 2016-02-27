@@ -20,7 +20,7 @@ class DefaultController extends Controller
     		throw new NotFoundHttpException('The requested page does not exist.');
     	}
 
-        return $this->render('page',[
+        return $this->render('page',$page->app,[
         	'page'=>$page,
         ]);
     }
@@ -42,7 +42,7 @@ class DefaultController extends Controller
     		
     	}
 
-        return $this->render('application',[
+        return $this->render('application',$app, [
         	'app'=>$app,
         ]);
 

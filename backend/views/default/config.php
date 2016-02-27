@@ -24,6 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			<?= $form->field($app, 'name')->textInput()  ?>	
 
+			<?= $form->field($app, 'viewPath',['template' => '{label}<div class="uk-form-controls"><div class="uk-button uk-button-primary"><i class="uk-icon-at"></i> app</div>{input}</div>'])->textInput()  ?>	
+
 		    <?= $form->field($app, 'frontpage')->widget(\mihaildev\ckeditor\CKEditor::className(), [
 			        'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
 			            'preset' => 'standart',
@@ -34,6 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
 		                ],
 			        ]),
 			]); ?>
+
+
 
 		<?php /*	<div class="uk-form-row">
 				<label class="uk-form-label"><?=$app->getAttributeLabel('types')?></label>
