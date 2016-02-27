@@ -27,4 +27,8 @@ class Applications extends \yii\db\ActiveRecord
         $params = $this->getParam();
         return isset($params[$name]) ? $params[$name] : [];
     }
+
+    public function getUrl() {
+        return \yii\helpers\Url::toRoute(['/zoo/default/a','a'=>$this->name]);
+    }
 }
