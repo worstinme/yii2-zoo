@@ -15,11 +15,13 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <div class="uk-width-medium-4-5">
 
-        <hr>
+        <div class="uk-panel-box">
 
         <?= $this->render('_form', [
             'model' => $model,
         ]) ?>
+
+        </div>
 
 	</div>
 

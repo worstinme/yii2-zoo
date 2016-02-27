@@ -108,4 +108,18 @@ class Menu extends \yii\db\ActiveRecord
             return self::find()->select(['label'])->where(['<>','id',$this->id])->andWhere(['menu'=>$this->menu])->indexBy('id')->column();
         }
     }
+
+    public function getUrl() {
+        if ($this->type == 4) {
+            $url = \yii\helpers\Json::decode($this->url);
+        }
+        elseif ($this->type == 5) {
+            $url = $this->url;
+        }
+        elseif ($this->type == 1) {
+            if (($application = \worstinme\zoo\frontend\models\Applications::findOne($this->application_id)) !== null) {
+                return $application->url;
+            } else return '#';
+        }
+    }
 }

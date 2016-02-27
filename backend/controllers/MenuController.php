@@ -6,6 +6,7 @@ use Yii;
 
 use worstinme\zoo\backend\models\Applications;
 use worstinme\zoo\backend\models\Menu;
+use worstinme\zoo\backend\models\MenuSearch;
 
 use yii\web\NotFoundHttpException;
 
@@ -14,7 +15,13 @@ class MenuController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new MenuSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionUpdate($menu = null)

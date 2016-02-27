@@ -12,17 +12,51 @@ $this->params['breadcrumbs'][] = $this->title;
     
     <div class="uk-width-medium-4-5">
  
-    <div class="uk-panel uk-panel-box">
+    <div class="items">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?= Html::a(Yii::t('backend','Добавить пункт меню'), ['/'.Yii::$app->controller->module->id.'/menu/update'], ['class' => 'uk-button uk-button-success']); ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-bordered'],
+        'options'=> ['class' => 'items'],
+        'layout' => '{items}{pager}<hr>',
+        'pager' => ['class'=> 'app\components\LinkPager'],
+        'columns' => [
+            [
+                'attribute'=>'id',
+                'label'=>'#',
+                'headerOptions'=>['class'=>'uk-text-center','style'=>'width:20px;'],
+                'contentOptions'=>['class'=>'uk-text-center'],
+            ],
+            [
+                'attribute'=>'label',
+                'label'=>'Наименование',
+                'format' => 'html',
+                'value' => function ($model, $index, $widget) {
+                    return Html::a($model->label,['update', 'menu'=>$model->id]);
+                },
+                //'headerOptions'=>['class'=>'uk-text-center'],
+                //'contentOptions'=>['class'=>'uk-text-center'],
+            ],
+            'application_id',
+            'category_id',
+            'item_id',
+            // 'class',
+            // 'parent_id',
+            // 'sort',
+            'type',
+            'menu',
+        ],
+    ]); ?>
     
     </div>
 
     </div>
 
+    <div class="uk-width-medium-1-5">
+    <?= Html::a(Yii::t('backend','Добавить пункт меню'), ['/'.Yii::$app->controller->module->id.'/menu/update'], ['class' => 'uk-button uk-button-success']); ?>
 
+    </div>
 
 
 </div>
