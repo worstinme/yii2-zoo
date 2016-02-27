@@ -19,17 +19,12 @@ class Nav extends \worstinme\uikit\Nav
 
             foreach ($menus as $menu) {
                 
-                if ($menu->type == 4) {
-                    $url = \yii\helpers\Json::decode($menu->url);
-                }
-                elseif ($menu->type == 5) {
-                    $url = $menu->url;
-                }
+                
 
                 $items[] = [
                     'label' => $menu->label,
                     'encodeLabels'=>false,
-                    'url' => $url,
+                    'url' => $menu->getUrl(),
                 ];
 
             }
