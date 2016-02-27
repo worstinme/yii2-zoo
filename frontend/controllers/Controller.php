@@ -25,8 +25,6 @@ class Controller extends \yii\web\Controller
     	if ($app !== null && !empty($app->viewPath)) {
 
     		$path  = '@app'.DIRECTORY_SEPARATOR.trim($app->viewPath,"/").DIRECTORY_SEPARATOR.ltrim($view, '/');
-
-    		echo $path;
     		
         	if (is_file(Yii::getAlias($path).'.php')) {
         		return $path;
