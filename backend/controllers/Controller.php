@@ -24,23 +24,6 @@ class Controller extends \yii\web\Controller
     	return parent::render($view, $params);
     }
     
-    // needs to change LOGIC
-
-
-  /*  public function findView($view) {
-    	
-    	if ($this->module->moduleViewPath !== null) {
-
-    		$path  = Yii::getAlias($this->module->moduleViewPath).DIRECTORY_SEPARATOR.$this->id.DIRECTORY_SEPARATOR.ltrim($view, '/').'.php';
-    		
-        	if (is_file($path)) {
-        		return $this->module->moduleViewPath.DIRECTORY_SEPARATOR.$this->id.DIRECTORY_SEPARATOR.$view;
-        	}	
-    	}
-    	
-    	return $this->module->moduleDefaultViewPath.DIRECTORY_SEPARATOR.$this->id.DIRECTORY_SEPARATOR.$view;
-    }	*/
-
     public function getApp() {
 
         if ($this->application === null) 
