@@ -62,7 +62,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	private function checkUniqueSlug( $slug )
 	{
 
-		$condition = 'alias = :out_attribute';
+		$condition = '{{%zoo_items}}.alias = :out_attribute';
 		$params = [ ':out_attribute' => $slug ];
 		if ( !$this->owner->isNewRecord ) {
 			$condition .= ' and {{%zoo_items}}.id != :pk';
