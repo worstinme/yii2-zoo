@@ -24,7 +24,9 @@ class Elements extends \yii\db\ActiveRecord
 
     private $icon = 'uk-icon-plus';
 
-    public $multiple = false;
+    public function getMultiple() {
+        return isset($this->_multiple) ? $this->_multiple : false;
+    }
 
     public static function tableName()
     {
@@ -119,6 +121,10 @@ class Elements extends \yii\db\ActiveRecord
 
     public function getSettingsView() {
         return '@worstinme/zoo/elements/'.$this->type.'/_settings';
+    }
+
+    public function getParamsView() {
+        return '@worstinme/zoo/elements/'.$this->type.'/_params';
     }
 
     //placeholder

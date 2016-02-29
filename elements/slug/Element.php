@@ -27,6 +27,14 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 		];
 	}
 
+    public function getValue($attribute = name) {
+        return $this->owner->alias;
+    }
+
+    public function setValue($attribute,$value) {
+        return $this->owner->alias = $value;
+    }
+
     public function createSlug()
     {
        	if (empty($this->owner->alias)) {

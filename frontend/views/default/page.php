@@ -1,8 +1,14 @@
 <?php
 
-$this->title = $page->name;
+$this->title = $page->metaTitle;
 
-$template = $page->app->getTemplate('full'); ?>
+$this->registerMetaTag(['name'=>'description', 'content'=> $page->metaDescription]);
+$this->registerMetaTag(['name'=>'keywords', 'content'=> $page->metaDescription]);
+
+$template = $page->getTemplate('full'); 
+
+
+?>
 
 <div class="zoo-default-index"> 
 	

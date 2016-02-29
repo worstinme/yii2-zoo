@@ -5,7 +5,7 @@
 		<?php if (count($items)): ?>
 			<div class="uk-width-1-3">
 				<?php foreach ($items as $attribute)
-					echo $this->render('/item/_element',['model'=>$model,'attribute'=>$attribute, 'view'=>$view]) ?>
+					echo $this->render('/item/_element',['model'=>$model,'attribute'=>$attribute['name'], 'view'=>$view]) ?>
 			</div>
 		<?php endif ?>
 	<?php endforeach ?>

@@ -51,13 +51,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 [
                     'class' => 'yii\grid\ActionColumn',
+                    'template'=>'{template}',
+                    'buttons'=>[
+                      'template' => function ($url, $model) {     
+                        return Html::a('<i class="uk-icon-object-group"></i>', ['/'.Yii::$app->controller->module->id.'/default/templates','app'=>$model->app_id,'item'=>$model->id], [
+                                'title' => Yii::t('backend', 'Настроить шаблон материала'),
+                        ]);                                
+                      },
+                    ],
+                    'contentOptions'=>['class'=>'uk-text-center'],                           
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
                     'template'=>'{delete}',
                     'buttons'=>[
                       'delete' => function ($url, $model) {     
                         return Html::a('<i class="uk-icon-trash"></i>', $url, [
                                 'title' => Yii::t('backend', 'Удалить'),
                         ]);                                
-                      }
+                      },
                     ],
                     'contentOptions'=>['class'=>'uk-text-center'],                           
                 ],

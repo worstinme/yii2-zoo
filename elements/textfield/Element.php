@@ -14,4 +14,6 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 			[$attributes,'required'],
 		];
 	}
+
+	public $value_field = 'value_string';
 }

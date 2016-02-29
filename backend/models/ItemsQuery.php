@@ -14,9 +14,9 @@ class ItemsQuery extends \yii\db\ActiveQuery
        // $modelClass = $this->modelClass;
        // $tableName = $modelClass::tableName();
         $this->joinWith([
-            'itemsElements',
-            'elements',
-            'categories'
+            //'itemsElements',
+            //'elements',
+            //'categories'
         ]);
 
         parent::init();

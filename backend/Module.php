@@ -41,6 +41,8 @@ class Module extends \yii\base\Module
             'units'=>'Единицы измерения',
             'slug'=>'Alias/Slug',
             'name'=>'Name',
+            'price'=>'Price',
+            'images'=>'Images',
         ];
 
     }

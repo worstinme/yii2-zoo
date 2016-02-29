@@ -20,8 +20,16 @@ if (count($template)) {
         }
     }
 }
-
 ?>
+
+<hr>
+
+
+<?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+
+<?= $form->field($model, 'metaDescription')->textarea(['rows' => 2,'class'=>'uk-width-1-1']) ?>
+
+<?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
 
 <div class="uk-form-row">
     <?=Html::submitButton('Продолжить',['class'=>'uk-button uk-button-success'])?>

@@ -13,8 +13,8 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	public function rules($attributes)
 	{
 		return [
-			['category','each','rule'=>['integer'],'message'=>'Выберите категорию'],
-			//['category','required'],
+			['category','safe'],
+			['category','required','message'=>'Выберите категорию'],
 		];
 	}
 
@@ -22,8 +22,16 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     {
         parent::attach($owner);
         if (!$this->owner->isNewRecord) {
-            $this->owner->setElementValue('category', \yii\helpers\ArrayHelper::getColumn($this->owner->categories, 'id'));
+            $this->owner->values['category'] = \yii\helpers\ArrayHelper::getColumn($this->owner->categories, 'id');
         }
+    }
+
+    public function getValue($attribute = 'category') {
+        return $this->owner->values['category'];
+    }
+
+    public function setValue($attribute,$value) {
+        return $this->owner->values[$attribute] = $value;
     }
 
 	public function events()
@@ -37,9 +45,10 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
     public function afterSave()
     {
-        Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$this->owner->id])->execute();
         
         if (count($this->owner->category)) {
+
+            Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$this->owner->id])->execute();
             
             foreach ($this->owner->category as $category) {
                 Yii::$app->db->createCommand()->insert('{{%zoo_items_categories}}', [

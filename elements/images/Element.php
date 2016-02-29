@@ -1,6 +1,6 @@
 <?php
 
-namespace worstinme\zoo\elements\name;
+namespace worstinme\zoo\elements\images;
 
 use Yii;
 
@@ -15,4 +15,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 		];
 	}
 
+	public $multiple = true;
+
+	public $value_field = 'value_string';
 }

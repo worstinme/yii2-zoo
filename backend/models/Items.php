@@ -11,6 +11,8 @@ class Items extends \yii\db\ActiveRecord
 {
 
     private $renderedElements = [];
+    public $values = [];
+    private $elements_ = [];
 
     /**
      * @inheritdoc
@@ -48,13 +50,11 @@ class Items extends \yii\db\ActiveRecord
             ->viaTable('{{%zoo_items_categories}}',['item_id'=>'id']);
     }
 
-    public function attachBehaviors($behaviors = null) {
-
-        if ($behaviors === null) {
-            $behaviors = array_unique(ArrayHelper::getColumn($this->elements,'type'));
-        }        
-
-        foreach ($behaviors as $behavior) {
+    public function attachBehaviors() {
+        
+        $this->elements_ = array_unique(ArrayHelper::getColumn($this->elements,'type'));
+               
+        foreach ($this->elements_ as $behavior) {
             if (is_file(Yii::getAlias('@worstinme/zoo/elements/'.$behavior.'/Element.php'))) {
                 $behavior_class = '\worstinme\zoo\elements\\'.$behavior.'\Element';
                 $this->attachBehavior($behavior,$behavior_class::className());
@@ -65,10 +65,9 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function __get($name)
-    {
-        
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null) {
-            return $this->getElementValue($name);
+    { 
+        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements_[$name])) !== null) {
+            return $behavior->getValue($name);
         } else {
             return parent::__get($name);
         }
@@ -76,41 +75,36 @@ class Items extends \yii\db\ActiveRecord
     
     public function __set($name, $value)
     {
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null) {
-            $this->setElementValue($name, $value);
+        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements_[$name])) !== null) {
+            return $behavior->setValue($name,$value);
         } else {
             parent::__set($name, $value);
         }
     } 
 
+/*
+    DEPRECATED
+
     public function getElementValue($name) 
     {   
+        
+        if (isset($this->values[$name])) {
+            return $this->values[$name];
+        }
+
         $values = [];
 
-        foreach ($this->itemsElements as $element) {
-            if ($element->element == $name) {
+        foreach ($this->itemsElements as $element) 
+            if ($element->element == $name) 
                 $values[] = $element->value_text;
-            }
-        }
 
-        if (!count($values)) {
-            return $this->elements[$name]->value;
-        }
-        elseif ($this->elements[$name]->multiple === false) {
-            return $values[0];
-        }
-
-        return $values;
+        return count($values) && $this->elements[$name]->multiple === false ? $values[0] : $values;
     }
 
     public function setElementValue($name,$value) 
-    {
-       // if (is_array($this->elements[$name]) //&& array_key_exists('value', $this->elements[$name])) {
-        if (isset($this->elements[$name])) {
-            return $this->elements[$name]->value = $value;
-        }
-        return false;
-    } 
+    {   
+        return $this->values[$name] = $value;
+    }  */
 
     /**
      * @inheritdoc
@@ -119,23 +113,23 @@ class Items extends \yii\db\ActiveRecord
     {
         $rules  = [
            // ['user_id','required'],
+            [['metaDescription','metaKeywords'], 'string'],
+            [['metaTitle'], 'string', 'max' => 255],
+            [['template'], 'safe'],
         ];
-        
-        $behaviors = array_unique(ArrayHelper::getColumn($this->elements,'type'));
 
-        foreach ($behaviors as $behavior_name) {
+        foreach ($this->elements_ as $behavior_name) {
             if (($behavior = $this->getBehavior($behavior_name)) !== null) {
                 $behavior_rules = $behavior->rules($this->getElementsByType($behavior_name));
                 if (count($behavior_rules)) {
                     $rules = array_merge($rules,$behavior_rules);
                 }
-                
             }
         }
 
         return $rules;
     }
-    
+
     public function attributeLabels()
     {
         $labels = [
@@ -177,6 +171,40 @@ class Items extends \yii\db\ActiveRecord
         return $default;
     }
 
+    //metaTitle
+    public function getMetaTitle() {
+        $params = Json::decode($this->params);
+        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
+    }
+    public function setMetaTitle($s) {
+        $params = Json::decode($this->params); $params['metaTitle'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    //metaKeywords
+    public function getMetaKeywords() {
+        $params = Json::decode($this->params);
+        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
+    }
+    public function setMetaKeywords($s) {
+        $params = Json::decode($this->params); $params['metaKeywords'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    //metaDescription
+    public function getMetaDescription() {
+        $params = Json::decode($this->params);
+        return isset($params['metaDescription']) ? $params['metaDescription'] : '';
+    }
+    public function setMetaDescription($s) {
+        $params = Json::decode($this->params); $params['metaDescription'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    public function getTemplate($name) {
+        $params = Json::decode($this->params);
+        return isset($params['templates']) && isset($params['templates'][$name]) ? $params['templates'][$name] : [];
+    }
 
     public function getRenderedElements() 
     {
@@ -243,7 +271,8 @@ class Items extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        foreach ($this->elements as $attribute => $element) {
+
+        foreach ($this->values as $attribute => $value) {
 
             if (!in_array($attribute, $this->attributes()) && $attribute != 'category') {
 
@@ -253,8 +282,14 @@ class Items extends \yii\db\ActiveRecord
                     $item->item_id = $this->id;
                 }
 
-                $item->value_text = $element->value;
+                $item->value_text = $value['value_text'];
+                $item->value_int = $value['value_int'];
+                $item->value_string = $value['value_string'];
+                $item->value_float = $value['value_float'];
+
                 $item->save();
+
+                print_r($item->errors);
 
             }
 

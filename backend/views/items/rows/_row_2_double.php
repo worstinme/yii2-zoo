@@ -10,7 +10,7 @@
 			<?php endif ?>
 			
 				<?php foreach ($items as $attribute)
-					echo $this->render('/items/_element',['model'=>$model,'attribute'=>$attribute, 'view'=>$view]) ?>
+					echo $this->render('/items/_element',['model'=>$model,'attribute'=>$attribute['name'], 'view'=>$view]) ?>
 			</div>
 		<?php endif ?>
 	<?php endforeach ?>

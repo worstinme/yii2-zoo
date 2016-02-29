@@ -35,4 +35,9 @@ class Applications extends \yii\db\ActiveRecord
     public function getViewPath() { 
         return isset($this->param['viewPath'])?$this->param['viewPath']:''; 
     }
+
+    //frontpage
+    public function getFrontpage() { 
+        return isset($this->param['frontpage'])?$this->param['frontpage']:''; 
+    }
 }

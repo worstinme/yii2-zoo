@@ -192,20 +192,64 @@ class DefaultController extends Controller
         
         $app = $this->getApp();
 
+        $templates = $this->module->itemTemplates;
+
+        $elements = $app->elements;
+
+        $rows = null;
+
+        $at = Yii::$app->request->get('template');
+
+        if (($item=Items::findOne(Yii::$app->request->get('item'))) !== null && $at !== null) {
+            $rows  = $item->getTemplate($at);
+        }
+        elseif ($at !== null) {
+            $rows  = $app->getTemplate($at);
+        }
+        
         return $this->render('templates', [
             'app' => $app,
+            'elements'=>$elements,
+            'rows'=>$rows,
+            'templates'=>$templates,
+            'item'=>$item,
+            'at'=>$at,
         ]);
 
     }
 
     public function actionTemplate() {
+
         $request = Yii::$app->request;
 
         $app = $this->getApp();
 
-        if($request->isPost) {   
-            $app->setTemplate(Yii::$app->request->post('template'),Yii::$app->request->post('rows'));
-            $app->save();
+        if($request->isPost) {  
+
+            $rows = Yii::$app->request->post('rows');
+
+            $name = Yii::$app->request->post('template');
+
+            if (($item=Items::findOne(Yii::$app->request->get('item'))) !== null) {
+
+                $params = \yii\helpers\Json::decode($item->params);
+
+                foreach ($rows as $key=>$row) {
+                    if (!count($row['items'])) {
+                        unset($rows[$key]);
+                    }
+                }
+                if (is_array($params['templates']))  $params['templates'][$name] = $rows;
+                else $params['templates'] = [$name => $rows];
+
+                Yii::$app->db->createCommand()->update('{{%zoo_items}}', ['params' => \yii\helpers\Json::encode($params)], ['id'=>$item->id])->execute();
+
+            }
+            else {
+                $app->setTemplate($name,$rows);
+                $app->save();
+            }        
+
             echo 'шаблон сохранен';
         }
     }

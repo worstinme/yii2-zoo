@@ -78,7 +78,7 @@ class Menu extends \yii\db\ActiveRecord
 
     public function getItems() {
         if (in_array($this->type, [3]) && $this->category_id !== 0) {
-            $items = Items::find()->joinWith('categories')->where(['{{%zoo_categories}}.id'=>$this->category_id])->asArray()->all();
+            $items = Items::find()->select('{{%zoo_items}}.id,{{%zoo_items}}.name')->joinWith('categories')->where(['{{%zoo_categories}}.id'=>$this->category_id])->asArray()->all();
             return \yii\helpers\ArrayHelper::map($items,'id','name');
         }
         return null;
@@ -119,6 +119,11 @@ class Menu extends \yii\db\ActiveRecord
         elseif ($this->type == 1) {
             if (($application = \worstinme\zoo\frontend\models\Applications::findOne($this->application_id)) !== null) {
                 return $application->url;
+            } else return '#';
+        }
+        elseif ($this->type == 3) {
+            if (($item = \worstinme\zoo\frontend\models\Items::findOne($this->item_id)) !== null) {
+                return $item->url;
             } else return '#';
         }
     }

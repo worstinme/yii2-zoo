@@ -9,11 +9,6 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложен�
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
-$templates = Yii::$app->controller->module->itemTemplates;
-$elements = $app->elements;
-
-$at = Yii::$app->request->get('template');
-$rows  = $app->getTemplate($at);
 
 ?>
 <div class="applications applications-index">
@@ -21,12 +16,16 @@ $rows  = $app->getTemplate($at);
 		<div class="uk-width-medium-8-10">
 			<ul class="uk-subnav uk-subnav-line">
 			<?php foreach ($templates as $key => $value): ?>
-				<li class="<?=$at != $value?:'uk-active'?>"><?=Html::a($value,['templates','template'=>$value,'app'=>$app->id])?></li>	
-			<?php endforeach ?>
+				<?php if ($item !== null): ?>
+					<li class="<?=$at != $value?:'uk-active'?>"><?=Html::a($value,['templates','template'=>$value,'app'=>$app->id,'item'=>$item->id])?></li>	
+				<?php else: ?>
+					<li class="<?=$at != $value?:'uk-active'?>"><?=Html::a($value,['templates','template'=>$value,'app'=>$app->id])?></li>	
+				<?php endif ?>
+				<?php endforeach ?>
 			</ul>
 			<hr>
 			<div class="uk-grid">
-			<?php if ($at !== null): ?>
+			<?php if ($rows !== null): ?>
 				<div class="uk-width-medium-6-10">
 					<div id="rows" data-template-name="<?=$at?>">
 					<?php if (count($rows)): ?>
@@ -48,17 +47,18 @@ $rows  = $app->getTemplate($at);
 							<ul class="uk-nestable" data-uk-nestable="{group:'elements',maxDepth:2}">
 								<?php foreach ($row['items'] as $items):  ?>
 									<? $item = array_shift($items); ?>
-									<?php if (array_key_exists($item, $elements)): ?>									
+									<?php if (array_key_exists($item['name'], $elements)): ?>									
 									
-									<li class="uk-nestable-item" data-element-id="<?=$item?>">
+									<li class="uk-nestable-item" data-element-id="<?=$item['name']?>">
 								        <div class="uk-nestable-panel">
 								            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-								            <?=$elements[$item]->title?>
-								            <? unset($elements[$item]); ?>
+								            <?=$elements[$item['name']]->title?>
+								            <?=$this->render($elements[$item['name']]->paramsView,[$item['params']])?>
+								            <? unset($elements[$item['name']]); ?>
 								        </div>
 								        <?php if (count($items)): ?>
 								        <ul class="uk-nestable">
-								    	<?php foreach ($items as $key => $value):  ?>
+								    	<?php foreach ($items as $value => $pars):  ?>
 								    		<?php if (array_key_exists($value, $elements)): ?>	
 								    		<li class="uk-nestable-item" data-element-id="<?=$value?>">
 								    		<div class="uk-nestable-panel">
@@ -116,6 +116,7 @@ $rows  = $app->getTemplate($at);
 					        <div class="uk-nestable-panel">
 					            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
 					            <?=$element->title?>
+					            <?=$this->render($element->paramsView,[$element])?>
 					        </div>
 					    </li>
 					<?php endforeach ?>	
@@ -136,11 +137,28 @@ $rows  = $app->getTemplate($at);
 \worstinme\uikit\assets\Nestable::register($this);
 \worstinme\uikit\assets\Notify::register($this);
 
-$template_url = Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/template','app'=>$app->id]);
+$template_url = $item !== null ? Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/template','app'=>$app->id,'item'=>$item->id]) : Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/template','app'=>$app->id]);
 
 $script = <<< JS
 
 (function($){
+
+	$.fn.serializeObject = function()
+	{
+	    var o = {};
+	    var a = this.serializeArray();
+	    $.each(a, function() {
+	        if (o[this.name] !== undefined) {
+	            if (!o[this.name].push) {
+	                o[this.name] = [o[this.name]];
+	            }
+	            o[this.name].push(this.value || '');
+	        } else {
+	            o[this.name] = this.value || '';
+	        }
+	    });
+	    return o;
+	};
 
 	var elements = UIkit.nestable($("#elements"), { group:'elements',maxDepth:1 });
 
@@ -161,7 +179,8 @@ $script = <<< JS
 			row['items'] = [];
 			$(this).children(".uk-nestable").children("li.uk-nestable-item").each(function(indx) {
 				var item = [];
-				item.push($(this).data('element-id'));
+				item.push({'name':$(this).data('element-id'),'params':$(this).find('form').serializeObject()});
+				console.log($(this).find('form').serializeObject());
 				$(this).find('li.uk-nestable-item').each(function(ind) {
 					item.push($(this).data('element-id'));
 				});

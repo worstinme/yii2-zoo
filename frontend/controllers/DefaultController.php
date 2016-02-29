@@ -4,6 +4,7 @@ namespace worstinme\zoo\frontend\controllers;
 
 use Yii;
 use worstinme\zoo\frontend\models\Items;
+use worstinme\zoo\frontend\models\ItemsSearch;
 use worstinme\zoo\frontend\models\Applications;
 
 use yii\web\NotFoundHttpException;
@@ -42,19 +43,10 @@ class DefaultController extends Controller
     		
     	}
 
-        return $this->render('application',$app, [
-        	'app'=>$app,
-        ]);
+        return $this->application($app);
 
     }
 
-
-    public function getApplication($redirect = false) {
-        
-        
-
-        return $application;
-    }
 
     public function getApp() {
 
@@ -79,5 +71,18 @@ class DefaultController extends Controller
         }
         
         return $this->application;
+    }
+
+    public function Application($app) {
+
+        $searchModel = new ItemsSearch();
+        $searchModel->app_id = $app->id;
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('application',$app, [
+            'app'=>$app,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }
