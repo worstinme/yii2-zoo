@@ -4,6 +4,7 @@ namespace worstinme\zoo\frontend\controllers;
 
 use Yii;
 use worstinme\zoo\frontend\models\Items;
+use worstinme\zoo\frontend\models\Categories;
 use worstinme\zoo\frontend\models\ItemsSearch;
 use worstinme\zoo\frontend\models\Applications;
 
@@ -16,35 +17,51 @@ class DefaultController extends Controller
 
     public function actionFrontpage($page_id)
     {
-
-    	if (($page = Items::findOne($page_id)) === null) {
-    		throw new NotFoundHttpException('The requested page does not exist.');
-    	}
-
-        return $this->render('page',$page->app,[
-        	'page'=>$page,
-        ]);
+    	if (($model = Items::findOne($page_id)) !== null) {
+            return $this->renderItem($model);
+        }
+        else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 
     public function actionA($a)
     {
+    	if (($app = Applications::find()->where(['name'=>$a])->one()) !== null) {
+            // приложение по алиасу
+            return $this->renderApplication($app);
+        }
+        elseif (($model = Items::find()->where(['alias'=>$a,'app_id'=>1])->one()) !== null) {
+            // материал дефолтного приложения по алиасу
+            return $this->renderItem($model);
+        }
+        
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
 
-    	if (($app = Applications::find()->where(['name'=>$a])->one()) === null) {
-    		
-    		if (($page = Items::find()->where(['alias'=>$a,'app_id'=>1])->one()) === null) {
+    public function actionAb($a,$b)
+    {
+        if (($app = Applications::find()->where(['name'=>$a])->one()) !== null) {
 
 
-    			throw new NotFoundHttpException('The requested page does not exist.');
-    		}
-    		
-    		return $this->render('page',[
-		    	'page'=>$page,
-		    ]);
-    		
-    	}
+            if (($category = Categories::find()->where(['app_id'=>$app->id,'alias'=>$b])->one()) !== null) {
+                // приложение -> категория по алиасу
+                return $this->renderCategory($category);
+            }
+            elseif(($model = Items::find()->where(['app_id'=>$app->id,'alias'=>$b])->one()) !== null) {
+                // приложение -> материал по алиасу
+                return $this->renderItem($model);
+            }
+            elseif(($model = Items::find()->where(['app_id'=>$app->id,'id'=>$b])->one()) !== null) {
+                // приложение -> материал по ID
+                return $this->renderItem($model);
+            }
+        }
+        else {
+            // категория дефолтного приложения -> материал
+        }
 
-        return $this->application($app);
-
+        throw new NotFoundHttpException('The requested page does not exist.');
     }
 
 
@@ -73,7 +90,7 @@ class DefaultController extends Controller
         return $this->application;
     }
 
-    public function Application($app) {
+    protected function renderApplication($app) {
 
         $searchModel = new ItemsSearch();
         $searchModel->app_id = $app->id;
@@ -83,6 +100,13 @@ class DefaultController extends Controller
             'app'=>$app,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    protected function renderItem($model) {
+
+        return $this->render('item',$model->app,[
+            'model'=>$model,
         ]);
     }
 }

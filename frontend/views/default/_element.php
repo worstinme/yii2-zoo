@@ -1,3 +1,3 @@
 <div class="element-<?=$attribute?>">
-	<?= $this->render('@worstinme/zoo/elements/'.$page->elements[$attribute]['type'].'/_view.php',['model'=>$page,'attribute'=>$attribute,'params'=>$params]); ?>
+	<?= $this->render('@worstinme/zoo/elements/'.$model->elements[$attribute]['type'].'/_view.php',['model'=>$model,'attribute'=>$attribute,'params'=>$params]); ?>
 </div>

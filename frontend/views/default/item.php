@@ -1,12 +1,11 @@
 <?php
 
-$this->title = $page->metaTitle;
+$this->title = $model->metaTitle;
 
-$this->registerMetaTag(['name'=>'description', 'content'=> $page->metaDescription]);
-$this->registerMetaTag(['name'=>'keywords', 'content'=> $page->metaDescription]);
+$this->registerMetaTag(['name'=>'description', 'content'=> $model->metaDescription]);
+$this->registerMetaTag(['name'=>'keywords', 'content'=> $model->metaDescription]);
 
-$template = $page->getTemplate('full'); 
-
+$template = $model->getTemplate('full'); 
 
 ?>
 
@@ -17,7 +16,7 @@ $template = $page->getTemplate('full');
         if (count($row['items'])) {
             echo $this->render('rows/'.$row['type'],[
                 'row'=>$row,
-                'page'=>$page,
+                'model'=>$model,
             ]);    
         }
     }

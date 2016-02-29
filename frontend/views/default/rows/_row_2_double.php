@@ -8,9 +8,8 @@
 			<?php else: $k = 0; ?>
 			<div class="uk-width-1-3">
 			<?php endif ?>
-			
 				<?php foreach ($items as $attribute)
-					echo $this->render('/default/_element',['page'=>$page,'attribute'=>$attribute['name']]) ?>
+					echo $this->render('/default/_element',['model'=>$model,'attribute'=>$attribute['name']]) ?>
 			</div>
 		<?php endif ?>
 	<?php endforeach ?>

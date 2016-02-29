@@ -4,7 +4,6 @@ use yii\helpers\Html;
 
 $template = $model->getTemplate('teaser'); 
 
-
 ?>
 <div class="zoo-item-teaser" data-item-id="<?=$model->id?>"> 
 <?php if (count($template)) {
@@ -12,7 +11,7 @@ $template = $model->getTemplate('teaser');
         if (count($row['items'])) {
             echo $this->render('rows/'.$row['type'],[
                 'row'=>$row,
-                'page'=>$model,
+                'model'=>$model,
             ]);    
         }
     }
