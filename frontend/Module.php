@@ -7,5 +7,5 @@ namespace worstinme\zoo\frontend;
  */
 class Module extends \yii\base\Module
 {
-    //public $controllerNamespace = 'worstinme\zoo\frontend\controllers';
+    public $modulePath = 'app\components\zoo\models\Items';
 }

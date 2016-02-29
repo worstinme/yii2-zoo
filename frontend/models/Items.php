@@ -91,6 +91,6 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function getUrl() {
-        return '#';
+        return ['/zoo/default/ab','a'=>$this->app->name,'b'=>$this->id];
     }
 }
