@@ -77,9 +77,16 @@ class Menu extends \yii\db\ActiveRecord
     }
 
     public function getItems() {
-        if (in_array($this->type, [3]) && $this->category_id !== 0) {
-            $items = Items::find()->select('{{%zoo_items}}.id,{{%zoo_items}}.name')->joinWith('categories')->where(['{{%zoo_categories}}.id'=>$this->category_id])->asArray()->all();
-            return \yii\helpers\ArrayHelper::map($items,'id','name');
+        if (in_array($this->type, [3]) && $this->category_id !== 0 && $this->category_id !== null) {
+
+            return (new \yii\db\Query())
+                        ->select([ 'a.name'])
+                        ->from(['a'=>'{{%zoo_items}}'])
+                        ->innerJoin(['b' => '{{zoo_items_categories}}','b.item_id = a.id'])
+                        ->where(['a.app_id'=>$this->application_id,'b.category_id' => $this->category_id])
+                        ->indexBy('a.id')
+                        ->groupBy('a.id')
+                        ->column();
         }
         return null;
     }
