@@ -182,7 +182,7 @@ $script = <<< JS
 				item.push({'name':$(this).data('element-id'),'params':$(this).find('form').serializeObject()});
 				console.log($(this).find('form').serializeObject());
 				$(this).find('li.uk-nestable-item').each(function(ind) {
-					item.push($(this).data('element-id'));
+					item.push({'name':$(this).data('element-id'),'params':$(this).find('form').serializeObject()});
 				});
 				item = $.extend({}, item);
 				row['items'].push(item);
