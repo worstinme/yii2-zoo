@@ -10,6 +10,8 @@ worstinme\uikit\assets\Slideset::register($this);
 
 <?php if (isset($params['gallery']) && $params['gallery'] == 1) : ?>
 	
+	<?php if (count($model->{$attribute}) > 1): ?>
+
 	<ul id="slider" class="uk-switcher">
 		<?php foreach ($model->{$attribute} as $img_url): ?>
 			<li><?=Html::img($img_url);?></li>
@@ -25,6 +27,10 @@ worstinme\uikit\assets\Slideset::register($this);
 	    <a href=""data-uk-slideset-item="previous"></a>
 	    <a href=""data-uk-slideset-item="next"></a>
 	</div>
+
+	<?php else: ?>
+		<?=Html::img($model->{$attribute}[0]);?>
+	<?php endif ?>
 
 <?php else: 
 
