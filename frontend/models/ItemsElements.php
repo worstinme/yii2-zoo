@@ -31,11 +31,11 @@ class ItemsElements extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['item_id', 'element_id'], 'required'],
-            [['item_id', 'element_id', 'value_int'], 'integer'],
+            [['item_id', 'element'], 'required'],
+            [['item_id', 'value_int'], 'integer'],
             [['value_text'], 'string'],
             [['value_float'], 'number'],
-            [['value_string'], 'string', 'max' => 255]
+            [['value_string','element'], 'string', 'max' => 255]
         ];
     }
 
@@ -47,7 +47,7 @@ class ItemsElements extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'item_id' => 'Item ID',
-            'element_id' => 'Element ID',
+            'element' => 'Element ID',
             'value_text' => 'Value Text',
             'value_int' => 'Value Int',
             'value_string' => 'Value String',
