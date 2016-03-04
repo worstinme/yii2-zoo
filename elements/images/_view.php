@@ -21,7 +21,7 @@ worstinme\uikit\assets\Slideset::register($this);
 	<div data-uk-slideset="{default: 4}">
 	    <ul class="uk-grid uk-grid-collapse uk-slideset" data-uk-switcher="{connect:'#slider'}">
 	        <?php foreach ($model->{$attribute} as $img_url): ?>
-				<li><?=Html::img($img_url);?></li>
+				<li><?=Html::img('/thumbnails/160-120'.$img_url);?></li>
 			<?php endforeach ?>
 	    </ul>
 	    <a href=""data-uk-slideset-item="previous"></a>
