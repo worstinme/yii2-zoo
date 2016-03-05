@@ -43,6 +43,7 @@ class Module extends \yii\base\Module
             'name'=>'Name',
             'price'=>'Price',
             'images'=>'Images',
+            'color'=>'COLOR',
         ];
 
     }

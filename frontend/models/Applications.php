@@ -40,4 +40,8 @@ class Applications extends \yii\db\ActiveRecord
     public function getFrontpage() { 
         return isset($this->param['frontpage'])?$this->param['frontpage']:''; 
     }
+
+    public function getElements() {
+        return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
+    }
 }

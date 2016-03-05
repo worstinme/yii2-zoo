@@ -41,34 +41,38 @@ class ItemsSearch extends Items
      */
     public function search($params)
     {
-        $query = Items::find()->select(['{{%zoo_items}}.*','price'=>'a.value_float'])->joinWith([
-            //'itemsElements',
-            //'elements',
-            //'categories',
-        ])
-        ->leftJoin('{{%zoo_items_elements}} a', 'a.item_id = {{%zoo_items}}.`id` AND a.element = "price"')
-        ->groupBy('{{%zoo_items}}.id');
+
+        $query = Items::find()->joinWith([
+           // 'itemsElements',
+        ])->groupBy('{{%zoo_items}}.id');
+
+        $sort = [
+            'attributes' => [
+                'name' => [
+                    'asc' => ['{{%zoo_items}}.name' => SORT_ASC],
+                    'desc' => ['{{%zoo_items}}.name' => SORT_DESC],
+                    'default' => SORT_ASC,
+                    'label'=>'name',
+                ],
+                'price' => [
+                    'asc' => ['{{%zoo_items}}.price' => SORT_ASC],
+                    'desc' => ['{{%zoo_items}}.price' => SORT_DESC],
+                    'default' => SORT_ASC,
+                    'label'=>'price',
+                ],
+                'hits' => [
+                    'asc' => ['{{%zoo_items}}.hits' => SORT_ASC],
+                    'desc' => ['{{%zoo_items}}.hits' => SORT_DESC],
+                    'default' => SORT_ASC,
+                    'label'=>'hits',
+                ],
+            ], 
+            'defaultOrder'=>['id' => SORT_DESC],   
+        ];
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort'=> [
-                'attributes' => [
-                    'price' => [
-                        'asc' => ['price' => SORT_ASC],
-                        'desc' => ['price' => SORT_DESC],
-                        'default' => SORT_ASC,
-                        'label'=>'price',
-                    ],
-                    'hits' => [
-                        'asc' => ['hits' => SORT_ASC],
-                        'desc' => ['hits' => SORT_DESC],
-                        'default' => SORT_ASC,
-                        'label'=>'hits',
-                    ],
-                ], 
-                'defaultOrder'=>['price' => SORT_DESC],            
-               // 'header'=>'Сортировать вакансии по',
-            ],
+            'sort'=> $sort, 
             'pagination'=>[
                 'pageSize'=>30,
             ],

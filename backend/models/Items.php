@@ -274,23 +274,32 @@ class Items extends \yii\db\ActiveRecord
 
         foreach ($this->values as $attribute => $value) {
 
+            $elements = [];
+            $attributes = [];
+
             if (!in_array($attribute, $this->attributes()) && $attribute != 'category') {
 
-                if (($item = ItemsElements::find()->where(['item_id'=>$this->id,'element'=>$attribute])->one()) === null) {
-                    $item = new ItemsElements;
-                    $item->element = $attribute;
-                    $item->item_id = $this->id;
-                }
+                $attributes[] = $attribute;
 
-                $item->value_text = $value['value_text'];
-                $item->value_int = $value['value_int'];
-                $item->value_string = $value['value_string'];
-                $item->value_float = $value['value_float'];
+                $elements[] = [
+                    $this->id, 
+                    $attribute,
+                    $value['value_text'],
+                    $value['value_int'],
+                    $value['value_string'],
+                    $value['value_float'],
+                ];
 
-                $item->save();
+            }
 
-                print_r($item->errors);
+            if (count($elements)) {
+                
+                $db->createCommand()->delete('{{%zoo_items_elements}}',['item_id'=>$this->id,'element'=>
+                            $attributes])->execute();
 
+                $db->createCommand()->batchInsert('{{%zoo_items_elements}}', 
+                            ['item_id', 'element','value_text','value_int','value_string','value_float'], 
+                                $elements)->execute();
             }
 
         }
