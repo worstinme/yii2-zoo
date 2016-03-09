@@ -28,11 +28,13 @@ class Categories extends \yii\db\ActiveRecord
             ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
             [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'string'],
-            ['parent_id', 'default', 'value' => 0],
             [['name', 'alias','image'], 'string', 'max' => 255],
-
             [['metaDescription','metaKeywords','content','preContent'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
+
+            //defaults
+            ['state', 'default', 'value' => 1],
+            ['parent_id', 'default', 'value' => 0],
 
         ];
     }
