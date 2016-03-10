@@ -10,8 +10,8 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	public function rules($attributes)
 	{
 		return [
-			[$attributes,'string'],
-			[$attributes,'required'],
+			[$attributes,'each', 'rule' => ['string']],
+			//[$attributes,'required'],
 		];
 	}
 
@@ -41,6 +41,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     			}
 
     			$value[] = [
+                    'id'=>$element->id,
 					'value_text' =>$element->value_text,
 					'value_int' =>$element->value_int,
 					'value_string' =>$element->value_string,
@@ -48,6 +49,8 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 				];
     		}
     	}
+
+        //print_r($value);
 
     	return $this->owner->values[$attribute] = $value;
 	}
@@ -60,6 +63,58 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
     	return yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute],$this->value_field);
 
+    }
+
+
+    public function setValue($attribute,$value) {
+
+        if (!isset($this->owner->values[$attribute])) {
+            $this->loadAttributesFromElements($attribute);
+        }
+
+
+        if (is_array($value)) {
+
+            $va = [];
+
+            foreach ($value as $key => $v) {
+               
+
+                if ($v !== null && !empty($v)) {
+
+                    $a = [
+                        'value_text' =>null,
+                        'value_int' =>null,
+                        'value_string' =>null,
+                        'value_float' =>null,
+                    ];
+
+                    $a[$this->value_field] = $v;
+
+                    $va[] = $a;
+                }
+
+                
+            }
+
+            $this->owner->values[$attribute] = $va;
+
+        }
+        else {
+
+            $a = [
+                    'value_text' =>null,
+                    'value_int' =>null,
+                    'value_string' =>null,
+                    'value_float' =>null,
+                ];
+
+            $a[$this->value_field] = $value;
+                 
+            $this->owner->values[$attribute] = [$a];
+        }
+
+        return true;
     }
 
 }

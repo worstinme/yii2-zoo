@@ -43,7 +43,6 @@ class DefaultController extends Controller
     {
         if (($app = Applications::find()->where(['name'=>$a])->one()) !== null) {
 
-
             if (($category = Categories::find()->where(['app_id'=>$app->id,'alias'=>$b])->one()) !== null) {
                 // приложение -> категория по алиасу
                 return $this->renderCategory($category);
@@ -58,6 +57,17 @@ class DefaultController extends Controller
             }
         }
         else {
+
+            if (($category = Categories::find()->where(['app_id'=>1,'alias'=>$a])->one()) !== null) {
+                if(($model = Items::find()->where(['app_id'=>1,'alias'=>$b])->one()) !== null && $model->parentCategory->alias == $a) {
+                    // приложение -> материал по алиасу
+                    return $this->renderItem($model);
+                }
+                elseif(($model = Items::find()->where(['app_id'=>1,'id'=>$b])->one()) !== null && $model->parentCategory->alias == $a) {
+                    // приложение -> материал по ID
+                    return $this->renderItem($model);
+                }
+            }
             // категория дефолтного приложения -> материал
         }
 

@@ -12,14 +12,20 @@ use worstinme\zoo\frontend\models\Items;
  */
 class ItemsSearch extends Items
 {
+    public $price_min;
+    public $price_max;
+    public $search;
+    public $color;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'app_id', 'user_id', 'flag', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
-            [['params', 'alias', 'name', 'source'], 'safe'],
+            [['price_min', 'price_max'], 'integer'],
+            [['search'], 'safe'],
+            [['color'], 'each','rule'=>['string']],
         ];
     }
 
@@ -42,9 +48,7 @@ class ItemsSearch extends Items
     public function search($params)
     {
 
-        $query = Items::find()->joinWith([
-           // 'itemsElements',
-        ])->groupBy('{{%zoo_items}}.id');
+        $query = Items::find();
 
         $sort = [
             'attributes' => [
@@ -86,6 +90,18 @@ class ItemsSearch extends Items
             return $dataProvider;
         }
 
+        if ($this->price_max > 0 || $this->price_min > 0 && $this->price_min != $this->price_max) {
+            $query->andFilterWhere(['<=','price',$this->price_max]);
+            $query->andFilterWhere(['>=','price',$this->price_min]);
+        }
+
+        if ($this->color !== null) {
+
+        $query->innerJoin(['c'=>'{{%zoo_items_elements}}'], "c.item_id = {{%zoo_items}}.id AND element = 'color' AND c.value_string = :color",[':color'=>['белый']]);
+
+        }
+
+
         $query->andFilterWhere([
             'id' => $this->id,
             '{{%zoo_items}}.app_id' => $this->app_id,
@@ -101,6 +117,8 @@ class ItemsSearch extends Items
             ->andFilterWhere(['like', 'alias', $this->alias])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'source', $this->source]);
+
+       // print_r($query);
 
         return $dataProvider;
     }

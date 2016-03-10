@@ -22,12 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'layout' => '{items}{pager}<hr>',
             'pager' => ['class'=> 'app\components\LinkPager'],
             'columns' => [
-                [
-                    'attribute'=>'id',
-                    'label'=>'#',
-                    'headerOptions'=>['class'=>'uk-text-center','style'=>'width:20px;'],
-                    'contentOptions'=>['class'=>'uk-text-center'],
-                ],
+                
                 [
                     'attribute'=>'name',
                     'label'=>'name',
@@ -38,9 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     //'headerOptions'=>['class'=>'uk-text-center'],
                     //'contentOptions'=>['class'=>'uk-text-center'],
                 ],
-                'elements.name.test',
-                'itemsElements',
-                'categories',
                 //'user_id',
                 //'flag',
                 //'sort',

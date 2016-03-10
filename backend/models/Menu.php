@@ -3,6 +3,7 @@
 namespace worstinme\zoo\backend\models;
 
 use Yii;
+use worstinme\zoo\frontend\models\Items as FrontItems;
 
 class Menu extends \yii\db\ActiveRecord
 {
@@ -22,7 +23,7 @@ class Menu extends \yii\db\ActiveRecord
     {
         return [
             [['type','label','menu'], 'required'],
-            [['category_id'],'required','when' => function($model) {return in_array($model->type, [2,3]); }],
+            [['category_id'],'required','when' => function($model) {return in_array($model->type, [2]); }],
             [['application_id'],'required','when' => function($model) {return in_array($model->type, [1,2,3]); }],
             [['item_id'],'required','when' => function($model) {return in_array($model->type, [3]); }],
             [['url'],'required','when' => function($model) {return in_array($model->type, [4,5]); }],
@@ -79,14 +80,21 @@ class Menu extends \yii\db\ActiveRecord
     public function getItems() {
         if (in_array($this->type, [3]) && $this->category_id !== 0 && $this->category_id !== null) {
 
-            return (new \yii\db\Query())
-                        ->select([ 'a.name'])
+            return \yii\helpers\ArrayHelper::map((new \yii\db\Query())
+                        ->select([ 'a.name','a.id'])
                         ->from(['a'=>'{{%zoo_items}}'])
-                        ->innerJoin(['b' => '{{zoo_items_categories}}','b.item_id = a.id'])
+                        ->innerJoin(['b' => '{{%zoo_items_categories}}','b.item_id = a.id'])
                         ->where(['a.app_id'=>$this->application_id,'b.category_id' => $this->category_id])
-                        ->indexBy('a.id')
                         ->groupBy('a.id')
-                        ->column();
+                        ->all(),'id','name');
+        }
+        elseif(in_array($this->type, [3])) {
+            return \yii\helpers\ArrayHelper::map((new \yii\db\Query())
+                        ->select([ 'a.name','a.id'])
+                        ->from(['a'=>'{{%zoo_items}}'])
+                        ->where(['a.app_id'=>$this->application_id])
+                        ->groupBy('a.id')
+                        ->all(),'id','name');
         }
         return null;
     }
@@ -98,7 +106,7 @@ class Menu extends \yii\db\ActiveRecord
         elseif($this->type == 2 && $this->category_id !== null && Categories::findOne($this->category_id) !== null) {
             return true;
         }
-        elseif($this->type == 3 && $this->category_id !== null && Items::findOne($this->item_id) !== null) {
+        elseif($this->type == 3 && $this->item_id > 0) {
             return true;
         }
         elseif($this->type == 4 || $this->type == 5) {
@@ -116,22 +124,40 @@ class Menu extends \yii\db\ActiveRecord
         }
     }
 
+    public function getActive() {
+        switch ($this->type) {
+
+            case 3:
+                null;
+            break;
+            
+            default: null;
+                break;
+        }
+    }
+
     public function getUrl() {
+
         if ($this->type == 4) {
-            $url = \yii\helpers\Json::decode($this->url);
+            return \yii\helpers\Json::decode($this->url);
         }
         elseif ($this->type == 5) {
-            $url = $this->url;
+            return $this->url;
         }
         elseif ($this->type == 1) {
             if (($application = \worstinme\zoo\frontend\models\Applications::findOne($this->application_id)) !== null) {
                 return $application->url;
-            } else return '#';
+            }
         }
         elseif ($this->type == 3) {
-            if (($item = \worstinme\zoo\frontend\models\Items::findOne($this->item_id)) !== null) {
+
+            $item = FrontItems::find()->where(['id'=>$this->item_id])->one();
+
+            if ($item !== null) {
                 return $item->url;
-            } else return '#';
+            } 
         }
+
+        return '#';
     }
 }

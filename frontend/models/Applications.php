@@ -41,6 +41,10 @@ class Applications extends \yii\db\ActiveRecord
         return isset($this->param['frontpage'])?$this->param['frontpage']:''; 
     }
 
+    public function getCatlinks() { 
+        return isset($this->param['catlinks'])?$this->param['catlinks']:''; 
+    }
+
     public function getElements() {
         return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
     }

@@ -1,4 +1,4 @@
-<div class="uk-form-row row<?=$class?' '.$class:''?>">
+<div class="row<?=$class?' '.$class:''?>">
 	<?=!empty($row['name'])?'<h2>'.$row['name'].'</h2>':''?>
 	<div class="uk-grid">	
 	<?php $k=0; foreach ($row['items'] as $items): ?>

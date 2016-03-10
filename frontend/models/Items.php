@@ -57,7 +57,7 @@ class Items extends \yii\db\ActiveRecord
 
     public function __get($name)
     { 
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements_[$name])) !== null) {
+        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->getValue($name);
         } else {
             return parent::__get($name);
@@ -90,7 +90,25 @@ class Items extends \yii\db\ActiveRecord
         return isset($this->param['templates']) && isset($this->param['templates'][$name]) ? $this->param['templates'][$name] : $this->app->getTemplate($name);
     }
 
+    public function getParentCategory() {
+        return $this->hasOne(Categories::className(),['id'=>'category_id'])
+            ->viaTable('{{%zoo_items_categories}}',['item_id'=>'id'])->where(['{{%zoo_categories}}.parent_id'=>0]);
+    }
+
     public function getUrl() {
-        return ['/zoo/default/ab','a'=>$this->app->name,'b'=>$this->id];
+
+        if ($this->app_id == 1) {  
+            if ($this->app->catlinks && $this->parentCategory !== null) {
+
+                return ['/zoo/default/ab','a'=> $this->parentCategory->alias,'b'=> !empty($this->alias) ? $this->alias :  $this->id ];
+            }
+            else {
+                return ['/zoo/default/a','a'=> !empty($this->alias) ? $this->alias :  $this->id ];
+            }            
+        }
+        else {
+            return ['/zoo/default/ab','a'=>$this->app->name,'b'=>!empty($this->alias) ? $this->alias :  $this->id];
+        }
+        
     }
 }

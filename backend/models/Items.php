@@ -66,7 +66,7 @@ class Items extends \yii\db\ActiveRecord
 
     public function __get($name)
     { 
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements_[$name])) !== null) {
+        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->getValue($name);
         } else {
             return parent::__get($name);
@@ -75,7 +75,7 @@ class Items extends \yii\db\ActiveRecord
     
     public function __set($name, $value)
     {
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements_[$name])) !== null) {
+        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->setValue($name,$value);
         } else {
             parent::__set($name, $value);
@@ -280,24 +280,38 @@ class Items extends \yii\db\ActiveRecord
             if (!in_array($attribute, $this->attributes()) && $attribute != 'category') {
 
                 $attributes[] = $attribute;
+                
 
-                $elements[] = [
-                    $this->id, 
-                    $attribute,
-                    $value['value_text'],
-                    $value['value_int'],
-                    $value['value_string'],
-                    $value['value_float'],
-                ];
-
+                if ($this->elements[$attribute]->multiple) {
+                    foreach ($value as $v) {
+                        $elements[] = [
+                            $this->id, 
+                            $attribute,
+                            $v['value_text'],
+                            $v['value_int'],
+                            $v['value_string'],
+                            $v['value_float'],
+                        ];
+                    }
+                }
+                else {
+                    $elements[] = [
+                        $this->id, 
+                        $attribute,
+                        $value['value_text'],
+                        $value['value_int'],
+                        $value['value_string'],
+                        $value['value_float'],
+                    ];
+                }
             }
 
             if (count($elements)) {
                 
-                $db->createCommand()->delete('{{%zoo_items_elements}}',['item_id'=>$this->id,'element'=>
+                Yii::$app->db->createCommand()->delete('{{%zoo_items_elements}}',['item_id'=>$this->id,'element'=>
                             $attributes])->execute();
 
-                $db->createCommand()->batchInsert('{{%zoo_items_elements}}', 
+                Yii::$app->db->createCommand()->batchInsert('{{%zoo_items_elements}}', 
                             ['item_id', 'element','value_text','value_int','value_string','value_float'], 
                                 $elements)->execute();
             }

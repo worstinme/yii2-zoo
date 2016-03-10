@@ -14,7 +14,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	{
 		return [
 			['category','safe'],
-			['category','required','message'=>'Выберите категорию'],
+			//['category','required','message'=>'Выберите категорию'],
 		];
 	}
 

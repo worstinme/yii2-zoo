@@ -34,7 +34,7 @@ class Applications extends \yii\db\ActiveRecord
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
 
-            [['sort', 'state'], 'integer'],
+            [['sort', 'state','catlinks'], 'integer'],
             [['params','template','frontpage'], 'safe'],
         ];
     }
@@ -110,6 +110,17 @@ class Applications extends \yii\db\ActiveRecord
     public function setFrontpage($preview) { 
         $params = $this->params;
         $params['frontpage'] = $preview; 
+        return $this->params = $params;
+    }
+
+    //categorieslinks
+    public function getCatlinks() { 
+        return isset($this->params['catlinks'])?$this->params['catlinks']:''; 
+    }
+
+    public function setCatlinks($preview) { 
+        $params = $this->params;
+        $params['catlinks'] = $preview; 
         return $this->params = $params;
     }
 

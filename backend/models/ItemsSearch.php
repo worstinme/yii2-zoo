@@ -13,6 +13,8 @@ use worstinme\zoo\backend\models\Items;
  */
 class ItemsSearch extends Items
 {
+
+    public $color;
     /**
      * @inheritdoc
      */
@@ -20,7 +22,7 @@ class ItemsSearch extends Items
     {
         return [
             [['id','app_id', 'user_id', 'flag', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
-            [['name'],'string','max'=>255],
+            [['name','color'],'string','max'=>255],
             [['params'], 'safe'],
         ];
     }
@@ -29,6 +31,7 @@ class ItemsSearch extends Items
     public function search($params)
     {
         $query = Items::find()->groupBy('{{%zoo_items}}.id');
+
 
         if (Yii::$app->request->get('app') !== null) {
             $query  = $query->where(['{{%zoo_items}}.app_id'=>Yii::$app->request->get('app')]);
@@ -42,6 +45,7 @@ class ItemsSearch extends Items
         ]);
 
         $this->load($params);
+
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

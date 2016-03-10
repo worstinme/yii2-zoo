@@ -37,6 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			        ]),
 			]); ?>
 
+			<?= $form->field($app, 'catlinks')->checkbox() ?>
+
 
 
 		<?php /*	<div class="uk-form-row">

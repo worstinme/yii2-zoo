@@ -46,6 +46,18 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'sort',
             'type',
             'menu',
+            [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template'=>'{delete}',
+                    'buttons'=>[
+                      'delete' => function ($url, $model) {     
+                        return Html::a('<i class="uk-icon-trash"></i>', $url, [
+                                'title' => Yii::t('backend', 'Удалить'),
+                        ]);                                
+                      },
+                    ],
+                    'contentOptions'=>['class'=>'uk-text-center'],                           
+                ],
         ],
     ]); ?>
     

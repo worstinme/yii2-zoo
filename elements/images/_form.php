@@ -1,9 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use mihaildev\elfinder\InputFile;
 
 $this->registerJs($model->addValidators($this,$attribute), 5);
-
 
 ?>
 
@@ -11,12 +11,26 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
 
 <?php foreach ($model->{$attribute} as $key=>$image): ?>
 	<div class="uk-from-controls">
-		<?= Html::activeInput('text', $model, $attribute."[".$key."]",['class'=>'uk-width-1-1']); ?>
+		<?= InputFile::widget([
+		    'language'   => 'ru',
+		    'controller' => 'elfinder', 
+		    'model'       => $model,
+		    'attribute'      => $attribute."[".$key."]",
+		    'buttonName'=>'Выбрать',
+		    'buttonOptions'=>['class'=>'uk-button uk-button-primary'],
+		]); ?>
 		<div class="uk-form-help-block uk-text-danger"></div>
 	</div>	
 <?php endforeach ?>
 
 <div class="uk-from-controls">
-	<?= Html::activeInput('text', $model, $attribute."[]",['class'=>'uk-width-1-1']); ?>
+	<?= InputFile::widget([
+		    'language'   => 'ru',
+		    'controller' => 'elfinder', 
+		    'model'       => $model,
+		    'attribute'      => $attribute."[]",
+		    'buttonName'=>'Выбрать',
+		    'buttonOptions'=>['class'=>'uk-button uk-button-primary'],
+		]); ?>
 	<div class="uk-form-help-block uk-text-danger"></div>
 </div>

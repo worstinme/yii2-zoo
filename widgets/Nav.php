@@ -18,14 +18,18 @@ class Nav extends \worstinme\uikit\Nav
             $menus = Menu::find()->where(['menu'=>$this->menu])->all();
 
             foreach ($menus as $menu) {
-                
-                
 
-                $items[] = [
+                $item = [
                     'label' => $menu->label,
                     'encodeLabels'=>false,
                     'url' => $menu->getUrl(),
                 ];
+
+                if ($menu->active !== null) {
+                    $item['active'] =  $menu->active;
+                }
+                
+                $items[] = $item;
 
             }
 

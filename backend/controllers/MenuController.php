@@ -31,16 +31,35 @@ class MenuController extends Controller
             $model = new Menu;
         }
         else {
-            $model = Menu::findOne($menu);
+            $model = $this->findModel($menu);
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Настройки сохранены'));
+            $this->redirect(['update','menu'=>$model->id]);
         }
 
         return $this->render('update',[
             'model'=>$model
         ]);
+    }
+
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+
+        $model->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = Menu::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 
 }
