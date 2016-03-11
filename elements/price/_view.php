@@ -1,5 +1,5 @@
 <?php
 
-echo $model->{$attribute};
+echo round($model->{$attribute},2);
 
 ?> <i class="uk-icon-rub"></i>
