@@ -8,9 +8,11 @@ JuiAsset::register($this);
 
 $id = uniqid();
 
+
+
 ?>
 
-<label>Цена</label>
+<label class="f-label">Цена, руб.</label>
 
 <div class="price-filter">
     <?= Html::activeTextInput($searchModel, 'price_min',['placeholder'=>'от...']); ?>
@@ -21,7 +23,7 @@ $id = uniqid();
 
 <?php 
 
-$values = \yii\helpers\Json::encode($searchModel->price_min !== null  && $searchModel->price_max !== null ? [$searchModel->price_min,$searchModel->price_max] : [15000,100000]);
+$values = \yii\helpers\Json::encode($searchModel->price_min > 0  && $searchModel->price_max > 0 ? [$searchModel->price_min,$searchModel->price_max] : [15000,100000]);
 
 
 $js = <<<JS

@@ -36,6 +36,9 @@ class Applications extends \yii\db\ActiveRecord
 
             [['sort', 'state','catlinks'], 'integer'],
             [['params','template','frontpage'], 'safe'],
+
+            [['metaDescription','metaKeywords'], 'string'],
+            [['metaTitle'], 'string', 'max' => 255],
         ];
     }
 
@@ -121,6 +124,36 @@ class Applications extends \yii\db\ActiveRecord
     public function setCatlinks($preview) { 
         $params = $this->params;
         $params['catlinks'] = $preview; 
+        return $this->params = $params;
+    }
+
+    //metaTitle
+    public function getMetaTitle() {
+        $params = $this->params;
+        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
+    }
+    public function setMetaTitle($s) {
+        $params = $this->params; $params['metaTitle'] = $s;
+        return $this->params = $params;
+    }
+
+    //metaKeywords
+    public function getMetaKeywords() {
+        $params = $this->params;
+        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
+    }
+    public function setMetaKeywords($s) {
+        $params = $this->params; $params['metaKeywords'] = $s;
+        return $this->params = $params;
+    }
+
+    //metaDescription
+    public function getMetaDescription() {
+        $params = $this->params;
+        return isset($params['metaDescription']) ? $params['metaDescription'] : '';
+    }
+    public function setMetaDescription($s) {
+        $params = $this->params; $params['metaDescription'] = $s;
         return $this->params = $params;
     }
 

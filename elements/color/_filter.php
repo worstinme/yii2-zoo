@@ -1,15 +1,16 @@
 <?php
 
-use yii\helpers\Html;
+use worstinme\zoo\elements\color\HtmlHelper;
 
 $colors = [
-	'Красный',
-	'Белый',
+	'красный',
+	'белый',
 ];
 
-?>
-<label>Цвет</label>
+print_r($searchModel->color);
 
-<?php foreach ($colors as $color): ?>
-	<?= Html::activeCheckbox($searchModel, 'color[]', ['value' => $color,'label'=>false]) ?>
-<?php endforeach ?>
+?>
+
+<label class="f-label">Цвет</label>
+
+<?= HtmlHelper::activeCheckboxList($searchModel, 'color', $colors ) ?>

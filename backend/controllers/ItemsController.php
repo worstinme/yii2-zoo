@@ -28,14 +28,15 @@ class ItemsController extends Controller
         ]);
     }
 
-    public function actionCreate($id = null)
+    public function actionCreate($app, $id = null)
     {
         if ($id === null) {
             $model = new Items();
+            $model->name = 'Заголовок';
             $model->app_id = $this->app->id;
             $model->save();
 
-            $this->redirect(['create','id'=>$model->id,'app'=>$model->app_id]);
+            return $this->redirect(['create','id'=>$model->id,'app'=>$model->app_id]);
             
         }
         else {

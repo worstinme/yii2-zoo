@@ -28,7 +28,7 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getUrl() {
-        return \yii\helpers\Url::toRoute(['/zoo/default/a','a'=>$this->name]);
+        return ['/zoo/default/a','a'=>$this->name];
     }
 
     //view Path
@@ -43,6 +43,21 @@ class Applications extends \yii\db\ActiveRecord
 
     public function getCatlinks() { 
         return isset($this->param['catlinks'])?$this->param['catlinks']:''; 
+    }
+
+    //metaTitle
+    public function getMetaTitle() {
+        return isset($this->param['metaTitle']) ? $this->param['metaTitle'] : $this->name;
+    }
+
+    //metaKeywords
+    public function getMetaKeywords() {
+        return isset($this->param['metaKeywords']) ? $this->param['metaKeywords'] : '';
+    }
+
+    //metaDescription
+    public function getMetaDescription() {
+        return isset($this->param['metaDescription']) ? $this->param['metaDescription'] : '';
     }
 
     public function getElements() {

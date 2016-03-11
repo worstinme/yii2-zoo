@@ -66,9 +66,13 @@ class Items extends \yii\db\ActiveRecord
 
     public function __get($name)
     { 
+
         if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->getValue($name);
         } else {
+            if ($name == 'category') {
+                return null;
+            }
             return parent::__get($name);
         }
     } 

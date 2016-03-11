@@ -12,9 +12,13 @@ use yii\widgets\ActiveForm;
         'options'=>['class'=>''],
     ]); ?>
 
+    <h4>Подбор по характеристикам</h4> 
+
 	<?php foreach ($app->elements as $element): ?>
 		<?php if ($element->filter == 1): ?>
+			<div class="filter">
 			<?= $this->render('@worstinme/zoo/elements/'.$element->type.'/_filter.php',['element'=>$element,'searchModel'=>$searchModel,'form'=>$form]); ?>
+			</div>
 		<?php endif ?>
 	<?php endforeach ?>
 

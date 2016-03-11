@@ -4,6 +4,7 @@ namespace worstinme\zoo\backend\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Json;
 
 class Categories extends \yii\db\ActiveRecord
 {
@@ -28,7 +29,11 @@ class Categories extends \yii\db\ActiveRecord
             [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'string'],
             ['parent_id', 'default', 'value' => 0],
-            [['name', 'alias'], 'string', 'max' => 255]
+            [['name', 'alias'], 'string', 'max' => 255],
+
+            [['metaDescription','metaKeywords','content','preContent'], 'string'],
+            [['metaTitle'], 'string', 'max' => 255],
+
         ];
     }
 
@@ -45,7 +50,64 @@ class Categories extends \yii\db\ActiveRecord
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
             'params' => Yii::t('backend', 'Params'),
+            'preContent' =>  Yii::t('backend', 'Верхнее описание категории'),
+            'content' =>  Yii::t('backend', 'Нижнее описание категории'),
         ];
+    }
+
+        //metaTitle
+    public function getMetaTitle() {
+        $params = Json::decode($this->params);
+        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
+    }
+    public function setMetaTitle($s) {
+        $params = Json::decode($this->params); $params['metaTitle'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    //metaKeywords
+    public function getMetaKeywords() {
+        $params = Json::decode($this->params);
+        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
+    }
+    public function setMetaKeywords($s) {
+        $params = Json::decode($this->params); $params['metaKeywords'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    //metaDescription
+    public function getMetaDescription() {
+        $params = Json::decode($this->params);
+        return isset($params['metaDescription']) ? $params['metaDescription'] : '';
+    }
+    public function setMetaDescription($s) {
+        $params = Json::decode($this->params); $params['metaDescription'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    //metaDescription
+    public function getContent() {
+        $params = Json::decode($this->params);
+        return isset($params['content']) ? $params['content'] : '';
+    }
+    public function setContent($s) {
+        $params = Json::decode($this->params); $params['content'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    //metaDescription
+    public function getPreContent() {
+        $params = Json::decode($this->params);
+        return isset($params['preContent']) ? $params['preContent'] : '';
+    }
+    public function setPreContent($s) {
+        $params = Json::decode($this->params); $params['preContent'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    public function getTemplate($name) {
+        $params = Json::decode($this->params);
+        return isset($params['templates']) && isset($params['templates'][$name]) ? $params['templates'][$name] : [];
     }
 
     public function getRelated()

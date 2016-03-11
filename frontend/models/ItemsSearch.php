@@ -17,13 +17,15 @@ class ItemsSearch extends Items
     public $search;
     public $color;
 
+    public $filter;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['price_min', 'price_max'], 'integer'],
+            [['price_min', 'price_max'], 'integer','min'=>1],
             [['search'], 'safe'],
             [['color'], 'each','rule'=>['string']],
         ];
@@ -48,63 +50,58 @@ class ItemsSearch extends Items
     public function search($params)
     {
 
-        $query = Items::find();
+        $query = Items::find()->from(['a'=>'{{%zoo_items}}']);
 
         $sort = [
             'attributes' => [
                 'name' => [
-                    'asc' => ['{{%zoo_items}}.name' => SORT_ASC],
-                    'desc' => ['{{%zoo_items}}.name' => SORT_DESC],
+                    'asc' => ['a.name' => SORT_ASC],
+                    'desc' => ['a.name' => SORT_DESC],
                     'default' => SORT_ASC,
                     'label'=>'name',
                 ],
                 'price' => [
-                    'asc' => ['{{%zoo_items}}.price' => SORT_ASC],
-                    'desc' => ['{{%zoo_items}}.price' => SORT_DESC],
+                    'asc' => ['a.price' => SORT_ASC],
+                    'desc' => ['a.price' => SORT_DESC],
                     'default' => SORT_ASC,
                     'label'=>'price',
                 ],
                 'hits' => [
-                    'asc' => ['{{%zoo_items}}.hits' => SORT_ASC],
-                    'desc' => ['{{%zoo_items}}.hits' => SORT_DESC],
+                    'asc' => ['a.hits' => SORT_ASC],
+                    'desc' => ['a.hits' => SORT_DESC],
                     'default' => SORT_ASC,
                     'label'=>'hits',
                 ],
             ], 
-            'defaultOrder'=>['id' => SORT_DESC],   
+            'defaultOrder'=>['price' => SORT_DESC],   
         ];
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort'=> $sort, 
-            'pagination'=>[
-                'pageSize'=>30,
-            ],
-        ]);
+        
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
-            return $dataProvider;
+            //return $dataProvider;
         }
 
-        if ($this->price_max > 0 || $this->price_min > 0 && $this->price_min != $this->price_max) {
+        if ($this->price_max > 0 || $this->price_min > 0) {
             $query->andFilterWhere(['<=','price',$this->price_max]);
             $query->andFilterWhere(['>=','price',$this->price_min]);
         }
 
+        $query->leftJoin(['color'=>'{{%zoo_items_elements}}'], "color.item_id = a.id AND color.element = 'color'");
+        $query->leftJoin(['material'=>'{{%zoo_items_elements}}'], "material.item_id = a.id AND material.element = 'material'");
+        $query->leftJoin(['application'=>'{{%zoo_items_elements}}'], "application.item_id = a.id AND application.element = 'application'");
+        $query->leftJoin(['article'=>'{{%zoo_items_elements}}'], "article.item_id = a.id AND article.element = 'article'");
+
         if ($this->color !== null) {
-
-        $query->innerJoin(['c'=>'{{%zoo_items_elements}}'], "c.item_id = {{%zoo_items}}.id AND element = 'color' AND c.value_string = :color",[':color'=>['белый']]);
-
+            $query->andFilterWhere(['color.value_string'=>$this->color]);
         }
-
 
         $query->andFilterWhere([
             'id' => $this->id,
-            '{{%zoo_items}}.app_id' => $this->app_id,
+            'a.app_id' => $this->app_id,
             'user_id' => $this->user_id,
             'flag' => $this->flag,
             'sort' => $this->sort,
@@ -118,7 +115,13 @@ class ItemsSearch extends Items
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'source', $this->source]);
 
-       // print_r($query);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query->groupBy('a.id'),
+            'sort'=> $sort, 
+            'pagination'=>[
+                'pageSize'=>30,
+            ],
+        ]);
 
         return $dataProvider;
     }

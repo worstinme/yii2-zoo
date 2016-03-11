@@ -29,6 +29,38 @@ $this->params['breadcrumbs'][] = $this->title;
 		    <?= $form->field($model, 'parent_id')
 				    	->dropDownList($app->catlist,['prompt'=>Yii::t('backend','Корневая категория')]); ?> 
 
+			<hr>
+
+			<?= $form->field($model, 'preContent')->widget(\mihaildev\ckeditor\CKEditor::className(), [
+			        'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
+			            'preset' => 'standart',
+		                'allowedContent' => true,
+		                'height'=>'200px',
+		                'contentsCss'=>[
+		                    '/css/site.css',
+		                ],
+			        ]),
+			]); ?>
+
+			<?= $form->field($model, 'content')->widget(\mihaildev\ckeditor\CKEditor::className(), [
+			        'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
+			            'preset' => 'standart',
+		                'allowedContent' => true,
+		                'height'=>'200px',
+		                'contentsCss'=>[
+		                    '/css/site.css',
+		                ],
+			        ]),
+			]); ?>
+
+			<hr>
+
+			<?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+
+			<?= $form->field($model, 'metaDescription')->textarea(['rows' => 2,'class'=>'uk-width-1-1']) ?>
+
+			<?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+
 		    <div class="uk-form-row uk-margin-large-top">
 		        <?= Html::submitButton($model->isNewRecord ? Yii::t('backend','Создать') : Yii::t('backend','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
 		    </div>

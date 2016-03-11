@@ -39,6 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			<?= $form->field($app, 'catlinks')->checkbox() ?>
 
+			<hr>
+
+			<?= $form->field($app, 'metaTitle')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+
+			<?= $form->field($app, 'metaDescription')->textarea(['rows' => 2,'class'=>'uk-width-1-1']) ?>
+
+			<?= $form->field($app, 'metaKeywords')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+
 
 
 		<?php /*	<div class="uk-form-row">

@@ -15,10 +15,10 @@ class DefaultController extends Controller
 
     private $application;
 
-    public function actionFrontpage($page_id)
+    public function actionFrontpage()
     {
-    	if (($model = Items::findOne($page_id)) !== null) {
-            return $this->renderItem($model);
+    	if (($app = Applications::findOne(1)) !== null) {
+            return $this->renderApplication($app);
         }
         else {
             throw new NotFoundHttpException('The requested page does not exist.');
