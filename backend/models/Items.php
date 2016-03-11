@@ -205,7 +205,7 @@ class Items extends \yii\db\ActiveRecord
         return $this->params = Json::encode($params);
     }
 
-    public function getTemplate($name) {
+    public function getTemplate($name = 'full') {
         $params = Json::decode($this->params);
         return isset($params['templates']) && isset($params['templates'][$name]) ? $params['templates'][$name] : [];
     }
