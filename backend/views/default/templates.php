@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
 								        <div class="uk-nestable-panel">
 								            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
 								            <?=$elements[$item['name']]->title?>
-								            <?=$this->render($elements[$item['name']]->paramsView,[$item['params']])?>
+								            <?=$this->render($elements[$item['name']]->paramsView,['params'=>$item['params']])?>
 								            <? unset($elements[$item['name']]); ?>
 								        </div>
 								        <?php if (count($items)): ?>

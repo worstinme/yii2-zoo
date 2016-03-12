@@ -7,10 +7,8 @@ $colors = [
 	'белый',
 ];
 
-print_r($searchModel->color);
-
 ?>
 
 <label class="f-label">Цвет</label>
 
-<?= HtmlHelper::activeCheckboxList($searchModel, 'color', $colors ) ?>
+<?= HtmlHelper::activeCheckboxList($searchModel, 'color', $colors,['class'=>'color-filter']) ?>

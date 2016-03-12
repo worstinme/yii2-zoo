@@ -6,6 +6,7 @@ use Yii;
 use worstinme\zoo\frontend\models\Items;
 use worstinme\zoo\frontend\models\Categories;
 use worstinme\zoo\frontend\models\ItemsSearch;
+use worstinme\zoo\frontend\models\S as s;
 use worstinme\zoo\frontend\models\Applications;
 
 use yii\web\NotFoundHttpException;
@@ -102,7 +103,7 @@ class DefaultController extends Controller
 
     protected function renderApplication($app) {
 
-        $searchModel = new ItemsSearch();
+        $searchModel = new s();
         $searchModel->app_id = $app->id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

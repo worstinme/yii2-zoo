@@ -25,11 +25,22 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     	foreach ($this->owner->itemsElements as $element) {
     		if ($element->element == $attribute) {
 
-    			if ($element->value_int == 2 && $element->value_text !== null) {
-    				$filename = $this->owner->id.'_'.array_pop(explode("/",$element->value_text ));
-    				$dir = '/images/o/';
-    				$img_content = file_get_contents($element->value_text);
-    				if ($img_content) {
+    			if ($element->value_int !== null && $element->value_text !== null) {
+                    $filename = $this->owner->id.'_'.array_pop(explode("/",$element->value_text ));
+                    
+                    switch ($element->value_int) {
+                        case 2:
+                            $dir = '/images/o/';
+                            break;
+                        case 3:
+                            $dir = '/images/k/';
+                            break;
+                        default:
+                            $dir = '/images/d/';
+                            break;
+                    }
+                    $img_content = file_get_contents($element->value_text);
+                    if ($img_content) {
                         $upload = file_put_contents(Yii::getAlias('@webroot').$dir.$filename, $img_content);
                         if ($upload) {
                             $element->value_string = $dir.$filename;
@@ -38,7 +49,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                             $element->save();
                         } 
                     }
-    			}
+                }
 
     			$value[] = [
                     'id'=>$element->id,

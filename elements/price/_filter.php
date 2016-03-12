@@ -25,6 +25,8 @@ $id = uniqid();
 
 $values = \yii\helpers\Json::encode($searchModel->price_min > 0  && $searchModel->price_max > 0 ? [$searchModel->price_min,$searchModel->price_max] : [15000,100000]);
 
+$price_min_id = Html::getInputId($searchModel, 'price_min');
+$price_max_id = Html::getInputId($searchModel, 'price_max');
 
 $js = <<<JS
 
@@ -35,8 +37,8 @@ $( "#price-$id" ).slider({
     step: 500,
     values: $values,  
     slide: function( event, ui ) {
-      $( "#itemssearch-price_min" ).val(ui.values[0]);
-      $( "#itemssearch-price_max" ).val(ui.values[1]);
+      $( "#$price_min_id" ).val(ui.values[0]);
+      $( "#$price_max_id" ).val(ui.values[1]);
     }
 });
 

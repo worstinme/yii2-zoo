@@ -10,7 +10,7 @@ use worstinme\zoo\frontend\models\Items;
 /**
  * ItemsSearch represents the model behind the search form about `worstinme\zoo\frontend\models\Items`.
  */
-class ItemsSearch extends yii\base\Model
+class S extends Items
 {
     public $price_min;
     public $price_max;
@@ -18,6 +18,7 @@ class ItemsSearch extends yii\base\Model
     public $color;
     public $material;
     public $filter;
+    public $query;
 
     /**
      * @inheritdoc
@@ -41,26 +42,17 @@ class ItemsSearch extends yii\base\Model
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
-
-    public function getQuery() {
-        return Items::find()->from(['a'=>'{{%zoo_items}}']);
+    public function query()
+    {
+        return Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
     }
 
-    public function getTotalCount() {
-        return $this->query->count();
-    }
 
-    public function search($query)
+
+    public function search($params)
     {
 
-        $query = $this->query;
+        $this->query = $this->query();
 
         $sort = [
             'attributes' => [
@@ -86,6 +78,7 @@ class ItemsSearch extends yii\base\Model
             'defaultOrder'=>['price' => SORT_DESC],   
         ];
 
+        
 
         $this->load($params);
 
@@ -95,25 +88,41 @@ class ItemsSearch extends yii\base\Model
         }
 
         if ($this->price_max > 0 || $this->price_min > 0) {
-            $query->andFilterWhere(['<=','price',$this->price_max]);
-            $query->andFilterWhere(['>=','price',$this->price_min]);
+            $this->query->andFilterWhere(['<=','price',$this->price_max]);
+            $this->query->andFilterWhere(['>=','price',$this->price_min]);
         }
 
-        $query->leftJoin(['color'=>'{{%zoo_items_elements}}'], "color.item_id = a.id AND color.element = 'color'");
-        $query->leftJoin(['material'=>'{{%zoo_items_elements}}'], "material.item_id = a.id AND material.element = 'material'");
+        $this->query->leftJoin(['color'=>'{{%zoo_items_elements}}'], "color.item_id = a.id AND color.element = 'color'");
+        $this->query->leftJoin(['material'=>'{{%zoo_items_elements}}'], "material.item_id = a.id AND material.element = 'material'");
    /*     $query->leftJoin(['application'=>'{{%zoo_items_elements}}'], "application.item_id = a.id AND application.element = 'application'");
         $query->leftJoin(['article'=>'{{%zoo_items_elements}}'], "article.item_id = a.id AND article.element = 'article'");
 */
         if ($this->color !== null) {
-            $query->andFilterWhere(['color.value_string'=>$this->color]);
+            $this->query->andFilterWhere(['color.value_string'=>$this->color]);
         }
 
         if ($this->material !== null) {
-            $query->andFilterWhere(['material.value_string'=>$this->material]);
+            $this->query->andFilterWhere(['material.value_string'=>$this->material]);
         }
 
+        $this->query->andFilterWhere([
+            'id' => $this->id,
+            'a.app_id' => $this->app_id,
+            'user_id' => $this->user_id,
+            'flag' => $this->flag,
+            'sort' => $this->sort,
+            'state' => $this->state,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
+        $this->query->andFilterWhere(['like', 'params', $this->params])
+            ->andFilterWhere(['like', 'alias', $this->alias])
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'source', $this->source]);
+
         $dataProvider = new ActiveDataProvider([
-            'query' => $query->groupBy('a.id'),
+            'query' => $this->query->groupBy('a.id'),
             'sort'=> $sort, 
             'pagination'=>[
                 'pageSize'=>30,

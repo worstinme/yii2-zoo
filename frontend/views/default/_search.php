@@ -8,8 +8,9 @@ use yii\widgets\ActiveForm;
 <div class="items-filter">
 
 	<?php $form = ActiveForm::begin([
+		'action'=> yii\helpers\Url::current(),
         'method' => 'get',
-        'options'=>['class'=>''],
+        'options'=>['class'=>'','data-pjax' => true],
     ]); ?>
 
     <h4>Подбор по характеристикам</h4> 
@@ -22,9 +23,8 @@ use yii\widgets\ActiveForm;
 		<?php endif ?>
 	<?php endforeach ?>
 
-    <div class="form-group uk-margin-top">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    <div class="form-group uk-margin-top uk-text-center">
+        <?= Html::submitButton('Поиск', ['class' => 'submit-button']) ?>
     </div>
 
 	<?php ActiveForm::end(); ?>

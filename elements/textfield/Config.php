@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use yii\db\BaseActiveRecord;
 
-class Element extends \yii\base\Behavior
+class Config extends \yii\base\Behavior
 {
 
     public $iconClass = 'uk-icon-header';

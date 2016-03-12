@@ -87,7 +87,7 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function getTemplate($name) {
-        return isset($this->param['templates']) && isset($this->param['templates'][$name]) ? $this->param['templates'][$name] : $this->app->getTemplate($name);
+        return isset($this->param['templates']) && isset($this->param['templates'][$name]) ? $this->param['templates'][$name] : $this->app !==null ? $this->app->getTemplate($name) : null;
     }
 
     public function getParentCategory() {
