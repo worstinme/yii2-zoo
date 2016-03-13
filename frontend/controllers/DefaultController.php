@@ -150,7 +150,17 @@ class DefaultController extends Controller
         $searchModel->app_id = $app->id;
         $searchModel->regBehaviors();
 
-        $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->data(Yii::$app->request->queryParams); 
+
+        if (Yii::$app->request->get('ItemsSearch') !== null) {
+
+            return $this->rend('search',$app, [
+                'app'=>$app,
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+
+        }
 
         return $this->rend('application',$app, [
             'app'=>$app,
