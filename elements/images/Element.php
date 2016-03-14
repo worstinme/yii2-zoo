@@ -37,6 +37,9 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                         case 3:
                             $dir = '/images/k/';
                             break;
+                        case 4:
+                            $dir = '/images/h/';
+                            break;
                         default:
                             $dir = '/images/d/';
                             break;
@@ -47,7 +50,6 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                         if ($upload) {
                             $element->value_string = $dir.$filename;
                             $element->value_int = null;
-                            $element->value_text = null;
                             $element->save();
                         } 
                     }
