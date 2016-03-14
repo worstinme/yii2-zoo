@@ -41,6 +41,8 @@ print_r($model->errors);
         
 $renderedElements = Json::encode($model->renderedElements);
 
+// echo Html::hiddenInput('renderedElements', $renderedElements, ['option' => 'value']);
+
 $js = <<<JS
 var form = $("#form");
 var renderedElements = $renderedElements;

@@ -105,9 +105,9 @@ class DefaultController extends Controller
 
         $searchModel = new s();
         $searchModel->app_id = $app->id;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
-        return $this->render('application',$app, [
+        return $this->rend('application',$app, [
             'app'=>$app,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -116,7 +116,7 @@ class DefaultController extends Controller
 
     protected function renderItem($model) {
 
-        return $this->render('item',$model->app,[
+        return $this->rend('item',$model->app,[
             'model'=>$model,
         ]);
     }

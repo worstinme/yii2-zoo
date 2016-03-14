@@ -2,6 +2,8 @@
 //
 use yii\helpers\Html;
 
+$related = isset($related) ? $related : false;
+
 ?>
 <ul class="<?=$related ? 'uk-nestable-list' : 'uk-nestable'?>"<?=$related ? '' :' data-uk-nestable="{handleClass:\'uk-nestable-handle\'}"'?> data-parent-id="<?=$parent_id?>">
 	<?php foreach ($categories as $category): ?>

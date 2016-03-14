@@ -13,7 +13,7 @@ class BaseElementBehavior extends \yii\base\Behavior
 
 	public $value_field = 'value_text';
 
-	public function rules($attributes = null)
+	public function rules($attributes)
 	{
 		return [];
 	}

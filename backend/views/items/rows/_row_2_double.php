@@ -1,4 +1,4 @@
-<div class="uk-form-row row<?=$class?' '.$class:''?>">
+<div class="uk-form-row row<?=$row['class']?' '.$row['class']:''?>">
 	<?=!empty($row['name'])?'<h2>'.$row['name'].'</h2>':''?>
 	<div class="uk-grid">	
 	<?php $k=0; foreach ($row['items'] as $items): ?>
@@ -10,7 +10,7 @@
 			<?php endif ?>
 			
 				<?php foreach ($items as $attribute)
-					echo $this->render('/items/_element',['model'=>$model,'attribute'=>$attribute['name'], 'view'=>$view]) ?>
+					echo $this->render('/items/_element',['model'=>$model,'attribute'=>$attribute['name']]) ?>
 			</div>
 		<?php endif ?>
 	<?php endforeach ?>

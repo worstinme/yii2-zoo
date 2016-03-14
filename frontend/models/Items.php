@@ -7,7 +7,6 @@ use yii\helpers\ArrayHelper;
 
 class Items extends \yii\db\ActiveRecord
 {
-    public $elements_;
     public $values = [];
     private $param_;
 
@@ -20,7 +19,7 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function afterFind() {
-        $this->attachBehaviors();
+        $this->regBehaviors();
         return parent::afterFind();
     }
 
@@ -41,11 +40,11 @@ class Items extends \yii\db\ActiveRecord
         return $this->hasMany(ItemsElements::className(),['item_id'=>'id']);
     }
 
-    public function attachBehaviors() {
+    public function regBehaviors() {
         
-        $this->elements_ = array_unique(ArrayHelper::getColumn($this->elements,'type'));
+        $elements = array_unique(ArrayHelper::getColumn($this->elements,'type'));
                
-        foreach ($this->elements_ as $behavior) {
+        foreach ($elements as $behavior) {
             if (is_file(Yii::getAlias('@worstinme/zoo/elements/'.$behavior.'/Element.php'))) {
                 $behavior_class = '\worstinme\zoo\elements\\'.$behavior.'\Element';
                 $this->attachBehavior($behavior,$behavior_class::className());
@@ -57,7 +56,11 @@ class Items extends \yii\db\ActiveRecord
 
     public function __get($name)
     { 
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
+        if (!in_array($name, $this->attributes())
+                && $name != 'elements'
+                && isset($this->elements[$name])
+                && $this->elements[$name] !== null 
+                && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->getValue($name);
         } else {
             return parent::__get($name);
@@ -66,7 +69,7 @@ class Items extends \yii\db\ActiveRecord
 
     public function getParam() {
         if ($this->param_ === null) {
-            $this->param_ = \yii\helpers\Json::decode($this->params);
+            $this->param_ = $this->params !== null  && !empty($this->params) ? \yii\helpers\Json::decode($this->params,true) : [];
         }
         return $this->param_;
     }

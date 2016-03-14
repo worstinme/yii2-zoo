@@ -57,56 +57,61 @@ class Categories extends \yii\db\ActiveRecord
 
         //metaTitle
     public function getMetaTitle() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         return isset($params['metaTitle']) ? $params['metaTitle'] : '';
     }
     public function setMetaTitle($s) {
-        $params = Json::decode($this->params); $params['metaTitle'] = $s;
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        $params['metaTitle'] = $s;
         return $this->params = Json::encode($params);
     }
 
     //metaKeywords
     public function getMetaKeywords() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
     }
     public function setMetaKeywords($s) {
-        $params = Json::decode($this->params); $params['metaKeywords'] = $s;
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        $params['metaKeywords'] = $s;
         return $this->params = Json::encode($params);
     }
 
     //metaDescription
     public function getMetaDescription() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         return isset($params['metaDescription']) ? $params['metaDescription'] : '';
     }
     public function setMetaDescription($s) {
-        $params = Json::decode($this->params); $params['metaDescription'] = $s;
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        $params['metaDescription'] = $s;
         return $this->params = Json::encode($params);
     }
 
     //metaDescription
     public function getContent() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         return isset($params['content']) ? $params['content'] : '';
     }
     public function setContent($s) {
-        $params = Json::decode($this->params); $params['content'] = $s;
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        $params['content'] = $s;
         return $this->params = Json::encode($params);
     }
 
     //metaDescription
     public function getPreContent() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         return isset($params['preContent']) ? $params['preContent'] : '';
     }
     public function setPreContent($s) {
-        $params = Json::decode($this->params); $params['preContent'] = $s;
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        $params['preContent'] = $s;
         return $this->params = Json::encode($params);
     }
 
     public function getTemplate($name) {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         return isset($params['templates']) && isset($params['templates'][$name]) ? $params['templates'][$name] : [];
     }
 

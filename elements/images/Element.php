@@ -26,7 +26,9 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     		if ($element->element == $attribute) {
 
     			if ($element->value_int !== null && $element->value_text !== null) {
-                    $filename = $this->owner->id.'_'.array_pop(explode("/",$element->value_text ));
+
+                    $filenameparts = explode("/",$element->value_text );
+                    $filename = $this->owner->id.'_'.array_pop($filenameparts);
                     
                     switch ($element->value_int) {
                         case 2:

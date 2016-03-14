@@ -1,17 +1,32 @@
 <?php
 
 use yii\helpers\Html;
-
-$query = $searchModel->query;
+use yii\helpers\ArrayHelper;
 
 $variants = (new \yii\db\Query())
     ->select(['value_string'])
     ->from('{{%zoo_items_elements}}')
     ->where(['element'=>$element->name])
-    ->indexBy('value_string')
     ->groupBy('value_string')
     ->orderBy('count(item_id) DESC')
-    ->column();
+    ->column();  
+
+// $variants = $searchModel->search(Yii::$app->request->queryParams)->select('material.value_string')->groupBy('material.value_string')->andWhere('material.value_string IS NOT NULL')->orderBY('count(material.value_string) DESC')->column(); 
+
+$variants = ArrayHelper::index($variants, function ($element) {return $element;}); 
+
+/* 
+
+$values = $searchModel->{$element->name};
+
+if(is_array($values) && count($values))
+foreach ($values as $value) {
+    if ($value !== null && !empty($value)) {
+        $variants[$value] = $value;
+    }
+}
+
+*/
 
 ?>
 

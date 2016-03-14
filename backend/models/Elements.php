@@ -180,7 +180,7 @@ class Elements extends \yii\db\ActiveRecord
     }
 
     public function getTypes() {
-        return count($this->params['types'])?$this->params['types']:[]; 
+        return isset($this->params['types']) && count($this->params['types'])?$this->params['types']:[]; 
     }
 
     public function setTypes($array) {

@@ -17,9 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			<ul class="uk-subnav uk-subnav-line">
 			<?php foreach ($templates as $key => $value): ?>
 				<?php if ($item !== null): ?>
-					<li class="<?=$at != $value?:'uk-active'?>"><?=Html::a($value,['templates','template'=>$value,'app'=>$app->id,'item'=>$item->id])?></li>	
+					<li class="<?=$at != $value?:'uk-active'?>"><?=Html::a($value,['templates','template'=>$value,'app'=>Yii::$app->controller->app->id,'item'=>$item->id])?></li>	
 				<?php else: ?>
-					<li class="<?=$at != $value?:'uk-active'?>"><?=Html::a($value,['templates','template'=>$value,'app'=>$app->id])?></li>	
+					<li class="<?=$at != $value?:'uk-active'?>"><?=Html::a($value,['templates','template'=>$value,'app'=>Yii::$app->controller->app->id])?></li>	
 				<?php endif ?>
 				<?php endforeach ?>
 			</ul>
@@ -46,15 +46,15 @@ $this->params['breadcrumbs'][] = $this->title;
 							</div>
 							<ul class="uk-nestable" data-uk-nestable="{group:'elements',maxDepth:2}">
 								<?php foreach ($row['items'] as $items):  ?>
-									<? $item = array_shift($items); ?>
-									<?php if (array_key_exists($item['name'], $elements)): ?>									
+									<? $it = array_shift($items); ?>
+									<?php if (array_key_exists($it['name'], $elements)): ?>									
 									
-									<li class="uk-nestable-item" data-element-id="<?=$item['name']?>">
+									<li class="uk-nestable-item" data-element-id="<?=$it['name']?>">
 								        <div class="uk-nestable-panel">
 								            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-								            <?=$elements[$item['name']]->title?>
-								            <?=$this->render($elements[$item['name']]->paramsView,['params'=>$item['params']])?>
-								            <? unset($elements[$item['name']]); ?>
+								            <?=$elements[$it['name']]->title?>
+								            <?=$this->render($elements[$it['name']]->paramsView,['params'=>isset($it['params']) ? $it['params'] : null])?>
+								            <? unset($elements[$it['name']]); ?>
 								        </div>
 								        <?php if (count($items)): ?>
 								        <ul class="uk-nestable">
@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div>
 		</div>
 		<div class="uk-width-medium-2-10">
-			<?=$this->render('/_nav',['app'=>$app])?>
+			<?=$this->render('/_nav')?>
 		</div>
 	</div>
 </div>
@@ -137,7 +137,9 @@ $this->params['breadcrumbs'][] = $this->title;
 \worstinme\uikit\assets\Nestable::register($this);
 \worstinme\uikit\assets\Notify::register($this);
 
-$template_url = $item !== null ? Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/template','app'=>$app->id,'item'=>$item->id]) : Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/template','app'=>$app->id]);
+$template_url = $item !== null  
+	? Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/template','app'=>Yii::$app->controller->app->id,'item'=>$item->id]) 
+	: Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/template','app'=>Yii::$app->controller->app->id]);
 
 $script = <<< JS
 

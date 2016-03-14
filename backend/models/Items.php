@@ -29,7 +29,7 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function afterFind() {
-        $this->attachBehaviors();
+        $this->regBehaviors();
         return parent::afterFind();
     }
 
@@ -50,7 +50,7 @@ class Items extends \yii\db\ActiveRecord
             ->viaTable('{{%zoo_items_categories}}',['item_id'=>'id']);
     }
 
-    public function attachBehaviors() {
+    public function regBehaviors() {
         
         $this->elements_ = array_unique(ArrayHelper::getColumn($this->elements,'type'));
                
@@ -66,20 +66,24 @@ class Items extends \yii\db\ActiveRecord
 
     public function __get($name)
     { 
-
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
+        if (!in_array($name, $this->attributes())
+                && $name != 'elements'
+                && isset($this->elements[$name])
+                && $this->elements[$name] !== null 
+                && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->getValue($name);
         } else {
-            if ($name == 'category') {
-                return null;
-            }
             return parent::__get($name);
         }
-    } 
+    }  
     
     public function __set($name, $value)
     {
-        if (!in_array($name, $this->attributes()) && $this->elements[$name] !== null && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
+        if (!in_array($name, $this->attributes())
+                && $name != 'elements'
+                && isset($this->elements[$name])
+                && $this->elements[$name] !== null 
+                && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->setValue($name,$value);
         } else {
             parent::__set($name, $value);
@@ -160,16 +164,18 @@ class Items extends \yii\db\ActiveRecord
 
     public function getElementParam($element,$param,$default = null)
     {
-        if (is_array($this->elements[$element]) && array_key_exists($param, $this->elements[$element])) {
+        if (isset($this->elements[$element]) && is_array($this->elements[$element]) && array_key_exists($param, $this->elements[$element])) {
             return $this->elements[$element][$param];
         }
 
         if (is_array($this->elements[$element]) && array_key_exists('params', $this->elements[$element])) {
+            
             $params = \yii\helpers\Json::decode($this->elements[$element]['params']);
-        }
+        
+            if (is_array($params) && array_key_exists($param, $params)) {
+                return $params[$param];
+            }
 
-        if (is_array($params) && array_key_exists($param, $params)) {
-            return $params[$param];
         }
 
         return $default;
@@ -177,27 +183,28 @@ class Items extends \yii\db\ActiveRecord
 
     //metaTitle
     public function getMetaTitle() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null ? Json::decode($this->params) : null;
         return isset($params['metaTitle']) ? $params['metaTitle'] : '';
     }
     public function setMetaTitle($s) {
-        $params = Json::decode($this->params); $params['metaTitle'] = $s;
+        $params = $this->params !== null ? Json::decode($this->params) : null; $params['metaTitle'] = $s;
         return $this->params = Json::encode($params);
     }
 
     //metaKeywords
     public function getMetaKeywords() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null ? Json::decode($this->params) : null;
         return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
     }
     public function setMetaKeywords($s) {
-        $params = Json::decode($this->params); $params['metaKeywords'] = $s;
+        $params = $this->params !== null ? Json::decode($this->params) : null;
+        $params['metaKeywords'] = $s;
         return $this->params = Json::encode($params);
     }
 
     //metaDescription
     public function getMetaDescription() {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null ? Json::decode($this->params) : null;
         return isset($params['metaDescription']) ? $params['metaDescription'] : '';
     }
     public function setMetaDescription($s) {
@@ -206,7 +213,7 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function getTemplate($name = 'full') {
-        $params = Json::decode($this->params);
+        $params = $this->params !== null ? Json::decode($this->params) : null;
         return isset($params['templates']) && isset($params['templates'][$name]) ? $params['templates'][$name] : [];
     }
 

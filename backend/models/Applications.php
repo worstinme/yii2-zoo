@@ -62,10 +62,7 @@ class Applications extends \yii\db\ActiveRecord
         return parent::afterFind();
     }
 
-    public function getCatlist() {
-        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();
-        return $catlist = count($parents) ? $this->getRelatedList($parents,$catlist,'') : [];
-    }
+
 
     public function getParentCategories() {
         return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
@@ -188,6 +185,10 @@ class Applications extends \yii\db\ActiveRecord
         return parent::afterSave($insert, $changedAttributes);
     } 
 
+    public function getCatlist() {
+        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();
+        return $catlist = count($parents) ? $this->getRelatedList($parents,[],'') : [];
+    }
     protected function getRelatedList($items,$array,$level) {
         if (count($items)) {
             foreach ($items as $item) {

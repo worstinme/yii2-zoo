@@ -15,9 +15,9 @@ use yii\web\NotFoundHttpException;
 class Controller extends \yii\web\Controller
 {
 
-	public function render($view, $app, $params = [])
+	public function rend($view, $app, $params = [])
     {
-    	return parent::render($this->findView($view,$app), $params);
+    	return $this->render($this->findView($view,$app), $params);
     }
 
     public function findView($view,$app) {

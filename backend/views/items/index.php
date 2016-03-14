@@ -60,6 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
                       'delete' => function ($url, $model) {     
                         return Html::a('<i class="uk-icon-trash"></i>', $url, [
                                 'title' => Yii::t('backend', 'Удалить'),
+                                'data'=>[
+                                    'method'=>'post',
+                                    'confirm'=>'Точно удалить?',
+                                ],
                         ]);                                
                       },
                     ],
