@@ -1,11 +1,15 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ListView;
 use worstinme\uikit\Breadcrumbs;
 
 $this->title = $app->title;
 $this->params['breadcrumbs'][] = $this->title;
+
+if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]);
+
 
 ?>
 
