@@ -31,6 +31,7 @@ class Controller extends \yii\web\Controller
                 'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post','delete'],
+                    'category-delete'=> ['post','delete'],
                 ],
             ],
         ];

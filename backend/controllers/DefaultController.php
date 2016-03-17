@@ -101,6 +101,22 @@ class DefaultController extends Controller
         ]);
     }
 
+    public function actionCategoryDelete() {
+
+        $app = $this->getApp();
+
+        if (Yii::$app->request->isPost) {
+  
+            $category = Categories::findOne(Yii::$app->request->get('category'));
+
+            if ($category !== null) {
+                $category->delete();
+            }
+        }
+        
+        return $this->redirect(['categories','app'=>$app->id]);
+    }
+
     public function actionUpdateType() {
 
         $app = $this->getApplication(true);

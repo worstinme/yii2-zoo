@@ -21,6 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
 		<h2><?=Yii::t('backend','Создание категории')?></h2>
 
 		<?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large','field_size'=>'large']); ?>
+
+		<?php if ($model->frontendCategory !== null): ?>
+			<?= Html::a('Посмотреть на сайте', $model->frontendCategory->url, ['target'=>'_blank','class' => 'uk-margin-top uk-button uk-button-primary uk-float-right']); ?>
+		<?php endif ?>
+			
 		                    
 		    <?= $form->field($model, 'name')->textInput(["data-aliascreate"=>"#categories-alias"])  ?>
 
@@ -35,9 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			        'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
 			            'preset' => 'standart',
 		                'allowedContent' => true,
-		                'height'=>'200px',
+		                'height'=>'200px',		
+                		//'forcePasteAsPlainText'=>true,
 		                'contentsCss'=>[
+		                	'/assets/58ef8039/css/uikit.min.css',
 		                    '/css/site.css',
+		                    'https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,400italic,900&amp;subset=latin,cyrillic',
 		                ],
 			        ]),
 			]); ?>
@@ -47,8 +55,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			            'preset' => 'standart',
 		                'allowedContent' => true,
 		                'height'=>'200px',
+                		//'forcePasteAsPlainText'=>true,
 		                'contentsCss'=>[
+		                	'/assets/58ef8039/css/uikit.min.css',
 		                    '/css/site.css',
+		                    'https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,400italic,900&amp;subset=latin,cyrillic',
 		                ],
 			        ]),
 			]); ?>

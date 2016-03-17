@@ -3,21 +3,8 @@
 namespace worstinme\zoo\frontend\models;
 
 use Yii;
+use yii\helpers\Json;
 
-/**
- * This is the model class for table "{{%zoo_categories}}".
- *
- * @property integer $id
- * @property string $name
- * @property string $alias
- * @property integer $parent_id
- * @property integer $app_id
- * @property integer $sort
- * @property integer $state
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $params
- */
 class Categories extends \yii\db\ActiveRecord
 {
     /**
@@ -28,35 +15,59 @@ class Categories extends \yii\db\ActiveRecord
         return '{{%zoo_categories}}';
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['name', 'alias', 'app_id', 'created_at', 'updated_at'], 'required'],
-            [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
-            [['params'], 'string'],
-            [['name', 'alias'], 'string', 'max' => 255]
-        ];
+    public function getApp() {
+        return $this->hasOne(Applications::className(),['id'=>'app_id']);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'name' => 'Name',
-            'alias' => 'Alias',
-            'parent_id' => 'Parent ID',
-            'app_id' => 'App ID',
-            'sort' => 'Sort',
-            'state' => 'State',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'params' => 'Params',
-        ];
+    public function getParent() {
+        return $this->hasOne(Categories::className(),['id'=>'parent_id']);
+    }
+
+    //metaTitle
+    public function getMetaTitle() {
+        $params = $this->params !== null ? Json::decode($this->params) : null;
+        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
+    }
+
+    //metaKeywords
+    public function getMetaKeywords() {
+        $params = $this->params !== null ? Json::decode($this->params) : null;
+        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
+    }
+
+    //metaDescription
+    public function getMetaDescription() {
+        $params = $this->params !== null ? Json::decode($this->params) : null;
+        return isset($params['metaDescription']) ? $params['metaDescription'] : '';
+    }
+
+    //metaDescription
+    public function getContent() {
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        return isset($params['content']) ? $params['content'] : '';
+    }
+
+    //metaDescription
+    public function getPreContent() {
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        return isset($params['preContent']) ? $params['preContent'] : '';
+    }
+
+    public function getUrl() {
+
+        $a = $this->app->name;
+
+        if ($this->parent !== null) {
+            if ($this->parent->parent !== null) {
+                return ['/zoo/default/abcd','a'=>$a,'b'=>$this->parent->parent->alias,'c'=>$this->parent->alias,'d'=>$this->alias];
+            }
+            else {
+                return ['/zoo/default/abc','a'=>$a,'b'=>$this->parent->alias,'c'=>$this->alias];
+            }
+        }
+        else {
+            return ['/zoo/default/ab','a'=>$a,'b'=>$this->alias];
+        }
+
     }
 }

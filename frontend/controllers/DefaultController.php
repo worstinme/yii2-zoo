@@ -75,6 +75,45 @@ class DefaultController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionAbc($a,$b,$c)
+    {
+        if (($app = Applications::find()->where(['name'=>$a])->one()) !== null) {
+
+            if (($parent_cat = Categories::find()->where(['app_id'=>$app->id,'alias'=>$b])->one()) !== null) {
+                // приложение -> категория по алиасу
+                if (($category = Categories::find()->where(['app_id'=>$app->id,'parent_id'=>$parent_cat->id,'alias'=>$c])->one()) !== null) {
+                    
+                    return $this->renderCategory($category);
+                }
+                elseif(($model = Items::find()->where(['app_id'=>$app->id,'alias'=>$c])->one()) !== null) {
+                    // приложение -> материал по алиасу
+                    return $this->renderItem($model);
+                }
+                elseif(($model = Items::find()->where(['app_id'=>$app->id,'id'=>$c])->one()) !== null) {
+                    // приложение -> материал по ID
+                    return $this->renderItem($model);
+                }  
+            }
+            
+        }
+        else {
+
+            if (($category = Categories::find()->where(['app_id'=>1,'alias'=>$a])->one()) !== null) {
+                if(($model = Items::find()->where(['app_id'=>1,'alias'=>$b])->one()) !== null && $model->parentCategory->alias == $a) {
+                    // приложение -> материал по алиасу
+                    return $this->renderItem($model);
+                }
+                elseif(($model = Items::find()->where(['app_id'=>1,'id'=>$b])->one()) !== null && $model->parentCategory->alias == $a) {
+                    // приложение -> материал по ID
+                    return $this->renderItem($model);
+                }
+            }
+            // категория дефолтного приложения -> материал
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
 
     public function getApp() {
 
@@ -118,6 +157,13 @@ class DefaultController extends Controller
 
         return $this->rend('item',$model->app,[
             'model'=>$model,
+        ]);
+    }
+
+    protected function renderCategory($category) {
+
+        return $this->rend('category',$category->app,[
+            'category'=>$category,
         ]);
     }
 }

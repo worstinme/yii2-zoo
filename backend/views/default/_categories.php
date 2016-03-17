@@ -11,8 +11,15 @@ $related = isset($related) ? $related : false;
 	        <div class="uk-nestable-panel">
 	            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
 	            <div data-nestable-action="toggle" class="uk-nestable-toggle uk-margin-small-right"></div>
-		        <?=Html::a($category->name,$category->url)?> / <?=$category->alias?> 
-		        
+		        <?=Html::a($category->name,$category->url,['target'=>'_blank'])?> / <?=$category->alias?> 
+		        <?=Html::a('<i class="uk-icon-trash"></i>',['category-delete','app'=>Yii::$app->controller->app->id,'category'=>$category->id],[
+		        		'class'=>'uk-float-right uk-margin-right',
+		        		'data'=>[
+		        			'method'=>'post',
+		        			'confirm'=>'Уверены что хотите удалить категорию '.$category->name.'?',
+		        		],
+		        		'target'=>'_blank',
+		        ])?> 
 		        <i class="uk-float-right uk-margin-right"><?=$category->id?></i>
 			</div>
 			<?php if ($category->getRelated()->count()): ?>

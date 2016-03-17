@@ -120,6 +120,11 @@ class Categories extends \yii\db\ActiveRecord
         return $this->hasMany(Categories::className(), ['parent_id' => 'id'])->orderBy('sort ASC');
     } 
 
+    public function getFrontendCategory()
+    {
+        return $this->hasOne(\worstinme\zoo\frontend\models\Categories::className(), ['id' => 'id']);
+    } 
+
     public function getParent()
     {
         return $this->hasOne(Categories::className(), ['id' => 'parent_id'])->orderBy('sort ASC');
@@ -132,5 +137,17 @@ class Categories extends \yii\db\ActiveRecord
 
     public function getUrl() {
         return yii\helpers\Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/update-category','app'=>$this->app_id,'category'=>$this->id]);
+    }
+
+    public function afterDelete()
+    {
+        $db = Yii::$app->db;
+
+        $db->createCommand()->delete('{{%zoo_items_categories}}', ['category_id'=>$this->id])->execute();
+        $db->createCommand()->delete('{{%zoo_elements_categories}}', ['category_id'=>$this->id])->execute();
+        $db->createCommand()->update('zoo_categories',['parent_id'=>0], ['parent_id'=>$this->id])->execute();
+        
+        parent::afterDelete();
+        
     }
 }
