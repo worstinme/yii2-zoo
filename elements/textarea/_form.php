@@ -17,6 +17,7 @@ $this->registerJs($model->addValidators($this,$attribute), 5);  ?>
                 'height'=>'400px',
                 'contentsCss'=>[
                     '/css/site.css',
+                    'https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,400italic,900&subset=latin,cyrillic',
                 ],
         ])
     ])?>
