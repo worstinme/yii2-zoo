@@ -18,6 +18,7 @@ class S extends Items
     public $color;
     public $material;
     public $filter;
+    public $categories = [];
 
     /**
      * @inheritdoc
@@ -54,6 +55,11 @@ class S extends Items
         }
 
         $query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+
+        if (count($this->categories)) {
+            $query->leftJoin('{{%zoo_items_categories}}', "{{%zoo_items_categories}}.item_id = a.id");
+            $query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>$this->categories]);
+        }
 
         if ($this->price_max > 0 || $this->price_min > 0) {
             $query->andFilterWhere(['<=','price',$this->price_max]);

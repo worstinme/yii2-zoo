@@ -162,8 +162,19 @@ class DefaultController extends Controller
 
     protected function renderCategory($category) {
 
-        return $this->rend('category',$category->app,[
+        $app = $category->app;
+
+        $searchModel = new s();
+        $searchModel->app_id = $app->id;
+        $searchModel->categories = [$category->id];
+        $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
+
+        return $this->rend('category', $app,[
             'category'=>$category,
+            'app'=>$app,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
+
     }
 }

@@ -63,4 +63,8 @@ class Applications extends \yii\db\ActiveRecord
     public function getElements() {
         return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
     }
+
+    public function getRelatedCategories() {
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where('{{%zoo_categories}}.parent_id = 0')->orderBy('sort ASC');
+    }
 }

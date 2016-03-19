@@ -14,10 +14,11 @@ class Categories extends \yii\db\ActiveRecord
     {
         return '{{%zoo_categories}}';
     }
-
-    public function getApp() {
-        return $this->hasOne(Applications::className(),['id'=>'app_id']);
-    }
+    
+    public function getApp()
+    {
+        return $this->hasOne(Applications::className(), ['id' => 'app_id']);
+    } 
 
     public function getParent() {
         return $this->hasOne(Categories::className(),['id'=>'parent_id']);
