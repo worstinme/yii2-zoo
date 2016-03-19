@@ -42,6 +42,7 @@ class S extends Items
 
         return $rules;
     }
+
     /**
      * @inheritdoc
      */
@@ -49,7 +50,7 @@ class S extends Items
     public function query()
     {
 
-        return Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+        return Items::find()->from(['a'=>'{{%zoo_items}}'])->leftJoin('{{%zoo_items_categories}}', "{{%zoo_items_categories}}.item_id = a.id")->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>(new \yii\db\Query())->select('id')->from('{{%zoo_categories}}')->where(['app_id'=>$this->app_id,'state'=>1])->column()]);
     }
 
     public function search($params = null)
@@ -59,14 +60,18 @@ class S extends Items
             $this->load($params);
         }
 
+        $this->query = Items::find()->from(['a'=>'{{%zoo_items}}']);
+        $this->query->leftJoin('{{%zoo_items_categories}}', "{{%zoo_items_categories}}.item_id = a.id");
+
         if (count($this->categories)) {
-            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}']);
-            $this->query->leftJoin('{{%zoo_items_categories}}', "{{%zoo_items_categories}}.item_id = a.id");
-            $this->query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>$this->categories]);
+            $this->query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>$this->categoryTree($this->categories)]);
         }
         else {
-
-            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+            $this->query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>(new \yii\db\Query())
+                ->select('id')
+                ->from('{{%zoo_categories}}')
+                ->where(['app_id'=>$this->app_id,'state'=>1])
+                ->column()]);
         }
 
         foreach ($this->elements as $element) {
@@ -117,20 +122,37 @@ class S extends Items
                         'default' => SORT_ASC,
                         'label'=>'price',
                     ],
-                    'hits' => [
-                        'asc' => ['a.hits' => SORT_ASC],
-                        'desc' => ['a.hits' => SORT_DESC],
+                    'amount' => [
+                        'asc' => ['a.amount' => SORT_ASC],
+                        'desc' => ['a.amount' => SORT_DESC],
                         'default' => SORT_ASC,
-                        'label'=>'hits',
+                        'label'=>'amount',
                     ],
                 ], 
-                'defaultOrder'=>['name' => SORT_DESC],   
+                'defaultOrder'=>['amount' => SORT_DESC],   
             ], 
             'pagination'=>[
-                'defaultPageSize'=>30,
+                'defaultPageSize'=>36,
             ],
         ]);
 
         return $dataProvider;
     }
+
+
+    public function categoryTree($categories) {
+
+        $related = (new \yii\db\Query())
+                ->select('id')
+                ->from('{{%zoo_categories}}')
+                ->where(['parent_id'=>$categories,'state'=>1])
+                ->column(); 
+
+        if (count($related) > 0) {
+            $related = $this->categoryTree($related);
+        }
+
+        return array_merge($categories,$related);
+    }
+
 }
