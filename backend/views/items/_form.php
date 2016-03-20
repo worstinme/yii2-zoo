@@ -6,7 +6,7 @@ use worstinme\uikit\ActiveForm;
 
 $template = Yii::$app->controller->app->getTemplate('form'); ?>
 
-<div class="uk-panel uk-panel-box">
+<div class="uk-panel">
 
 <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValidation' => false]);
 
