@@ -7,7 +7,39 @@ use worstinme\uikit\ActiveForm;
 
 $filter  = Yii::$app->request->post('Filter');
 
+if ($filter['element'] == 'parsed_category') {
+	
+	$categories = (new \yii\db\Query())
+	    ->select(['value_string'])
+	    ->from('{{%zoo_items_elements}}')
+	    ->where(['element'=>'parsed_category'])
+	    ->groupBy('value_string')
+	    ->orderBy('count(item_id) DESC')
+	    ->column(); 
 
+	$variants = [];
+
+	foreach ($categories as $value) {
+	  	
+	  	$category = \app\modules\admin\models\ParserCategories::find()->where(['source_id'=>$value])->one();
+
+	  	$cat_id = $value;
+
+		if ($category !== null) {
+			$value = $category->name;
+			if ($category->parent !== null) {
+				$value = $category->parent->name.' / '.$value;
+				if ($category->parent->parent !== null) {
+					$value = $category->parent->parent->name.' / '.$value;
+				}
+			}
+		}
+
+		$variants[$cat_id] = $value;
+	}
+
+}
+else {
 
 	$variants = $filter['element'] !== null ? (new \yii\db\Query())
 	    ->select(['value_string'])
@@ -18,6 +50,7 @@ $filter  = Yii::$app->request->post('Filter');
 	    ->column() : []; 
 
 	$variants = ArrayHelper::index($variants, function ($element) {return $element;}); 
+}
 
 
 
