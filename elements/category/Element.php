@@ -27,7 +27,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     }
 
     public function getValue($attribute = 'category') {
-        return $this->owner->values['category'];
+        return $this->owner->values['category']?:[];
     }
 
     public function setValue($attribute,$value) {

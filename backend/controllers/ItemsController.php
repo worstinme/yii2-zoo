@@ -20,6 +20,9 @@ class ItemsController extends Controller
         $app = $this->getApp();
         
         $searchModel = new ItemsSearch();
+        $searchModel->app_id = $app->id;
+        $searchModel->regBehaviors();
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

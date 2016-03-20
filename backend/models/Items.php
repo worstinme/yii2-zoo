@@ -12,7 +12,7 @@ class Items extends \yii\db\ActiveRecord
 
     private $renderedElements = [];
     public $values = [];
-    private $elements_ = [];
+    public $elements_ = [];
 
     /**
      * @inheritdoc
