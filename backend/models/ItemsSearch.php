@@ -32,15 +32,10 @@ class ItemsSearch extends Items
     {
         $query = Items::find()->groupBy('{{%zoo_items}}.id');
 
-
-        if (Yii::$app->request->get('app') !== null) {
-            $query  = $query->where(['{{%zoo_items}}.app_id'=>Yii::$app->request->get('app')]);
-        }
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 30,
             ],
         ]);
 
@@ -55,7 +50,7 @@ class ItemsSearch extends Items
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'app_id' => $this->app_id,
             'flag' => $this->flag,
             'sort' => $this->sort,
             'state' => $this->state,

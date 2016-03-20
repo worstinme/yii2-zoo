@@ -38,13 +38,14 @@ class Module extends \yii\base\Module
             'select'=>'Список вариантов',
             'textarea'=>'Текст / Редактор',
             'textfield'=>'Текстовое поле / Строка',
-            'units'=>'Единицы измерения',
-            'slug'=>'Alias/Slug',
-            'name'=>'Name',
-            'price'=>'Price',
-            'images'=>'Images',
-            'color'=>'COLOR',
+            'units'=>'units',
+            'slug'=>'slug',
+            'name'=>'name',
+            'price'=>'price',
+            'images'=>'images',
+            'color'=>'color',
             'buy'=>'buy',
+            'parsed_category'=>'parsed_category',
         ];
 
     }

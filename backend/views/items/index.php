@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 $this->title = Yii::$app->controller->app->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];    
@@ -14,10 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="uk-width-medium-5-6">
 
+        <?php  \yii\widgets\Pjax::begin(['id'=>'catalog','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
+
+        <?php  \yii\widgets\Pjax::begin(['id'=>'filter','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
+            <?= $this->render('_filter',['searchModel'=>$searchModel]); ?>
+        <?php  \yii\widgets\Pjax::end(); ?>
+        
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-bordered'],
+            'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-bordered uk-margin-top'],
             'options'=> ['class' => 'items'],
             'layout' => '{items}{pager}<hr>',
             'pager' => ['class'=> 'app\components\LinkPager'],
@@ -71,6 +78,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]); ?>
+
+        <?php  \yii\widgets\Pjax::end(); ?>
 
         </div>
 
