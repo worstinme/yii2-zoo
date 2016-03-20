@@ -15,8 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="uk-width-medium-5-6">
 
-        <?php  \yii\widgets\Pjax::begin(['id'=>'catalog','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
-
         <?php  \yii\widgets\Pjax::begin(['id'=>'filter','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
             <?= $this->render('_filter',['searchModel'=>$searchModel]); ?>
         <?php  \yii\widgets\Pjax::end(); ?>
@@ -24,9 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
+            'summaryOptions'=>['class'=>'uk-text-center'],
             'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-bordered uk-margin-top'],
             'options'=> ['class' => 'items'],
-            'layout' => '{items}{pager}<hr>',
+            'layout' => '{items}{summary}{pager}<hr>',
             'pager' => ['class'=> 'app\components\LinkPager'],
             'columns' => [
                 
@@ -42,6 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute'=>'category',
+                    'filter'=>false,
                     'label'=>'Категории',
                     'format' => 'html',
                     'value' => function ($model, $index, $widget) {
@@ -96,8 +96,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ],
         ]); ?>
-
-        <?php  \yii\widgets\Pjax::end(); ?>
 
         </div>
 

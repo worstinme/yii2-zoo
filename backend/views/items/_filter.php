@@ -7,6 +7,19 @@ use worstinme\uikit\ActiveForm;
 
 $filter  = Yii::$app->request->post('Filter');
 
+$elements = [];
+ArrayHelper::map($searchModel->elements,'name','title');
+
+foreach ($searchModel->elements as $element) {
+	if (!in_array($element->name,$searchModel->attributes())) {
+
+		if ($element->filterAdmin) {
+			$elements[$element->name] = $element->title;
+		}
+		
+	}
+}
+
 if ($filter['element'] == 'parsed_category') {
 	
 	$categories = (new \yii\db\Query())
@@ -64,9 +77,9 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 
 	<div class="uk-width-3-10">
 
-		<?php $form = ActiveForm::begin(['action'=>Url::current(), 'id' => 'login-form','options'=>['data-pjax'=>false]]); ?>
+		<?php $form = ActiveForm::begin(['action'=>Url::current(), 'id' => 'login-form','options'=>['data-pjax'=>true]]); ?>
 
-			<?= Html::dropDownList('Filter[element]',$filter['element']?:null, ArrayHelper::map($searchModel->elements,'name','title'), ['id'=>"filter-element",'prompt'=>'Выбрать параметр для фильтрации']); ?>
+			<?= Html::dropDownList('Filter[element]',$filter['element']?:null, $elements, ['id'=>"filter-element",'prompt'=>'Выбрать параметр для фильтрации']); ?>
 
 		<?php ActiveForm::end(); ?>
 
@@ -77,7 +90,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 	<?php $form = ActiveForm::begin([
 		'action'=> Url::current(),
         'method' => 'get',
-        'options'=>['class'=>'uk-margin-top','data-pjax' => true],
+        'options'=>['class'=>'uk-margin-top','data-pjax' => false],
     ]); ?>
 
     <?php if (count($search_params)): ?>

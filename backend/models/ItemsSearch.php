@@ -15,14 +15,27 @@ class ItemsSearch extends Items
 {
 
     public $search;
+
+    public $isSearch = true;
     /**
      * @inheritdoc
      */
     public function rules()
     {
-        return [
+        $rules = [
             [['search'],'string'],
         ];
+
+        foreach ($this->elements_ as $behavior_name) {
+            if (($behavior = $this->getBehavior($behavior_name)) !== null) {
+                $behavior_rules = $behavior->rules($this->getElementsByType($behavior_name));
+                if (count($behavior_rules)) {
+                    $rules = array_merge($rules,$behavior_rules);
+                }
+            }
+        }
+
+        return $rules;
     }
 
     public function attributeLabels()
@@ -40,35 +53,34 @@ class ItemsSearch extends Items
 
     public function search($params)
     {
-        $query = Items::find()->groupBy('{{%zoo_items}}.id');
+        $query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+        $this->load($params);
+
+        foreach ($this->elements as $element) {
+
+            $e = $element->name;
+
+            if (!in_array($e, $this->attributes) && $element->filterAdmin) {
+                
+                if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
+
+                    $query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = a.id AND ".$e.".element = '".$e."'");
+                    $query->andFilterWhere([$e.'.value_string'=>$this->$e]);
+                }
+
+            }
+        }
+
+        $query->andFilterWhere([
+           
+        ]);
+
+        return $dataProvider = new ActiveDataProvider([
+            'query' => $query->groupBy('a.id'),
             'pagination' => [
                 'pageSize' => 30,
             ],
         ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'app_id' => $this->app_id,
-            'flag' => $this->flag,
-            'sort' => $this->sort,
-            'state' => $this->state,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-        ]);
-
-        $query->andFilterWhere(['like', 'params', $this->params]);
-
-        return $dataProvider;
     }
 }

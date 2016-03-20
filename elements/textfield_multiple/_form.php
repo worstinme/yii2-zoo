@@ -8,7 +8,6 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
 
 <?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
 
-
 <div class="uk-from-controls">
 	<?php foreach ($model->{$attribute} as $key=>$value): ?>
 	<?= Html::activeInput('text', $model, $attribute."[".$key."]",['class'=>'uk-width-1-1']); ?>	

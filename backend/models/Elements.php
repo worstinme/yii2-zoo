@@ -49,7 +49,7 @@ class Elements extends \yii\db\ActiveRecord
             ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
             ['types','each','rule'=>['number']],
 
-            [['filter', 'required', 'allcategories','refresh'], 'integer'],
+            [['filter','filterAdmin', 'required', 'allcategories','refresh'], 'integer'],
 
             [['params'],'safe'],
 
@@ -86,6 +86,7 @@ class Elements extends \yii\db\ActiveRecord
             'type' => Yii::t('backend', 'Type'),
             'required' => Yii::t('backend', 'Обязательно для заполнения?'),
             'filter' => Yii::t('backend', 'Использовать в фильтре?'),
+            'filterAdmin' => Yii::t('backend', 'Использовать в фильтре админки?'),
             'state' => Yii::t('backend', 'State'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
@@ -146,6 +147,17 @@ class Elements extends \yii\db\ActiveRecord
     public function setRefresh($refresh) { 
         $params = $this->params;
         $params['refresh'] = $refresh; 
+        return $this->params = $params;
+    }
+
+    //refresh
+    public function getFilterAdmin() { 
+        return isset($this->params['filterAdmin'])?$this->params['filterAdmin']:0; 
+    }
+
+    public function setFilterAdmin($refresh) { 
+        $params = $this->params;
+        $params['filterAdmin'] = $refresh; 
         return $this->params = $params;
     }
 

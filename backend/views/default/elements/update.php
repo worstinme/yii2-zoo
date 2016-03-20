@@ -58,6 +58,8 @@ $this->registerJs($js, $this::POS_READY);
 
 					<?= $form->field($model, 'filter')->checkbox() ?>
 
+					<?= $form->field($model, 'filterAdmin')->checkbox() ?>
+
 					<?= $form->field($model, 'refresh')->checkbox() ?>
 
 					<hr>

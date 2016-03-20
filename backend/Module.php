@@ -38,6 +38,7 @@ class Module extends \yii\base\Module
             'select'=>'Список вариантов',
             'textarea'=>'Текст / Редактор',
             'textfield'=>'Текстовое поле / Строка',
+            'textfield_multiple'=>'Текстовое поле / _multiple',
             'units'=>'units',
             'slug'=>'slug',
             'name'=>'name',
