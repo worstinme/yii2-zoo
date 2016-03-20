@@ -72,12 +72,12 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 
 	</div>
 
-	<hr>
+	
 
 	<?php $form = ActiveForm::begin([
 		'action'=> Url::current(),
         'method' => 'get',
-        'options'=>['class'=>'','data-pjax' => true],
+        'options'=>['class'=>'uk-margin-top','data-pjax' => true],
     ]); ?>
 
     <?php if (count($search_params)): ?>
