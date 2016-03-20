@@ -14,19 +14,29 @@ use worstinme\zoo\backend\models\Items;
 class ItemsSearch extends Items
 {
 
-    public $color;
+    public $search;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id','app_id', 'user_id', 'flag', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
-            [['name','color'],'string','max'=>255],
-            [['params'], 'safe'],
+            [['search'],'string'],
         ];
     }
 
+    public function attributeLabels()
+    {
+        $labels = [
+            'search' => Yii::t('backend', 'Поиск'),
+        ];
+
+        foreach ($this->elements as $key => $element) {
+            $labels[$key] = $element->title;
+        }
+
+        return $labels;
+    }
 
     public function search($params)
     {
@@ -40,7 +50,6 @@ class ItemsSearch extends Items
         ]);
 
         $this->load($params);
-
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails

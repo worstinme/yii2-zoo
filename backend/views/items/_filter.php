@@ -42,9 +42,10 @@ if ($filter['element'] == 'parsed_category') {
 else {
 
 	$variants = $filter['element'] !== null ? (new \yii\db\Query())
-	    ->select(['value_string'])
-	    ->from('{{%zoo_items_elements}}')
-	    ->where(['element'=>$filter['element']])
+	    ->select(['ie.value_string'])
+	    ->from(['ie'=>'{{%zoo_items_elements}}'])
+	    ->leftJoin(['i'=>'{{%zoo_items}}'],'i.id = ie.item_id')
+	    ->where(['ie.element'=>$filter['element'],'i.app_id'=>Yii::$app->controller->app->id])
 	    ->groupBy('value_string')
 	    ->orderBy('count(item_id) DESC')
 	    ->column() : []; 
@@ -63,7 +64,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 
 	<div class="uk-width-3-10">
 
-		<?php $form = ActiveForm::begin(['action'=>Url::current(), 'id' => 'login-form','options'=>['data-pjax'=>true]]); ?>
+		<?php $form = ActiveForm::begin(['action'=>Url::current(), 'id' => 'login-form','options'=>['data-pjax'=>false]]); ?>
 
 			<?= Html::dropDownList('Filter[element]',$filter['element']?:null, ArrayHelper::map($searchModel->elements,'name','title'), ['id'=>"filter-element",'prompt'=>'Выбрать параметр для фильтрации']); ?>
 
@@ -82,22 +83,24 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
     <?php if (count($search_params)): ?>
     	<div class="filter-list">
 		<?php foreach ($search_params as $key => $value): ?>
-			<?php if (is_array($value)): ?>
-				<?php foreach ($value as $v): ?>
+			<?php if (isset($searchModel->elements[$key])): ?>
+				<?php if (is_array($value)): ?>
+
+					<?php foreach ($value as $v): ?>
+						<span class="uk-badge uk-badge-notification uk-badge-success">
+							<b><?=$searchModel->elements[$key]->title?></b> : <?=$v?>
+							<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$v?>">
+								<i class="uk-icon-close"></i></a>
+						</span>
+					<?php endforeach ?>
+				<?php else: ?>
 					<span class="uk-badge uk-badge-notification uk-badge-success">
-						<b><?=$searchModel->elements[$key]->title?></b> : <?=$v?>
-						<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$v?>">
+						<b><?=$searchModel->elements[$key]->title?></b> : <?=$value?>
+						<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$value?>">
 							<i class="uk-icon-close"></i></a>
 					</span>
-				<?php endforeach ?>
-			<?php else: ?>
-				<span class="uk-badge uk-badge-notification uk-badge-success">
-					<b><?=$searchModel->elements[$key]->title?></b> : <?=$value?>
-					<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$value?>">
-						<i class="uk-icon-close"></i></a>
-				</span>
+				<?php endif ?>
 			<?php endif ?>
-			
 		<?php endforeach ?>
 		</div>
 	<?php endif; ?>
@@ -107,11 +110,11 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 	
 	<div class="uk-grid uk-grid-collapse uk-margin-top">	
 		
-	    <div class="uk-width-6-10">
+	    <div class="uk-width-5-10">
 			<?= Html::activeDropDownList($searchModel, $filter['element'].'[]', $variants, ['class' => 'uk-width-1-1 ']); ?>
 		</div>
 		
-		<div class="uk-width-1-10">
+		<div>
 			<?= Html::submitButton('Добавить', ['class' => 'uk-width-1-1 uk-button uk-button-success']) ?>
 		</div>
 	    

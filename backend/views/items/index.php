@@ -31,14 +31,32 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 
                 [
-                    'attribute'=>'name',
-                    'label'=>'name',
+                    'attribute'=>'search',
+                    'label'=>'Наименование',
                     'format' => 'html',
                     'value' => function ($model, $index, $widget) {
                         return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id]);
                     },
                     //'headerOptions'=>['class'=>'uk-text-center'],
                     //'contentOptions'=>['class'=>'uk-text-center'],
+                ],
+                [
+                    'attribute'=>'category',
+                    'label'=>'Категории',
+                    'format' => 'html',
+                    'value' => function ($model, $index, $widget) {
+                        
+                        if (count($model->categories)) {
+                            $category_ = [];
+                            foreach ($model->categories as $category) {
+                                $category_[] = $category->name;
+                            }
+                            return implode(" / ",$category_);
+                        }
+                        else return '—';
+                    },
+                    'headerOptions'=>['class'=>'uk-text-center'],
+                    'contentOptions'=>['class'=>'uk-text-center'],
                 ],
                 //'user_id',
                 //'flag',
