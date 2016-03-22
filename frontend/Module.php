@@ -8,4 +8,6 @@ namespace worstinme\zoo\frontend;
 class Module extends \yii\base\Module
 {
     public $modulePath = 'app\components\zoo\models\Items';
+
+    
 }

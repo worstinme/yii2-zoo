@@ -37,7 +37,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                     $dir = '/images/uploads/'.$filename[0].$filename[1].'/'.$filename[2].$filename[3].'/';
 
                     if (!is_dir(Yii::getAlias('@webroot').$dir)) {
-                        mkdir(Yii::getAlias('@webroot').$dir, 0700, true);
+                        @mkdir(Yii::getAlias('@webroot').$dir, 0700, true);
                     }
 
                     if ($img_content) {

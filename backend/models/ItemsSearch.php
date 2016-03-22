@@ -15,6 +15,8 @@ class ItemsSearch extends Items
 {
 
     public $search;
+    public $query;
+    public $withoutCategory;
 
     public $isSearch = true;
     /**
@@ -24,6 +26,7 @@ class ItemsSearch extends Items
     {
         $rules = [
             [['search'],'string'],
+            ['withoutCategory','integer'],
         ];
 
         foreach ($this->elements_ as $behavior_name) {
@@ -42,6 +45,7 @@ class ItemsSearch extends Items
     {
         $labels = [
             'search' => Yii::t('backend', 'Поиск'),
+            'withoutCategory'=>'Показать материалы без категорий'
         ];
 
         foreach ($this->elements as $key => $element) {
@@ -53,7 +57,50 @@ class ItemsSearch extends Items
 
     public function search($params)
     {
-        $query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+        
+        $this->load($params);
+
+        if ($this->withoutCategory) {
+            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+            $this->query->andWhere('a.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE 1)');
+        }
+        elseif (!empty($this->category) && count($this->category)) {
+            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}']);
+            $this->query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = a.id");
+            $this->query->andFilterWhere(['category.category_id'=>$this->category]);
+        }
+        else {
+            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+        }
+
+        foreach ($this->elements as $element) {
+
+            $e = $element->name;
+
+            if (!in_array($e, $this->attributes()) && $element->filterAdmin) {
+                
+                if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
+
+                    $this->query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = a.id AND ".$e.".element = '".$e."'");
+                    $this->query->andFilterWhere([$e.'.value_string'=>$this->$e]);
+                }
+
+            }
+        }
+
+        $query = clone $this->query;
+
+        return $dataProvider = new ActiveDataProvider([
+            'query' => $query->groupBy('a.id'),
+            'pagination' => [
+                'pageSize' => 30,
+            ],
+        ]);
+    }
+
+    public function itemIds($params)
+    {
+        $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
 
         $this->load($params);
 
@@ -76,11 +123,6 @@ class ItemsSearch extends Items
            
         ]);
 
-        return $dataProvider = new ActiveDataProvider([
-            'query' => $query->groupBy('a.id'),
-            'pagination' => [
-                'pageSize' => 30,
-            ],
-        ]);
+        return $query->groupBy('a.id')->column();
     }
 }

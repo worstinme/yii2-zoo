@@ -50,6 +50,11 @@ class Items extends \yii\db\ActiveRecord
             ->viaTable('{{%zoo_items_categories}}',['item_id'=>'id']);
     }
 
+    public function getFrontendItem()
+    {
+        return $this->hasOne(\worstinme\zoo\frontend\models\Items::className(), ['id' => 'id']);
+    } 
+
     public function regBehaviors() {
         
         $this->elements_ = array_unique(ArrayHelper::getColumn($this->elements,'type'));

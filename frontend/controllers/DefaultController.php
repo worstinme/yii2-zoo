@@ -144,6 +144,8 @@ class DefaultController extends Controller
 
         $searchModel = new s();
         $searchModel->app_id = $app->id;
+        $searchModel->regBehaviors();
+
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->rend('application',$app, [
@@ -166,7 +168,9 @@ class DefaultController extends Controller
 
         $searchModel = new s();
         $searchModel->app_id = $app->id;
+        $searchModel->regBehaviors();
         $searchModel->categories = [$category->id];
+
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->rend('category', $app,[

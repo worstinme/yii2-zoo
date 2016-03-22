@@ -4,21 +4,19 @@ namespace worstinme\zoo\frontend\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use worstinme\zoo\backend\models\Items;
 
-class Items extends \yii\db\ActiveRecord
+class Items extends Items
 {
     public $values = [];
     private $param_;
 
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
+    public function attributeLabels()
     {
-        return '{{%zoo_items}}';
+        return [];
     }
 
-    public function afterFind() {
+    public function afterFind() { 
         $this->regBehaviors();
         return parent::afterFind();
     }
@@ -89,7 +87,7 @@ class Items extends \yii\db\ActiveRecord
         return isset($this->params['metaDescription']) ? $this->params['metaDescription'] : '';
     }
 
-    public function getTemplate($name) {
+    public function getTemplate($name = 'full') {
         return isset($this->param['templates']) && isset($this->param['templates'][$name]) ? $this->param['templates'][$name] : $this->app !==null ? $this->app->getTemplate($name) : null;
     }
 

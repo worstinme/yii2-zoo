@@ -25,6 +25,49 @@ class ItemsController extends Controller
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        if (Yii::$app->request->isPost) {
+
+            $categoryIds = Yii::$app->request->post('categoryIds',[]);
+            $selection = Yii::$app->request->post('selection',[]);
+            
+            if (Yii::$app->request->post('replaceCategories') !== null && count($categoryIds) > 0) {
+
+                $itemIds = count($selection) > 0 ? $selection : $searchModel->itemIds(Yii::$app->request->queryParams);
+
+                foreach ($itemIds as $item_id) {
+                    
+                    Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$item_id])->execute();
+
+                    $rows = [];
+
+                    foreach ($categoryIds as $category_id) {
+                        $rows[] = [$item_id, (int)$category_id];
+                    }
+
+                    if (count($rows)) {
+
+                        Yii::$app->db->createCommand()
+                            ->batchInsert('{{%zoo_items_categories}}', ['item_id', 'category_id'], $rows)
+                            ->execute();
+
+                    }
+
+                }
+
+
+                Yii::$app->session->setFlash('success', 'Обновлены категории для '.count($itemIds).' материалов.');
+            }
+
+            if (Yii::$app->request->post('removeCategories') !== null ) {
+
+                $itemIds = count($selection) > 0 ? $selection : $searchModel->itemIds(Yii::$app->request->queryParams);
+                
+                foreach ($itemIds as $item_id) {
+                    Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$item_id])->execute();
+                }
+            }
+        }
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

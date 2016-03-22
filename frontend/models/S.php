@@ -5,6 +5,7 @@ namespace worstinme\zoo\frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use worstinme\zoo\frontend\models\Items;
 
 /**
@@ -15,35 +16,39 @@ class S extends Items
     public $price_min;
     public $price_max;
     public $search;
-    public $color;
-    public $material;
-    public $filter;
     public $categories = [];
+    public $query;
 
     /**
      * @inheritdoc
      */
     public function rules()
     {
-        return [
+        $rules = [
             [['price_min', 'price_max'], 'integer','min'=>1],
             [['search'], 'safe'],
-            [['color'], 'each','rule'=>['string']],
-            [['material'], 'each','rule'=>['string']],
         ];
-    }
 
+        $elements = array_unique(ArrayHelper::getColumn($this->elements,'type'));
+
+        foreach ($elements as $behavior_name) {
+            if (($behavior = $this->getBehavior($behavior_name)) !== null) {
+                $behavior_rules = $behavior->rules($this->getElementsByType($behavior_name));
+                if (count($behavior_rules)) {
+                    $rules = array_merge($rules,$behavior_rules);
+                }
+            }
+        }
+
+        return $rules;
+    }
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
 
     public function query()
     {
+
         return Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
     }
 
@@ -54,30 +59,35 @@ class S extends Items
             $this->load($params);
         }
 
-        $query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
-
         if (count($this->categories)) {
-            $query->leftJoin('{{%zoo_items_categories}}', "{{%zoo_items_categories}}.item_id = a.id");
-            $query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>$this->categories]);
+            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}']);
+            $this->query->leftJoin('{{%zoo_items_categories}}', "{{%zoo_items_categories}}.item_id = a.id");
+            $this->query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>$this->categories]);
+        }
+        else {
+
+            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
         }
 
-        if ($this->price_max > 0 || $this->price_min > 0) {
-            $query->andFilterWhere(['<=','price',$this->price_max]);
-            $query->andFilterWhere(['>=','price',$this->price_min]);
+        foreach ($this->elements as $element) {
+
+            $e = $element->name;
+
+            if (!in_array($e, $this->attributes()) && $element->filter) {
+
+                $value = $this->$e;
+
+                if ((is_array($value) && count($value) > 0) || (!is_array($value) && !empty($value))) {
+
+                    $this->query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = a.id AND ".$e.".element = '".$e."'");
+                    $this->query->andFilterWhere([$e.'.value_string'=>$value]);
+
+                }
+
+            }
         }
 
-        $query->leftJoin(['color'=>'{{%zoo_items_elements}}'], "color.item_id = a.id AND color.element = 'color'");
-        $query->leftJoin(['material'=>'{{%zoo_items_elements}}'], "material.item_id = a.id AND material.element = 'material'");
-
-        if ($this->color !== null) {
-            $query->andFilterWhere(['color.value_string'=>$this->color]);
-        }
-
-        if ($this->material !== null) {
-            $query->andFilterWhere(['material.value_string'=>$this->material]);
-        }
-
-        return $query;
+        return $this->query;
     }
 
     public function data($params) {
@@ -87,7 +97,7 @@ class S extends Items
         $query = $this->search();
 
         if (!$this->validate()) {
-            print_r($this->errors);
+            //print_r($this->errors);
            // $query = $this->query();
         }
 
@@ -114,10 +124,10 @@ class S extends Items
                         'label'=>'hits',
                     ],
                 ], 
-                'defaultOrder'=>['price' => SORT_DESC],   
+                'defaultOrder'=>['name' => SORT_DESC],   
             ], 
             'pagination'=>[
-                'pageSize'=>30,
+                'defaultPageSize'=>30,
             ],
         ]);
 

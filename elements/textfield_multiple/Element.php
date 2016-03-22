@@ -25,7 +25,15 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     		$this->loadAttributesFromElements($attribute);
     	}
 
-    	return yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute],$this->value_field);
+        $values = [];
+
+        foreach ($this->owner->values[$attribute] as $value) {
+            if (!empty($value[$this->value_field])) {
+                $values[] = $value[$this->value_field];
+            }
+        }
+
+    	return $values;
 
     }
 
@@ -35,7 +43,6 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
         if (!isset($this->owner->values[$attribute])) {
             $this->loadAttributesFromElements($attribute);
         }
-
 
         if (is_array($value)) {
 

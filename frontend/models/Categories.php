@@ -24,10 +24,14 @@ class Categories extends \yii\db\ActiveRecord
         return $this->hasOne(Categories::className(),['id'=>'parent_id']);
     }
 
+    public function getRelated() {
+        return $this->hasMany(Categories::className(),['parent_id'=>'id']);
+    }
+
     //metaTitle
     public function getMetaTitle() {
         $params = $this->params !== null ? Json::decode($this->params) : null;
-        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
+        return !empty($params['metaTitle']) ? $params['metaTitle'] : $this->name;
     }
 
     //metaKeywords

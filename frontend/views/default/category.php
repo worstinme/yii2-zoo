@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $category->name;
 <div class="<?=$app->name?> <?=$app->name?>-category">
 <div class="uk-container uk-container-center">
 
-<?php // \yii\widgets\Pjax::begin(['id'=>'catalog','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
+<?php  \yii\widgets\Pjax::begin(['id'=>'catalog','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
 
     <div class="uk-grid">
 
@@ -28,9 +28,15 @@ $this->params['breadcrumbs'][] = $category->name;
 
             <?= Breadcrumbs::widget(['links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],]) ?>
 
-            <h1><?= Html::encode($this->title) ?></h1>
+            <h1><?= Html::encode($category->name) ?></h1>
 
 			<?=$category->preContent?>
+
+            <div class="uk-grid uk-grid-width-medium-1-3">
+            <?php foreach ($category->related as $related): ?>
+                <div><?= Html::a($related->name, $related->url); ?></div>
+            <?php endforeach ?>
+            </div>
 
             <?= ListView::widget([
                 'dataProvider' => $dataProvider,
@@ -46,7 +52,7 @@ $this->params['breadcrumbs'][] = $category->name;
 
     </div>
 
-<?php // \yii\widgets\Pjax::end(); ?>
+<?php \yii\widgets\Pjax::end(); ?>
 </div>
 </div>
 
