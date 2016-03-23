@@ -25,6 +25,8 @@ class ItemsController extends Controller
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        //print_r($searchModel->itemIds(Yii::$app->request->queryParams));
+
         if (Yii::$app->request->isPost) {
 
             $categoryIds = Yii::$app->request->post('categoryIds',[]);

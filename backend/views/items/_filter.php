@@ -27,10 +27,9 @@ if ($filter['element'] == 'parsed_category') {
 	
 	$categories = (new \yii\db\Query())
 	    ->select(['value_string'])
+	    ->distinct()
 	    ->from('{{%zoo_items_elements}}')
-	    ->where(['element'=>'parsed_category'])
-	    ->groupBy('value_string')
-	    ->orderBy('count(item_id) DESC');
+	    ->where(['element'=>'parsed_category']);
 
 	$categories = $searchModel->withoutCategory ? $categories->andWhere('item_id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE 1)')->column(): $categories->column();
 
@@ -54,6 +53,8 @@ if ($filter['element'] == 'parsed_category') {
 
 		$variants[$cat_id] = $value;
 	}
+
+	asort($variants);
 
 }
 else {
@@ -94,8 +95,6 @@ else {
 
 
 
-
-
 $search_params = Yii::$app->request->get('ItemsSearch',[]);
 ?>
 
@@ -124,6 +123,8 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
     	'style'=>'margin-top:-45px;'
     ]]); ?>
 
+    <?= Html::activeTextInput($searchModel, 'search', ['class'=>'uk-width-1-3','placeholder' => 'фильтр по названию (enter)']); ?>
+
     <?php if (count($search_params)): ?>
     	<div class="filter-list">
 		<?php foreach ($search_params as $key => $value): ?>
@@ -139,7 +140,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 							<?php $pc = ParserCategories::find()->where(['source_id'=>$v])->one() ?>
 
 							<span class="uk-badge uk-badge-notification uk-badge-success">
-								<b><?=$searchModel->elements[$key]->title?></b> : <?=$pc->name?>
+								<b><?=$searchModel->elements[$key]->title?></b> : <?=$pc !== null? $pc->name : $v?>
 								<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$v?>">
 									<i class="uk-icon-close"></i></a>
 							</span>	
@@ -163,7 +164,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 						<?php $pc = ParserCategories::find()->where(['source_id'=>$value])->one() ?>
 
 							<span class="uk-badge uk-badge-notification uk-badge-success">
-								<b><?=$searchModel->elements[$key]->title?></b> : <?=$pc->name?>
+								<b><?=$searchModel->elements[$key]->title?></b> : <?=$pc !== null? $pc->name : $value?>
 								<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$value?>">
 									<i class="uk-icon-close"></i></a>
 							</span>	

@@ -20,11 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $this->render('_filter',['searchModel'=>$searchModel]); ?>
             
-            <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValidation' => false]); ?>
+            <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked']); ?>
 
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
+                'filterModel' => false,
                 'summaryOptions'=>['class'=>'uk-text-center'],
                 'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-hover uk-table-bordered uk-margin-top'],
                 'options'=> ['class' => 'items'],
@@ -46,17 +46,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                     ],
                     [
-                        'class' => 'yii\grid\ActionColumn',
-                        'template'=>'{frontend-view}',
-                        'buttons'=>[
-                          'frontend-view' => function ($url, $model) {     
+                        'format' => 'raw',
+                        'value' => function ($model) {     
                             return Html::a('<i class="uk-icon-bookmark"></i>', $model->frontendItem->url, [
                                     'title' => Yii::t('backend', 'Открыть на сайте'),
                                     'target'=>'_blank',
+                                    'data'=>['pjax'=>false],
                                     'style'=>'color:#468847',
                             ]);                                
-                          },
-                        ],
+                        },
                         'contentOptions'=>['class'=>'uk-text-center'],                           
                     ],
                     [

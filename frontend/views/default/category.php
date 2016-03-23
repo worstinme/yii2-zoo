@@ -10,6 +10,12 @@ $this->registerMetaTag(['name'=>'description', 'content'=> $category->metaDescri
 $this->registerMetaTag(['name'=>'keywords', 'content'=> $category->metaDescription]);
 
 $this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => $app->url];
+if ($category->parent !== null) {
+    $this->params['breadcrumbs'][] = ['label' => $category->parent->name, 'url' =>  $category->parent->url]; 
+    if ($category->parent->parent !== null) {
+        $this->params['breadcrumbs'][] = ['label' => $category->parent->parent->name, 'url' =>  $category->parent->parent->url]; 
+    }
+}
 $this->params['breadcrumbs'][] = $category->name;
 
 ?>

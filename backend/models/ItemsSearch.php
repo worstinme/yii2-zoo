@@ -25,7 +25,8 @@ class ItemsSearch extends Items
     public function rules()
     {
         $rules = [
-            [['search'],'string'],
+            [['search'],'safe'],
+            [['category'],'safe'],
             ['withoutCategory','integer'],
         ];
 
@@ -62,7 +63,7 @@ class ItemsSearch extends Items
 
         if ($this->withoutCategory) {
             $this->query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
-            $this->query->andWhere('a.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE 1)');
+            $this->query->andWhere('a.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
             $this->query = Items::find()->from(['a'=>'{{%zoo_items}}']);
@@ -88,6 +89,8 @@ class ItemsSearch extends Items
             }
         }
 
+        $this->query->andFilterWhere(['LIKE','a.name',$this->search]);
+
         $query = clone $this->query;
 
         return $dataProvider = new ActiveDataProvider([
@@ -100,9 +103,22 @@ class ItemsSearch extends Items
 
     public function itemIds($params)
     {
-        $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+        
 
         $this->load($params);
+
+        if ($this->withoutCategory) {
+            $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+            $query->andWhere('a.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
+        }
+        elseif (!empty($this->category) && count($this->category)) {
+            $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}']);
+            $query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = a.id");
+            $query->andFilterWhere(['category.category_id'=>$this->category]);
+        }
+        else {
+            $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+        }
 
         foreach ($this->elements as $element) {
 
@@ -119,9 +135,7 @@ class ItemsSearch extends Items
             }
         }
 
-        $query->andFilterWhere([
-           
-        ]);
+        $query->andFilterWhere(['LIKE','a.name',$this->search]);
 
         return $query->groupBy('a.id')->column();
     }
