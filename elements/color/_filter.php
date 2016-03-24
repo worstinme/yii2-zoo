@@ -3,16 +3,8 @@
 use worstinme\zoo\elements\color\HtmlHelper;
 use yii\helpers\ArrayHelper;
 
-$colors = (new \yii\db\Query())
-    ->select(['value_string'])
-    ->from('{{%zoo_items_elements}}')
-    ->where(['element'=>$element->name])
-    ->groupBy('value_string')
-    ->orderBy('count(item_id) DESC')
-    ->limit(25)
-    ->column(); 
 
-$varQuery = clone $searchModel->query;
+$varQuery = !empty($extended) && $extended ? clone $searchModel->query() : clone $searchModel->query;
 
 $attribute_sq = $element->name.'.value_string';
 
