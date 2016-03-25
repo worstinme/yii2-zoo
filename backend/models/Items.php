@@ -145,10 +145,9 @@ class Items extends \yii\db\ActiveRecord
 
     public function attributeLabels()
     {
-        $labels = [
-            'categories' => Yii::t('backend', 'Категории'),
-        ];
 
+        $labels = [];
+        
         foreach ($this->elements as $key => $element) {
             $labels[$key] = $element->title;
         }

@@ -1,9 +1,1 @@
-<?php
-
-echo $model->{$attribute};
-
-
-?>
-
-<hr>
-
+<span><?=$model->getAttributeLabel($attribute)?>:</span> <?=$model->{$attribute}?>

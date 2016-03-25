@@ -1,3 +1,1 @@
-<?php 
-
-echo worstinme\zcart\widgets\BuyButton::widget(['model'=>$model]);
+<?php echo worstinme\zcart\widgets\BuyButton::widget(['model'=>$model]);

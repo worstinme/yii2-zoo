@@ -18,5 +18,4 @@ $template = $model->getTemplate('teaser');
         }
     }
 } ?>
-<?echo $model->source; ?>
 </div>

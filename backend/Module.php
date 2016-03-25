@@ -47,6 +47,7 @@ class Module extends \yii\base\Module
             'color'=>'color',
             'buy'=>'buy',
             'parsed_category'=>'parsed_category',
+            'article'=>'article',
         ];
 
     }

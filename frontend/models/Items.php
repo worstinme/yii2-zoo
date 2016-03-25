@@ -11,11 +11,6 @@ class Items extends Items
     public $values = [];
     private $param_;
 
-    public function attributeLabels()
-    {
-        return [];
-    }
-
     public function afterFind() { 
         $this->regBehaviors();
         return parent::afterFind();
