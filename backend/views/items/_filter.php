@@ -94,7 +94,6 @@ else {
 }
 
 
-
 $search_params = Yii::$app->request->get('ItemsSearch',[]);
 ?>
 
@@ -122,8 +121,6 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
     	'class' => 'uk-button uk-float-right',
     	'style'=>'margin-top:-45px;'
     ]]); ?>
-
-    <?= Html::activeTextInput($searchModel, 'search', ['class'=>'uk-width-1-3','placeholder' => 'фильтр по названию (enter)']); ?>
 
     <?php if (count($search_params)): ?>
     	<div class="filter-list">
@@ -205,15 +202,8 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 
 	<?php ActiveForm::end(); ?>
 
-		
-	
-
-
 
 </div>
-
-
-
 <?php
 
 $script = <<< JS

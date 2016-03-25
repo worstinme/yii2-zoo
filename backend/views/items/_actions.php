@@ -15,14 +15,9 @@ use yii\helpers\Json;
     <li><span>Применить <span class="selected-count"></span>:</span></li>
     <li><a href="#actions-category" data-uk-modal>Присвоить категории</a></li>
     <li>
-        <?= Html::a('Удалить категории', Url::current(), ['data' => 
-            [
-                'method'=>'post',
-                'confirm'=>'Уверены что хотите очистить категории у найденных материалов?',
-                'params'=>[
-                    'removeCategories'=>true,
-                ]
-            ]
+        <?= Html::a('Удалить категории', Url::current(), [
+            'id'=>'deleteCategories',
+            'data'=>['method'=>'post','confirm'=>'Уверены что хотите очистить категории у найденных материалов?',]
         ]); ?>
     </li>
 </ul>
@@ -47,8 +42,12 @@ use yii\helpers\Json;
         </div>
 
         <div class="uk-form-row">
+
+            <?= Html::a('Заменить категории на выбранные', Url::current(), [ 'id'=>'replaceCategories', 
+                    'data'=>[ 'method'=>'post', ], 
+                ]); ?>
             
-            <?=Html::submitButton('Заменить',['name'=>'replaceCategories','class'=>'uk-button uk-button-primary'])?>
+            <? //=Html::submitButton('Заменить',['name'=>'replaceCategories','class'=>'uk-button uk-button-primary'])?>
             <? //=Html::submitButton('Добавить к имеющимся',['name'=>'addCategories','class'=>'uk-button uk-button-success'])?>
             
             
@@ -74,8 +73,25 @@ $("#catalogue .items th:first-child input[type='checkbox'],#catalogue .items td:
     }
     else {
         $("#catalogue .selected-count").html("");
-    }
+    } 
+});
+
+$("body").on("click", "#replaceCategories", function(e) {
+
+    var selection = $('#catalogue .items').yiiGridView('getSelectedRows');
+    var categoryIds = $("#form input.category-list:checked").map(function () { return $(this).val(); }).get();
+    var params = JSON.stringify({categoryIds,selection,replaceCategories:true});
     
+    $(this).attr('data-params', params);
+
+});
+$("body").on("click", "#deleteCategories", function(e) {
+
+    var selection = $('#catalogue .items').yiiGridView('getSelectedRows');
+    var params = JSON.stringify({selection,deleteCategories:true});
+
+    $(this).attr('data-params', params);
+    console.log(params);
 });
 
 JS;

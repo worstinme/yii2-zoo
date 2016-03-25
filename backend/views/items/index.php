@@ -20,11 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $this->render('_filter',['searchModel'=>$searchModel]); ?>
             
-            <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked']); ?>
+            
 
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'filterModel' => false,
+                'filterModel' => $searchModel,
                 'summaryOptions'=>['class'=>'uk-text-center'],
                 'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-hover uk-table-bordered uk-margin-top'],
                 'options'=> ['class' => 'items'],
@@ -35,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'yii\grid\CheckboxColumn',
                         'headerOptions'=>['class'=>'uk-text-center'],
                         'contentOptions'=>['class'=>'uk-text-center'],
-                        // you may configure additional properties here
                     ],
                     [
                         'attribute'=>'search',
@@ -108,6 +107,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
             ]); ?>
+
+            <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked']); ?>
 
             <?=$this->render('_actions')?>
 

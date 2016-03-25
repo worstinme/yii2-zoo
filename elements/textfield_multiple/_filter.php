@@ -23,6 +23,7 @@ $variants = $varQuery->select($attribute_sq)
                 ->groupBy($attribute_sq)
                 ->andWhere($attribute_sq.' IS NOT NULL')
                 ->orderBY('count('.$attribute_sq.') DESC')
+                ->limit(30)
                 ->column(); 
 
 $variants = ArrayHelper::index($variants, function ($element) {return $element;}); 

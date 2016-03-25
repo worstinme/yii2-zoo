@@ -18,6 +18,8 @@ class ItemsController extends Controller
     public function actionIndex()
     {
         $app = $this->getApp();
+
+        $request = Yii::$app->request;
         
         $searchModel = new ItemsSearch();
         $searchModel->app_id = $app->id;
@@ -27,32 +29,37 @@ class ItemsController extends Controller
 
         //print_r($searchModel->itemIds(Yii::$app->request->queryParams));
 
-        if (Yii::$app->request->isPost) {
+        if ($request->isPost) {
 
-            $categoryIds = Yii::$app->request->post('categoryIds',[]);
-            $selection = Yii::$app->request->post('selection',[]);
+            $categoryIds = !empty($request->post('categoryIds')) ? explode(",",$request->post('categoryIds')) : [];
+            $selection = !empty($request->post('selection')) ? explode(",",$request->post('selection')) : [];
             
-            if (Yii::$app->request->post('replaceCategories') !== null && count($categoryIds) > 0) {
+            if ($request->post('replaceCategories') !== null && count($categoryIds) > 0) {
 
                 $itemIds = count($selection) > 0 ? $selection : $searchModel->itemIds(Yii::$app->request->queryParams);
 
-                foreach ($itemIds as $item_id) {
-                    
-                    Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$item_id])->execute();
+                if (is_array($itemIds) && count($itemIds) > 0) {
+                   
+                    foreach ($itemIds as $item_id) {
+                        
+                        $rows = [];
 
-                    $rows = [];
+                        foreach ($categoryIds as $category_id) {
+                            $rows[] = [$item_id, (int)$category_id];
+                        }
 
-                    foreach ($categoryIds as $category_id) {
-                        $rows[] = [$item_id, (int)$category_id];
-                    }
+                        if (count($rows)) {
 
-                    if (count($rows)) {
+                            Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$item_id])->execute();
 
-                        Yii::$app->db->createCommand()
-                            ->batchInsert('{{%zoo_items_categories}}', ['item_id', 'category_id'], $rows)
-                            ->execute();
+                            Yii::$app->db->createCommand()
+                                ->batchInsert('{{%zoo_items_categories}}', ['item_id', 'category_id'], $rows)
+                                ->execute(); 
 
-                    }
+                        }
+
+
+                    } 
 
                 }
 
@@ -60,10 +67,11 @@ class ItemsController extends Controller
                 Yii::$app->session->setFlash('success', 'Обновлены категории для '.count($itemIds).' материалов.');
             }
 
-            if (Yii::$app->request->post('removeCategories') !== null ) {
+            if (Yii::$app->request->post('deleteCategories') !== null ) {
 
                 $itemIds = count($selection) > 0 ? $selection : $searchModel->itemIds(Yii::$app->request->queryParams);
                 
+
                 foreach ($itemIds as $item_id) {
                     Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$item_id])->execute();
                 }

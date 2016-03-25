@@ -1,9 +1,7 @@
+<hr>
 <?php
 
-echo $model->{$attribute};
-
+echo implode(", ",$model->{$attribute});
 
 ?>
-
-<hr>
 
