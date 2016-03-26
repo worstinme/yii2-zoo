@@ -32,6 +32,12 @@ class DefaultController extends Controller
             // приложение по алиасу
             return $this->renderApplication($app);
         }
+        
+        elseif (($category = Categories::find()->where(['alias'=>$a,'app_id'=>1])->one()) !== null) {
+            // материал дефолтного приложения по алиасу
+            return $this->renderCategory($category);
+        }
+
         elseif (($model = Items::find()->where(['alias'=>$a,'app_id'=>1])->one()) !== null) {
             // материал дефолтного приложения по алиасу
             return $this->renderItem($model);

@@ -149,6 +149,11 @@ class Menu extends \yii\db\ActiveRecord
                 return $application->url;
             }
         }
+        elseif ($this->type == 2) {
+            if (($category = \worstinme\zoo\frontend\models\Categories::findOne($this->category_id)) !== null) {
+                return $category->url;
+            }
+        }
         elseif ($this->type == 3) {
 
             $item = FrontItems::find()->where(['id'=>$this->item_id])->one();

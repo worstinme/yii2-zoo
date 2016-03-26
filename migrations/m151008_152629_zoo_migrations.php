@@ -22,6 +22,20 @@ class m151008_152629_zoo_migrations extends Migration
             'params' => $this->text(),
         ], $tableOptions);
 
+        $this->createTable('{{%zoo_menu}}', [
+            'id' => $this->primaryKey(),            
+            'label' => $this->string()->notNull(),
+            'application_id' => $this->integer(), 
+            'category_id' => $this->integer(), 
+            'aitem_id' => $this->integer(), 
+            'class' => $this->string()->notNull(),
+            'parent_id' =>$this->integer()->defaultValue(0),
+            'sort' =>$this->integer()->defaultValue(0),
+            'type' =>$this->integer()->notNull(),
+            'url' => $this->text(),
+            'menu' => $this->string()->notNull(),
+        ], $tableOptions);
+
         $this->createTable('{{%zoo_categories}}', [
             'id' => $this->primaryKey(),            
             'name' => $this->string()->notNull(),
@@ -101,6 +115,7 @@ class m151008_152629_zoo_migrations extends Migration
         $this->dropTable('{{%zoo_items}}');
         $this->dropTable('{{%zoo_elements}}');
         $this->dropTable('{{%zoo_config}}');
+        $this->dropTable('{{%zoo_menu}}');
         $this->dropTable('{{%zoo_elements_categories}}');
         $this->dropTable('{{%zoo_items_categories}}');
         $this->dropTable('{{%zoo_items_elements}}');
