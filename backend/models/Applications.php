@@ -13,14 +13,7 @@ class Applications extends \yii\db\ActiveRecord
     {
         return '{{%zoo_applications}}';
     }
-
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
+    
     public function rules()
     {
         return [

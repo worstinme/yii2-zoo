@@ -19,8 +19,6 @@ class m151008_152629_zoo_migrations extends Migration
             'title' => $this->string()->notNull(),
             'sort' =>$this->integer()->notNull()->defaultValue(0),
             'state' => $this->smallInteger()->notNull()->defaultValue(0),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
             'params' => $this->text(),
         ], $tableOptions);
 
@@ -30,10 +28,10 @@ class m151008_152629_zoo_migrations extends Migration
             'alias' => $this->string()->notNull(),
             'parent_id' => $this->integer()->defaultValue(0),
             'app_id' => $this->integer()->notNull(),            
-            'sort' =>$this->integer()->notNull()->defaultValue(0),
-            'state' => $this->smallInteger()->notNull()->defaultValue(0),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'sort' =>$this->integer()->defaultValue(0),
+            'state' => $this->smallInteger()->defaultValue(0),
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
             'params' => $this->text(),
         ], $tableOptions);
 
@@ -41,16 +39,18 @@ class m151008_152629_zoo_migrations extends Migration
             'id' => $this->primaryKey(),   
             'app_id' => $this->integer()->notNull(),   
             'user_id' => $this->integer()->notNull(),
-            'flag' =>$this->integer()->notNull()->defaultValue(0),
-            'sort' =>$this->integer()->notNull()->defaultValue(0),
-            'state' => $this->smallInteger()->notNull()->defaultValue(0),      
+            'flag' =>$this->smallInteger()->defaultValue(0),
+            'sort' =>$this->integer()->defaultValue(0),
+            'state' => $this->smallInteger()->defaultValue(0),      
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull(),
             'params' => $this->text(),
+            'alias' => $this->string(),
+            'name' => $this->string()->notNull(),
             
         ], $tableOptions);
 
-        $this->createTable('{{%zoo_fields}}', [
+        $this->createTable('{{%zoo_elements}}', [
             'id' => $this->primaryKey(),   
             'title' => $this->string()->notNull(),   
             'name' => $this->string()->notNull(),   
@@ -69,10 +69,10 @@ class m151008_152629_zoo_migrations extends Migration
             'parent_id' => $this->integer()->notNull()->defaultValue(0),
             'parent_name' => $this->string(),
             'value' => $this->text(),
-        ], $tableOptions);
+        ], $tableOptions); 
 
-        $this->createTable('{{%zoo_fields_categories}}', [  
-            'field_id' => $this->integer()->notNull(),
+        $this->createTable('{{%zoo_elements_categories}}', [  
+            'element_id' => $this->integer()->notNull(),
             'category_id' => $this->integer()->notNull(),
         ], $tableOptions);
 
@@ -81,7 +81,8 @@ class m151008_152629_zoo_migrations extends Migration
             'category_id' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $this->createTable('{{%zoo_items_fields}}', [  
+        $this->createTable('{{%zoo_items_elements}}', [  
+            'id' => $this->primaryKey(),   
             'item_id' => $this->integer()->notNull(),
             'element' => $this->string()->notNull(),   
             'value_text' => $this->text(), 
@@ -98,11 +99,11 @@ class m151008_152629_zoo_migrations extends Migration
         $this->dropTable('{{%zoo_applications}}');
         $this->dropTable('{{%zoo_categories}}');
         $this->dropTable('{{%zoo_items}}');
-        $this->dropTable('{{%zoo_fields}}');
+        $this->dropTable('{{%zoo_elements}}');
         $this->dropTable('{{%zoo_config}}');
-        $this->dropTable('{{%zoo_fields_categories}}');
+        $this->dropTable('{{%zoo_elements_categories}}');
         $this->dropTable('{{%zoo_items_categories}}');
-        $this->dropTable('{{%zoo_items_fields}}');
+        $this->dropTable('{{%zoo_items_elements}}');
         
     }
 
