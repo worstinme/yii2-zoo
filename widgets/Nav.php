@@ -15,21 +15,11 @@ class Nav extends \worstinme\uikit\Nav
 
             $items = $this->items;
 
-            $menus = Menu::find()->where(['menu'=>$this->menu])->all();
+            $menus = Menu::find()->where(['menu'=>$this->menu])->andWhere('parent_id IS NULL')->all();
 
             foreach ($menus as $menu) {
 
-                $item = [
-                    'label' => $menu->label,
-                    'encodeLabels'=>false,
-                    'url' => $menu->getUrl(),
-                ];
-
-                if ($menu->active !== null) {
-                    $item['active'] =  $menu->active;
-                }
-                
-                $items[] = $item;
+                $items[] = $this->processItem($menu);
 
             }
 
@@ -37,6 +27,29 @@ class Nav extends \worstinme\uikit\Nav
         }
         
         parent::init();
+
+    }
+
+
+    public function processItem($menu) {
+
+        $item = [
+            'label' => $menu->label,
+            'encodeLabels'=>false,
+            'url' => $menu->getUrl(),
+        ];
+
+        if ($menu->active !== null) {
+            $item['active'] =  $menu->active;
+        }
+
+        if (count($menu->related) > 0) {
+            foreach ($menu->related as $related) {
+                $item['items'][] = $this->processItem($related);
+            }
+        }
+
+        return $item;
 
     }
 }

@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-hover uk-table-bordered uk-margin-top'],
                 'options'=> ['class' => 'items'],
                 'layout' => '{items}{summary}{pager}<hr>',
-                'pager' => ['class'=> 'app\components\LinkPager'],
+                'pager' => ['class'=> 'worstinme\uikit\widgets\LinkPager'],
                 'columns' => [
                     [
                         'class' => 'yii\grid\CheckboxColumn',

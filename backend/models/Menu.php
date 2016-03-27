@@ -115,6 +115,10 @@ class Menu extends \yii\db\ActiveRecord
         return false;
     }
 
+    public function getRelated() {
+        return $this->hasMany(Menu::className(), ['parent_id' => 'id'])->orderBy('sort ASC');
+    }
+
     public function getParents() {
         if ($this->isNewRecord) {
             return self::find()->select(['label'])->where(['menu'=>$this->menu])->indexBy('id')->column();
