@@ -29,7 +29,6 @@ foreach ($values as $value) {
     }
 }
 
-if (count($variants)) {
 
 ?>
 
@@ -40,5 +39,3 @@ if (count($variants)) {
 <?php if (count($variants) > 5): ?>
 	<?= Html::a('Показать все', '#', ['class' => 'dfn','data-uk-toggle'=>"{cls: 'active', target:'#".Html::getInputId($searchModel, $element->name)."'}"]); ?>
 <?php endif ?>
-
-<?php }
