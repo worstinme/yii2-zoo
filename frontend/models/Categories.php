@@ -62,7 +62,20 @@ class Categories extends \yii\db\ActiveRecord
 
         $a = $this->app->name;
 
-        if ($this->parent !== null) {
+        if ($this->app_id == 1) {
+            if ($this->parent !== null) {
+                if ($this->parent->parent !== null) {
+                    return ['/zoo/default/abc','a'=>$this->parent->parent->alias,'b'=>$this->parent->alias,'c'=>$this->alias];
+                }
+                else {
+                    return ['/zoo/default/ab','a'=>$this->parent->alias,'b'=>$this->alias];
+                }
+            }
+            else {
+                return ['/zoo/default/a','a'=>$this->alias];
+            }
+        }
+        elseif ($this->parent !== null) {
             if ($this->parent->parent !== null) {
                 return ['/zoo/default/abcd','a'=>$a,'b'=>$this->parent->parent->alias,'c'=>$this->parent->alias,'d'=>$this->alias];
             }

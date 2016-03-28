@@ -13,7 +13,7 @@ class Applications extends \yii\db\ActiveRecord
     {
         return '{{%zoo_applications}}';
     }
-    
+
     public function rules()
     {
         return [

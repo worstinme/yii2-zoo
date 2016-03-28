@@ -23,6 +23,10 @@ class Applications extends \yii\db\ActiveRecord
         return $this->param_;
     }
 
+    public function getParentCategories() {
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
+    }
+
     public function getTemplate($name) {
         return isset($this->param[$name]) ? $this->param[$name] : [];
     }

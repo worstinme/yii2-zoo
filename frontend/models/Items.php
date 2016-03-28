@@ -4,9 +4,8 @@ namespace worstinme\zoo\frontend\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use worstinme\zoo\backend\models\Items;
 
-class Items extends Items
+class Items extends \worstinme\zoo\backend\models\Items
 {
     public $values = [];
     private $param_;

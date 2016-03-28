@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
+use yii\behaviors\TimestampBehavior;
 
 class Items extends \yii\db\ActiveRecord
 {
@@ -17,6 +18,13 @@ class Items extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
 
     public static function tableName()
     {
