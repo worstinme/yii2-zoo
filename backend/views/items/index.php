@@ -39,9 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute'=>'search',
                         'label'=>'Наименование',
-                        'format' => 'html',
+                        'format' => 'raw',
                         'value' => function ($model, $index, $widget) {
-                            return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id]);
+                            return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['target'=>'_blank','data'=>['pjax'=>0]]);
                         },
                     ],
                     [

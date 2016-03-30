@@ -34,6 +34,17 @@ $this->params['breadcrumbs'][] = $this->title;
 		    <?= $form->field($model, 'parent_id')
 				    	->dropDownList($app->catlist,['prompt'=>Yii::t('backend','Корневая категория')]); ?> 
 
+			<?= $form->field($model, 'image')->widget(\mihaildev\elfinder\InputFile::className(), [
+			    'language'      => 'ru',
+			    'controller'    => 'elfinder',     
+			    'template'      => '<div class="uk-form-row">{input}{button}</div>',
+			    'options'       => ['class' => 'uk-from-controls'],
+			    'buttonOptions' => ['class' => 'uk-button uk-button-primary'],
+			    'multiple'      => false       // возможность выбора нескольких файлов
+			]);?>
+
+			<?= $form->field($model, 'state')->checkbox(); ?>
+
 			<hr>
 
 			<?= $form->field($model, 'preContent')->widget(\mihaildev\ckeditor\CKEditor::className(), [

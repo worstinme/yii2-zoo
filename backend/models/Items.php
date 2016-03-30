@@ -99,7 +99,7 @@ class Items extends \yii\db\ActiveRecord
                 && ($behavior = $this->getBehavior($this->elements[$name]->type)) !== null) {
             return $behavior->setValue($name,$value);
         } else {
-            parent::__set($name, $value);
+            return parent::__set($name, $value);
         }
     } 
 

@@ -29,7 +29,7 @@ class Categories extends \yii\db\ActiveRecord
             [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'string'],
             ['parent_id', 'default', 'value' => 0],
-            [['name', 'alias'], 'string', 'max' => 255],
+            [['name', 'alias','image'], 'string', 'max' => 255],
 
             [['metaDescription','metaKeywords','content','preContent'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
@@ -46,12 +46,13 @@ class Categories extends \yii\db\ActiveRecord
             'parent_id' => Yii::t('backend', 'Родитель'),
             'app_id' => Yii::t('backend', 'App ID'),
             'sort' => Yii::t('backend', 'Sort'),
-            'state' => Yii::t('backend', 'State'),
+            'state' => Yii::t('backend', 'Опубликовано?'),
             'created_at' => Yii::t('backend', 'Created At'),
             'updated_at' => Yii::t('backend', 'Updated At'),
             'params' => Yii::t('backend', 'Params'),
             'preContent' =>  Yii::t('backend', 'Верхнее описание категории'),
             'content' =>  Yii::t('backend', 'Нижнее описание категории'),
+            'image'=>Yii::t('backend', 'Изображение категории'),
         ];
     }
 
@@ -63,6 +64,17 @@ class Categories extends \yii\db\ActiveRecord
     public function setMetaTitle($s) {
         $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         $params['metaTitle'] = $s;
+        return $this->params = Json::encode($params);
+    }
+
+    //metaTitle
+    public function getImage() {
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        return isset($params['image']) ? $params['image'] : '';
+    }
+    public function setImage($s) {
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        $params['image'] = $s;
         return $this->params = Json::encode($params);
     }
 

@@ -46,6 +46,12 @@ class Categories extends \yii\db\ActiveRecord
         return isset($params['metaDescription']) ? $params['metaDescription'] : '';
     }
 
+    //metaTitle
+    public function getImage() {
+        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
+        return isset($params['image']) ? $params['image'] : '';
+    }
+
     //metaDescription
     public function getContent() {
         $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];

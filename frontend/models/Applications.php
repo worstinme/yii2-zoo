@@ -24,7 +24,7 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getParentCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0,'state'=>1])->orderBy('sort ASC');
     }
 
     public function getTemplate($name) {
@@ -69,6 +69,6 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getRelatedCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where('{{%zoo_categories}}.parent_id = 0')->orderBy('sort ASC');
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where('{{%zoo_categories}}.parent_id = 0 AND state = 1')->orderBy('sort ASC');
     }
 }
