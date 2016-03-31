@@ -1,8 +1,11 @@
 <?php
 
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ListView;
 use worstinme\uikit\Breadcrumbs;
+
+if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]);
 
 $this->title = $category->metaTitle;
 
