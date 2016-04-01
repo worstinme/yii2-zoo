@@ -144,7 +144,11 @@ class DefaultController extends Controller
         return $this->application;
     }
 
-    protected function renderApplication($app) {
+    public function actionSearch($a) {
+
+        if (($app = Applications::find()->where(['name'=>$a])->one()) === null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
 
         $searchModel = new s();
         $searchModel->app_id = $app->id;
@@ -152,15 +156,21 @@ class DefaultController extends Controller
 
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams); 
 
-        if (Yii::$app->request->get('ItemsSearch') !== null) {
+        return $this->rend('search',$app, [
+            'app'=>$app,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
 
-            return $this->rend('search',$app, [
-                'app'=>$app,
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
+    }
 
-        }
+    protected function renderApplication($app) {
+
+        $searchModel = new s();
+        $searchModel->app_id = $app->id;
+        $searchModel->regBehaviors();
+
+        $dataProvider = $searchModel->data(Yii::$app->request->queryParams); 
 
         return $this->rend('application',$app, [
             'app'=>$app,
