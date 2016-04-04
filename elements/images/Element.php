@@ -27,20 +27,21 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
     			if ($element->value_int !== null && $element->value_text !== null) {
 
-                    $filenameparts = explode(".",$element->value_text );
-                    $fileext = array_pop($filenameparts);
-                    
                     $img_content = file_get_contents($element->value_text);
 
-                    $filename = md5($img_content).'.'.$fileext; 
-
-                    $dir = '/images/uploads/'.$filename[0].$filename[1].'/'.$filename[2].$filename[3].'/';
-
-                    if (!is_dir(Yii::getAlias('@webroot').$dir)) {
-                        @mkdir(Yii::getAlias('@webroot').$dir, 0700, true);
-                    }
-
                     if ($img_content) {
+
+                        $filenameparts = explode(".",$element->value_text );
+                        $fileext = array_pop($filenameparts);
+
+                        $filename = md5($img_content).'.'.$fileext; 
+
+                        $dir = '/images/uploads/'.$filename[0].$filename[1].'/'.$filename[2].$filename[3].'/';
+
+                        if (!is_dir(Yii::getAlias('@webroot').$dir)) {
+                            @mkdir(Yii::getAlias('@webroot').$dir, 0700, true);
+                        }
+
                         $upload = file_put_contents(Yii::getAlias('@webroot').$dir.$filename, $img_content);
                         if ($upload) {
                             $element->value_string = $dir.$filename;

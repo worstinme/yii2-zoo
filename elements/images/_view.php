@@ -47,7 +47,7 @@ worstinme\uikit\assets\Slideset::register($this);
 
 	if ($preview) {
 
-		$image  = Html::img($thumbnail.ltrim($model->{$attribute}[0],"/"));
+		$image = !empty($thumbnail)?Html::img($thumbnail.ltrim($model->{$attribute}[0],"/")):Html::img($model->{$attribute}[0]);
 
 		echo $url ? Html::a($image, $model->url,['data-pjax'=>0]) : $image;
 

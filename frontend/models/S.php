@@ -60,13 +60,17 @@ class S extends Items
             $this->load($params);
         }
 
+
+
         $this->query = Items::find()->from(['a'=>'{{%zoo_items}}']);
         $this->query->leftJoin('{{%zoo_items_categories}}', "{{%zoo_items_categories}}.item_id = a.id");
 
-        if (count($this->categories)) {
+        if (count($this->categories) > 0) {
             $this->query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>$this->categoryTree($this->categories)]);
         }
         else {
+
+            $this->query->andFilterWhere(['app_id'=>$this->app_id]);
             $this->query->andFilterWhere(['{{%zoo_items_categories}}.category_id'=>(new \yii\db\Query())
                 ->select('id')
                 ->from('{{%zoo_categories}}')
@@ -91,6 +95,7 @@ class S extends Items
 
             }
         }
+
 
         return $this->query;
     }

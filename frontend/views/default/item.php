@@ -9,7 +9,12 @@ $this->registerMetaTag(['name'=>'keywords', 'content'=> $model->metaDescription]
 
 $template = $model->getTemplate('full'); 
 
+if ($model->parentCategory !== null) {
+    $this->params['breadcrumbs'][] = ['label' => $model->parentCategory->name, 'url' =>  $model->parentCategory->url]; 
+}
+
 $this->params['breadcrumbs'][] = $this->title;
+
 
 ?>
 
