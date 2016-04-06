@@ -28,11 +28,11 @@ worstinme\uikit\assets\Slideset::register($this);
 	    <a href=""data-uk-slideset-item="next"></a>
 	</div>
 
-	<?php else: ?>
+	<?php elseif(isset($model->{$attribute}[0])):  ?>
 		<?=Html::img($model->{$attribute}[0]);?>
 	<?php endif ?>
 
-<?php else: 
+<?php elseif(isset($model->{$attribute}[0])): 
 
 	$url = isset($params['asUrl']) && $params['asUrl'] == 1 ? true : false;
 	$preview = isset($params['preview']) && $params['preview'] == 1 ? true : false;

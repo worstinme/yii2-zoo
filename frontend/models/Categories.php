@@ -21,11 +21,11 @@ class Categories extends \yii\db\ActiveRecord
     } 
 
     public function getParent() {
-        return $this->hasOne(Categories::className(),['id'=>'parent_id']);
+        return $this->hasOne(Categories::className(),['id'=>'parent_id'])->orderBy('sort');
     }
 
     public function getRelated() {
-        return $this->hasMany(Categories::className(),['parent_id'=>'id']);
+        return $this->hasMany(Categories::className(),['parent_id'=>'id'])->orderBy('sort');
     }
 
     //metaTitle

@@ -20,8 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $this->render('_filter',['searchModel'=>$searchModel]); ?>
             
-            
-
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
