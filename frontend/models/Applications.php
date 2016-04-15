@@ -71,4 +71,20 @@ class Applications extends \yii\db\ActiveRecord
     public function getRelatedCategories() {
         return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where('{{%zoo_categories}}.parent_id = 0 AND state = 1')->orderBy('sort ASC');
     }
+
+    public function getCatlist() {
+        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();
+        return $catlist = count($parents) ? $this->getRelatedList($parents,[],'') : [];
+    }
+    protected function getRelatedList($items,$array,$level) {
+        if (count($items)) {
+            foreach ($items as $item) {
+                $array[$item->id] = $level.' '.$item->name;
+                if (count($item->related)) {
+                    $array = $this->getRelatedList($item->related,$array,$level.'—');
+                }
+            }
+        }
+        return $array;
+    }
 }

@@ -5,7 +5,6 @@ use yii\helpers\Html;
 $template = $model->getTemplate('teaser'); 
 
 
-
 ?>
 <div class="zoo-item-teaser" data-item-id="<?=$model->id?>"> 
 <?php if (count($template)) {

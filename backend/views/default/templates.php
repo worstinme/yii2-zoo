@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									<option<?=$row['type'] == '_row_2_double'?' selected="selected"':''?> value="_row_2_double">2 колонки 66% / 33%</option>
 									<option<?=$row['type'] == '_row_2_double_r'?' selected="selected"':''?> value="_row_2_double_r">2 колонки 33% / 66%</option>
 									<option<?=$row['type'] == '_row_3'?' selected="selected"':''?> value="_row_3">3 колонки</option>
-									<option<?=$row['type'] == '_row_4'?' selected="selected"':''?> value="_row_4">3 колонки</option>
+									<option<?=$row['type'] == '_row_orientir'?' selected="selected"':''?> value="_row_4">_row_orientir</option>
 									<option<?=$row['type'] == '_row_combo'?' selected="selected"':''?> value="_row_combo">объединенно</option>
 								</select>
 							</div>

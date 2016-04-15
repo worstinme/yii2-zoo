@@ -63,9 +63,9 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                     $a[$this->value_field] = $v;
 
                     $va[] = $a;
+
                 }
 
-                
             }
 
             $this->owner->values[$attribute] = $va;

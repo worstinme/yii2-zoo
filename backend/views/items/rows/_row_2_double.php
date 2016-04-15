@@ -10,7 +10,8 @@
 			<?php endif ?>
 			
 				<?php foreach ($items as $attribute)
-					echo $this->render('/items/_element',['model'=>$model,'attribute'=>$attribute['name']]) ?>
+					echo $this->render('/items/_element',['model'=>$model,'attribute'=>$attribute['name'],
+						'params'=>isset($attribute['params']) ? $attribute['params'] : null,'form'=>$form]) ?>
 			</div>
 		<?php endif ?>
 	<?php endforeach ?>

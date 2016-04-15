@@ -1,5 +1,11 @@
 <?php
 
-echo round($model->{$attribute},2);
+$branding = isset($params['branding']) ? (int)$params['branding'] : null;
 
-?> <i class="uk-icon-rub"></i>
+?>
+
+<?=$model->price?> <i class="uk-icon-rub"></i>
+
+<?php if ($branding ): ?>
+	<a href="#" class="uk-float-right uk-button uk-button-inverse">Стоимость нанесения логотипа</a>
+<?php endif ?>

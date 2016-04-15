@@ -16,6 +16,7 @@ if (count($template)) {
             echo $this->render('rows/'.$row['type'],[
                 'row'=>$row,
                 'model'=>$model,
+                'form'=>$form,
             ]);    
         }
     }

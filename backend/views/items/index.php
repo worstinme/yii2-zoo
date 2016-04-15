@@ -9,7 +9,7 @@ $this->title = Yii::$app->controller->app->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];    
 $this->params['breadcrumbs'][] = $this->title;
 
-?>
+?> 
 <div class="applications items-index">
 
     <div class="uk-grid uk-grid-small">

@@ -8,7 +8,14 @@ JuiAsset::register($this);
 
 $id = uniqid();
 
+$varQuery = clone $searchModel->query;
 
+//$max = Round($varQuery->max('price'));
+//$min = Round($varQuery->min('price'));
+
+$max = 150000;
+$min = 0;
+$step = $max >= 30000 ? 500 : 100;
 
 ?>
 
@@ -23,7 +30,7 @@ $id = uniqid();
 
 <?php 
 
-$values = \yii\helpers\Json::encode($searchModel->price_min > 0  && $searchModel->price_max > 0 ? [$searchModel->price_min,$searchModel->price_max] : [15000,100000]);
+$values = \yii\helpers\Json::encode($searchModel->price_min > 0  && $searchModel->price_max > 0 ? [$searchModel->price_min,$searchModel->price_max] : [round($max*0.15),round($max*0.75)]);
 
 $price_min_id = Html::getInputId($searchModel, 'price_min');
 $price_max_id = Html::getInputId($searchModel, 'price_max');
@@ -32,9 +39,9 @@ $js = <<<JS
 
 $( "#price-$id" ).slider({
     range: true,
-    min: 0,
-    max: 150000,
-    step: 500,
+    min: $min,
+    max: $max,
+    step: $step,
     values: $values,  
     slide: function( event, ui ) {
       $( "#$price_min_id" ).val(ui.values[0]);

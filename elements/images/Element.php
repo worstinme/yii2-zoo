@@ -25,7 +25,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     	foreach ($this->owner->itemsElements as $element) {
     		if ($element->element == $attribute) {
 
-    			if ($element->value_int !== null && $element->value_text !== null) {
+    			/*if ($element->value_int !== null && $element->value_text !== null) {
 
                     $img_content = file_get_contents($element->value_text);
 
@@ -49,7 +49,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                             $element->save();
                         } 
                     }
-                }
+                }*/
 
     			$value[] = [
                     'id'=>$element->id,

@@ -7,10 +7,20 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
 
 $parent_categories = ArrayHelper::map(Yii::$app->controller->app->parentCategories,'id','name');
 
+
+$multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
+
 ?>
 
 <?= Html::activeLabel($model, 'category',['class'=>'uk-form-label']); ?>
 
+
+<?php if ($multiselect ): ?>
+
+	<?=Html::activeDropDownList($model,$attribute,$model->app->catlist,['class'=>'uk-width-1-1','multiple'=>'multiple','size'=>10])?>
+
+<?php else: ?>
+	
 <div class="uk-form-controls">
 	<?=Html::activeDropDownList($model,$attribute.'[0]',$parent_categories,['id'=>'item-'.$attribute,'prompt'=>'выбрать из списка','class'=>'uk-width-1-1 category-select'])?>
 	<?php if (count($model->category)): ?>
@@ -31,3 +41,5 @@ $parent_categories = ArrayHelper::map(Yii::$app->controller->app->parentCategori
 	<?php endif ?>
 	<div class="uk-form-help-block uk-text-danger"></div>
 </div>
+
+<?php endif ?>

@@ -18,5 +18,5 @@ $value = implode(", ",$values);
 ?>
 
 <?php if (!empty($value)): ?>
-<span><?=$model->getAttributeLabel($attribute)?></span>: <?=$value?>
+<span class="label"><?=$model->getAttributeLabel($attribute)?>:</span> <?=$value?>
 <?php endif ?>
