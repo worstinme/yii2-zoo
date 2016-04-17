@@ -17,9 +17,11 @@ class m151008_152629_zoo_migrations extends Migration
             'id' => $this->primaryKey(),            
             'name' => $this->string()->notNull(),
             'title' => $this->string()->notNull(),
-            'sort' =>$this->integer()->notNull()->defaultValue(0),
-            'state' => $this->smallInteger()->notNull()->defaultValue(0),
             'params' => $this->text(),
+            'model_table_name' => $this->string(),
+            'content' => $this->text(),
+            'intro' => $this->text(),
+            'templates' => $this->text(),
         ], $tableOptions);
 
         $this->createTable('{{%zoo_categories}}', [
@@ -52,12 +54,9 @@ class m151008_152629_zoo_migrations extends Migration
 
         $this->createTable('{{%zoo_elements}}', [
             'id' => $this->primaryKey(),   
-            'title' => $this->string()->notNull(),   
+            'label' => $this->string()->notNull(),   
             'name' => $this->string()->notNull(),   
             'type' => $this->string()->notNull(), 
-            'required'=>$this->boolean()->notNull()->defaultValue(0),
-            'filter'=>$this->boolean()->notNull()->defaultValue(0),
-            'state' => $this->smallInteger()->notNull()->defaultValue(0),      
             'app_id' => $this->integer()->notNull(),
             'params' => $this->text(),
             
