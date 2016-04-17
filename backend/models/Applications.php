@@ -165,7 +165,7 @@ class Applications extends \worstinme\zoo\models\Applications
 
     public function modelFileExists($attribute, $params)
     {
-        if (is_file(Yii::getAlias('@app/models/').$this->model_table_name.'.php')) {
+        if (is_file(Yii::getAlias('@app/models/').$this->modelName.'.php')) {
             $this->addError($attribute, 'Model file already exists');
         }
         
@@ -196,6 +196,14 @@ class Applications extends \worstinme\zoo\models\Applications
         }
         
         return $list;
+    }
+
+    public function getControllerName() {
+        return Inflector::camelize($this->name).'Controller';
+    }
+
+    public function getModelName() {
+        return Inflector::camelize($this->model_table_name);
     }
 
     public function controllerFileExists($attribute, $params)

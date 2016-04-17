@@ -1,7 +1,5 @@
 <?php echo "<?php"; ?>
 
-use worstinme\uikit\Breadcrumbs;
-
 $this->title = $model->metaTitle;
 
 $this->registerMetaTag(['name'=>'description', 'content'=> $model->metaDescription]);
@@ -15,20 +13,23 @@ if ($model->parentCategory !== null) {
 
 $this->params['breadcrumbs'][] = $this->title;
 
-
 ?>
 
 <div class="<?=$controller?> <?=$controller?>-item">
 	
-<?php echo "<?php"; ?> if (count($template)) {
-    foreach ($template as $row) {
-        if (count($row['items'])) {
-            echo $this->render('rows/'.$row['type'],[
-                'row'=>$row,
-                'model'=>$model,
-            ]);    
-        }
+<?php echo "<?php"; ?> $items = []; foreach ($model->renderedElements as $attribute) {
+
+    if (!empty($model->$attribute)) {
+        $items[$attribute] = $this->render('@worstinme/zoo/elements/'.$model->elements[$attribute]['type'].'/_view.php',[
+            'model'=>$model,
+            'attribute'=>$attribute,
+        ]);
     }
-} ?>
+    
+}
+echo $this->render($model->getRendererView('full'), [
+    'items'=>$items,
+    'rows'=>$model->getTemplateRows('full'),
+]); ?>
 
 </div>

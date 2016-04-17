@@ -10,6 +10,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]);
 
+$layout = $app->itemsColumns > 1 ? '<div class="uk-grid uk-grid-width-medium-1-'.$app->itemsColumns.' uk-grid-match items" data-uk-grid-margin>{items}</div>' : '<div class="items">{items}</div><div class="pager">{pager}</div>';
+
+if ($app->itemsSort) {
+    $layout = '<div class="sorter">Упорядочить по {sorter}</div>'.$layout;
+}
+
 ?>
 
 <div class="<?=$controller?> <?=$controller?>-application">
@@ -27,8 +33,8 @@ if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical
 
             <?="<?="; ?> ListView::widget([
                 'dataProvider' => $dataProvider,
-                'layout'=>'<div class="catalog-nav"><div class="sorter">Упорядочить по {sorter}</div><div class="pager">{pager}</div></div><div class="uk-grid uk-grid-medium items" data-uk-grid-match=\'{"target":".zoo-item-teaser"}\'>{items}</div><div class="catalog-nav"><div class="sorter">Упорядочить по {sorter}</div><div class="pager">{pager}</div></div>',
-                'itemOptions' => ['class' => 'item uk-grid-margin uk-width-1-2 uk-width-medium-1-3'],
+                'layout'=>$layout,
+                'itemOptions' => ['class' => 'item'],
                 'itemView' => '_teaser',
             ]) ?>
 

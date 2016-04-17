@@ -3,7 +3,6 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\ListView;
-use worstinme\uikit\Breadcrumbs;
 
 if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]);
 
@@ -21,6 +20,13 @@ if ($category->parent !== null) {
 }
 
 $this->params['breadcrumbs'][] = $category->name;
+
+$layout = $app->itemsColumns > 1 ? '<div class="uk-grid uk-grid-width-medium-1-'.$app->itemsColumns.' uk-grid-match items" data-uk-grid-margin>{items}</div>' : '<div class="items">{items}</div><div class="pager">{pager}</div>';
+
+if ($app->itemsSort) {
+    $layout = '<div class="sorter">Упорядочить по {sorter}</div>'.$layout;
+}
+
 
 ?>
 <div class="<?=$controller?> <?=$controller?>-category">
@@ -47,9 +53,8 @@ $this->params['breadcrumbs'][] = $category->name;
 
             <?="<?="; ?> ListView::widget([
                 'dataProvider' => $dataProvider,
-                'summary'=>'Подобрано {totalCount} из '.$searchModel->query()->count().' показаны с {begin} по {end}',
-                'layout'=>'<div class="spinner"></div><p class="summary">{summary}</p><div class="catalog-nav"><div class="sorter">Упорядочить по {sorter}</div><div class="pager">{pager}</div></div><div class="items uk-grid uk-grid-medium uk-grid-match uk-grid-width-1-1 uk-grid-width-medium-1-3">{items}</div><div class="catalog-nav"><div class="sorter">Упорядочить по {sorter}</div><div class="pager">{pager}</div></div>',
-                'itemOptions' => ['class' => 'item uk-grid-margin'],
+                'layout'=>$layout,
+                'itemOptions' => ['class' => 'item'],
                 'itemView' => '_teaser',
             ]) ?>
 
