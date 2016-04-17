@@ -8,8 +8,7 @@ use yii\helpers\Json;
 
 ?>
 
-<div class="uk-panel uk-panel-box actions">
-
+<div class="items-actions">
 
 <ul class="uk-subnav uk-subnav-line" style="margin-bottom: 0">
     <li><span>Применить <span class="selected-count"></span>:</span></li>

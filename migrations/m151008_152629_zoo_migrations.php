@@ -87,7 +87,7 @@ class m151008_152629_zoo_migrations extends Migration
             'element' => $this->string()->notNull(),   
             'value_text' => $this->text(), 
             'value_int' => $this->integer(),
-            'value_string' => $this->string()->notNull(),  
+            'value_string' => $this->string(),  
             'value_float'=>$this->float(),
         ], $tableOptions);  
  

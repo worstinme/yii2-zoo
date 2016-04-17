@@ -23,7 +23,7 @@ class Controller extends \yii\web\Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'],
+                        'roles' => $this->module->accessRoles,
                     ],
                 ],
             ],
@@ -31,7 +31,6 @@ class Controller extends \yii\web\Controller
                 'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post','delete'],
-                    'category-delete'=> ['post','delete'],
                 ],
             ],
         ];
@@ -104,5 +103,33 @@ class Controller extends \yii\web\Controller
         $str = trim($str, '-');
 
         return $str;
+    }
+
+    public function actionAliasCreate() {
+        $request = Yii::$app->request;
+        $alias = $request->post('alias');
+        $nodelimiter = $request->post('nodelimiter');
+
+        if ($request->isPost && !empty($alias)) {
+            
+            $d = [];
+            $str = explode(" ",$alias);
+            if (count($str)) {
+                foreach ($str as $s) {
+                    $d[] = $this->transliteration($s);
+                }
+            }
+
+            $string = implode('-',$d);
+
+            if ($nodelimiter == true) {
+                $string = str_replace("-", "", $string);
+            }
+            
+            echo $string;
+
+            //echo \yii\helpers\Inflector::slug($alias);
+        }
+        else echo '';
     }
 }

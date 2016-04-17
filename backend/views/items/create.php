@@ -10,24 +10,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<div class="applications items-create">
+<?=$this->render('/_nav')?>
+	
 
-	<div class="uk-grid uk-grid-small">
-
-	    <div class="uk-width-medium-5-6">
-
-	        <?= $this->render('_form', [
-	            'model' => $model,
-	        ]) ?>
-
-		</div>
-
-	    <div class="uk-width-medium-1-6">
-
-	        <?=$this->render('/_nav')?>
-	        
-	    </div>
-
-	</div>
-
-</div>
+<?= $this->render('_form', [
+    'model' => $model,
+]) ?>

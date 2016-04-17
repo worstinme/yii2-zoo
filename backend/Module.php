@@ -3,21 +3,27 @@
 namespace worstinme\zoo\backend;
 
 use Yii;
+use worstinme\zoo\helpers\AppHelper;
+use yii\helpers\Inflector;
+
 class Module extends \yii\base\Module
 {
+    public $accessRoles = ['admin'];
+
     public $controllerNamespace = 'worstinme\zoo\backend\controllers';
 
-    public $itemTemplates = [
-        'form',
-        'user_form',
-        'full',
-        'teaser',
-        'related',
-    ];
+
 
     public function init()
     {
         parent::init();
+
+        if (!Yii::$app->has('zoo')) {
+
+            Yii::$app->set('zoo',[ 'class'=>'\worstinme\zoo\Zoo' ]);
+
+        }
+
 
         $this->registerTranslations();      
     }
@@ -33,25 +39,45 @@ class Module extends \yii\base\Module
 
     public function getElements() {
 
-        return [
-            'category'=>'Выбор категории',
-            'select'=>'Список вариантов',
-            'textarea'=>'Текст / Редактор',
-            'textfield'=>'Текстовое поле / Строка',
-            'textfield_multiple'=>'Текстовое поле / _multiple',
-            'units'=>'units',
-            'slug'=>'slug',
-            'name'=>'name',
-            'price'=>'price',
-            'images'=>'images',
-            'color'=>'color',
-            'buy'=>'buy',
-            'parsed_category'=>'parsed_category',
-            'article'=>'article',
-        ];
+        $files = AppHelper::findDirectories(Yii::getAlias('@worstinme/zoo/elements'));
+
+        $files = array_unique(array_merge($files, AppHelper::findDirectories(Yii::getAlias(Yii::$app->zoo->elementsPath))));
+
+        $elements = [];
+
+        foreach ($files as $file) {
+            $elements[$file] = Inflector::camel2words($file);
+        }
+
+        return $elements;
 
     }
-	
+
+    public function getRenderers() {
+
+        $files = AppHelper::findDirectories(Yii::getAlias('@worstinme/zoo/renderers'));
+
+        $files = array_unique(array_merge($files, AppHelper::findDirectories(Yii::getAlias(Yii::$app->zoo->renderersPath))));
+
+        $renderers = [];
+
+        foreach ($files as $file) {
+            $renderers[$file] = Inflector::camel2words($file);
+        }
+
+        return $renderers;
+
+    }
+
+    public function getTemplates() {
+        return [
+            'form',
+            'full',
+            'teaser',
+            'related',
+            'submission',
+        ];
+    }
 
 	public static function t($category, $message, $params = [], $language = null)
 	{

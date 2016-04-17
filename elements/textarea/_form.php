@@ -14,10 +14,13 @@ $this->registerJs($model->addValidators($this,$attribute), 5);  ?>
         'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
                 'preset' => 'standart',
                 'allowedContent' => true,
-                'height'=>'400px',
+                'height'=>'200px',
+                'toolbar' => [
+                    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
+                    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source']
+                ],
                 'contentsCss'=>[
                     '/css/site.css',
-                    'https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,400italic,900&subset=latin,cyrillic',
                 ],
         ])
     ])?>

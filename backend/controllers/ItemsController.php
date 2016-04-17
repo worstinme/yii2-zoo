@@ -4,7 +4,7 @@ namespace worstinme\zoo\backend\controllers;
 
 use Yii;
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\models\Items;
 use worstinme\zoo\backend\models\ItemsSearch;
 
 use yii\web\NotFoundHttpException;
@@ -85,20 +85,14 @@ class ItemsController extends Controller
     }
 
     public function actionCreate($app, $id = null)
-    {
-        if ($id === null) {
+    {   
+        $app = $this->getApp($app);
+
+        if ($id === null || ($model = Items::findOne(["i.id"=>$id])) === null) {
             $model = new Items();
-            $model->name = 'Заголовок';
-            $model->app_id = $this->app->id;
-            $model->save();
-
-            return $this->redirect(['create','id'=>$model->id,'app'=>$model->app_id]);
-            
+            $model->app_id = $app->id;
+            $model->regBehaviors();
         }
-        else {
-            $model = Items::findOne($id);
-        }   
-
 
         if (Yii::$app->request->post("reload") == 'true') {
             if ($model->load(Yii::$app->request->post()) && $model->validate() || true) {
@@ -139,6 +133,7 @@ class ItemsController extends Controller
         }
         elseif ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал сохранён'));
+            return $this->redirect(['index','app'=>$app->id]);
         }
 
         return $this->render('create',[

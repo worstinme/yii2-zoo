@@ -1,9 +1,8 @@
 <?php
 
-namespace worstinme\zoo\backend\models;
+namespace worstinme\zoo\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use yii\helpers\Json;
 
 class Applications extends \yii\db\ActiveRecord
@@ -17,7 +16,7 @@ class Applications extends \yii\db\ActiveRecord
 
     public function afterFind()
     {
-        $this->params = Json::decode($this->params);
+        $this->params = !empty($this->params) ? Json::decode($this->params) : null;
         return parent::afterFind();
     }
 
@@ -29,97 +28,62 @@ class Applications extends \yii\db\ActiveRecord
         return $this->hasMany(Categories::className(), ['app_id' => 'id'])->orderBy('sort ASC');
     }
 
+    public function getItems() {
+        return $this->hasMany(Items::className(), ['app_id' => 'id'])->inverseOf('app');
+    }
+
 
     public function getTemplate($name = null) {
-        $params = !empty($this->templates) ? \yii\helpers\Json::decode($this->templates) : []; 
+        $params = !empty($this->templates) ? Json::decode($this->templates) : []; 
         if ($name === null) {
             return $params;
         }
         return isset($params[$name]) ? $this->params[$name] : [];
     }
 
-    //frontpage
-    public function getFrontpage() { 
-        return isset($this->params['frontpage'])?$this->params['frontpage']:''; 
-    }
-
-    public function setFrontpage($preview) { 
-        $params = $this->params;
-        $params['frontpage'] = $preview; 
-        return $this->params = $params;
-    }
-
-    //categorieslinks
-    public function getCatlinks() { 
-        return isset($this->params['catlinks'])?$this->params['catlinks']:''; 
-    }
-
-    public function setCatlinks($preview) { 
-        $params = $this->params;
-        $params['catlinks'] = $preview; 
-        return $this->params = $params;
+    //metaTitle
+    public function getMetaTitle() {
+        return !empty($this->params['metaTitle']) ? $this->params['metaTitle'] : null;
     }
 
     //metaTitle
-    public function getMetaTitle() {
-        $params = $this->params;
-        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
+    public function getFilters() {
+        return !empty($this->params['filters']) ? $this->params['filters'] : null;
     }
-    public function setMetaTitle($s) {
-        $params = $this->params; $params['metaTitle'] = $s;
-        return $this->params = $params;
+
+    public function getItemsSearch() {
+        return !empty($this->params['itemsSearch']) ? $this->params['itemssearch'] : null;
+    }
+
+    public function getItemsSort() {
+        return !empty($this->params['itemsSort']) ? $this->params['itemsSort'] : null;
+    }
+
+    public function getDefaultPageSize() {
+        return !empty($this->params['defaultPageSize']) ? $this->params['defaultPageSize'] : 24;
+    }
+
+    public function getItemsColumns() {
+        return !empty($this->params['itemsColumns']) ? $this->params['itemsColumns'] : 1;
+    }
+
+    public function getPjax() {
+        return !empty($this->params['pjax']) ? $this->params['pjax'] : null;
     }
 
     //metaKeywords
     public function getMetaKeywords() {
-        $params = $this->params;
-        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
-    }
-    public function setMetaKeywords($s) {
-        $params = $this->params; $params['metaKeywords'] = $s;
-        return $this->params = $params;
+        return !empty($his->params['metaKeywords']) ? $this->params['metaKeywords'] : null;
     }
 
     //metaDescription
     public function getMetaDescription() {
-        $params = $this->params;
-        return isset($params['metaDescription']) ? $params['metaDescription'] : '';
-    }
-    public function setMetaDescription($s) {
-        $params = $this->params; $params['metaDescription'] = $s;
-        return $this->params = $params;
-    }
-
-    //view Path
-    public function getViewPath() { 
-        return isset($this->params['viewPath'])?$this->params['viewPath']:''; 
-    }
-
-    public function setViewPath($preview) { 
-        $params = $this->params;
-        $params['viewPath'] = $preview; 
-        return $this->params = $params;
+        return !empty($this->params['metaDescription']) ? $this->params['metaDescription'] : null;
     }
 
     public function getElements() {
         return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
     }
-
-    public function beforeSave($insert) {
-        if (parent::beforeSave($insert)) {
-
-            $this->params = Json::encode($this->params);
-
-            return true;
-        }
-        else return false;
-    }
-
-    public function afterSave($insert, $changedAttributes)
-    {   
-        $this->params = Json::decode($this->params);
-        return parent::afterSave($insert, $changedAttributes);
-    } 
 
     public function getCatlist() {
         $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();

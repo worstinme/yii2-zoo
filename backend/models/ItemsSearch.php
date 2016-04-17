@@ -6,12 +6,12 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\models\Items;
 
 /**
  * ItemsSearch represents the model behind the search form about `worstinme\zoo\models\Items`.
  */
-class ItemsSearch extends Items
+class ItemsSearch extends \worstinme\zoo\models\Items
 {
 
     public $search;
@@ -30,7 +30,7 @@ class ItemsSearch extends Items
             ['withoutCategory','integer'],
         ];
 
-        foreach ($this->elements_ as $behavior_name) {
+        foreach ($this->elementsTypes as $behavior_name) {
             if (($behavior = $this->getBehavior($behavior_name)) !== null) {
                 $behavior_rules = $behavior->rules($this->getElementsByType($behavior_name));
                 if (count($behavior_rules)) {
@@ -50,7 +50,7 @@ class ItemsSearch extends Items
         ];
 
         foreach ($this->elements as $key => $element) {
-            $labels[$key] = $element->title;
+            $labels[$key] = $element->label;
         }
 
         return $labels;
@@ -62,39 +62,39 @@ class ItemsSearch extends Items
         $this->load($params);
 
         if ($this->withoutCategory) {
-            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+            $this->query = Items::find()->where(['i.app_id' => $this->app_id ]);
             $this->query->andWhere('a.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
-            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}']);
-            $this->query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = a.id");
+            $this->query = Items::find()->from(['i'=>'{{%zoo_items}}']);
+            $this->query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = i.id");
             $this->query->andFilterWhere(['category.category_id'=>$this->category]);
         }
         else {
-            $this->query = Items::find()->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+            $this->query = Items::find()->where(['i.app_id' => $this->app_id ]);
         }
 
         foreach ($this->elements as $element) {
 
             $e = $element->name;
 
-            if (!in_array($e, $this->attributes()) && $element->filterAdmin) {
+            if (!in_array($e, $this->attributes()) && $element->filter) {
                 
                 if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
 
-                    $this->query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = a.id AND ".$e.".element = '".$e."'");
+                    $this->query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = i.id AND ".$e.".element = '".$e."'");
                     $this->query->andFilterWhere([$e.'.value_string'=>$this->$e]);
                 }
 
             }
         }
 
-        $this->query->andFilterWhere(['LIKE','a.name',$this->search]);
+        $this->query->andFilterWhere(['LIKE','i.name',$this->search]);
 
         $query = clone $this->query;
 
         return $dataProvider = new ActiveDataProvider([
-            'query' => $query->groupBy('a.id'),
+            'query' => $query->groupBy('i.id'),
             'pagination' => [
                 'pageSize' => 30,
             ],
@@ -108,35 +108,35 @@ class ItemsSearch extends Items
         $this->load($params);
 
         if ($this->withoutCategory) {
-            $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
-            $query->andWhere('a.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
+            $query = Items::find()->select('i.id')->from(['a'=>'{{%zoo_items}}'])->where(['i.app_id' => $this->app_id ]);
+            $query->andWhere('i.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
-            $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}']);
-            $query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = a.id");
+            $query = Items::find()->select('i.id')->from(['a'=>'{{%zoo_items}}']);
+            $query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = i.id");
             $query->andFilterWhere(['category.category_id'=>$this->category]);
         }
         else {
-            $query = Items::find()->select('a.id')->from(['a'=>'{{%zoo_items}}'])->where(['a.app_id' => $this->app_id ]);
+            $query = Items::find()->select('i.id')->from(['a'=>'{{%zoo_items}}'])->where(['i.app_id' => $this->app_id ]);
         }
 
         foreach ($this->elements as $element) {
 
             $e = $element->name;
 
-            if (!in_array($e, $this->attributes) && $element->filterAdmin) {
+            if (!in_array($e, $this->attributes) && $element->filter) {
                 
                 if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
 
-                    $query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = a.id AND ".$e.".element = '".$e."'");
+                    $query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = i.id AND ".$e.".element = '".$e."'");
                     $query->andFilterWhere([$e.'.value_string'=>$this->$e]);
                 }
 
             }
         }
 
-        $query->andFilterWhere(['LIKE','a.name',$this->search]);
+        $query->andFilterWhere(['LIKE','i.name',$this->search]);
 
-        return $query->groupBy('a.id')->column();
+        return $query->groupBy('i.id')->column();
     }
 }

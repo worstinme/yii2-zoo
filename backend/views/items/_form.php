@@ -4,27 +4,31 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use worstinme\uikit\ActiveForm;
 
-$template = Yii::$app->controller->app->getTemplate('form'); ?>
+?>
 
 <div class="uk-panel">
 
-<?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValidation' => false]);
+<?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValidation' => false]); 
 
-if (count($template)) {
-    foreach ($template as $row) {
-        if (count($row['items'])) {
-            echo $this->render('rows/'.$row['type'],[
-                'row'=>$row,
-                'model'=>$model,
-                'form'=>$form,
-            ]);    
-        }
-    }
+$items = [];
+
+foreach ($model->renderedElements as $attribute) {
+
+  //  if (!empty($model->$attribute)) {
+        $items[$attribute] = $this->render('@worstinme/zoo/elements/'.$model->elements[$attribute]['type'].'/_form.php',[
+            'form'=>$form,
+            'model'=>$model,
+            'attribute'=>$attribute,
+        ]);
+  //  }
+    
 }
-?>
+echo $this->render($model->getRendererView('form'), [
+    'items'=>$items,
+    'rows'=>$model->getTemplateRows('form'),
+]); ?>
 
 <hr>
-
 
 <?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
 

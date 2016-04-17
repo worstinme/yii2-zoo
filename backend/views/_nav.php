@@ -1,55 +1,60 @@
 <?php
 
 use worstinme\uikit\Nav;
+use worstinme\uikit\NavBar;
 use yii\helpers\Html;
 
-
-$items = [
-    
-    ['label' => '<i class="uk-icon-th-large"></i> '.Yii::t('backend','Все приложения'),
-        'url' => ['/'.Yii::$app->controller->module->id.'/default/index'],], 
-    ['label' => '<i class="uk-icon-navicon"></i> '.Yii::t('backend','Настройка меню'),
-        'url' => ['/'.Yii::$app->controller->module->id.'/menu/index'],],
-
-    '<li class="uk-nav-divider"></li>',
-
-    ['label' => '<i class="uk-icon-clipboard"></i> '.Yii::t('backend','Материалы'), 
-        'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id],], 
-    ['label' => '<i class="uk-icon-th-list"></i> '.Yii::t('backend','Категории'), 
-        'url' => ['/'.Yii::$app->controller->module->id.'/default/categories','app'=>Yii::$app->controller->app->id],], 
-    ['label' => '<i class="uk-icon-cubes"></i> '.Yii::t('backend','Элементы'), 
-        'url' => ['/'.Yii::$app->controller->module->id.'/default/elements','app'=>Yii::$app->controller->app->id],], 
-    ['label' => '<i class="uk-icon-object-group"></i> '.Yii::t('backend','Шаблоны'), 
-        'url' => ['/'.Yii::$app->controller->module->id.'/default/templates','app'=>Yii::$app->controller->app->id],], 
-
-    '<li class="uk-nav-divider"></li>',
-
-    ['label' => '<i class="uk-icon-edit"></i> '.Yii::t('backend','Создать категорию'), 
-        'url' => ['/'.Yii::$app->controller->module->id.'/default/update-category','app'=>Yii::$app->controller->app->id],],
+$subnav = [
 
     ['label' => '<i class="uk-icon-plus"></i> '.Yii::t('backend','Создать материал'), 
+        'linkOptions'=>['class'=>'uk-button-primary'],
         'url' => ['/'.Yii::$app->controller->module->id.'/items/create','app'=>Yii::$app->controller->app->id],],
 
-    '<li class="uk-nav-divider"></li>',
+    ['label' => '<i class="uk-icon-edit"></i> '.Yii::t('backend','Создать категорию'), 
+        'url' => ['/'.Yii::$app->controller->module->id.'/categories/update','app'=>Yii::$app->controller->app->id],],
 
-    ['label' => '<i class="uk-icon-cog"></i> '.Yii::t('backend','Настройки'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/default/config','app'=>Yii::$app->controller->app->id],], 
+   
 ];
 
+if (isset($items) && is_array($items) && count($items)) {
+    $subnav = array_merge($items,$subnav);
+}
+
 ?>
+<div class="items-filters">
+<? NavBar::begin(['container'=>false,'offcanvas'=>false,'brandUrl' => false,'options'=>['class'=>'application-nav']]); ?>
+    
+    <span class="uk-navbar-brand"><?=Yii::$app->controller->app->title?></span>
 
-<div class="uk-panel uk-panel-box">
+    <?=Nav::widget([
+        'navbar'=>true,
+        'options'=>['data-uk-nav'=>true],
+        'items' => [
 
-<?= Nav::widget([
+            ['label' => Yii::t('backend','Материалы'), 
+                'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id],], 
+            ['label' => Yii::t('backend','Категории'), 
+                'url' => ['/'.Yii::$app->controller->module->id.'/categories/index','app'=>Yii::$app->controller->app->id],], 
+            ['label' => Yii::t('backend','Элементы'), 
+                'url' => ['/'.Yii::$app->controller->module->id.'/elements/index','app'=>Yii::$app->controller->app->id],], 
+            ['label' => Yii::t('backend','Шаблоны'), 
+                'url' => ['/'.Yii::$app->controller->module->id.'/templates/index','app'=>Yii::$app->controller->app->id],], 
 
-    'options'=>['class'=>'uk-nav-side','data-uk-nav'=>true],
+            ['label' => '<i class="uk-icon-cog"></i>', 
+                    'url' => ['/'.Yii::$app->controller->module->id.'/default/update','app'=>Yii::$app->controller->app->id],], 
 
-    'items' => $items,
+        ],
+    ]);  ?>
 
-]); ?>
+    <div class="uk-navbar-flip">
 
+        <?= Nav::widget([
+            'navbar'=>true,
+            'options'=>['data-uk-nav'=>true],
+            'items' => $subnav,
+        ]); ?>
 
+    </div>
 
+<?php NavBar::end(); ?>
 </div>
-
-<hr>

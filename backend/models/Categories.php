@@ -6,13 +6,8 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\Json;
 
-class Categories extends \yii\db\ActiveRecord
+class Categories extends \worstinme\zoo\models\Categories
 {
-    
-    public static function tableName()
-    {
-        return '{{%zoo_categories}}';
-    }
 
     public function behaviors()
     {
@@ -29,7 +24,7 @@ class Categories extends \yii\db\ActiveRecord
             [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'string'],
             [['name', 'alias','image'], 'string', 'max' => 255],
-            [['metaDescription','metaKeywords','content','preContent'], 'string'],
+            [['metaDescription','metaKeywords','content','intro'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
 
             //defaults
@@ -58,33 +53,18 @@ class Categories extends \yii\db\ActiveRecord
         ];
     }
 
-        //metaTitle
-    public function getMetaTitle() {
-        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
-        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
-    }
     public function setMetaTitle($s) {
         $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         $params['metaTitle'] = $s;
         return $this->params = Json::encode($params);
     }
 
-    //metaTitle
-    public function getImage() {
-        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
-        return isset($params['image']) ? $params['image'] : '';
-    }
     public function setImage($s) {
         $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         $params['image'] = $s;
         return $this->params = Json::encode($params);
     }
 
-    //metaKeywords
-    public function getMetaKeywords() {
-        $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
-        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
-    }
     public function setMetaKeywords($s) {
         $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
         $params['metaKeywords'] = $s;
@@ -114,13 +94,13 @@ class Categories extends \yii\db\ActiveRecord
     }
 
     //metaDescription
-    public function getPreContent() {
+    public function getIntro() {
         $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
-        return isset($params['preContent']) ? $params['preContent'] : '';
+        return isset($params['intro']) ? $params['intro'] : '';
     }
-    public function setPreContent($s) {
+    public function setIntro($s) {
         $params = $this->params !== null && !empty($this->params) ? Json::decode($this->params) : [];
-        $params['preContent'] = $s;
+        $params['intro'] = $s;
         return $this->params = Json::encode($params);
     }
 

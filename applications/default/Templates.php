@@ -1,0 +1,49 @@
+<?php
+
+return [  
+
+	'form'=>[
+		'renderer'=>'uikit_grid',
+		'rendererViewPath'=>'@worstinme/zoo/renderers/uikit_grid/view',
+		'rows'=>[
+			[	
+				'params'=>['column'=>1],
+				'items'=>[
+					['element'=>'category'],
+					['element'=>'name'],
+					['element'=>'intro'],
+					['element'=>'content'],
+				],
+			],
+		],
+	],
+	'full'=>[
+		'renderer'=>'uikit_grid',
+		'rendererViewPath'=>'@worstinme/zoo/renderers/uikit_grid/view',
+		'rows'=>[
+			[	
+				'params'=>['column'=>1],
+				'items'=>[
+					['element'=>'name'],
+					['element'=>'intro'],
+					['element'=>'content'],
+				],
+			],
+		],
+	],
+	'teaser'=>[
+		'renderer'=>'uikit_grid',
+		'rendererViewPath'=>'@worstinme/zoo/renderers/uikit_grid/view',
+		'rows'=>[
+			[	
+				'params'=>['column'=>1],
+				'items'=>[
+					['element'=>'name','params'=>['asUrl'=>true]],
+					['element'=>'intro'],
+					['element'=>'content'],
+				],
+			],
+		],
+	],
+
+];

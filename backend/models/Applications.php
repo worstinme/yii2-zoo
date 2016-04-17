@@ -3,34 +3,36 @@
 namespace worstinme\zoo\backend\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use yii\helpers\Json;
+use yii\helpers\Inflector;
+use yii\base\InvalidParamException;
 
-class Applications extends \yii\db\ActiveRecord
+class Applications extends \worstinme\zoo\models\Applications
 {
 
-    public static function tableName()
-    {
-        return '{{%zoo_applications}}';
-    }
+    public $example;
 
     public function rules()
     {
         return [
-            ['name', 'required'],
-            ['name', 'match', 'pattern' => '#^[\w_]+$#i'],
+            ['name', 'required','when' => function($model) { return $model->isNewRecord;}, ],
+            ['name', 'match', 'pattern' => '#^[\w_]+$#i','when' => function($model) { return $model->isNewRecord;}, ],
             ['name', 'unique', 'targetClass' => Applications::className(), 'message' => Yii::t('backend', 'Такое приложение уже есть')],
-            ['name', 'string', 'min' => 2, 'max' => 255],
+            ['name', 'string', 'min' => 2, 'max' => 255,'when' => function($model) { return $model->isNewRecord;}, ],
+            ['name', 'controllerFileExists','when' => function($model) { return $model->isNewRecord;}, ],
+            ['name', 'viewFolderExists','when' => function($model) { return $model->isNewRecord;}, ],
 
-            ['viewPath', 'string', 'max' => 255],
+            ['model_table_name', 'match', 'pattern' => '#^[\w_}{\%}]+$#i'],
+            ['model_table_name', 'tableExists','when' => function($model) { return $model->isNewRecord;}, ],
+            ['model_table_name', 'modelFileExists','when' => function($model) { return $model->isNewRecord;}, ],
+            ['example','exampleExists','when' => function($model) { return $model->isNewRecord;}, ],
+
+            [['filters','itemsSearch','itemsSort','itemsColumns','defaultPageSize'],'integer'],
             
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
 
-            [['sort', 'state','catlinks'], 'integer'],
-            [['params','template','frontpage'], 'safe'],
-
-            [['metaDescription','metaKeywords'], 'string'],
+            [['content','intro','metaDescription','metaKeywords'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
         ];
     }
@@ -49,149 +51,213 @@ class Applications extends \yii\db\ActiveRecord
         ];
     }
 
-    public function afterFind()
-    {
-        $this->params = Json::decode($this->params);
-        return parent::afterFind();
+
+
+    public function setTemplate($name,$template) {
+        $params = !empty($this->templates) ? \yii\helpers\Json::decode($this->templates) : []; 
+        $params[$name] = $template; 
+        return $this->templates = \yii\helpers\Json::encode($params);
     }
 
 
-
-    public function getParentCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
-    }
-
-    public function getCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->orderBy('sort ASC');
-    }
-
-    public function getUrl() {
-        return \yii\helpers\Url::toRoute(['/'.Yii::$app->controller->module->id.'/items/index','app'=>$this->id]);
-    }
-
-   /* public function getTypes() {
-        return isset($this->params['types'])?$this->params['types']:[];
-    }
-
-    public function setTypes($array) {
-        $params = $this->params;
-        foreach ($array as $key => $value) { if (empty($value)) unset($array[$key]); }
-        $params['types'] = $array;
-        return $this->params = $params;
-    }*/
-
-    public function setTemplate($name,$rows) {
-        $params = $this->params; 
-        foreach ($rows as $key=>$row) {
-            if (!count($row['items'])) {
-                unset($rows[$key]);
-            }
-        }
-        $params[$name] = $rows;; 
-        return $this->params = $params;
-    }
-
-    public function getTemplate($name = null) {
-        return isset($this->params[$name]) ? $this->params[$name] : [];
-    }
-
-    //frontpage
-    public function getFrontpage() { 
-        return isset($this->params['frontpage'])?$this->params['frontpage']:''; 
-    }
-
-    public function setFrontpage($preview) { 
-        $params = $this->params;
-        $params['frontpage'] = $preview; 
-        return $this->params = $params;
-    }
-
-    //categorieslinks
-    public function getCatlinks() { 
-        return isset($this->params['catlinks'])?$this->params['catlinks']:''; 
-    }
-
-    public function setCatlinks($preview) { 
-        $params = $this->params;
-        $params['catlinks'] = $preview; 
-        return $this->params = $params;
-    }
-
-    //metaTitle
-    public function getMetaTitle() {
-        $params = $this->params;
-        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
-    }
     public function setMetaTitle($s) {
         $params = $this->params; $params['metaTitle'] = $s;
         return $this->params = $params;
     }
 
-    //metaKeywords
-    public function getMetaKeywords() {
-        $params = $this->params;
-        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
+    public function setFilters($s) {
+        $params = $this->params; $params['filters'] = $s;
+        return $this->params = $params;
     }
+
     public function setMetaKeywords($s) {
         $params = $this->params; $params['metaKeywords'] = $s;
         return $this->params = $params;
     }
 
-    //metaDescription
-    public function getMetaDescription() {
-        $params = $this->params;
-        return isset($params['metaDescription']) ? $params['metaDescription'] : '';
+    public function setItemsSearch($s) {
+        $params = $this->params; $params['itemsSearch'] = $s;
+        return $this->params = $params;
     }
+
+    public function setItemsSort($s) {
+        $params = $this->params; $params['itemsSort'] = $s;
+        return $this->params = $params;
+    }
+
+    public function setDefaultPageSize($s) {
+        $params = $this->params; $params['defaultPageSize'] = $s;
+        return $this->params = $params;
+    }
+
+    public function setItemsColumns($s) {
+        $params = $this->params; $params['itemsColumns'] = $s;
+        return $this->params = $params;
+    }
+
     public function setMetaDescription($s) {
         $params = $this->params; $params['metaDescription'] = $s;
         return $this->params = $params;
     }
+    public function create() {
 
-    //view Path
-    public function getViewPath() { 
-        return isset($this->params['viewPath'])?$this->params['viewPath']:''; 
+        //controller 
+
+        $controller = Yii::$app->view->render('@worstinme/zoo/applications/default/controllers/DefaultController',[
+                'controllerName'=>$this->controllerName,
+                'modelName'=>$this->modelName,
+            ]);
+
+        file_put_contents(Yii::getAlias('@app/controllers/'.$this->controllerName.'.php'),$controller);
+
+        //views
+
+        $controller = strtolower($this->name);
+
+        if (!is_dir(Yii::getAlias('@app/views/'.$controller))) {
+            mkdir(Yii::getAlias('@app/views/'.$controller));
+        }
+
+        $files = \yii\helpers\FileHelper::findFiles(Yii::getAlias('@worstinme/zoo/applications/default/views'));
+
+        foreach ($files as $file) {
+
+            $view = str_replace([Yii::getAlias('@worstinme/zoo/applications/default/views/'),".php"],"",$file);
+
+            $text = Yii::$app->view->render('@worstinme/zoo/applications/default/views/'.$view,[
+                    'controller'=>$controller,
+                ]);
+
+            file_put_contents(Yii::getAlias('@app/views/'.$controller.'/'.$view).'.php',$text);
+
+        }
+
+      /*  if ($this->modelName !== null) {
+
+            $model = Yii::$app->view->render('@worstinme/zoo/applications/default/models/Items',[
+                'modelName'=>$this->modelName,
+                'tableName'=>$this->model_table_name,
+            ]);
+
+            file_put_contents(Yii::getAlias('@app/models/'.$this->modelName.'.php'),$model);
+
+            $searchModel = Yii::$app->view->render('@worstinme/zoo/applications/default/models/S',[
+                'modelName'=>$this->modelName,
+                'tableName'=>$this->model_table_name,
+            ]);
+
+            file_put_contents(Yii::getAlias('@app/models/Search'.$this->modelName.'.php'),$searchModel);
+
+        } */
+
+        return true;
     }
 
-    public function setViewPath($preview) { 
-        $params = $this->params;
-        $params['viewPath'] = $preview; 
-        return $this->params = $params;
+    public function tableExists($attribute, $params)
+    {
+        $tableSchema = Yii::$app->db->schema->getTableSchema($this->model_table_name);
+
+        if ($tableSchema !== null) {
+            $this->addError($attribute, 'Table already exists');
+        }
+        
     }
 
-    public function getElements() {
-        return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
+    public function modelFileExists($attribute, $params)
+    {
+        if (is_file(Yii::getAlias('@app/models/').$this->model_table_name.'.php')) {
+            $this->addError($attribute, 'Model file already exists');
+        }
+        
+    }
+
+    public function exampleExists($attribute, $params)
+    {
+        if ($this->example === null) {
+            $this->example = 'default';
+        }
+
+        if (!is_dir(Yii::getAlias('@worstinme/zoo/applications/').$this->example)) {
+            $this->addError($attribute, 'Application example is not exists');
+        }
+        
+    }
+
+    public function getExamples() {
+
+        $dirs = \worstinme\zoo\helpers\AppHelper::findDirectories(Yii::getAlias('@worstinme/zoo/applications'));
+
+        $list = [];
+
+        if (count($dirs)) {
+            foreach ($dirs as $dir) {
+               $list[$dir] = $dir;
+            }
+        }
+        
+        return $list;
+    }
+
+    public function controllerFileExists($attribute, $params)
+    {
+        if (is_file(Yii::getAlias('@app/controllers/').$this->controllerName.'.php')) {
+            $this->addError($attribute, 'Controller file already exists');
+        }
+        
+    }
+
+    public function viewFolderExists($attribute, $params)
+    {
+        if (is_dir(Yii::getAlias('@app/views/').strtolower($this->name))) {
+            $this->addError($attribute, 'View folder already exists');
+        }
+        
     }
 
     public function beforeSave($insert) {
+
         if (parent::beforeSave($insert)) {
 
             $this->params = Json::encode($this->params);
 
+            if ($insert) {
+                $this->templates = Json::encode(require(Yii::getAlias('@worstinme/zoo/applications/default/Templates.php')));
+            }
+
             return true;
         }
-        else return false;
+        
+        return false;
     }
 
     public function afterSave($insert, $changedAttributes)
     {   
         $this->params = Json::decode($this->params);
-        return parent::afterSave($insert, $changedAttributes);
-    } 
 
-    public function getCatlist() {
-        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();
-        return $catlist = count($parents) ? $this->getRelatedList($parents,[],'') : [];
-    }
-    protected function getRelatedList($items,$array,$level) {
-        if (count($items)) {
-            foreach ($items as $item) {
-                $array[$item->id] = $level.' '.$item->name;
-                if (count($item->related)) {
-                    $array = $this->getRelatedList($item->related,$array,$level.'—');
+        if ($insert) {
+
+            $this->create();
+
+            $elements = require(Yii::getAlias('@worstinme/zoo/applications/default/Elements.php'));
+            
+            if (is_array($elements) && count($elements)) {
+                foreach ($elements as $key => $params) {
+                    
+                    $element = new Elements;
+
+                    $element->setAttributes($params);
+                    $element->name = $key;
+                    $element->app_id = $this->id;
+                    $element->allcategories = 1;
+                    $element->save();
+
+                    print_r($element->errors);
                 }
             }
+
         }
-        return $array;
-    }
+
+        return parent::afterSave($insert, $changedAttributes);
+    } 
 
 }

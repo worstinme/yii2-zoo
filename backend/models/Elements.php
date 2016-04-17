@@ -6,27 +6,12 @@ use Yii;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 
-class Elements extends \yii\db\ActiveRecord
+class Elements extends \worstinme\zoo\models\Elements
 {
-
-    public $value;
-
-    private $test;
-
-    public function getTest() {
-        if ($this->test === null) {
-            $this->test = rand();
-        }
-        return $this->test;
-    }
 
     private $categories = [];
 
     private $icon = 'uk-icon-plus';
-
-    public function getMultiple() {
-        return isset($this->_multiple) ? $this->_multiple : false;
-    }
 
     public static function tableName()
     {
@@ -36,20 +21,18 @@ class Elements extends \yii\db\ActiveRecord
     public function rules()
     {
         $rules = [
-            [['name', 'type','title'], 'required'],
-            [['name', 'type','title'], 'string', 'max' => 255],
+
+            [['name', 'type','label'], 'required'],
+            [['name', 'type','label'], 'string', 'max' => 255],
 
             ['name', 'match', 'pattern' => '#^[\w_]+$#i'],
             ['type', 'match', 'pattern' => '#^[\w_]+$#i'],
 
             [['name', 'app_id'], 'unique', 'targetAttribute' => ['name', 'app_id']],
 
-            ['placeholder', 'string', 'max' => 255],
-
             ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
-            ['types','each','rule'=>['number']],
 
-            [['filter','filterAdmin', 'required', 'allcategories','refresh'], 'integer'],
+            [['filter', 'required', 'allcategories','refresh','related'], 'integer'],
 
             [['params'],'safe'],
 
@@ -63,33 +46,15 @@ class Elements extends \yii\db\ActiveRecord
         }
     }
 
-    public function afterFind()
-    {
-        $this->params = Json::decode($this->params);
-
-        if ($this->type !== null  && is_file(Yii::getAlias('@worstinme/zoo').'/elements/'.$this->type.'/Config.php')) {
-            $element = '\worstinme\zoo\elements\\'.$this->type.'\Config';
-            $this->attachBehaviors([
-                $element::className()          // an anonymous behavior
-            ]);
-        }
-
-        return parent::afterFind();
-    }
-
     public function attributeLabels()
     {
         $labels = [
             'id' => Yii::t('backend', 'ID'),
-            'title' => Yii::t('backend', 'Название поля (Label)'),
+            'label' => Yii::t('backend', 'Название поля (Label)'),
             'name' => Yii::t('backend', 'Системное название поля'),
             'type' => Yii::t('backend', 'Type'),
             'required' => Yii::t('backend', 'Обязательно для заполнения?'),
             'filter' => Yii::t('backend', 'Использовать в фильтре?'),
-            'filterAdmin' => Yii::t('backend', 'Использовать в фильтре админки?'),
-            'state' => Yii::t('backend', 'State'),
-            'created_at' => Yii::t('backend', 'Created At'),
-            'updated_at' => Yii::t('backend', 'Updated At'),
             'params' => Yii::t('backend', 'Params'),
             'placeholder'=>Yii::t('backend', 'Placeholder'),
             'categories'=>Yii::t('backend', 'Категории'),
@@ -116,32 +81,20 @@ class Elements extends \yii\db\ActiveRecord
         }
     }
 
-    public function getFormView() {
-        return '@worstinme/zoo/elements/'.$this->type.'/_form';
+    public function renderParams($params) {
+        return '';
     }
 
-    public function getSettingsView() {
-        return '@worstinme/zoo/elements/'.$this->type.'/_settings';
-    }
-
-    public function getParamsView() {
-        return '@worstinme/zoo/elements/'.$this->type.'/_params';
-    }
-
-    //placeholder
-    public function getPlaceholder() { 
-        return isset($this->params['placeholder'])?$this->params['placeholder']:''; 
-    }
-
-    public function setPlaceholder($preview) { 
+    public function setRelated($related) { 
         $params = $this->params;
-        $params['placeholder'] = $preview; 
+        $params['related'] = $related; 
         return $this->params = $params;
     }
 
-    //refresh
-    public function getRefresh() { 
-        return isset($this->params['refresh'])?$this->params['refresh']:0; 
+    public function setRequired($related) { 
+        $params = $this->params;
+        $params['required'] = $related; 
+        return $this->params = $params;
     }
 
     public function setRefresh($refresh) { 
@@ -150,21 +103,10 @@ class Elements extends \yii\db\ActiveRecord
         return $this->params = $params;
     }
 
-    //refresh
-    public function getFilterAdmin() { 
-        return isset($this->params['filterAdmin'])?$this->params['filterAdmin']:0; 
-    }
-
-    public function setFilterAdmin($refresh) { 
+    public function setFilter($filter) { 
         $params = $this->params;
-        $params['filterAdmin'] = $refresh; 
+        $params['filter'] = $filter; 
         return $this->params = $params;
-    }
-
-    //allcategories
-    public function getAllcategories()
-    {
-        return isset($this->params['allcategories'])?$this->params['allcategories']:1; 
     }
 
     public function setAllcategories($a)
@@ -188,17 +130,6 @@ class Elements extends \yii\db\ActiveRecord
 
     public function setCategories($array) {
         $this->categories = $array;
-        return true;
-    }
-
-    public function getTypes() {
-        return isset($this->params['types']) && count($this->params['types'])?$this->params['types']:[]; 
-    }
-
-    public function setTypes($array) {
-        $params = $this->params;
-        $params['types'] = $array;
-        return $this->params = $params;
     }
 
     public function beforeSave($insert) {
@@ -215,7 +146,9 @@ class Elements extends \yii\db\ActiveRecord
     {
         $db = Yii::$app->db;
 
-        $db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id'=>$this->id])->execute();
+        if (!$insert) {
+            $db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id'=>$this->id])->execute();
+        }
 
         $this->params = Json::decode($this->params);
 
