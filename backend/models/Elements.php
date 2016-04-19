@@ -32,7 +32,7 @@ class Elements extends \worstinme\zoo\models\Elements
 
             ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
 
-            [['filter', 'required', 'allcategories','refresh'], 'integer'],
+            [['filter','adminFilter','search', 'required', 'allcategories','refresh'], 'integer'],
 
             [['related'], 'match', 'pattern' => '#^[\w_]+$#i'],
 
@@ -108,6 +108,18 @@ class Elements extends \worstinme\zoo\models\Elements
     public function setFilter($filter) { 
         $params = $this->params;
         $params['filter'] = $filter; 
+        return $this->params = $params;
+    }
+
+    public function setAdminFilter($filter) { 
+        $params = $this->params;
+        $params['adminFilter'] = $filter; 
+        return $this->params = $params;
+    }
+
+    public function setSearch($filter) { 
+        $params = $this->params;
+        $params['search'] = $filter; 
         return $this->params = $params;
     }
 

@@ -75,31 +75,16 @@ class Categories extends \yii\db\ActiveRecord
 
     public function getUrl() {
 
-        $a = $this->app->name;
-
-        if ($this->app_id == 1) {
-            if ($this->parent !== null) {
-                if ($this->parent->parent !== null) {
-                    return ['/zoo/default/abc','a'=>$this->parent->parent->alias,'b'=>$this->parent->alias,'c'=>$this->alias];
-                }
-                else {
-                    return ['/zoo/default/ab','a'=>$this->parent->alias,'b'=>$this->alias];
-                }
-            }
-            else {
-                return ['/zoo/default/a','a'=>$this->alias];
-            }
-        }
-        elseif ($this->parent !== null) {
+        if ($this->parent !== null) {
             if ($this->parent->parent !== null) {
-                return ['/zoo/default/abcd','a'=>$a,'b'=>$this->parent->parent->alias,'c'=>$this->parent->alias,'d'=>$this->alias];
+                return ['/'.$this->app->name.'/abc','a'=>$this->parent->parent->alias,'b'=>$this->parent->alias,'c'=>$this->alias];
             }
             else {
-                return ['/zoo/default/abc','a'=>$a,'b'=>$this->parent->alias,'c'=>$this->alias];
+                return ['/'.$this->app->name.'/ab','a'=>$this->parent->alias,'b'=>$this->alias];
             }
         }
         else {
-            return ['/zoo/default/ab','a'=>$a,'b'=>$this->alias];
+            return ['/'.$this->app->name.'/a','a'=>$this->alias];
         }
 
     }

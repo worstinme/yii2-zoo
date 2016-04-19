@@ -57,6 +57,14 @@ class Elements extends \yii\db\ActiveRecord
     public function getFilter() { 
         return !empty($this->params['filter'])?$this->params['filter']:null; 
     }
+    //filter
+    public function getAdminFilter() { 
+        return !empty($this->params['adminFilter'])?$this->params['adminFilter']:null; 
+    }
+    //filter
+    public function getSearch() { 
+        return !empty($this->params['search'])?$this->params['search']:null; 
+    }
 
     //allcategories
     public function getAllcategories()

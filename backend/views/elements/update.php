@@ -53,7 +53,11 @@ $this->registerJs($js, $this::POS_READY);
 
 		    <?= $form->field($model, 'required')->checkbox() ?>
 
+			<?= $form->field($model, 'adminFilter')->checkbox() ?>
+
 			<?= $form->field($model, 'filter')->checkbox() ?>
+
+			<?= $form->field($model, 'search')->checkbox() ?>
 
 			<?= $form->field($model, 'refresh')->checkbox() ?>
 
