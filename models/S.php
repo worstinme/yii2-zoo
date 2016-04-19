@@ -54,6 +54,10 @@ class S extends Items
         $this->query->andFilterWhere(['i.app_id'=>$this->app_id]);
         $this->query->andFilterWhere(['categories.id'=>$this->categoryTree($this->getAttribute('categories.id'))]);
 
+        print_r($this->query);
+
+        exit;
+
         foreach ($this->elements as $element) {
 
             $e = $element->name;

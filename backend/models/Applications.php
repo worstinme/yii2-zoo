@@ -163,6 +163,10 @@ class Applications extends \worstinme\zoo\models\Applications
         
     }
 
+    public function getElements() {
+        return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
+    }
+
     public function modelFileExists($attribute, $params)
     {
         if (is_file(Yii::getAlias('@app/models/').$this->modelName.'.php')) {
@@ -221,6 +225,7 @@ class Applications extends \worstinme\zoo\models\Applications
         }
         
     }
+
 
     public function beforeSave($insert) {
 

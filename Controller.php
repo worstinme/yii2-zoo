@@ -208,7 +208,7 @@ class Controller extends \yii\web\Controller
         $searchModel = new s();
         $searchModel->app_id = $app->id;
         $searchModel->regBehaviors();
-        $searchModel->categories = [$category->id];
+        $searchModel->setAttribute('categories.id',[$category->id]);
 
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 

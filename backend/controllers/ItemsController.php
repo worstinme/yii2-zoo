@@ -15,6 +15,34 @@ use yii\web\NotFoundHttpException;
 class ItemsController extends Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'create', 'delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['delete', 'create'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin','moder'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post','delete'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $app = $this->getApp();
@@ -142,20 +170,14 @@ class ItemsController extends Controller
         
     } 
 
-    public function actionView($id)
-    {
-        
-        $model = Items::findOne($id);
-
-        return $this->render('view',[
-            'model'=>$model,
-        ]); 
-
-    }
-
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
+
+        if ($this->module->accessRoles === null && !Yii::$app->user->can('admin') && Yii::$app->user->identity->id != $model->user_id) {
+            Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Удаление не разрешено'));
+            return $this->redirect(['index','app'=>$model->app_id]);
+        }
 
         $model->delete();
 

@@ -13,6 +13,29 @@ use yii\web\NotFoundHttpException;
 class MenuController extends Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'update','delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'update','delete'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post','delete'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $searchModel = new MenuSearch();

@@ -9,7 +9,7 @@ return [
 	],
 	'name'=>[
 		'label'=>'Наименование',
-		'type'=>'textfield',
+		'type'=>'name',
 		'required'=>true,
 	],
 	'alias'=>[

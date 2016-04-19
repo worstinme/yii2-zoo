@@ -15,6 +15,34 @@ use yii\web\NotFoundHttpException;
 class DefaultController extends Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'create', 'update'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['update', 'create'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['index'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin','moder'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post','delete'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
     	$applications = Applications::find()->All();

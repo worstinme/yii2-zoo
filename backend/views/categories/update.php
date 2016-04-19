@@ -19,9 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large']); ?>
 
-<?php if ($model->frontendCategory !== null): ?>
-	<?= Html::a('Посмотреть на сайте', $model->frontendCategory->url, ['target'=>'_blank','class' => 'uk-margin-top uk-button uk-button-primary uk-float-right']); ?>
-<?php endif ?>
+
+	<?= Html::a('Посмотреть на сайте', $model->url, ['target'=>'_blank','class' => 'uk-margin-top uk-button uk-button-primary uk-float-right']); ?>
+
 	
                     
     <?= $form->field($model, 'name')->textInput(["data-aliascreate"=>"#categories-alias"])  ?>

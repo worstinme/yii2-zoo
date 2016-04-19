@@ -8,7 +8,7 @@ use yii\helpers\Inflector;
 
 class Module extends \yii\base\Module
 {
-    public $accessRoles = ['admin'];
+    public $accessRoles;
 
     public $controllerNamespace = 'worstinme\zoo\backend\controllers';
 

@@ -14,6 +14,29 @@ use yii\web\NotFoundHttpException;
 class ElementsController extends Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'create', 'update','delete'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'create', 'update','delete'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post','delete'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex() {
         
         $app = $this->getApp();
@@ -36,7 +59,7 @@ class ElementsController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Элемент создан. Необходимо его настроить.'));
-            $this->redirect(['update-element','app'=>$app->id,'element'=>$model->id]);
+            return $this->redirect(['update','app'=>$app->id,'element'=>$model->id]);
         }
 
         return $this->render('create', [
@@ -75,7 +98,7 @@ class ElementsController extends Controller
             }
         }
 
-        return $this->redirect(['elements','app'=>$app->id]);
+        return $this->redirect(['index','app'=>$app->id]);
     }
 
 

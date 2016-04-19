@@ -12,6 +12,28 @@ use yii\web\NotFoundHttpException;
 
 class TemplatesController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'renderer','template-save'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'renderer','template-save'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post','delete'],
+                ],
+            ],
+        ];
+    }
 
     public function actionIndex() {
         

@@ -38,7 +38,7 @@ class Applications extends \yii\db\ActiveRecord
         if ($name === null) {
             return $params;
         }
-        return isset($params[$name]) ? $this->params[$name] : [];
+        return isset($params[$name]) ? $params[$name] : [];
     }
 
     //metaTitle
@@ -99,6 +99,11 @@ class Applications extends \yii\db\ActiveRecord
             }
         }
         return $array;
+    }
+
+    
+    public function getUrl() {
+        return ['/'.$this->name.'/index'];
     }
 
 }

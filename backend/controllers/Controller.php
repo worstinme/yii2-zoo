@@ -15,27 +15,6 @@ use yii\web\NotFoundHttpException;
 class Controller extends \yii\web\Controller
 {
 
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => $this->module->accessRoles,
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => \yii\filters\VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post','delete'],
-                ],
-            ],
-        ];
-    }
-
     private $application;
 
 	public function render($view, $params = [])

@@ -13,6 +13,30 @@ use yii\web\NotFoundHttpException;
 class CategoriesController extends Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'only' => ['index', 'update', 'delete','sort'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index', 'update', 'delete','sort'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post','delete'],
+                    'sort' => ['post'],
+                ],
+            ],
+        ];
+    }
+
     public function actionIndex() {
         
         $app = $this->getApp();
@@ -85,7 +109,6 @@ class CategoriesController extends Controller
                     }
                 }
             }
-
         }
     }
 
