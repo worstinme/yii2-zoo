@@ -22,19 +22,23 @@ $this->title = Yii::t('backend','Приложения');
 									['class'=>'uk-panel uk-border-rounded uk-panel-box uk-text-center'])?>
 			</div>
 		
-		<?php endforeach ?>	
+		<?php endforeach ?>		
 
+		<?php if ($this->context->module->accessRoles !== null || Yii::$app->user->can('admin')) : ?>
+	
 		<div class="uk-width-1-1 uk-width-medium-1-3 uk-width-large-1-4 uk-grid-margin">
 			<?=Html::a('<i class="uk-icon-plus"></i> '.Yii::t('backend','Создать приложение'),
 					['/'.Yii::$app->controller->module->id.'/default/create'],
 					['class'=>'uk-panel uk-panel-box uk-text-center uk-border-rounded'])?>
 		</div>
+
+		<?php endif ?>
 		
 	</div>
 
 	<hr class="uk-margin-large-top">
 
-<?php else: ?>
+<?php elseif($this->context->module->accessRoles !== null || Yii::$app->user->can('admin')): ?>
 
 	<p><?=Yii::t('backend','У вас еще нет ни одного приложения')?></p>
 
