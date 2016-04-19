@@ -22,7 +22,7 @@ class Categories extends \worstinme\zoo\models\Categories
             [['name', 'alias', 'app_id'], 'required'],
             ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
             [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
-            [['params'], 'string'],
+            [['params'], 'safe'],
             [['name', 'alias','image'], 'string', 'max' => 255],
             [['metaDescription','metaKeywords','content','intro'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
@@ -34,24 +34,7 @@ class Categories extends \worstinme\zoo\models\Categories
         ];
     }
 
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('backend', 'ID'),
-            'alias' => Yii::t('backend', 'Алиас'),
-            'name' => Yii::t('backend', 'Название'),
-            'parent_id' => Yii::t('backend', 'Родитель'),
-            'app_id' => Yii::t('backend', 'App ID'),
-            'sort' => Yii::t('backend', 'Sort'),
-            'state' => Yii::t('backend', 'Опубликовано?'),
-            'created_at' => Yii::t('backend', 'Created At'),
-            'updated_at' => Yii::t('backend', 'Updated At'),
-            'params' => Yii::t('backend', 'Params'),
-            'preContent' =>  Yii::t('backend', 'Верхнее описание категории'),
-            'content' =>  Yii::t('backend', 'Нижнее описание категории'),
-            'image'=>Yii::t('backend', 'Изображение категории'),
-        ];
-    }
+
 
 
     public function setMetaTitle($s) {

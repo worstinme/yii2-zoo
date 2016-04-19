@@ -34,6 +34,22 @@ class Elements extends \yii\db\ActiveRecord
         return parent::afterFind();
     }
 
+    public function beforeSave($insert) {
+        if (parent::beforeSave($insert)) {
+
+            $this->params = Json::encode($this->params);
+            
+            return true;
+        }
+        else return false;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {   
+        $this->params = Json::decode($this->params);
+        return parent::afterSave($insert, $changedAttributes);
+    }
+
     public function getFormView() {
         return '@worstinme/zoo/elements/'.$this->type.'/_form';
     }

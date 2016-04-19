@@ -1,6 +1,6 @@
 <?php
 
-namespace worstinme\zoo\elements\slug;
+namespace worstinme\zoo\elements\alias;
 
 use Yii;
 use ArrayObject;
@@ -70,10 +70,10 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	private function checkUniqueSlug( $slug )
 	{
 
-		$condition = '{{%zoo_items}}.alias = :out_attribute';
+		$condition = 'i.alias = :out_attribute';
 		$params = [ ':out_attribute' => $slug ];
 		if ( !$this->owner->isNewRecord ) {
-			$condition .= ' and {{%zoo_items}}.id != :pk';
+			$condition .= ' and i.id != :pk';
 			$params[':pk'] = $this->owner->id;
 		}
 

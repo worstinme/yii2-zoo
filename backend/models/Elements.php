@@ -146,15 +146,6 @@ class Elements extends \worstinme\zoo\models\Elements
         $this->categories = $array;
     }
 
-    public function beforeSave($insert) {
-        if (parent::beforeSave($insert)) {
-
-            $this->params = Json::encode($this->params);
-            
-            return true;
-        }
-        else return false;
-    }
 
     public function afterSave($insert, $changedAttributes)
     {
@@ -164,7 +155,6 @@ class Elements extends \worstinme\zoo\models\Elements
             $db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id'=>$this->id])->execute();
         }
 
-        $this->params = Json::decode($this->params);
 
         if ($this->allcategories == 1) {
             $db->createCommand()->insert('{{%zoo_elements_categories}}', [

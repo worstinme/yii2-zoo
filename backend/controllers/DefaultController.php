@@ -20,11 +20,11 @@ class DefaultController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'create', 'update'],
+                'only' => ['index', 'create', 'update','elfinder'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update', 'create'],
+                        'actions' => ['update', 'create','elfinder'],
                         'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
                     ],
                     [
@@ -97,6 +97,11 @@ class DefaultController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionElfinder() {
+        return $this->render('elfinder', [
         ]);
     }
 

@@ -3,7 +3,9 @@
 namespace worstinme\zoo\backend\models;
 
 use Yii;
-use worstinme\zoo\frontend\models\Items as FrontItems;
+use worstinme\zoo\models\Items;
+use worstinme\zoo\models\Applications;
+use worstinme\zoo\models\Categories;
 
 class Menu extends \yii\db\ActiveRecord
 {
@@ -149,18 +151,18 @@ class Menu extends \yii\db\ActiveRecord
             return $this->url;
         }
         elseif ($this->type == 1) {
-            if (($application = \worstinme\zoo\frontend\models\Applications::findOne($this->application_id)) !== null) {
+            if (($application = Applications::findOne($this->application_id)) !== null) {
                 return $application->url;
             }
         }
         elseif ($this->type == 2) {
-            if (($category = \worstinme\zoo\frontend\models\Categories::findOne($this->category_id)) !== null) {
+            if (($category = Categories::findOne($this->category_id)) !== null) {
                 return $category->url;
             }
         }
         elseif ($this->type == 3) {
 
-            $item = FrontItems::find()->where(['id'=>$this->item_id])->one();
+            $item = Items::find()->where(['i.id'=>$this->item_id])->one();
 
             if ($item !== null) {
                 return $item->url;

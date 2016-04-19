@@ -14,10 +14,14 @@ class Items extends \yii\db\ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_SUBMISSION = 'submission';
 
+    const ENVIRONMENT = 'frontend';
+
     private $renderedElements = [];
     private $elements_types;
 
+
     public $values = [];
+    public $backend = false;
 
     public function __get($name)
     { 
@@ -72,7 +76,7 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function getApp() {
-        return $this->hasOne(Applications::className(),['id'=>'app_id'])->with('elements')->inverseOf('items');
+        return $this->hasOne(Applications::className(),['id'=>'app_id'])->inverseOf('items');
     }
 
     public function getItemsElements() {
@@ -186,7 +190,7 @@ class Items extends \yii\db\ActiveRecord
     //metaTitle
     public function getMetaTitle() {
         $params = $this->params !== null ? Json::decode($this->params) : null;
-        return isset($params['metaTitle']) ? $params['metaTitle'] : '';
+        return !empty($params['metaTitle']) ? $params['metaTitle'] : $this->name;
     }
     public function setMetaTitle($s) {
         $params = $this->params !== null ? Json::decode($this->params) : null; $params['metaTitle'] = $s;
@@ -196,7 +200,7 @@ class Items extends \yii\db\ActiveRecord
     //metaKeywords
     public function getMetaKeywords() {
         $params = $this->params !== null ? Json::decode($this->params) : null;
-        return isset($params['metaKeywords']) ? $params['metaKeywords'] : '';
+        return !empty($params['metaKeywords']) ? $params['metaKeywords'] : '';
     }
     public function setMetaKeywords($s) {
         $params = $this->params !== null ? Json::decode($this->params) : null;
@@ -207,7 +211,7 @@ class Items extends \yii\db\ActiveRecord
     //metaDescription
     public function getMetaDescription() {
         $params = $this->params !== null ? Json::decode($this->params) : null;
-        return isset($params['metaDescription']) ? $params['metaDescription'] : '';
+        return !empty($params['metaDescription']) ? $params['metaDescription'] : '';
     }
     public function setMetaDescription($s) {
         $params = Json::decode($this->params); $params['metaDescription'] = $s;
@@ -279,7 +283,10 @@ class Items extends \yii\db\ActiveRecord
 
     public function getUrl() {
 
-        if ($this->parentCategory !== null) {
+        if ($this->app->simpleItemLinks) {
+            return ['/'.$this->app->name.'/a','a'=> $this->id ];
+        }
+        elseif ($this->parentCategory !== null) {
             return ['/'.$this->app->name.'/ab','a'=> $this->parentCategory->alias,'b'=> !empty($this->alias) ? $this->alias :  $this->id ];
         }
         else {
@@ -306,6 +313,19 @@ class Items extends \yii\db\ActiveRecord
         }
 
         return '@worstinme/zoo/renderers/uikit_grid/view';
+    }
+
+    public function beforeSave($insert) {
+        if (parent::beforeSave($insert)) {
+
+
+            if ($insert) {
+                $this->user_id = Yii::$app->user->identity->id;
+            }
+            
+            return true;
+        }
+        else return false;
     }
 
     public function afterSave($insert, $changedAttributes)

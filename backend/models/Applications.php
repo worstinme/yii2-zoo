@@ -28,9 +28,12 @@ class Applications extends \worstinme\zoo\models\Applications
             ['example','exampleExists','when' => function($model) { return $model->isNewRecord;}, ],
 
             [['filters','itemsSearch','itemsSort','itemsColumns','defaultPageSize'],'integer'],
+
+            ['simpleItemLinks','integer'],
             
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
+
 
             [['content','intro','metaDescription','metaKeywords'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
@@ -99,6 +102,12 @@ class Applications extends \worstinme\zoo\models\Applications
         $params = $this->params; $params['metaDescription'] = $s;
         return $this->params = $params;
     }
+
+    public function setSimpleItemLinks($s) {
+        $params = $this->params; $params['simpleItemLinks'] = $s;
+        return $this->params = $params;
+    }
+
     public function create() {
 
         //controller 
@@ -231,8 +240,6 @@ class Applications extends \worstinme\zoo\models\Applications
 
         if (parent::beforeSave($insert)) {
 
-            $this->params = Json::encode($this->params);
-
             if ($insert) {
                 $this->templates = Json::encode(require(Yii::getAlias('@worstinme/zoo/applications/default/Templates.php')));
             }
@@ -245,7 +252,6 @@ class Applications extends \worstinme\zoo\models\Applications
 
     public function afterSave($insert, $changedAttributes)
     {   
-        $this->params = Json::decode($this->params);
 
         if ($insert) {
 

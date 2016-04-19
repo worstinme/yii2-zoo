@@ -68,6 +68,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="uk-width-medium-1-3">
 
+	<?= $form->field($model, 'simpleItemLinks')->checkbox(); ?>
+
 	<?= $form->field($model, 'filters')->checkbox(); ?>
 
 	<?= $form->field($model, 'itemsSearch')->checkbox(); ?>

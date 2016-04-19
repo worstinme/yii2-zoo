@@ -1,6 +1,6 @@
 <?php
 
-namespace worstinme\zoo\elements\slug;
+namespace worstinme\zoo\elements\alias;
 
 use Yii;
 use yii\db\ActiveRecord;

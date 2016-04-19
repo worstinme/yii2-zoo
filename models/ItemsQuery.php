@@ -7,10 +7,13 @@ class ItemsQuery extends \yii\db\ActiveQuery
     public function init()
     {
 
-        $this->from(['i'=>'{{%zoo_items}}'])->with([
-            'itemsElements',
-            'categories',
-        ]);
+    	$modelClass = $this->modelClass;
+
+    	$this->from(['i'=>'{{%zoo_items}}']);
+    	
+    	if ($modelClass::ENVIRONMENT == 'frontend') {
+    		$this->joinWith(['itemsElements','categories','app']);
+    	}
 
         parent::init();
     }

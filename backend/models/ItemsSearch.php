@@ -6,12 +6,12 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-use worstinme\zoo\models\Items;
+use worstinme\zoo\backend\models\Items;
 
 /**
  * ItemsSearch represents the model behind the search form about `worstinme\zoo\models\Items`.
  */
-class ItemsSearch extends \worstinme\zoo\models\Items
+class ItemsSearch extends Items
 {
 
     public $search;
@@ -25,6 +25,7 @@ class ItemsSearch extends \worstinme\zoo\models\Items
     public function rules()
     {
         $rules = [
+            ['user_id','integer'],
             [['search'],'safe'],
             [['category'],'safe'],
             ['withoutCategory','integer'],
@@ -63,7 +64,7 @@ class ItemsSearch extends \worstinme\zoo\models\Items
 
         if ($this->withoutCategory) {
             $this->query = Items::find()->where(['i.app_id' => $this->app_id ]);
-            $this->query->andWhere('a.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
+            $this->query->andWhere('i.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
             $this->query = Items::find()->from(['i'=>'{{%zoo_items}}']);
@@ -90,8 +91,11 @@ class ItemsSearch extends \worstinme\zoo\models\Items
         }
 
         $this->query->andFilterWhere(['LIKE','i.name',$this->search]);
+        $this->query->andFilterWhere(['i.user_id'=>$this->user_id]);
 
         $query = clone $this->query;
+
+        $query->orderBy('created_at DESC, updated_at DESC');
 
         return $dataProvider = new ActiveDataProvider([
             'query' => $query->groupBy('i.id'),

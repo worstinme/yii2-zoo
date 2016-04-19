@@ -59,35 +59,21 @@ class Controller extends \yii\web\Controller
 
     public function actionAb($a,$b)
     {
-        if (($app = Applications::find()->where(['name'=>$a])->one()) !== null) {
-
-            if (($category = Categories::find()->where(['app_id'=>$app->id,'alias'=>$b])->one()) !== null) {
-                // приложение -> категория по алиасу
+        if (($parent_cat = Categories::find()->where(['app_id'=>$this->app->id,'alias'=>$a])->one()) !== null) {
+            // приложение -> категория по алиасу
+            if (($category = Categories::find()->where(['app_id'=>$this->app->id,'parent_id'=>$parent_cat->id,'alias'=>$b])->one()) !== null) {
+                
                 return $this->renderCategory($category);
             }
-            elseif(($model = $app->items->where(['alias'=>$b])->one()) !== null) {
+            elseif(($model = Items::find()->where(['app_id'=>$this->app->id,'alias'=>$b])->one()) !== null) {
                 // приложение -> материал по алиасу
                 return $this->renderItem($model);
             }
-            elseif(($model = $app->items->where(['id'=>$b])->one()) !== null) {
+            elseif(($model = Items::find()->where(['app_id'=>$this->app->id,'id'=>$b])->one()) !== null) {
                 // приложение -> материал по ID
                 return $this->renderItem($model);
-            }
-        }
-        else {
-
-            if (($category = Categories::find()->where(['app_id'=>1,'alias'=>$a])->one()) !== null) {
-                if(($model = Items::find()->where(['app_id'=>1,'alias'=>$b])->one()) !== null && $model->parentCategory->alias == $a) {
-                    // приложение -> материал по алиасу
-                    return $this->renderItem($model);
-                }
-                elseif(($model = Items::find()->where(['app_id'=>1,'id'=>$b])->one()) !== null && $model->parentCategory->alias == $a) {
-                    // приложение -> материал по ID
-                    return $this->renderItem($model);
-                }
-            }
-            // категория дефолтного приложения -> материал
-        }
+            }  
+        }       
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
@@ -157,11 +143,7 @@ class Controller extends \yii\web\Controller
         return $this->application;
     }
 
-    public function actionSearch($a) {
-
-        if (($app = Applications::find()->where(['name'=>$a])->one()) === null) {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+    public function actionSearch() {
 
         $searchModel = new s();
         $searchModel->app_id = $app->id;

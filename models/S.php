@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use worstinme\zoo\models\Items;
+use worstinme\zoo\models\ItemsItems;
 
 /**
  * ItemsSearch represents the model behind the search form about `worstinme\zoo\frontend\models\Items`.
@@ -64,7 +64,7 @@ class S extends Items
 
                 if ((is_array($value) && count($value) > 0) || (!is_array($value) && !empty($value))) {
 
-                    $this->query->leftJoin([$e=>Elements::tablename()], $e.".item_id = i.id AND ".$e.".element = '".$e."'");
+                    $this->query->leftJoin([$e=>ItemsElements::tablename()], $e.".item_id = i.id AND ".$e.".element = '".$e."'");
                     $this->query->andFilterWhere([$e.'.value_string'=>$value]);
 
                 }

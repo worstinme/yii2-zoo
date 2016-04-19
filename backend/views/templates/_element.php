@@ -4,7 +4,8 @@
         <?=$element->label?>
         <?php if (!empty($element->paramsView)): ?>
         <?=$this->render($element->paramsView,[
-	    	'element'=>$element
+	    	'element'=>$element,
+	    	'params'=>$params,
 	    ])?>	
         <?php endif ?>
        

@@ -49,7 +49,7 @@ use yii\helpers\Html;
 						$elements[$item['element']] : null;
 
 					if ($element !== null) {
-						echo $this->render('@worstinme/zoo/backend/views/templates/_element',['element'=>$element]);
+						echo $this->render('@worstinme/zoo/backend/views/templates/_element',['element'=>$element,'params'=>!empty($item['params'])?$item['params']:'']);
 					}
 					else { ?>
 

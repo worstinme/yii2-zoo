@@ -7,25 +7,51 @@ use yii\helpers\Json;
 
 class Applications extends \yii\db\ActiveRecord
 {
+    private $catlist;
+
+    private $test;
 
     public static function tableName()
     {
         return '{{%zoo_applications}}';
     }
 
+    public function test() {
+        if ($this->test === null) {
+            $this->test = rand();
+        }
+        return $this->test;
+    }
+
 
     public function afterFind()
     {
-        $this->params = !empty($this->params) ? Json::decode($this->params) : null;
+        $this->params = !empty($this->params) ? Json::decode($this->params) : [];
         return parent::afterFind();
     }
+
+    public function beforeSave($insert) {
+        if (parent::beforeSave($insert)) {
+
+            $this->params = Json::encode($this->params);
+            
+            return true;
+        }
+        else return false;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {   
+        $this->params = Json::decode($this->params);
+        return parent::afterSave($insert, $changedAttributes);
+    } 
 
     public function getParentCategories() {
         return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0,'state'=>1])->orderBy('sort ASC');
     }
 
     public function getCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->orderBy('sort ASC');
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['state'=>1])->orderBy('sort ASC');
     }
 
     public function getItems() {
@@ -43,7 +69,7 @@ class Applications extends \yii\db\ActiveRecord
 
     //metaTitle
     public function getMetaTitle() {
-        return !empty($this->params['metaTitle']) ? $this->params['metaTitle'] : null;
+        return !empty($this->params['metaTitle']) ? $this->params['metaTitle'] : $this->title;
     }
 
     //metaTitle
@@ -76,20 +102,50 @@ class Applications extends \yii\db\ActiveRecord
         return !empty($his->params['metaKeywords']) ? $this->params['metaKeywords'] : null;
     }
 
+
     //metaDescription
     public function getMetaDescription() {
         return !empty($this->params['metaDescription']) ? $this->params['metaDescription'] : null;
+    }
+
+    public function getSimpleItemLinks() {
+        return !empty($this->params['simpleItemLinks']) ? $this->params['simpleItemLinks'] : null;
     }
 
     public function getElements() {
         return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
     }
 
-    public function getCatlist() {
+ /*   public function getCatlist() {
         $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();
         return $catlist = count($parents) ? $this->getRelatedList($parents,[],'') : [];
+    } */
+
+    public function getCatlist() {
+
+        if ($this->catlist === null) {
+
+            $this->catlist = $this->processCatlist($this->getCategories()->select(['id','parent_id','name'])->asArray()->all());
+        }
+
+        return $this->catlist;
+        
     }
-    protected function getRelatedList($items,$array,$level) {
+
+    protected function processCatlist($categories,$parent_id = 0,$delimiter = null, $array=[]) {
+        if (count($categories)) {
+            foreach ($categories as $key=>$category) {
+                if ($category['parent_id'] == $parent_id) {
+                    $array[$category['id']] = (empty($delimiter)?'':$delimiter.' ').$category['name'];
+                    unset($categories[$key]);
+                    $array = $this->processCatlist($categories,$category['id'],$delimiter.'—',$array);
+                }
+            }
+        }
+        return $array;
+    }
+
+   /* protected function getRelatedList($items,$array,$level) {
         if (count($items)) {
             foreach ($items as $item) {
                 $array[$item->id] = $level.' '.$item->name;
@@ -99,7 +155,7 @@ class Applications extends \yii\db\ActiveRecord
             }
         }
         return $array;
-    }
+    } */
 
     
     public function getUrl() {

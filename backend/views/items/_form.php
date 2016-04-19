@@ -4,29 +4,42 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use worstinme\uikit\ActiveForm;
 
+$rows=$model->getTemplateRows('form');
 ?>
 
-<div class="uk-panel">
+<div class="uk-panel uk-panel-box">
 
 <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValidation' => false]); 
 
-$items = [];
+foreach ($rows as $row) {
 
-foreach ($model->renderedElements as $attribute) {
+        $class = !empty($row['params']) && !empty($row['params']['column'])?'uk-grid uk-grid-width-medium-1-'.$row['params']['column']:'row';
 
-  //  if (!empty($model->$attribute)) {
-        $items[$attribute] = $this->render('@worstinme/zoo/elements/'.$model->elements[$attribute]['type'].'/_form.php',[
-            'form'=>$form,
-            'model'=>$model,
-            'attribute'=>$attribute,
-        ]);
-  //  }
-    
-}
-echo $this->render($model->getRendererView('form'), [
-    'items'=>$items,
-    'rows'=>$model->getTemplateRows('form'),
-]); ?>
+        ?><div class="<?=$class?>"><?php
+        
+        foreach ($row['items'] as $item) {
+            
+            if (in_array($item['element'],$model->renderedElements)) {  ?>
+
+            
+            <div class="element">
+            <?=$items[$attribute] = $this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/_form.php',[
+                'model'=>$model,
+                'attribute'=>$item['element'],
+                'params'=>!empty($item['params'])?$item['params']:[],
+            ]);?>       
+            </div>  
+
+           
+                
+            <? }
+
+        }
+
+        ?></div><?php
+
+} ?>
+
 
 <hr>
 
@@ -40,11 +53,24 @@ echo $this->render($model->getRendererView('form'), [
     <?=Html::submitButton('Продолжить',['class'=>'uk-button uk-button-success'])?>
 </div>
 
-<?php ActiveForm::end(); 
+<?php ActiveForm::end();  ?>
 
-print_r($model->errors);
+</div>
+
+<?php
+
         
 $renderedElements = Json::encode($model->renderedElements);
+
+$refresh[] = '.some-el';
+
+foreach ($model->elements as $element) {
+    if ($element->refresh) {
+        $refresh[] = "#".Html::getInputId($model, $element['name']);
+    }
+}
+
+$refresh = implode(",",$refresh);
 
 // echo Html::hiddenInput('renderedElements', $renderedElements, ['option' => 'value']);
 
@@ -52,7 +78,7 @@ $js = <<<JS
 var form = $("#form");
 var renderedElements = $renderedElements;
 
-form.on("change",'.category-select', function() {
+form.on("change",'$refresh', function() {
     if (!form.hasClass('update')) {
         form.addClass('update');
         $.post(location.href, form.serialize() + '&' + $.param({reload:'true','renderedElements':renderedElements}),

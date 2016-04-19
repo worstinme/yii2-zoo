@@ -15,23 +15,82 @@ $elementnames = ArrayHelper::map($searchModel->elements,'name','label');
 foreach ($searchModel->elements as $element) {
 	if (!in_array($element->name,$searchModel->attributes())) {
 
-		if ($element->filter) {
+		if ($element->adminFilter) {
 			$elements[$element->name] = $element->label;
 		}
 		
 	}
 }
 
-$variants = $filter['element'] !== null ? (new \yii\db\Query())
-    ->select(['ie.value_string'])
-    ->from(['ie'=>'{{%zoo_items_elements}}'])
-    ->leftJoin(['i'=>'{{%zoo_items}}'],'i.id = ie.item_id')
-    ->where(['ie.element'=>$filter['element'],'i.app_id'=>Yii::$app->controller->app->id])
-    ->groupBy('value_string')
-    ->orderBy('count(item_id) DESC')
-    ->column() : []; 
+if ($filter['element'] == 'parsed_category') {
 
-$variants = ArrayHelper::index($variants, function ($element) {return $element;});  
+	$categories = (new \yii\db\Query())
+	    ->select(['value_string'])
+	    ->distinct()
+	    ->from('{{%zoo_items_elements}}')
+	    ->where(['element'=>'parsed_category']);
+
+	$categories = $searchModel->withoutCategory ? $categories->andWhere('item_id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE 1)')->column(): $categories->column();
+
+	$variants = [];
+
+	foreach ($categories as $value) {
+	  	
+	  	$category = ParserCategories::find()->where(['source_id'=>$value])->one();
+
+	  	$cat_id = $value;
+
+		if ($category !== null) {
+			$value = $category->name;
+			if ($category->parent !== null) {
+				$value = $category->parent->name.' / '.$value;
+				if ($category->parent->parent !== null) {
+					$value = $category->parent->parent->name.' / '.$value;
+				}
+			}
+		}
+
+		$variants[$cat_id] = $value;
+	}
+
+	asort($variants);
+
+}
+else {
+
+	$variants = $filter['element'] !== null ? (new \yii\db\Query())
+	    ->select(['ie.value_string'])
+	    ->from(['ie'=>'{{%zoo_items_elements}}'])
+	    ->leftJoin(['i'=>'{{%zoo_items}}'],'i.id = ie.item_id')
+	    ->where(['ie.element'=>$filter['element'],'i.app_id'=>Yii::$app->controller->app->id])
+	    ->groupBy('value_string')
+	    ->orderBy('count(item_id) DESC')
+	    ->column() : []; 
+
+	$variants = ArrayHelper::index($variants, function ($element) {return $element;});  
+
+/*	$variants = [];
+
+	if ($filter['element'] !== null) {
+	
+		$varQuery = clone $searchModel->query;
+
+		$attribute_sq = $filter['element'].'.value_string';
+
+		$j = false; if(count($varQuery->join) > 0) foreach ($varQuery->join as $join)  if (isset($join[1][$element->name])) $j = true;  
+
+		if (!$j) $varQuery->leftJoin([$filter['element']=>'{{%zoo_items_elements}}'], $filter['element'].".item_id = a.id AND ".$filter['element'].".element = '".$filter['element']."'"); 
+
+		$variants = $varQuery->select($attribute_sq)
+		                ->groupBy($attribute_sq)
+		                ->andWhere($attribute_sq.' IS NOT NULL')
+		                ->orderBY('count('.$attribute_sq.') DESC')
+		                ->column(); 
+
+		$variants = ArrayHelper::index($variants, function ($element) {return $element;}); 
+
+	} */
+}
 
 
 $search_params = Yii::$app->request->get('ItemsSearch',[]);
@@ -78,7 +137,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 							<?php $pc = ParserCategories::find()->where(['source_id'=>$v])->one() ?>
 
 							<span class="uk-badge uk-badge-notification uk-badge-success">
-								<b><?=$searchModel->elements[$key]->title?></b> : <?=$pc !== null? $pc->name : $v?>
+								<b><?=$searchModel->elements[$key]->label?></b> : <?=$pc !== null? $pc->name : $v?>
 								<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$v?>">
 									<i class="uk-icon-close"></i></a>
 							</span>	
@@ -86,7 +145,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 						<?php else: ?>
 							
 						<span class="uk-badge uk-badge-notification uk-badge-success">
-							<b><?=$searchModel->elements[$key]->title?></b> : <?=$v?>
+							<b><?=$searchModel->elements[$key]->label?></b> : <?=$v?>
 							<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$v?>">
 								<i class="uk-icon-close"></i></a>
 						</span>
@@ -102,7 +161,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 						<?php $pc = ParserCategories::find()->where(['source_id'=>$value])->one() ?>
 
 							<span class="uk-badge uk-badge-notification uk-badge-success">
-								<b><?=$searchModel->elements[$key]->title?></b> : <?=$pc !== null? $pc->name : $value?>
+								<b><?=$searchModel->elements[$key]->label?></b> : <?=$pc !== null? $pc->name : $value?>
 								<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$value?>">
 									<i class="uk-icon-close"></i></a>
 							</span>	
@@ -110,7 +169,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 					<?php else: ?>
 
 					<span class="uk-badge uk-badge-notification uk-badge-success">
-						<b><?=$searchModel->elements[$key]->title?></b> : <?=$value?>
+						<b><?=$searchModel->elements[$key]->label?></b> : <?=$value?>
 						<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$value?>">
 							<i class="uk-icon-close"></i></a>
 					</span>

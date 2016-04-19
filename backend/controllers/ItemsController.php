@@ -24,12 +24,7 @@ class ItemsController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['delete', 'create'],
-                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['index'],
+                        'actions' => ['index', 'create', 'delete'],
                         'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin','moder'],
                     ],
                 ],
@@ -52,6 +47,10 @@ class ItemsController extends Controller
         $searchModel = new ItemsSearch();
         $searchModel->app_id = $app->id;
         $searchModel->regBehaviors();
+
+        if ($this->module->accessRoles === null && !Yii::$app->user->can('admin')) {
+            $searchModel->user_id = Yii::$app->user->identity->id;
+        }
 
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -114,12 +113,19 @@ class ItemsController extends Controller
 
     public function actionCreate($app, $id = null)
     {   
+
         $app = $this->getApp($app);
 
         if ($id === null || ($model = Items::findOne(["i.id"=>$id])) === null) {
             $model = new Items();
             $model->app_id = $app->id;
             $model->regBehaviors();
+        }
+        else {
+            if ($this->module->accessRoles === null && !Yii::$app->user->can('admin') && $model->user_id !== Yii::$app->user->identity->id) {
+                Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Доступ запрещён'));
+                return $this->redirect(['index','app'=>$app->id]);
+            }
         }
 
         if (Yii::$app->request->post("reload") == 'true') {
@@ -174,12 +180,14 @@ class ItemsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->module->accessRoles === null && !Yii::$app->user->can('admin') && Yii::$app->user->identity->id != $model->user_id) {
+        if (($this->module->accessRoles === null && !Yii::$app->user->can('admin')) && Yii::$app->user->identity->id != $model->user_id) {
             Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Удаление не разрешено'));
             return $this->redirect(['index','app'=>$model->app_id]);
         }
 
         $model->delete();
+
+        Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал удалён, окончательно и безповоротно. Совсем. Не вернуть его уже.'));
 
         return $this->redirect(['index','app'=>$model->app_id]);
     }
@@ -193,7 +201,7 @@ class ItemsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Items::findOne($id)) !== null) {
+        if (($model = Items::find()->where(['i.id'=>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
