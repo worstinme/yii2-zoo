@@ -3,11 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 
+if (count($model->categories))
 
-?>
-
-<?php
-
-echo $model->{$attribute};
-
-?>
+foreach ($model->categories as $category) {
+	echo Html::a($category->name, $category->url);
+} 
