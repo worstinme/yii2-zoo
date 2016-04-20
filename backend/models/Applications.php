@@ -253,30 +253,35 @@ class Applications extends \worstinme\zoo\models\Applications
     public function afterSave($insert, $changedAttributes)
     {   
 
-        if ($insert) {
+        if (parent::afterSave($insert, $changedAttributes)) {
 
-            $this->create();
+            if ($insert) {
 
-            $elements = require(Yii::getAlias('@worstinme/zoo/applications/default/Elements.php'));
-            
-            if (is_array($elements) && count($elements)) {
-                foreach ($elements as $key => $params) {
-                    
-                    $element = new Elements;
+                $this->create();
 
-                    $element->setAttributes($params);
-                    $element->name = $key;
-                    $element->app_id = $this->id;
-                    $element->allcategories = 1;
-                    $element->save();
+                $elements = require(Yii::getAlias('@worstinme/zoo/applications/default/Elements.php'));
+                
+                if (is_array($elements) && count($elements)) {
+                    foreach ($elements as $key => $params) {
+                        
+                        $element = new Elements;
 
-                    print_r($element->errors);
+                        $element->setAttributes($params);
+                        $element->name = $key;
+                        $element->app_id = $this->id;
+                        $element->allcategories = 1;
+                        $element->save();
+
+                    }
                 }
+
             }
+
+            return true;
 
         }
 
-        return parent::afterSave($insert, $changedAttributes);
+        return false;
     } 
 
 }
