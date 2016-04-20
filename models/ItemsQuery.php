@@ -12,7 +12,7 @@ class ItemsQuery extends \yii\db\ActiveQuery
     	$this->from(['i'=>'{{%zoo_items}}']);
     	
     	if ($modelClass::ENVIRONMENT == 'frontend') {
-    		$this->joinWith(['itemsElements','categories','app']);
+    	//	$this->joinWith(['itemsElements','categories','app']);
     	}
 
         parent::init();

@@ -43,6 +43,7 @@ class S extends Items
         return array_merge(parent::attributes(), ['categories.id']);
     }
 
+
     public function search($params = null)
     {
 
@@ -50,7 +51,8 @@ class S extends Items
             $this->load($params);
         }
 
-        $this->query = Items::find();
+        $this->query = Items::find()->joinWith(['categories']);
+        
         $this->query->andFilterWhere(['i.app_id'=>$this->app_id]);
         $this->query->andFilterWhere(['categories.id'=>$this->categoryTree($this->getAttribute('categories.id'))]);
 
