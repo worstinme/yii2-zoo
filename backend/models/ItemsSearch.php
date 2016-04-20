@@ -112,11 +112,11 @@ class ItemsSearch extends Items
         $this->load($params);
 
         if ($this->withoutCategory) {
-            $query = Items::find()->select('i.id')->from(['a'=>'{{%zoo_items}}'])->where(['i.app_id' => $this->app_id ]);
+            $query = Items::find()->select('i.id')->where(['i.app_id' => $this->app_id ]);
             $query->andWhere('i.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
-            $query = Items::find()->select('i.id')->from(['a'=>'{{%zoo_items}}']);
+            $query = Items::find()->select('i.id');
             $query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = i.id");
             $query->andFilterWhere(['category.category_id'=>$this->category]);
         }
