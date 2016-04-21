@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php if (count(Yii::$app->controller->app->elements)): ?>
 		<ul id="elements" class="uk-nestable">
 		<?php foreach (Yii::$app->controller->app->elements as $element): ?>
-			<?=$this->render('_element',['element'=>$element])?>		
+			<?=$this->render('_element',['element'=>$element,'params'=>[]])?>		
 		<?php endforeach ?>	
 		</ul>
 		<?php endif ?>
