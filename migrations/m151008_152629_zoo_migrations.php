@@ -64,10 +64,12 @@ class m151008_152629_zoo_migrations extends Migration
 
         $this->createTable('{{%zoo_config}}', [
             'id' => $this->primaryKey(),   
-            'category' => $this->string()->notNull(),   
-            'parent_id' => $this->integer()->notNull()->defaultValue(0),
-            'parent_name' => $this->string(),
+            'name' => $this->string()->notNull(),
             'value' => $this->text(),
+            'category' => $this->string(),   
+            'sort' => $this->integer()->defaultValue(0),
+            'parent_id' => $this->integer(),
+            'comment' => $this->string(),
         ], $tableOptions); 
 
         $this->createTable('{{%zoo_elements_categories}}', [  
