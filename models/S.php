@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use worstinme\zoo\models\ItemsItems;
+use worstinme\zoo\models\Categories;
 
 /**
  * ItemsSearch represents the model behind the search form about `worstinme\zoo\frontend\models\Items`.
@@ -22,7 +23,6 @@ class S extends Items
     public function rules()
     {
         $rules = [
-            [['categories.id'],'each','rule'=>['integer']],
             [['search'], 'safe'],
         ];
 
@@ -51,16 +51,15 @@ class S extends Items
             $this->load($params);
         }
 
-        $this->query = Items::find()->joinWith(['categories']);
+        $this->query = $this->app->getItems()->joinWith(['categories']);
         
-        $this->query->andFilterWhere(['i.app_id'=>$this->app_id]);
-        $this->query->andFilterWhere(['categories.id'=>$this->categoryTree($this->getAttribute('categories.id'))]);
+        $this->query->andFilterWhere([Categories::tablename().'.id'=>$this->categoryTree($this->category)]);
 
         foreach ($this->elements as $element) {
 
             $e = $element->name;
 
-            if (!in_array($e, $this->attributes())) {
+            if (!in_array($e, $this->attributes()) && ($element->filter || $element->search)) {
 
                 $value = $this->$e;
 
