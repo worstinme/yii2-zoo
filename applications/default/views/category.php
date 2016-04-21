@@ -62,7 +62,7 @@ if ($app->itemsSort) {
 
         <?php echo "<?php /*"; ?></div>
 
-    </div> */ ?>
+    </div> */
 
 <?="<?php"; ?> \yii\widgets\Pjax::end(); ?>
 </div>
