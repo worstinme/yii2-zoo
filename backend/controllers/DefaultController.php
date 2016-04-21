@@ -100,9 +100,4 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function actionElfinder() {
-        return $this->render('elfinder', [
-        ]);
-    }
-
 }
