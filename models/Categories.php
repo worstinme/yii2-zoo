@@ -38,7 +38,7 @@ class Categories extends \yii\db\ActiveRecord
 
     //metaTitle
     public function getMetaTitle() {
-        return !empty($this->params['metaTitle']) ? $this->params['metaTitle'] : null;
+        return !empty($this->params['metaTitle']) ? $this->params['metaTitle'] : $this->name;
     }
 
     //metaTitle
