@@ -121,7 +121,7 @@ class ItemsSearch extends Items
             $query->andFilterWhere(['category.category_id'=>$this->category]);
         }
         else {
-            $query = Items::find()->select('i.id')->from(['a'=>'{{%zoo_items}}'])->where(['i.app_id' => $this->app_id ]);
+            $query = Items::find()->select('i.id')->where(['i.app_id' => $this->app_id ]);
         }
 
         foreach ($this->elements as $element) {
