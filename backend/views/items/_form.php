@@ -23,7 +23,7 @@ foreach ($rows as $row) {
 
             
             <div class="element">
-            <?=$items[$attribute] = $this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/_form.php',[
+            <?=$items[$item['element']] = $this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/_form.php',[
                 'model'=>$model,
                 'attribute'=>$item['element'],
                 'params'=>!empty($item['params'])?$item['params']:[],
