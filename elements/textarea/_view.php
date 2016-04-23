@@ -1,5 +1,5 @@
 <?php
 
-echo $model->{$attribute};
+echo Yii::$app->zoo->findWidgets($model->{$attribute});
 
 ?>
