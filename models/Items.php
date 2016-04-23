@@ -76,7 +76,7 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function getApp() {
-        return $this->hasOne(Applications::className(),['id'=>'app_id'])->inverseOf('items');
+        return $this->hasOne(Applications::className(),['id'=>'app_id'])->with('elements')->inverseOf('items');
     }
 
     public function getItemsElements() {
