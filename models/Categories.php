@@ -91,8 +91,8 @@ class Categories extends \yii\db\ActiveRecord
 
     public function getUrl() {
 
-        if ($this->parent !== null) {
-            if ($this->parent->parent !== null) {
+        if ($this->parent_id != null && $this->parent !== null) {
+            if ($this->parent->parent_id != null && $this->parent->parent !== null) {
                 return ['/'.$this->app->name.'/abc','a'=>$this->parent->parent->alias,'b'=>$this->parent->alias,'c'=>$this->alias];
             }
             else {
