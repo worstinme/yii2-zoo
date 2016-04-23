@@ -6,7 +6,7 @@ use yii\widgets\ListView;
 use worstinme\uikit\Breadcrumbs;
 
 $this->title = $app->metaTitle;
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = $app->title;
 
 if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]);
 
@@ -27,7 +27,7 @@ if ($app->itemsSort) {
 
         <div class="uk-width-medium-3-4"> ?> */ ?>
 
-            <h1><?="<?="; ?> Html::encode($this->title) ?></h1>
+            <h1><?="<?="; ?> Html::encode($app->title) ?></h1>
 
             <?="<?="; ?>$app->intro?>
 
