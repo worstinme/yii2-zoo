@@ -2,14 +2,8 @@
 
 use yii\helpers\Html; 
 
-?>
+$tag = !empty($params['tag']) ? $params['tag'] : 'h1';
 
-<?php if (isset($params['asUrl']) && $params['asUrl'] == 1): ?>
+$content = !empty($params['asUrl']) && $params['asUrl'] == 1 ? Html::a($model->name, $model->url,['data-pjax'=>0]) : $model->name;
 
-	<h2><?=Html::a($model->name, $model->url,['data-pjax'=>0])?></h2>
-	
-<?php else: ?>
-
-	<h1><?=$model->name;?></h1>
-	
-<?php endif ?>
+echo Html::tag($tag,$content);
