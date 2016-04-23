@@ -51,7 +51,7 @@ class S extends Items
             $this->load($params);
         }
 
-        $this->query = $this->app->getItems()->joinWith(['categories']);
+        $this->query = $this->app->getItems()->with(['itemsElements','app'])->joinWith(['categories']);
         
         $this->query->andFilterWhere([Categories::tablename().'.id'=>$this->categoryTree($this->category)]);
 
