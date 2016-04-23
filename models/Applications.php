@@ -9,20 +9,10 @@ class Applications extends \yii\db\ActiveRecord
 {
     private $catlist;
 
-    private $test;
-
     public static function tableName()
     {
         return '{{%zoo_applications}}';
     }
-
-    public function test() {
-        if ($this->test === null) {
-            $this->test = rand();
-        }
-        return $this->test;
-    }
-
 
     public function afterFind()
     {
@@ -51,7 +41,7 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['state'=>1])->orderBy('sort ASC');
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['state'=>1])->orderBy('sort ASC')->inverseOf('app');
     }
 
     public function getItems() {
