@@ -17,22 +17,23 @@ foreach ($rows as $row) {
 
         ?><div class="<?=$class?>"><?php
         
-        foreach ($row['items'] as $item) {
-            
-            if (in_array($item['element'],$model->renderedElements)) {  ?>
+        foreach ($row['items'] as $item) { 
 
-            
-            <div class="element">
-            <?=$items[$item['element']] = $this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/_form.php',[
-                'model'=>$model,
-                'attribute'=>$item['element'],
-                'params'=>!empty($item['params'])?$item['params']:[],
-            ]);?>       
-            </div>  
+            $element = $model->elements[$item['element']];
 
-           
-                
-            <? }
+            $refresh = $element->refresh ? 'refresh' : '';
+
+            if (in_array($item['element'],$model->renderedElements)): ?>
+                <div class="element element-<?=$item['element']?> uk-form-row <?=$refresh?>">
+                <?=$this->render('@worstinme/zoo/elements/'.$element->type.'/_form.php',[
+                    'model'=>$model,
+                    'attribute'=>$item['element'],
+                    'params'=>!empty($item['params'])?$item['params']:[],
+                ]);?>       
+                </div>
+            <?php else: ?>
+                <div class="element element-<?=$item['element']?> <?=$refresh?>"></div>
+            <?php endif;
 
         }
 
@@ -59,18 +60,17 @@ foreach ($rows as $row) {
 
 <?php
 
-        
-$renderedElements = Json::encode($model->renderedElements);
-
-$refresh[] = '.some-el';
+$refresh_el = ['.category-select'];
 
 foreach ($model->elements as $element) {
     if ($element->refresh) {
-        $refresh[] = "#".Html::getInputId($model, $element['name']);
+        $refresh_el[] = "#".Html::getInputId($model,$element->name);
     }
 }
+     
+$refresh_el = implode(",",$refresh_el);
 
-$refresh = implode(",",$refresh);
+$renderedElements = Json::encode($model->renderedElements);
 
 // echo Html::hiddenInput('renderedElements', $renderedElements, ['option' => 'value']);
 
@@ -78,7 +78,7 @@ $js = <<<JS
 var form = $("#form");
 var renderedElements = $renderedElements;
 
-form.on("change",'$refresh', function() {
+form.on("change",'$refresh_el', function() {
     if (!form.hasClass('update')) {
         form.addClass('update');
         $.post(location.href, form.serialize() + '&' + $.param({reload:'true','renderedElements':renderedElements}),
