@@ -155,14 +155,18 @@ class Elements extends \worstinme\zoo\models\Elements
             $db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id'=>$this->id])->execute();
         }
 
+        $params = Json::decode($this->params);
 
-        if ($this->allcategories == 1) {
+        $allcategories = isset($params['allcategories']) ? $params['allcategories'] : 1;
+
+
+        if ($allcategories) {
             $db->createCommand()->insert('{{%zoo_elements_categories}}', [
                     'element_id' => $this->id,
                     'category_id' => 0,
                 ])->execute();
         }
-        elseif (count($this->categories)) {
+        elseif (is_array($this->categories) && count($this->categories)) {
             foreach ($this->categories as $category) {
                 $db->createCommand()->insert('{{%zoo_elements_categories}}', [
                         'element_id' => $this->id,
