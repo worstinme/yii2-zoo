@@ -61,31 +61,31 @@ class Elements extends \yii\db\ActiveRecord
 
     //required
     public function getRequired() { 
-        return !empty($this->params['required'])?$this->params['required']:null; 
+        return isset($this->params['required'])?$this->params['required']:null; 
     }
 
     //refresh
     public function getRefresh() { 
-        return !empty($this->params['refresh'])?$this->params['refresh']:null; 
+        return isset($this->params['refresh'])?$this->params['refresh']:null; 
     }
 
     //filter
     public function getFilter() { 
-        return !empty($this->params['filter'])?$this->params['filter']:null; 
+        return isset($this->params['filter'])?$this->params['filter']:null; 
     }
     //filter
     public function getAdminFilter() { 
-        return !empty($this->params['adminFilter'])?$this->params['adminFilter']:null; 
+        return isset($this->params['adminFilter'])?$this->params['adminFilter']:null; 
     }
     //filter
     public function getSearch() { 
-        return !empty($this->params['search'])?$this->params['search']:null; 
+        return isset($this->params['search'])?$this->params['search']:null; 
     }
 
     //allcategories
     public function getAllcategories()
     {
-        return !empty($this->params['allcategories'])?$this->params['allcategories']:1; 
+        return isset($this->params['allcategories'])?$this->params['allcategories']:1; 
     }
 
 }
