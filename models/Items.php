@@ -229,8 +229,8 @@ class Items extends \yii\db\ActiveRecord
                     ->where(['category_id'=>$this->category])->orWhere(['category_id'=>0])->column();
 
             foreach ($this->elements as $key => $element) {
-                if (in_array($element['id'], $elementByCategories)) {
-                    if (($behavior = $this->getBehavior($element['type'])) !== null) {
+                if (in_array($element->id, $elementByCategories)) {
+                    if (($behavior = $this->getBehavior($element->type)) !== null) {
                         if ($behavior->isRendered($element['name'])) {
                             $renderedElements[] = $key;
                         }
