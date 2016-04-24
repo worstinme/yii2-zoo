@@ -138,7 +138,7 @@ class ItemsController extends Controller
                     if (!in_array($element,$renderedElements)) {
                         $renderElements[] = $element;
                     }
-                    elseif($model->getElementParam($element,'refresh',false)) {
+                    elseif($model->elements[$element]->refresh) {
                         $renderElements[] = $element;
                         $removeElements[] = $element;
                     }   
