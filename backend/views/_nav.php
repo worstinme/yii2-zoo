@@ -13,7 +13,7 @@ $subnav = [
 ];
 
 $mainnav = [
-    ['label' => Yii::t('backend','Материалы'), 
+    ['label' => '<i class="uk-icon-bars"></i> '.Yii::$app->controller->app->title, 
                 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id],], 
 ];
 
@@ -41,8 +41,7 @@ if (isset($items) && is_array($items) && count($items)) {
 ?>
 <div class="items-filters">
 <? NavBar::begin(['container'=>false,'offcanvas'=>false,'brandUrl' => false,'options'=>['class'=>'application-nav']]); ?>
-    
-    <span class="uk-navbar-brand"><?=Yii::$app->controller->app->title?></span>
+
 
     <?=Nav::widget([
         'navbar'=>true,
