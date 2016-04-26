@@ -69,6 +69,11 @@ class Elements extends \yii\db\ActiveRecord
         return isset($this->params['refresh'])?$this->params['refresh']:null; 
     }
 
+    //sorter
+    public function getSorter() { 
+        return isset($this->params['sorter'])?$this->params['sorter']:null; 
+    }
+
     //filter
     public function getFilter() { 
         return isset($this->params['filter'])?$this->params['filter']:null; 

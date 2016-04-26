@@ -47,6 +47,8 @@ $this->registerJs($js, $this::POS_READY);
 
 		    <?= $form->field($model, 'name')->textInput(['disabled'=>'disabled'])  ?>
 
+		    <?= $form->field($model, 'sorter')->checkbox() ?>
+
 	    </div>
 
 	    <div class="uk-width-medium-1-3 uk-margin">

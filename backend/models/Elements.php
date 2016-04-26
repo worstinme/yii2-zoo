@@ -32,7 +32,7 @@ class Elements extends \worstinme\zoo\models\Elements
 
             ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
 
-            [['filter','adminFilter','search', 'required', 'allcategories','refresh'], 'integer'],
+            [['filter','adminFilter','search', 'required', 'allcategories','refresh','sorter'], 'integer'],
 
             [['related'], 'match', 'pattern' => '#^[\w_]+$#i'],
 
@@ -52,7 +52,7 @@ class Elements extends \worstinme\zoo\models\Elements
     {
         $labels = [
             'id' => Yii::t('backend', 'ID'),
-            'label' => Yii::t('backend', 'Название поля (Label)'),
+            'title' => Yii::t('backend', 'Название поля (Label)'),
             'name' => Yii::t('backend', 'Системное название поля'),
             'type' => Yii::t('backend', 'Type'),
             'required' => Yii::t('backend', 'Обязательно для заполнения?'),
@@ -64,6 +64,7 @@ class Elements extends \worstinme\zoo\models\Elements
             'types'=>Yii::t('backend', 'Типы материалов'),
             'type'=>Yii::t('backend', 'Тип элемента'),
             'refresh'=>Yii::t('backend', 'Обновлять поле?'),
+            'sorter'=>'Использовать поле в сортировке',
         ];
 
         if (isset($this->labels) && count($this->labels)) {
@@ -87,11 +88,17 @@ class Elements extends \worstinme\zoo\models\Elements
         return '';
     }
 
+
+    public function setSorter($s) { 
+        return $this->params['sorter'] = $s;
+    }
+    
     public function setRelated($related) { 
         $params = $this->params;
         $params['related'] = $related; 
         return $this->params = $params;
     }
+
 
     public function setRequired($related) { 
         $params = $this->params;
