@@ -10,12 +10,9 @@ class ItemsQuery extends \yii\db\ActiveQuery
     	$modelClass = $this->modelClass;
 
     	$this->from(['i'=>'{{%zoo_items}}']);
-    	
-    	if ($modelClass::ENVIRONMENT == 'frontend') {
-    	//	$this->joinWith(['itemsElements','categories','app']);
-    	}
 
         parent::init();
+        
     }
 
 }
