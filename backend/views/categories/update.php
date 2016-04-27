@@ -13,17 +13,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?=$this->render('/_nav',['app'=>$app])?>
+<?=$this->render('/_nav',['model'=>$model])?> 
 
+<div class="uk-panel uk-panel-box">
 <h2><?=Yii::t('backend','Создание категории')?></h2>
 
 <?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large']); ?>
-
-
-	<?= Html::a('Посмотреть на сайте', $model->url, ['target'=>'_blank','class' => 'uk-margin-top uk-button uk-button-primary uk-float-right']); ?>
-
-	
-                    
+  
     <?= $form->field($model, 'name')->textInput(["data-aliascreate"=>"#categories-alias"])  ?>
 
     <?= $form->field($model, 'alias')->textInput()  ?>
@@ -51,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'height'=>'200px',
             'toolbar' => [
 			    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-			    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source']
+			    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
 			],
             'contentsCss'=>[
                 '/css/site.css',
@@ -66,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'height'=>'200px',
             'toolbar' => [
 			    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-			    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source']
+			    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
 			],
             'contentsCss'=>[
                 '/css/site.css',
@@ -88,6 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php ActiveForm::end(); ?>
 
+</div>
 
 <?php
 
