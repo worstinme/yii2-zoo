@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?=$this->render('/_nav',['app'=>$app])?>
-
+<div class="uk-panel uk-panel-box">
 <h2><?=$this->title?></h2>
 
 <?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'full']); ?>    
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 <?php ActiveForm::end(); ?>
-
+</div>
 
 <?php
 

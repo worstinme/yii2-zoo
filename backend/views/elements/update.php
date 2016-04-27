@@ -32,7 +32,7 @@ $this->registerJs($js, $this::POS_READY);
 <?=$this->render('/_nav',['app'=>$app, 'items' => [
 	['label'=>'Создать новый элемент','url'=>['create','app'=>$app->id],'linkOptions'=>['class'=>'uk-button-success']],
 ]])?>
-		
+<div class="uk-panel uk-panel-box">		
 <h2><?=$this->title?></h2>
 
 <?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'full']); ?>    
@@ -103,7 +103,7 @@ $this->registerJs($js, $this::POS_READY);
 	</div>
 
 <?php ActiveForm::end(); ?>
-
+</div>
 
 <?php
 
