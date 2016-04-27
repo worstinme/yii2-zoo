@@ -65,7 +65,7 @@ class ItemsController extends Controller
 
                 $itemIds = count($selection) > 0 ? $selection : $searchModel->itemIds(Yii::$app->request->queryParams);
 
-                if (is_array($itemIds) && count($itemIds) > 0) {
+                if (is_array($itemIds) && count($itemIds)) {
                    
                     foreach ($itemIds as $item_id) {
                         
@@ -92,6 +92,35 @@ class ItemsController extends Controller
 
 
                 Yii::$app->session->setFlash('success', 'Обновлены категории для '.count($itemIds).' материалов.');
+            }
+
+            if ($request->post('addCategories') !== null && count($categoryIds) > 0) {
+                $itemIds = count($selection) > 0 ? $selection : $searchModel->itemIds(Yii::$app->request->queryParams);
+                if (is_array($itemIds) && count($itemIds)) {
+                    foreach ($itemIds as $item_id) {
+                        
+                        $rows = [];
+
+                        foreach ($categoryIds as $category_id) {
+                            $rows[] = [$item_id, (int)$category_id];
+                        }
+
+                        if (count($rows)) {
+
+                            Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', 
+                                ['item_id'=>$item_id,'category_id'=>$categoryIds])->execute();
+
+                            Yii::$app->db->createCommand()
+                                ->batchInsert('{{%zoo_items_categories}}', ['item_id', 'category_id'], $rows)
+                                ->execute(); 
+
+                        }
+
+
+                    } 
+                }
+
+                Yii::$app->session->setFlash('success', 'Добавлены категории для '.count($itemIds).' материалов.');
             }
 
             if (Yii::$app->request->post('deleteCategories') !== null ) {
