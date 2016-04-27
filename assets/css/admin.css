@@ -1,7 +1,15 @@
 html {
 	overflow-y:scroll;
 }
-
+body.admin {
+    background: url('/images/The-Elder-Scrolls-V-Skyrim.jpg') fixed;
+    background-size: cover;
+    min-height: calc(100vh - 30px);
+    padding-bottom: 30px;
+}
+body > nav.uk-navbar {
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.11);
+}
 .uk-panel-box {
 	background: #fff;
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.11);
@@ -89,7 +97,12 @@ html {
 	line-height: 1;
 }
 .items-actions {
-	padding:0 8px;
+	padding:5px 8px;
+	background: #fff;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.11);
+}
+.items-actions .uk-subnav {
+	margin:0;
 }
 .items-actions .uk-subnav>* {
 	margin-top: 0;
