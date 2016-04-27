@@ -23,6 +23,13 @@ class Controller extends \yii\web\Controller
         if (!Yii::$app->has('zoo')) {
             Yii::$app->set('zoo',[ 'class'=>'\worstinme\zoo\Zoo' ]);
         }  
+
+        \yii\base\Event::on('\yii\web\View', \yii\web\View::EVENT_END_PAGE,function($event){
+            if (Yii::$app->cache->get('frontendCss-'.$this->id) === false) {
+                Yii::$app->cache->set('frontendCss-'.$this->id,array_keys($event->sender->cssFiles));
+            }
+        });
+
     }
 
     public function beforeAction($action)
@@ -180,6 +187,7 @@ class Controller extends \yii\web\Controller
 
         return $this->render('item',[
             'model'=>$model,
+            'app'=>$this->app,
         ]);
     }
 
