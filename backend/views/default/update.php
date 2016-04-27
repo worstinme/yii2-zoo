@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <?=$this->render('/_nav',['app'=>$model])?>
-
+<div class="uk-panel uk-panel-box">
 <h2>Настройка приложения: <em><?=$model->name?></em></h2>
 
 <?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large']); ?>
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'height'=>'200px',
                 'toolbar' => [
 				    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-				    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source']
+				    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
 				],
                 'contentsCss'=>[
                     '/css/site.css',
@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'height'=>'200px',
                 'toolbar' => [
 				    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-				    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source']
+				    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
 				],
                 'contentsCss'=>[
                     '/css/site.css',
@@ -63,6 +63,16 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="uk-form-row uk-margin-large-top">
 	    <?= Html::submitButton(Yii::t('backend','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
 	</div> 
+
+	<div class="uk-form-row uk-margin-large-top uk-margin-large-bottom">
+
+	<?=Html::a('<i class="uk-icon-trash"></i> Удалить приложение', ['/'.Yii::$app->controller->module->id.'/default/delete','app'=>$model->id], [
+        'title' => Yii::t('backend', 'Удалить'),
+        'target'=>'_blank',
+        'data'=>['method'=>'post','confirm'=>'Вы точно хотите удалить приложение?',],
+    ]); ?>
+
+	</div>
 
 </div>
 
@@ -85,7 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php ActiveForm::end(); ?>
-	
+</div>
 <?php
 
 $script = <<< JS
