@@ -11,6 +11,7 @@ return [
 				'items'=>[
 					['element'=>'category'],
 					['element'=>'name'],
+					['element'=>'alias'],
 					['element'=>'intro'],
 					['element'=>'content'],
 				],
@@ -38,9 +39,8 @@ return [
 			[	
 				'params'=>['column'=>1],
 				'items'=>[
-					['element'=>'name','params'=>['asUrl'=>true]],
+					['element'=>'name','params'=>['asUrl'=>true,'tag'=>'h2']],
 					['element'=>'intro'],
-					['element'=>'content'],
 				],
 			],
 		],
