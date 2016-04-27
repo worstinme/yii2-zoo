@@ -140,9 +140,7 @@ class Applications extends \worstinme\zoo\models\Applications
 
             $view = str_replace([Yii::getAlias('@worstinme/zoo/applications/default/views/'),".php"],"",$file);
 
-            $text = Yii::$app->view->render('@worstinme/zoo/applications/default/views/'.$view,[
-                    'controller'=>$controller,
-                ]);
+            $text = file_get_contents(Yii::getAlias('@worstinme/zoo/applications/default/views/'.$view).'.php');
 
             file_put_contents(Yii::getAlias('@app/views/'.$controller.'/'.$view).'.php',$text);
 
@@ -287,5 +285,31 @@ class Applications extends \worstinme\zoo\models\Applications
 
         return parent::afterSave($insert, $changedAttributes);
     } 
+
+    public function afterDelete()
+    {
+        $db = Yii::$app->db;
+
+        foreach ($this->elements as $element) $element->delete();
+        foreach ($this->categories as $element) $element->delete();
+        foreach ($this->items as $element) $element->delete();
+
+        unlink(Yii::getAlias('@app/controllers/'.$this->controllerName.'.php'));
+
+        $controller = strtolower($this->name);
+
+        $files = \yii\helpers\FileHelper::findFiles(Yii::getAlias('@app/views/'.$controller));
+
+        if (!empty($controller) && count($files)) {
+            foreach ($files as $file) {
+                unlink($file);
+            }
+        }
+
+        rmdir(Yii::getAlias('@app/views/'.$controller));
+        
+        parent::afterDelete();
+        
+    }
 
 }
