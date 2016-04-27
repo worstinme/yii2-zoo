@@ -110,4 +110,15 @@ class Categories extends \yii\db\ActiveRecord
 
     }
 
+    public function getBreadcrumbs($selfUrl = false) {
+        $crumbs = $selfUrl ? [['label'=>$this->name,'url'=>$this->url]] : [$this->name];
+        $parent = $this->parent;
+        while ($parent !== null) {
+            $crumbs[] = ['label' => $parent->name, 'url' =>  $parent->url]; 
+            $parent = $parent->parent;
+        }
+        $crumbs[] = ['label'=>$this->app->title,'url'=>$this->app->url];
+        return array_reverse($crumbs);
+    }
+
 }
