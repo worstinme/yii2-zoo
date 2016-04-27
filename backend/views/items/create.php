@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?=$this->render('/_nav')?>
+<?=$this->render('/_nav',['model'=>$model])?> 
 	
 
 <?= $this->render('_form', [
