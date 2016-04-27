@@ -88,11 +88,12 @@ class Elements extends \worstinme\zoo\models\Elements
         return '';
     }
 
-
     public function setSorter($s) { 
-        return $this->params['sorter'] = $s;
+        $params = $this->params;
+        $params['sorter'] = $s; 
+        return $this->params = $params;
     }
-    
+
     public function setRelated($related) { 
         $params = $this->params;
         $params['related'] = $related; 
