@@ -20,11 +20,11 @@ class DefaultController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'create', 'update','elfinder'],
+                'only' => ['index', 'create', 'update','elfinder','delete'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update', 'create','elfinder'],
+                        'actions' => ['update', 'create','elfinder','delete'],
                         'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
                     ],
                     [
@@ -98,6 +98,23 @@ class DefaultController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+
+    public function actionDelete()
+    {
+
+        $model = $this->getApp();
+
+        if ($model !== null && $model->delete()) {
+            Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Приложение удалено.'));
+        }
+        else {
+            Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Что-то пошло не так.'));
+        }
+
+        return $this->redirect(['index']);
+
     }
 
 }
