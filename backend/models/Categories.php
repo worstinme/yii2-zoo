@@ -73,7 +73,7 @@ class Categories extends \worstinme\zoo\models\Categories
 
         $db->createCommand()->delete('{{%zoo_items_categories}}', ['category_id'=>$this->id])->execute();
         $db->createCommand()->delete('{{%zoo_elements_categories}}', ['category_id'=>$this->id])->execute();
-        $db->createCommand()->update('{{%zoo_categories}}',['parent_id'=>0], ['parent_id'=>$this->id])->execute();
+        $db->createCommand()->update('{{%zoo_categories}}',['parent_id'=>$this->parent_id], ['parent_id'=>$this->id])->execute();
         
         parent::afterDelete();
         
