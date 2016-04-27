@@ -5,7 +5,6 @@ namespace worstinme\zoo\backend\controllers;
 use Yii;
 use worstinme\zoo\backend\models\Config;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class ConfigController extends Controller
