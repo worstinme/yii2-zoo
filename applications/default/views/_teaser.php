@@ -1,23 +1,22 @@
-<?php echo "<?php"; ?>
+<?php
 
 use yii\helpers\Html;
 
 $rows = $model->getTemplateRows('teaser');
 
+$class = !empty($row['params']) && !empty($row['params']['column'])?'uk-grid uk-grid-width-medium-1-'.$row['params']['column']:'';
+
 ?>
-<div class="item-teaser" data-item-id="<?php echo "<?="; ?>$model->id?>"> 
-<?php echo "<?php"; ?> foreach ($rows as $row) {
-
-		$class = !empty($row['params']) && !empty($row['params']['column'])?'uk-grid uk-grid-width-medium-1-'.$row['params']['column']:'row';
-
+<div class="item item-teaser <?=$class?>"> 
+<?php foreach ($rows as $row) {
 
 		foreach ($row['items'] as $item) {
 			
 			if (!empty($item['element'])) {  ?>
 
-			<div class="element element-<?php echo "<?="; ?>$item['element']?>">
+			<div class="element element-<?=$item['element']?>">
 				
-			<?php echo "<?="; ?>$this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/_view.php',[
+			<?= $this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/_view.php',[
 	            'model'=>$model,
 	            'attribute'=>$item['element'],
 	            'params'=>!empty($item['params'])?$item['params']:[],
@@ -25,7 +24,7 @@ $rows = $model->getTemplateRows('teaser');
 				
 			</div>
 				
-			<?php echo "<?php"; ?> }
+			<?php }
 
 		}
 

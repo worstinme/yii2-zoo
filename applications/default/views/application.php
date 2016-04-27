@@ -1,4 +1,4 @@
-<?php echo "<?php"; ?>
+<?php
 
 use yii\helpers\Url;
 use yii\helpers\Html;
@@ -6,7 +6,7 @@ use yii\widgets\ListView;
 use worstinme\uikit\Breadcrumbs;
 
 $this->title = $app->metaTitle;
-$this->params['breadcrumbs'][] = $app->title;
+$this->params['breadcrumbs'][] = ['label'=>$app->title];
 
 if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]);
 
@@ -16,32 +16,31 @@ if ($app->itemsSort) {
     $layout = '<div class="sorter">Упорядочить по {sorter}</div>'.$layout;
 }
 
+$pjaxId = $app->name.'-application';
+
 ?>
 
-<div class="<?=$controller?> <?=$controller?>-application">
-    <?php echo "<?php /*"; ?><div class="uk-grid">
+<div class="<?=$app->name?> <?=$app->name?>-application">
+<?php \yii\widgets\Pjax::begin(['id'=>$pjaxId,'timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
 
-        <div class="uk-width-medium-1-4">
-            <?="<?="; ?>$this->render('_search', ['app' => $app,'searchModel'=>$searchModel]); ?>
-        </div>
+    <h1><?= Html::encode($app->title) ?></h1>
 
-        <div class="uk-width-medium-3-4"> ?> */ ?>
+    <?= $app->intro?>
 
-            <h1><?="<?="; ?> Html::encode($app->title) ?></h1>
+    <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'layout'=>$layout,
+        'itemOptions' => ['tag' => false],
+        'itemView' => '_teaser',
+    ]) ?>
 
-            <?="<?="; ?>$app->intro?>
+    <?= $app->content?>
 
-            <?="<?="; ?> ListView::widget([
-                'dataProvider' => $dataProvider,
-                'layout'=>$layout,
-                'itemOptions' => ['class' => 'item'],
-                'itemView' => '_teaser',
-            ]) ?>
-
-            <?="<?="; ?>$app->content?>
-
-    <?php echo "<?php /*"; ?></div> 
-
-    </div> */ ?>
-
+<?php \yii\widgets\Pjax::end(); ?>
 </div>
+
+<?php $js = <<<JS
+$("#$pjaxId").on("pjax:start",function(){ $(this).addClass("reload");});
+$("#$pjaxId").on("pjax:end",function(){ $(this).removeClass("reload");})
+JS;
+$this->registerJs($js, $this::POS_READY); ?>
