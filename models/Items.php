@@ -14,8 +14,6 @@ class Items extends \yii\db\ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_SUBMISSION = 'submission';
 
-    const ENVIRONMENT = 'frontend';
-
     private $renderedElements = [];
     private $elements_types;
 
@@ -294,6 +292,17 @@ class Items extends \yii\db\ActiveRecord
         }   
     }
 
+    public function getBreadcrumbs($selfUrl = false) {
+        $crumbs[] = ['label'=>$this->app->title,'url'=>$this->app->url];
+        if (is_array($this->categories)) {
+            foreach ($this->categories as $category) {
+                $crumbs[] = ['label' => $category->name, 'url' =>  $category->url]; 
+            }
+        }
+        $crumbs[] = $selfUrl ? ['label'=>$this->name,'url'=>$this->url] : $this->name;
+        return $crumbs;
+    }
+
     public function getTemplate($name) {
         $template = $this->app->template;
         return !empty($template[$name]) ? $template[$name] : [] ;
@@ -383,7 +392,7 @@ class Items extends \yii\db\ActiveRecord
     public function afterDelete()
     {
         Yii::$app->db->createCommand()->delete('{{%zoo_items_elements}}', ['item_id'=>$this->id])->execute();
-
+        Yii::$app->db->createCommand()->delete('{{%zoo_items_categories}}', ['item_id'=>$this->id])->execute();
         parent::afterDelete();
         
     }
