@@ -9,7 +9,6 @@ use yii\helpers\Json;
 ?>
 
 <div class="items-actions">
-
 <ul class="uk-subnav uk-subnav-line" style="margin-bottom: 0">
     <li><span>Применить <span class="selected-count"></span>:</span></li>
     <li><a href="#actions-category" data-uk-modal>Присвоить категории</a></li>
@@ -20,7 +19,7 @@ use yii\helpers\Json;
         ]); ?>
     </li>
 </ul>
-
+</div>
 
 <div id="actions-category" class="uk-modal">
     <div class="uk-modal-dialog">
@@ -43,6 +42,12 @@ use yii\helpers\Json;
         <div class="uk-form-row">
 
             <?= Html::a('Заменить категории на выбранные', Url::current(), [ 'id'=>'replaceCategories', 
+                    'class'=>'uk-button uk-button-small uk-button-success',
+                    'data'=>[ 'method'=>'post', ], 
+                ]); ?>
+
+            <?= Html::a('Добавить категории', Url::current(), [ 'id'=>'addCategories', 
+                    'class'=>'uk-button uk-button-small uk-button-primary uk-float-right',
                     'data'=>[ 'method'=>'post', ], 
                 ]); ?>
             
@@ -58,8 +63,6 @@ use yii\helpers\Json;
 </div>
 
 
-
-</div>
 
 <?php 
 
@@ -80,6 +83,15 @@ $("body").on("click", "#replaceCategories", function(e) {
     var selection = $('#catalogue .items').yiiGridView('getSelectedRows');
     var categoryIds = $("#form input.category-list:checked").map(function () { return $(this).val(); }).get();
     var params = JSON.stringify({categoryIds,selection,replaceCategories:true});
+    
+    $(this).attr('data-params', params);
+
+});
+$("body").on("click", "#addCategories", function(e) {
+
+    var selection = $('#catalogue .items').yiiGridView('getSelectedRows');
+    var categoryIds = $("#form input.category-list:checked").map(function () { return $(this).val(); }).get();
+    var params = JSON.stringify({categoryIds,selection,addCategories:true});
     
     $(this).attr('data-params', params);
 

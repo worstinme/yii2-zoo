@@ -4,35 +4,43 @@ use worstinme\uikit\Nav;
 use worstinme\uikit\NavBar;
 use yii\helpers\Html;
 
+$app = Yii::$app->controller->app;
+
+
 $subnav = [
 
     ['label' => '<i class="uk-icon-plus"></i> '.Yii::t('backend','Создать материал'), 
         'linkOptions'=>['class'=>'uk-button-primary'],
-        'url' => ['/'.Yii::$app->controller->module->id.'/items/create','app'=>Yii::$app->controller->app->id],],
+        'url' => ['/'.Yii::$app->controller->module->id.'/items/create','app'=>$app->id],],
 
 ];
 
 $mainnav = [
-    ['label' => '<i class="uk-icon-bars"></i> '.Yii::$app->controller->app->title, 
-                'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id],], 
+    ['label' => '<i class="uk-icon-bars"></i> '.$app->title, 
+                'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>$app->id],], 
 ];
 
 if ($this->context->module->accessRoles !== null || Yii::$app->user->can('admin')) {
     $subnav[] = ['label' => '<i class="uk-icon-edit"></i> '.Yii::t('backend','Создать категорию'), 
-        'url' => ['/'.Yii::$app->controller->module->id.'/categories/update','app'=>Yii::$app->controller->app->id],];
+        'url' => ['/'.Yii::$app->controller->module->id.'/categories/update','app'=>$app->id],];
 
     $mainnav = array_merge($mainnav,[
         ['label' => Yii::t('backend','Категории'), 
-                'url' => ['/'.Yii::$app->controller->module->id.'/categories/index','app'=>Yii::$app->controller->app->id],], 
+                'url' => ['/'.Yii::$app->controller->module->id.'/categories/index','app'=>$app->id],], 
         ['label' => Yii::t('backend','Элементы'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/elements/index','app'=>Yii::$app->controller->app->id],], 
+            'url' => ['/'.Yii::$app->controller->module->id.'/elements/index','app'=>$app->id],], 
         ['label' => Yii::t('backend','Шаблоны'), 
-            'url' => ['/'.Yii::$app->controller->module->id.'/templates/index','app'=>Yii::$app->controller->app->id],], 
+            'url' => ['/'.Yii::$app->controller->module->id.'/templates/index','app'=>$app->id],], 
 
         ['label' => '<i class="uk-icon-cog"></i>', 
-                    'url' => ['/'.Yii::$app->controller->module->id.'/default/update','app'=>Yii::$app->controller->app->id],], 
+                    'url' => ['/'.Yii::$app->controller->module->id.'/default/update','app'=>$app->id],], 
     ]);
 }
+
+
+
+
+$mainnav[] = ['label' => '<i class="uk-icon-external-link-square"></i>', 'url'=>isset($model) && $model !== null ? $model->url : $app->url,'linkOptions'=>['target'=>'_blank']];
 
 if (isset($items) && is_array($items) && count($items)) {
     $subnav = array_merge($items,$subnav);
@@ -41,7 +49,6 @@ if (isset($items) && is_array($items) && count($items)) {
 ?>
 <div class="items-filters">
 <? NavBar::begin(['container'=>false,'offcanvas'=>false,'brandUrl' => false,'options'=>['class'=>'application-nav']]); ?>
-
 
     <?=Nav::widget([
         'navbar'=>true,
