@@ -14,6 +14,14 @@ class Items extends \yii\db\ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_SUBMISSION = 'submission';
 
+    const STATE_ACTIVE = 10;
+    const STATE_PUBLISHED = 5;
+    const STATE_ACCEPTED = 4;
+    const STATE_EXPIRED = 3;
+    const STATE_REMOVED = 2;
+    const STATE_REJECTED = 1;
+    const STATE_HIDDEN = 0;
+
     private $renderedElements = [];
     private $elements_types;
 
