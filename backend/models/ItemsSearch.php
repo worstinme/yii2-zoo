@@ -57,6 +57,10 @@ class ItemsSearch extends Items
         return $labels;
     }
 
+    public function model() {
+        return new Items;
+    }
+
     public function search($params)
     {
         
