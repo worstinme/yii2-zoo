@@ -34,6 +34,12 @@ class Controller extends \yii\web\Controller
         return $this->application;
     }
 
+    public function afterAction($action, $result)
+    {
+        Yii::$app->getUser()->setReturnUrl(Yii::$app->request->url);
+        return parent::afterAction($action, $result);
+    }
+
     public static function transliteration($str)
     {
         // ГОСТ 7.79B
