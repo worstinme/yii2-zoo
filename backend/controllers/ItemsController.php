@@ -4,7 +4,7 @@ namespace worstinme\zoo\backend\controllers;
 
 use Yii;
 
-use worstinme\zoo\models\Items;
+use worstinme\zoo\backend\models\Items;
 use worstinme\zoo\backend\models\ItemsSearch;
 
 use yii\web\NotFoundHttpException;
@@ -41,6 +41,7 @@ class ItemsController extends Controller
     public function actionIndex()
     {
         $app = $this->getApp();
+
 
         $request = Yii::$app->request;
         
@@ -195,8 +196,17 @@ class ItemsController extends Controller
             }
         }
         elseif ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return [
+                    'success' => true,
+                    'model' => $model->getAttributes(),
+                ];
+            }
+
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал сохранён'));
-            return $this->redirect(['index','app'=>$app->id]);
+            return $this->goBack();
         }
 
         return $this->render('create',[
