@@ -10,6 +10,12 @@ body.admin {
 body > nav.uk-navbar {
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.11);
 }
+@media (min-width: 1220px) {
+	.admin .uk-container {
+	    max-width: 1360px;
+	    padding: 0 35px;
+	}
+}
 .uk-panel-box {
 	background: #fff;
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.11);
