@@ -38,20 +38,50 @@ $this->params['breadcrumbs'][] = $this->title;
             'label'=>'Наименование',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]]);
+                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]])." ".Html::a('<i class="uk-icon-external-link"></i>', $model->url, ['title' => Yii::t('backend', 'Открыть на сайте'),
+                        'target'=>'_blank','data'=>['pjax'=>false], 'style'=>'float:right;color:#468847',
+                ]);
             },
         ],
         [
+            'attribute'=>'state',
+            'label'=>'',
             'format' => 'raw',
-            'value' => function ($model) {     
-                return Html::a('<i class="uk-icon-bookmark"></i>', $model->url, [
-                        'title' => Yii::t('backend', 'Открыть на сайте'),
-                        'target'=>'_blank',
-                        'data'=>['pjax'=>false],
-                        'style'=>'color:#468847',
-                ]);                                
+            'value' => function ($model, $index, $widget) {
+                return Html::a('','#',['onClick' => "var link=$(this);
+                        $.ajax({url:'".Url::to(['create','app'=>$model->app_id, 'id'=>$model->id])."',type:'POST',
+                            data: {'".$model->formName()."[state]':link.data('state')==0?10:0},
+                            success: function(data){
+                                if (data.success) {
+                                    if(data.model.state == 10) link.attr('class','uk-icon-check-circle'); 
+                                    else link.attr('class','uk-icon-times-circle'); 
+                                    link.data('state',data.model.state)
+                                }
+                            }
+                        })",'class'=>"uk-icon-".($model->flag==10 ? 'check' :'times')."-circle",'data'=>['pjax'=>0,'state'=>$model->state]]);
             },
-            'contentOptions'=>['class'=>'uk-text-center'],                           
+            'headerOptions'=>['class'=>'uk-text-center'],
+            'contentOptions'=>['class'=>'uk-text-center'],
+        ],
+        [
+            'attribute'=>'flag',
+            'label'=>'',
+            'format' => 'raw',
+            'value' => function ($model, $index, $widget) {
+                return Html::a('','#',['onClick' => "var link=$(this);
+                        $.ajax({url:'".Url::to(['create','app'=>$model->app_id, 'id'=>$model->id])."',type:'POST',
+                            data: {'".$model->formName()."[flag]':link.data('flag')==0?1:0},
+                            success: function(data){
+                                if (data.success) {
+                                    if(data.model.flag == 1) link.attr('class','uk-icon-star'); 
+                                    else link.attr('class','uk-icon-star-o'); 
+                                    link.data('flag',data.model.flag)
+                                }
+                            }
+                        })",'class'=>"uk-icon-star".($model->flag ? '' :'-o'),'data'=>['pjax'=>0,'flag'=>$model->flag]]);
+            },
+            'headerOptions'=>['class'=>'uk-text-center'],
+            'contentOptions'=>['class'=>'uk-text-center'],
         ],
         [
             'attribute'=>'category',

@@ -44,13 +44,32 @@ foreach ($rows as $row) {
 
 <hr>
 
-<?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+<div class="uk-grid">
 
-<?= $form->field($model, 'metaDescription')->textarea(['rows' => 2,'class'=>'uk-width-1-1']) ?>
+    <div class="uk-width-medium-2-3">
 
-<?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+    <?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
 
-<div class="uk-form-row">
+    <?= $form->field($model, 'metaDescription')->textarea(['rows' => 2,'class'=>'uk-width-1-1']) ?>
+
+    <?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
+
+    </div>
+
+    <div class="uk-width-medium-1-3">
+
+        <?= $form->field($model, 'state')->dropDownList([
+            $model::STATE_HIDDEN=>'Hidden',
+            $model::STATE_ACTIVE=>'Active',
+        ], ['option' => 'value']); ?>
+
+        <?= $form->field($model, 'flag')->checkbox(['option' => 'value'])->label('&nbsp;'); ?>
+ 
+    </div>
+
+</div>
+
+<div class="uk-form-row uk-margin-top">
     <?=Html::submitButton('Продолжить',['class'=>'uk-button uk-button-success'])?>
 </div>
 
