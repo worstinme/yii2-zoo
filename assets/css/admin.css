@@ -125,28 +125,55 @@ body > nav.uk-navbar {
 .uk-nestable-panel {
 	background: #fff;
 }
-.renderers .uk-nestable:empty {
-	min-height: 40px;
+.renderers .rows .uk-nestable {
+	min-height: 30px;
+	padding:5px;
+	border:1px dotted #ccc;
 }
 .renderers .fieldset {
-	border:1px dotted #00a8e6;
 	padding:8px;
 }
 
 .renderers .fieldset  .uk-nestable-item+.uk-nestable-item {
-	margin:0;
+	margin:5px 0 0;
 }
 
 .renderers .fieldset+.fieldset {
 	margin-top:10px;
 }
+.renderers .uk-nestable-item .uk-icon-plus {
+	float: right;
+    line-height: 20px;
+    width: 20px;
+    text-align: center; 
+    display: block;
+}
+.renderers .uk-nestable-item .params {
+	border-top:1px dotted #ddd;
+	padding-top: 10px;
+	margin-top: 5px;
+}
 
+.uk-nestable-item select.columns {
+	display: none;
+}
 .renderers .row-list {
 	list-style: none;
 	padding:0;
 	margin:10px 0;
 }
-
 .renderers .row-list li {
 	display: inline-block;
+}
+a[data-state],a[data-flag] {
+	font-size: 15px;
+}
+a[data-state].uk-icon-times-circle {
+	color: red;
+}
+a[data-state].uk-icon-check-circle {
+	color: green;
+}
+a.uk-icon-star {
+	color: gold;
 }
