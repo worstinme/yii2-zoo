@@ -177,7 +177,7 @@ class ItemsController extends Controller
                 $renders = [];
 
                 foreach ($renderElements as $element) {
-                    $path = '@worstinme/zoo/elements/'.$model->elements[$element]['type'].'/_form.php';
+                    $path = '@worstinme/zoo/elements/'.$model->elements[$element]['type'].'/form.php';
                     $renders[$element] = $this->renderAjax($path,[
                                 'model'=>$model,
                                 'attribute'=>$element,

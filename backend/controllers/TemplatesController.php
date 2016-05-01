@@ -17,11 +17,11 @@ class TemplatesController extends Controller
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'renderer','template-save'],
+                'only' => ['index', 'template','template-save'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'renderer','template-save'],
+                        'actions' => ['index', 'template','template-save'],
                         'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
                     ],
                 ],
@@ -39,18 +39,15 @@ class TemplatesController extends Controller
         
         $app = $this->getApp();
 
-        $templates = $this->module->templates;
-
-        $custom_templates = [];
-
+        $templates = array_keys($app->templatesConfig);
+        
         return $this->render('index', [
             'templates'=>$templates,
-            'custom_templates'=>$custom_templates,
         ]);
 
     }
 
-    public function actionRenderer($renderer = null) {
+    public function actionTemplate() {
 
         $app = $this->getApp();
 
@@ -58,22 +55,13 @@ class TemplatesController extends Controller
 
         $template = $app->getTemplate($name);
 
-        $template['renderer'] = !empty($template['renderer']) ? $template['renderer'] : null;
-
-        if ($renderer !== null) {
-            $template['renderer'] = $renderer;
-        }
-
-        $renderersNames = $this->module->renderers;
-
-        return $this->render('renderer', [ 
+        return $this->render('template', [ 
             'name'=>$name,
             'template'=>$template,
-            'renderersNames'=>$renderersNames,
-            'configView'=>$this->getRendererConfigView($template['renderer']),
         ]);
 
     }
+
     public function actionTemplateSave($renderer = null) {
 
         $request = Yii::$app->request;
@@ -83,8 +71,6 @@ class TemplatesController extends Controller
         if($request->isPost) {  
 
             $rows = $request->post('rows');
-            $renderer = $request->post('renderer');
-            $rendererViewPath = $request->post('rendererViewPath');
             $name = $request->post('name');
 
             foreach ($rows as $key=>$row) {
@@ -93,34 +79,12 @@ class TemplatesController extends Controller
                 }
             }
 
-            $app->setTemplate($name,['renderer'=>$renderer,'rendererViewPath'=>$rendererViewPath,'rows'=>$rows]);
+            $app->setTemplate($name,['rows'=>$rows]);
             $app->save();     
 
             echo 'шаблон сохранен';
         }
         
     }
-
-
-    public function getRendererConfigView($renderer) {
-
-        if (!empty($renderer)) {
-
-            $userPath = rtrim(Yii::$app->zoo->renderersPath,"/");
-
-            $path = $renderer."/config.php";
-
-            if (is_file(Yii::getAlias($userPath."/".$path))) {
-                return $userPath."/".$path;
-            }
-            elseif (is_file(Yii::getAlias("@worstinme/zoo/renderers/".$path))) {
-                return "@worstinme/zoo/renderers/".$path;
-            }
-
-        }
-
-        return null;
-    }
-
 
 }

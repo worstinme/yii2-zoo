@@ -12,27 +12,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?=$this->render('/_nav')?>
 
-<h1 class="uk-h3"><?=$this->title?></h1>
+<div class="uk-panel uk-panel-box">
 
-<ul class="uk-subnav uk-subnav-pill">
-	<li class="uk-disabled uk-padding-remove"><span class="uk-text-bold"><?=Yii::t('backend','Стандартные шаблоны')?></span></li>
-<?php foreach ($templates as $key => $value): ?>
-	<li>
-		<?=Html::a($value,['renderer','template'=>$value,'app'=>Yii::$app->controller->app->id])?>
-	</li>
-<?php endforeach ?>
-</ul>
+	<h1 class="uk-h3"><?=$this->title?></h1>
 
-<?php if (count($custom_templates)): ?>
-
-<ul class="uk-subnav uk-subnav-pill">
-	<li class="uk-disabled uk-padding-remove"><span class="uk-text-bold"><?=Yii::t('backend','Свои шаблоны')?></span></li>
-<?php foreach ($custom_templates as $key => $value): ?>
-	<li>
-		<?=Html::a($value,['renderer','template'=>$value,'app'=>Yii::$app->controller->app->id])?>
-	</li>
-<?php endforeach ?>
-</ul>
-
-
-<?php endif ?>
+	<ul class="uk-subnav uk-subnav-pill">
+	<?php foreach ($templates as $key => $value): ?>
+		<li>
+			<?=Html::a($value,['template','template'=>$value,'app'=>Yii::$app->controller->app->id])?>
+		</li>
+	<?php endforeach ?>
+	</ul>
+	
+</div>

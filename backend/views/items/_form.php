@@ -25,7 +25,7 @@ foreach ($rows as $row) {
 
             if (in_array($item['element'],$model->renderedElements)): ?>
                 <div class="element element-<?=$item['element']?> uk-form-row <?=$refresh?>">
-                <?=$this->render('@worstinme/zoo/elements/'.$element->type.'/_form.php',[
+                <?=$this->render('@worstinme/zoo/elements/'.$element->type.'/form.php',[
                     'model'=>$model,
                     'attribute'=>$item['element'],
                     'params'=>!empty($item['params'])?$item['params']:[],

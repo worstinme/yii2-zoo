@@ -51,7 +51,7 @@ class Elements extends \yii\db\ActiveRecord
     }
 
     public function getFormView() {
-        return '@worstinme/zoo/elements/'.$this->type.'/_form';
+        return '@worstinme/zoo/elements/'.$this->type.'/form';
     }
 
     //related

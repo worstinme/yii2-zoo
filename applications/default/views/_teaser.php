@@ -16,7 +16,7 @@ $class = !empty($row['params']) && !empty($row['params']['column'])?'uk-grid uk-
 
 			<div class="element element-<?=$item['element']?>">
 				
-			<?= $this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/_view.php',[
+			<?= $this->render('@worstinme/zoo/elements/'.$model->elements[$item['element']]['type'].'/view.php',[
 	            'model'=>$model,
 	            'attribute'=>$item['element'],
 	            'params'=>!empty($item['params'])?$item['params']:[],
