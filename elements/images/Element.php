@@ -51,6 +51,8 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                     }
                 }*/
 
+                if ($element->value_string !== null)
+                    
     			$value[] = [
                     'id'=>$element->id,
 					'value_text' =>$element->value_text,

@@ -14,6 +14,6 @@ class Config extends \yii\base\Behavior
     public $_multiple = false;
 
     public function getParamsView() {
-        return '@worstinme/zoo/elements/image/_params';
+        return '@worstinme/zoo/elements/image/params';
     }
 }

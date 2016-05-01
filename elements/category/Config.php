@@ -9,6 +9,6 @@ class Config extends \yii\base\Behavior
 {
 
 	public function getParamsView() {
-        return '@worstinme/zoo/elements/category/_params';
+        return '@worstinme/zoo/elements/category/params';
     }
 }

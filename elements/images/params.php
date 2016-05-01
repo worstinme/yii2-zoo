@@ -5,8 +5,6 @@ use yii\helpers\Html;
 
 ?>
 
-<hr>
-
 <form>
 <?= Html::checkbox('preview', isset($params['preview']) ? $params['preview'] : null,['label'=>'Отобразить превью первой картинки']); ?><br>
 <?= Html::checkbox('asUrl', isset($params['asUrl']) ? $params['asUrl'] : null,['label'=>'Отображать ссылку на материал?']); ?><br>
