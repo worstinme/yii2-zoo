@@ -8,6 +8,7 @@ use yii\helpers\Json;
 class Applications extends \yii\db\ActiveRecord
 {
     private $catlist;
+    private $templatesConfig;
 
     public static function tableName()
     {
@@ -106,10 +107,20 @@ class Applications extends \yii\db\ActiveRecord
         return $this->hasMany(Elements::className(), ['app_id' => 'id'])->indexBy('name');
     }
 
- /*   public function getCatlist() {
-        $parents = Categories::find()->where(['app_id'=>$this->id,'parent_id'=>0])->orderBy('sort ASC')->all();
-        return $catlist = count($parents) ? $this->getRelatedList($parents,[],'') : [];
-    } */
+    public function getTemplatesConfig($name = null) {
+        if ($this->templatesConfig === null) {
+
+            $default = ["form"=>[],"full"=>[],"teaser"=>[],"related"=>[],"submission"=>[]];
+            $configFile = Yii::getAlias('@app/views/'.$this->name.'/templates.json');
+            if (is_file($configFile)) {
+                $this->templatesConfig = array_merge($default,Json::decode(file_get_contents($configFile)));
+            }
+            else {
+                $this->templatesConfig = $default;
+            }
+        }
+        return $name === null ? $this->templatesConfig : (!empty($this->templatesConfig[$name]) ? $this->templatesConfig[$name] : []);
+    }
 
     public function getCatlist() {
 
