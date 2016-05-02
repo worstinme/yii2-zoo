@@ -73,16 +73,26 @@ class TemplatesController extends Controller
             $rows = $request->post('rows');
             $name = $request->post('name');
 
-            foreach ($rows as $key=>$row) {
-                if (empty($row['items']) || !count($row['items'])) {
-                    unset($rows[$key]);
+            if (is_array($rows) && count($rows)) {
+                
+                foreach ($rows as $key=>$row) {
+                    if (empty($row['items']) || !count($row['items'])) {
+                        unset($rows[$key]);
+                    }
                 }
+
+                $app->setTemplate($name,['rows'=>$rows]);
+                $app->save();     
+
+                echo 'шаблон сохранен';
+
             }
+            else {
+                print_R($_POST);
+            }
+           
 
-            $app->setTemplate($name,['rows'=>$rows]);
-            $app->save();     
-
-            echo 'шаблон сохранен';
+            
         }
         
     }

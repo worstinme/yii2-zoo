@@ -2,51 +2,64 @@
 
 use yii\helpers\Html;
 
+
+$row_types = [
+
+];
+
 $app = $this->context->app;
 $positions = !empty($app->getTemplatesConfig($name)['positions']) ? $app->getTemplatesConfig($name)['positions'] : [];
 $rows = !empty($template['rows']) ? $template['rows'] : []; ?>
 
 <div class="rows" data-template='{"name": "<?=$name?>"}'>
 
+	<?php if (count($positions)): ?>
+
 	<?php foreach ($positions as $key=>$position): ?>
 	<div class="fieldset uk-form uk-panel uk-panel-box" data-row='<?=$position?>'>
-		<div class="header"><?=$position?>	</div>
+		<div class="header"><?=$position?>	<?=$this->render('_row_header',['row'=>!empty($rows[$position]) ? $rows[$position] : []])?></div>
 		<ul class="uk-nestable" data-uk-nestable="{group:'elements',maxDepth:1,handleClass:'uk-nestable-handle'}">
-		<?php if (!empty($rows[$position]) && !empty($rows[$position]['items']) && is_array($rows[$position]['items'])): ?>
-		<?php foreach ($rows[$position]['items'] as $item) {
-			if (!empty($item['element']) && isset($elements[$item['element']])) {
-				echo $this->render('_element',[
-					'element'=>$elements[$item['element']],
-					'params'=>!empty($item['params'])?$item['params']:''
-				]);
-			}
-		} ?>
-		<?php endif ?></ul>
-	</div>
-	<?php endforeach ?>
-
-	<?php if (!count($positions)): ?>
-
-		<?php foreach ($rows as $row): ?>
-			<div class="fieldset default uk-form uk-panel uk-panel-box" data-row>
-				<div class="header">	</div>
-				<ul class="uk-nestable" data-uk-nestable="{group:'elements',maxDepth:2,handleClass:'uk-nestable-handle'}">
-				<?php if (!empty($row) && !empty($row['items']) && is_array($row['items'])): ?>
-				<?php foreach ($row['items'] as $item) {
+			<?php if (!empty($rows[$position]) && !empty($rows[$position]['items']) && is_array($rows[$position]['items'])): ?>
+				<?php foreach ($rows[$position]['items'] as $item) {
 					if (!empty($item['element']) && isset($elements[$item['element']])) {
 						echo $this->render('_element',[
+							'items'=>!empty($item['items']) ? $item['items'] : [],
 							'element'=>$elements[$item['element']],
-							'params'=>!empty($item['params'])?$item['params']:''
+							'params'=>!empty($item['params'])?$item['params']:[]
 						]);
 					}
 				} ?>
-				<?php endif ?></ul>
+			<?php endif ?>
+		</ul>
+	</div>
+	<?php endforeach ?>
+
+	<?php else: ?>
+
+		<?php foreach ($rows as $row): ?>
+			<div class="fieldset default uk-form uk-panel uk-panel-box" data-row="default">
+				<div class="header"><?=$this->render('_row_header',['row'=>$row])?></div>
+				<ul class="uk-nestable" data-uk-nestable="{group:'elements',maxDepth:2,handleClass:'uk-nestable-handle'}">
+					<?php if (!empty($row) && !empty($row['items']) && is_array($row['items'])): ?>
+						<?php foreach ($row['items'] as $item) {
+							if (!empty($item['element']) && isset($elements[$item['element']])) {
+								echo $this->render('_element',[
+									'items'=>!empty($item['items']) ? $item['items'] : [],
+									'element'=>$elements[$item['element']],
+									'params'=>!empty($item['params'])?$item['params']:[]
+								]);
+							}
+						} ?>
+					<?php endif ?>
+				</ul>
 			</div>
 		<?php endforeach ?>
-			<div class="fieldset default uk-form uk-panel uk-panel-box" data-row>
-				<div class="header"></div>
+
+			<div class="fieldset default uk-hidden uk-form uk-panel uk-panel-box" data-row="default">
+				<div class="header"><?=$this->render('_row_header',['row'=>[]])?></div>
 				<ul class="uk-nestable"></ul>
 			</div>
+
 	<?php endif ?>
 
 </div>	
@@ -64,7 +77,7 @@ $script = <<< JS
 	var elements = UIkit.nestable($('#elements,.rows .uk-nestable'), {group:'elements',maxDepth:2,handleClass:'uk-nestable-handle'});
 
 	$("[add-new-group]").on("click",function(){
-		var row = $('.fieldset.default:last-child').clone();
+		var row = $('.fieldset.default:last-child').clone().removeClass('uk-hidden');
 		$(".rows").append(row);
 		row.find('.uk-nestable').html("");
 		var nestable = UIkit.nestable(row.find('.uk-nestable'), {group:'elements',maxDepth:2,handleClass:'uk-nestable-handle'});
@@ -79,21 +92,33 @@ $script = <<< JS
 
 		var data = $(".rows").data("template");
 
-		data.rows = [];
+		data.rows = {};
 
-		$(".rows").children('[data-row]').each(function(index) {
+		$(".rows").children('[data-row]:not(.uk-hidden)').each(function(index) {
 			
-			var row = {"params":$(this).data("row"),"items":[]};
+			var row = {"type":$(this).find("select[name='type']").val(),"items":[]};
 
-			$(this).find("[data-element]").each(function(indx) {
+			$(this).find("> .uk-nestable > [data-element]").each(function(indx) {
 
-				var item = {'element':$(this).data('element'),'params':$(this).find('form').serializeObject()};
+				var item = {'element':$(this).data('element'),'params':$(this).find('form').serializeObject(),'items':[]};
+
+				$(this).find("[data-element]").each(function(indx) {
+					var it = {'element':$(this).data('element'),'params':$(this).find('form').serializeObject()};
+					item['items'].push(it);
+				});
 
 				row['items'].push(item);
 
 			});
 
-			data.rows[data.rows.length] = row;
+			var key = $(this).data("row");
+
+			if (key == 'default') {
+				data.rows[data.rows.length] = row;
+			}
+			else {
+				data.rows[key] = row;
+			}
 
 		});
 
