@@ -105,7 +105,6 @@ class Items extends \yii\db\ActiveRecord
         return $this->elements_types;
     }
 
-
     public function getParentCategory() {
         if (count($this->categories)) {
             foreach ($this->categories as $category) {
