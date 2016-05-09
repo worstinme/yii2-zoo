@@ -67,16 +67,16 @@ class ItemsSearch extends Items
         $this->load($params);
 
         if ($this->withoutCategory) {
-            $this->query = Items::find()->where(['i.app_id' => $this->app_id ]);
-            $this->query->andWhere('i.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
+            $this->query = Items::find()->where(['app_id' => $this->app_id ]);
+            $this->query->andWhere('id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
-            $this->query = Items::find()->from(['i'=>'{{%zoo_items}}']);
-            $this->query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = i.id");
+            $this->query = Items::find();
+            $this->query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = ".Items::tablename().".id");
             $this->query->andFilterWhere(['category.category_id'=>$this->category]);
         }
         else {
-            $this->query = Items::find()->where(['i.app_id' => $this->app_id ]);
+            $this->query = Items::find()->where([Items::tablename().'.app_id' => $this->app_id ]);
         }
 
         foreach ($this->elements as $element) {
@@ -87,22 +87,22 @@ class ItemsSearch extends Items
                 
                 if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
 
-                    $this->query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = i.id AND ".$e.".element = '".$e."'");
+                    $this->query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = ".Items::tablename().".id AND ".$e.".element = '".$e."'");
                     $this->query->andFilterWhere([$e.'.value_string'=>$this->$e]);
                 }
 
             }
         }
 
-        $this->query->andFilterWhere(['LIKE','i.name',$this->search]);
-        $this->query->andFilterWhere(['i.user_id'=>$this->user_id]);
+        $this->query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
+        $this->query->andFilterWhere([Items::tablename().'.user_id'=>$this->user_id]);
 
         $query = clone $this->query;
 
         $query->orderBy('created_at DESC, updated_at DESC');
 
         return $dataProvider = new ActiveDataProvider([
-            'query' => $query->groupBy('i.id'),
+            'query' => $query->groupBy(Items::tablename().'.id'),
             'pagination' => [
                 'pageSize' => 30,
             ],
@@ -116,16 +116,16 @@ class ItemsSearch extends Items
         $this->load($params);
 
         if ($this->withoutCategory) {
-            $query = Items::find()->select('i.id')->where(['i.app_id' => $this->app_id ]);
-            $query->andWhere('i.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
+            $query = Items::find()->select(Items::tablename().'.id')->where([Items::tablename().'.app_id' => $this->app_id ]);
+            $query->andWhere(Items::tablename().'.id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
-            $query = Items::find()->select('i.id');
-            $query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = i.id");
+            $query = Items::find()->select(Items::tablename().'.id');
+            $query->leftJoin(['category'=>'{{%zoo_items_categories}}'], "category.item_id = ".Items::tablename().".id");
             $query->andFilterWhere(['category.category_id'=>$this->category]);
         }
         else {
-            $query = Items::find()->select('i.id')->where(['i.app_id' => $this->app_id ]);
+            $query = Items::find()->select(Items::tablename().'.id')->where([Items::tablename().'.app_id' => $this->app_id ]);
         }
 
         foreach ($this->elements as $element) {
@@ -136,15 +136,15 @@ class ItemsSearch extends Items
                 
                 if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
 
-                    $query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = i.id AND ".$e.".element = '".$e."'");
+                    $query->leftJoin([$e=>'{{%zoo_items_elements}}'], $e.".item_id = ".Items::tablename().".id AND ".$e.".element = '".$e."'");
                     $query->andFilterWhere([$e.'.value_string'=>$this->$e]);
                 }
 
             }
         }
 
-        $query->andFilterWhere(['LIKE','i.name',$this->search]);
+        $query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
 
-        return $query->groupBy('i.id')->column();
+        return $query->groupBy(Items::tablename().'.id')->column();
     }
 }

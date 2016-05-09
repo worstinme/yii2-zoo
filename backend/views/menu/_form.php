@@ -40,9 +40,7 @@ $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValid
 
     <?php if ($model->check): ?>
 
-    <?= $form->field($model, 'label')->textInput(['class'=>'uk-width-1-1'])  ?>
-
-    <?= $form->field($model, 'class')->textInput(['class'=>'uk-width-1-1'])  ?>
+    <?= $form->field($model, 'name')->textInput(['class'=>'uk-width-1-1'])  ?>
 
     <?= $form->field($model, 'parent_id')->dropDownList($model->parents,['prompt'=>Yii::t('backend','Родительский пункт меню')])  ?>
 

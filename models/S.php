@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
-use worstinme\zoo\models\ItemsItems;
+use worstinme\zoo\models\Items;
 use worstinme\zoo\models\Categories;
 
 /**
@@ -65,7 +65,7 @@ class S extends Items
 
                 if ((is_array($value) && count($value) > 0) || (!is_array($value) && !empty($value))) {
 
-                    $this->query->leftJoin([$e=>ItemsElements::tablename()], $e.".item_id = i.id AND ".$e.".element = '".$e."'");
+                    $this->query->leftJoin([$e=>ItemsElements::tablename()], $e.".item_id = ".Items::tablename().".id AND ".$e.".element = '".$e."'");
                     $this->query->andFilterWhere([$e.'.value_string'=>$value]);
 
                 }
@@ -74,7 +74,7 @@ class S extends Items
         }
 
         if (!empty($this->search)) {
-            $this->query->select('i.*, MATCH (node) AGAINST (:text) as REL')
+            $this->query->select(Items::tablename().'.*, MATCH (node) AGAINST (:text) as REL')
                 ->andWhere('MATCH (node) AGAINST (:text)',[':text'=>$this->search]);
         }
 
@@ -95,14 +95,14 @@ class S extends Items
         $sort = [
             'attributes' => [
                 'name' => [
-                    'asc' => ['i.name' => SORT_ASC],
-                    'desc' => ['i.name' => SORT_DESC],
+                    'asc' => [Items::tablename().'.name' => SORT_ASC],
+                    'desc' => [Items::tablename().'.name' => SORT_DESC],
                     'default' => SORT_ASC,
                     'label'=>'наменованию',
                 ],
                 'created' => [
-                    'asc' => ['i.created_at' => SORT_ASC],
-                    'desc' => ['i.created_at' => SORT_DESC],
+                    'asc' => [Items::tablename().'.created_at' => SORT_ASC],
+                    'desc' => [Items::tablename().'.created_at' => SORT_DESC],
                     'default' => SORT_ASC,
                     'label'=>'дате создания',
                 ],
@@ -123,7 +123,7 @@ class S extends Items
         } 
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query->groupBy('i.id'),
+            'query' => $query->groupBy(Items::tablename().'.id'),
             'sort'=>$sort, 
             'pagination'=>[
                 'defaultPageSize'=>Yii::$app->controller->app->defaultPageSize,

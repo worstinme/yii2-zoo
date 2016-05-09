@@ -14,6 +14,8 @@ class m160428_084227_widgets_menu extends Migration
             'position' => $this->string(),
             'bound' => $this->string(),
             'params'=> $this->text(),
+            'updated_at' => $this->integer(),
+            'state'=> $this->smallInteger()->defaultValue(0),
         ], $tableOptions);
 
         $this->createTable('{{%zoo_menu}}', [
@@ -29,6 +31,7 @@ class m160428_084227_widgets_menu extends Migration
             'item_id' => $this->integer()->defaultValue(0),
             'sort' => $this->integer(),
             'url'=> $this->text(),
+            'updated_at' => $this->integer(),
         ], $tableOptions);
                 
     }

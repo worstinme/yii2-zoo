@@ -64,6 +64,15 @@ class CategoriesController extends Controller
         $model->app_id = $app->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return [
+                    'success' => true,
+                    'model' => $model->getAttributes(),
+                ];
+            }
+            
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Успешно'));
             return $this->redirect(['index','app'=>$app->id,'parent_id'=>$model->parent_id]);
         }

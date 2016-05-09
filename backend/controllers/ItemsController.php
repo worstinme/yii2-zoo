@@ -146,7 +146,7 @@ class ItemsController extends Controller
 
         $app = $this->getApp($app);
 
-        if ($id === null || ($model = Items::findOne(["i.id"=>$id])) === null) {
+        if ($id === null || ($model = Items::findOne(["id"=>$id])) === null) {
             $model = new Items();
             $model->app_id = $app->id;
             $model->regBehaviors();
@@ -240,7 +240,7 @@ class ItemsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Items::find()->where(['i.id'=>$id])->one()) !== null) {
+        if (($model = Items::find()->where(['id'=>$id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

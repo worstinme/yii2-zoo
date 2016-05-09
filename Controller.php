@@ -56,7 +56,7 @@ class Controller extends \yii\web\Controller
             // материал дефолтного приложения по алиасу
             return $this->renderCategory($category);
         }
-        elseif (($model = $this->app->getItems()->where(['i.alias'=>$a])->orWhere(['i.id'=>$a])->one()) !== null) {
+        elseif (($model = $this->app->getItems()->where([Items::tablename().'.alias'=>$a])->orWhere([Items::tablename().'.id'=>$a])->one()) !== null) {
             // материал дефолтного приложения по алиасу
             return $this->renderItem($model);
         }

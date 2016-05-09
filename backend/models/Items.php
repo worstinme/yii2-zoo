@@ -17,4 +17,9 @@ class Items extends \worstinme\zoo\models\Items
         return $rules = array_merge(parent::rules(),$rules);
     }
 
+    public function getCategories() {
+        return $this->hasMany(Categories::className(),['id'=>'category_id'])
+            ->viaTable('{{%zoo_items_categories}}',['item_id'=>'id']);
+    }
+
 }

@@ -14,12 +14,7 @@ class Items extends \yii\db\ActiveRecord
     const SCENARIO_EDIT = 'edit';
     const SCENARIO_SUBMISSION = 'submission';
 
-    const STATE_ACTIVE = 10;
-    const STATE_PUBLISHED = 5;
-    const STATE_ACCEPTED = 4;
-    const STATE_EXPIRED = 3;
-    const STATE_REMOVED = 2;
-    const STATE_REJECTED = 1;
+    const STATE_ACTIVE = 1;
     const STATE_HIDDEN = 0;
 
     private $renderedElements = [];
@@ -63,11 +58,6 @@ class Items extends \yii\db\ActiveRecord
         return '{{%zoo_items}}';
     }
 
-    public static function find()
-    {
-        return new ItemsQuery(get_called_class());
-    }
-
     public function scenarios()
     {
         $scenarios = parent::scenarios();
@@ -90,7 +80,8 @@ class Items extends \yii\db\ActiveRecord
     }
 
     public function getCategories() {
-        return $this->hasMany(Categories::className(),['id'=>'category_id'])->viaTable('{{%zoo_items_categories}}',['item_id'=>'id']);
+        return $this->hasMany(Categories::className(),['id'=>'category_id'])
+            ->viaTable('{{%zoo_items_categories}}',['item_id'=>'id']);
     }
 
     public function getElements() {

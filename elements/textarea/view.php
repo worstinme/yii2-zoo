@@ -1,5 +1,5 @@
 <?php
 
-echo Yii::$app->zoo->findWidgets($model->{$attribute});
+echo Yii::$app->zoo->findShortcodes($model->{$attribute});
 
 ?>

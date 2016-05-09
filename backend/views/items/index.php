@@ -50,15 +50,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'value' => function ($model, $index, $widget) {
                 return Html::a('','#',['onClick' => "var link=$(this);
                         $.ajax({url:'".Url::to(['create','app'=>$model->app_id, 'id'=>$model->id])."',type:'POST',
-                            data: {'".$model->formName()."[state]':link.data('state')==0?10:0},
+                            data: {'".$model->formName()."[state]':link.data('state')==0?1:0},
                             success: function(data){
                                 if (data.success) {
-                                    if(data.model.state == 10) link.attr('class','uk-icon-check-circle'); 
+                                    if(data.model.state == 1) link.attr('class','uk-icon-check-circle'); 
                                     else link.attr('class','uk-icon-times-circle'); 
                                     link.data('state',data.model.state)
                                 }
                             }
-                        })",'class'=>"uk-icon-".($model->flag==10 ? 'check' :'times')."-circle",'data'=>['pjax'=>0,'state'=>$model->state]]);
+                        })",'class'=>"uk-icon-".($model->state==1 ? 'check' :'times')."-circle",'data'=>['pjax'=>0,'state'=>$model->state]]);
             },
             'headerOptions'=>['class'=>'uk-text-center'],
             'contentOptions'=>['class'=>'uk-text-center'],
