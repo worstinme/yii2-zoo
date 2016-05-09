@@ -41,9 +41,12 @@ class MenuController extends Controller
         $searchModel = new MenuSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $groups = Menu::find()->select(['menu'])->distinct()->indexBy('menu')->column();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'groups'=>$groups,
         ]);
     }
 
@@ -58,8 +61,7 @@ class MenuController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Настройки сохранены'));
-            $this->redirect(['update','menu'=>$model->id]);
+            return $this->redirect(['index']);
         }
 
         return $this->render('update',[

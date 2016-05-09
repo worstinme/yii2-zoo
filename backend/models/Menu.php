@@ -24,14 +24,14 @@ class Menu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type','label','menu'], 'required'],
+            [['type','name','menu'], 'required'],
             [['category_id'],'required','when' => function($model) {return in_array($model->type, [2]); }],
             [['application_id'],'required','when' => function($model) {return in_array($model->type, [1,2,3]); }],
             [['item_id'],'required','when' => function($model) {return in_array($model->type, [3]); }],
             [['url'],'required','when' => function($model) {return in_array($model->type, [4,5]); }],
             [['application_id', 'category_id', 'item_id', 'parent_id', 'sort', 'type'], 'integer'],
             [['url'], 'string'],
-            [['label', 'class','menu'], 'string', 'max' => 255],
+            [['name','menu'], 'string', 'max' => 255],
             ['menu', 'match', 'pattern' => '#^[\w_-]+$#i'],
         ];
     }
@@ -43,11 +43,10 @@ class Menu extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'label' => 'Label',
+            'name' => 'Label',
             'application_id' => 'Application ID',
             'category_id' => 'Category ID',
             'item_id' => 'Item ID',
-            'class' => 'Class',
             'parent_id' => 'Parent ID',
             'sort' => 'Sort',
             'type' => 'Type',
@@ -123,10 +122,10 @@ class Menu extends \yii\db\ActiveRecord
 
     public function getParents() {
         if ($this->isNewRecord) {
-            return self::find()->select(['label'])->where(['menu'=>$this->menu])->indexBy('id')->column();
+            return self::find()->select(['name'])->where(['menu'=>$this->menu])->indexBy('id')->column();
         }
         else {
-            return self::find()->select(['label'])->where(['<>','id',$this->id])->andWhere(['menu'=>$this->menu])->indexBy('id')->column();
+            return self::find()->select(['name'])->where(['<>','id',$this->id])->andWhere(['menu'=>$this->menu])->indexBy('id')->column();
         }
     }
 
@@ -162,7 +161,7 @@ class Menu extends \yii\db\ActiveRecord
         }
         elseif ($this->type == 3) {
 
-            $item = Items::find()->where(['i.id'=>$this->item_id])->one();
+            $item = Items::find()->where([Items::tablename().'.id'=>$this->item_id])->one();
 
             if ($item !== null) {
                 return $item->url;
@@ -170,5 +169,15 @@ class Menu extends \yii\db\ActiveRecord
         }
 
         return '#';
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->updated_at = time();
+            return true;
+        } else {
+            return false;
+        }
     }
 }
