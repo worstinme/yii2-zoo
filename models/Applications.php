@@ -46,7 +46,7 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getItems() {
-        return $this->hasMany(Items::className(), ['app_id' => 'id'])->inverseOf('app');
+        return $this->hasMany(Items::className(), ['app_id' => 'id'])->inverseOf('app')->where([Items::tablename().'.state'=>1]);
     }
 
 
