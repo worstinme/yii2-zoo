@@ -10,7 +10,9 @@ $this->title = 'Widgets';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="widgets-index">
-<div class="items">
+
+    <?= Html::a(Yii::t('backend','Создать виджет'), ['create'], ['class' => 'uk-button uk-button-success']); ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -54,5 +56,4 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
-</div>
 </div>

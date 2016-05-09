@@ -35,7 +35,6 @@ class WidgetsController extends Controller
         ];
     }
 
-
     public function actionIndex()
     {
         $searchModel = new WidgetsSearch();
@@ -49,22 +48,17 @@ class WidgetsController extends Controller
 
     public function actionCreate()
     {
-        $model = new Widgets();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['update','id'=>$model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+        return $this->render('create', [
+            'widgets'=>$this->findWidgets(),
+        ]);
+        
     }
 
-    public function actionUpdate($id)
+    public function actionUpdate($id = null)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->widgetModel->validate() && $model->save()) {
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
@@ -82,10 +76,44 @@ class WidgetsController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Widgets::findOne($id)) !== null) {
+        if ($id === null && ($widget = $this->checkWidget(Yii::$app->request->get('widget'))) !== null) {
+            $model = new Widgets;
+            $model->widgetModel = new $widget;
+            $model->type = Yii::$app->request->get('widget');
             return $model;
-        } else {
+        }
+        elseif (($model = Widgets::findOne($id)) !== null && ($widget = $this->checkWidget($model->type)) !== null) {
+            $model->widgetModel = new $widget;
+            $model->widgetModel->setAttributes(\yii\helpers\Json::decode($model->params));
+            return $model;
+        }
+        else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    protected function checkWidget($widget) {
+
+        if (!empty($widget) && file_exists(Yii::getAlias('@worstinme/zoo/widgets/models/'.$widget.'.php'))) {
+            return 'worstinme\zoo\widgets\models\\'.$widget;
+        } else {
+            return null;
+        }
+    }
+
+    protected function findWidgets() {
+
+        $widgets = [];
+
+        $path = Yii::getAlias('@worstinme/zoo/widgets/models/');
+
+        $widgetModels = \yii\helpers\FileHelper::findFiles($path);
+
+        foreach ($widgetModels as $key => $model) {
+            $model = str_replace($path, '', rtrim($model,".php"));
+            $widgets[$model] = "worstinme\zoo\widgets\models\\".$model;
+        }
+
+        return $widgets;
     }
 }

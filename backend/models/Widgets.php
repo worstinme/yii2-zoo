@@ -7,7 +7,8 @@ use Yii;
 
 class Widgets extends \worstinme\zoo\models\Widgets
 {
-
+    public $widgetModel;
+    
     public function rules()
     {
         return [
@@ -28,4 +29,28 @@ class Widgets extends \worstinme\zoo\models\Widgets
             'params' => 'Params',
         ];
     }
+
+    public function load($data, $formName = null)
+    {
+        if ($this->widgetModel !== null) {
+            return $this->widgetModel->load($data, $formName) && parent::load($data, $formName);
+        }
+    }
+
+    public function getParams() {
+
+        return $this->params !== null ? \yii\helpers\Json::decode($this->params) : null;
+        
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->params = \yii\helpers\Json::encode($this->widgetModel->getAttributes());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
