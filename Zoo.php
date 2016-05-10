@@ -42,6 +42,7 @@ class Zoo extends \yii\base\Component {
 		
 		return array_merge([
 			'uk-slideshow'=>['worstinme\uikit\widgets\Slideshow','widget'],
+			'widget'=>['worstinme\zoo\widgets\Widget','widget'],
 			//'anothershortcode'=>function($attrs, $content, $tag){},
 		],$this->callbacks);
 	}
@@ -61,7 +62,7 @@ class Zoo extends \yii\base\Component {
 
 		if (!empty($params['position'])) {
 
-			$widgets = Widgets::find()->where(['position'=>$params['position']])->all();
+			$widgets = Widgets::find()->where(['state'=>1,'position'=>$params['position']])->orderBY('sort')->all();
 
 			foreach ($widgets as $widget) {
 
@@ -75,17 +76,15 @@ class Zoo extends \yii\base\Component {
 
 	}
 
-	protected function callWidget($widget) {
+	public function callWidget($widget) {
 
 		if (!empty($this->widgets[$widget->type])) {
-
 			return call_user_func([$this->widgets[$widget->type],'widget'], $widget->getParams());
-
 		}
 
 	}
 
-	protected function getWidgets() {
+	public function getWidgets() {
 
 		if ($this->_widgets === null) {
 
