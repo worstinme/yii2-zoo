@@ -3,11 +3,10 @@
 namespace worstinme\zoo\widgets;
 
 use Yii;
-use yii\base\Widget;
 use yii\helpers\Html;
 use yii\helpers\FileHelper;
 
-class UkSlideshow extends Widget
+class UkSlideshow extends \yii\base\Widget
 {
 
     public $path;
