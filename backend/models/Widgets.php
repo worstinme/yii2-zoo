@@ -15,6 +15,7 @@ class Widgets extends \worstinme\zoo\models\Widgets
             [['type', 'name'], 'required'],
             [['params'], 'string'],
             [['type', 'name', 'position', 'bound'], 'string', 'max' => 255],
+            [['state','sort'],'integer'],
         ];
     }
 
@@ -33,7 +34,11 @@ class Widgets extends \worstinme\zoo\models\Widgets
     public function load($data, $formName = null)
     {
         if ($this->widgetModel !== null) {
-            return $this->widgetModel->load($data, $formName) && parent::load($data, $formName);
+            $this->widgetModel->load($data, $formName);
+            return parent::load($data, $formName);
+        }
+        else {
+            return parent::load($data, $formName);
         }
     }
 

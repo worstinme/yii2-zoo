@@ -22,7 +22,7 @@ class WidgetsSearch extends Widgets
 
     public function search($params)
     {
-        $query = Widgets::find();
+        $query = Widgets::find()->orderBy('sort');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query, 
@@ -33,7 +33,7 @@ class WidgetsSearch extends Widgets
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
-            return $dataProvider;
+            //return $dataProvider;
         }
 
         $query->andFilterWhere([

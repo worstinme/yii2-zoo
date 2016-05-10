@@ -38,6 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         	<?= $form->field($model, 'position'); ?>
 
+            <?= $form->field($model, 'state')->checkbox(); ?>
+
         </div>
 
         <div class="uk-margin-top">

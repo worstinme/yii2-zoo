@@ -29,7 +29,7 @@ class WidgetsController extends Controller
                 'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post','delete'],
-                    'sort' => ['post'],
+                    //'sort' => ['post'],
                 ],
             ],
         ];
@@ -59,12 +59,53 @@ class WidgetsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->widgetModel->validate() && $model->save()) {
+
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                return [
+                    'success' => true,
+                    'model' => $model->getAttributes(),
+                ];
+            }
+
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionSort() {
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $sort = Yii::$app->request->post('sort');
+
+        $result = [];
+
+        if ($sort !== null && is_array($sort)) {
+            
+            foreach ($sort as $key => $value) {
+                
+                $widget = $this->findModel($key);
+                $widget->sort = (int)$value;
+                $widget->save();
+
+                $result[] = $widget->errors;
+
+            }
+
+            return [
+                'success' => true,
+                'result'=>$result,
+            ];
+
+        }
+
+        return [
+            'success' => false,
+        ];
     }
 
     public function actionDelete($id)
