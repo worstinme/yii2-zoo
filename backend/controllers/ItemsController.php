@@ -206,7 +206,7 @@ class ItemsController extends Controller
             }
 
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал сохранён'));
-            return $this->goBack();
+            return $this->redirect(['index','app'=>$app->id]);
         }
 
         return $this->render('create',[
