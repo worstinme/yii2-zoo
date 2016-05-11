@@ -6,7 +6,7 @@ use yii\widgets\ListView;
 use worstinme\uikit\Breadcrumbs;
 
 $this->title = $app->metaTitle;
-$this->params['breadcrumbs'][] = ['label'=>$app->title];
+$this->params['breadcrumbs'][] = $app->title;
 
 if(count(Yii::$app->request->get())) $this->registerLinkTag(['rel' => 'canonical', 'href' => Url::canonical()]);
 

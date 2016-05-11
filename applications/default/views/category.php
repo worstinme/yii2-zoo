@@ -10,7 +10,7 @@ $this->title = $category->metaTitle;
 $this->registerMetaTag(['name'=>'description', 'content'=> $category->metaDescription]);
 $this->registerMetaTag(['name'=>'keywords', 'content'=> $category->metaDescription]);
 
-$this->params['breadcrumbs'] = array_merge(isset($this->params['breadcrumbs'])?$this->params['breadcrumbs']:[],$category->breadcrumbs);
+$this->params['breadcrumbs'] = array_merge($this->params['breadcrumbs'],$category->breadcrumbs);
 
 $layout = $app->itemsColumns > 1 ? '<div class="uk-grid uk-grid-width-medium-1-'.$app->itemsColumns.' uk-grid-match items" data-uk-grid-margin>{items}</div>' : '<div class="items">{items}</div><div class="pager">{pager}</div>';
 
