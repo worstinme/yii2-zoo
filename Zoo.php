@@ -14,6 +14,7 @@ class Zoo extends \yii\base\Component {
 	public $appsConfigPath = '@app/config/zoo';
 	public $elementsPath = '@app/components/elements';
 	public $renderersPath = '@app/components/renderers';
+	public $defaultLang = 'ru';
 
 	public $callbacks = [];
 
@@ -104,6 +105,10 @@ class Zoo extends \yii\base\Component {
         }
 
         return $this->_widgets;
+    }
+
+    public function getLang() {
+    	return Yii::$app->request->get('lang',$this->defaultLang);
     }
 
 }
