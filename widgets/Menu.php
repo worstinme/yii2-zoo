@@ -21,7 +21,7 @@ class Menu extends \worstinme\uikit\Nav
 
                 $items = $this->items;
 
-                $menus = MenuModel::find()->where(['menu'=>$this->name])->andWhere('parent_id IS NULL')->all();
+                $menus = MenuModel::find()->where(['menu'=>$this->name])->andWhere('parent_id IS NULL')->orderBy('sort')->all();
 
                 foreach ($menus as $name) {
 
