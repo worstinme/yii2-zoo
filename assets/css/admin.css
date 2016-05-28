@@ -2,7 +2,6 @@ html {
 	overflow-y:scroll;
 }
 body.admin {
-    background: url('/images/The-Elder-Scrolls-V-Skyrim.jpg') fixed;
     background-size: cover;
     min-height: calc(100vh - 30px);
     padding-bottom: 30px;
@@ -171,4 +170,7 @@ a[data-state].uk-icon-check-circle {
 }
 a.uk-icon-star {
 	color: gold;
+}
+.row+.row {
+	margin-top:10px;
 }
