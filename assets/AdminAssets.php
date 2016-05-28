@@ -18,6 +18,7 @@ class AdminAssets extends AssetBundle
 
     public $depends = [
         'worstinme\uikit\UikitAsset',
+        'worstinme\uikit\assets\Notify',
     ];
 
     public $publishOptions = [
