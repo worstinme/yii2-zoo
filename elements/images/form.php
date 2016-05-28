@@ -10,7 +10,7 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
 
 <?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
 
-<?php foreach ($model->{$attribute} as $key=>$image): ?>
+<?php foreach ($model->$attribute as $key=>$image): ?>
 	<div class="uk-from-controls">
 		<?= InputFile::widget([
 		    'language'   => 'ru',

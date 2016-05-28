@@ -5,11 +5,16 @@ use yii\helpers\Json;
 use worstinme\uikit\ActiveForm;
 
 $rows=$model->getTemplateRows('form');
+
 ?>
 
 <div class="uk-panel uk-panel-box">
 
 <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValidation' => false]); 
+
+if (count($model->errors)) {
+    echo $form->errorSummary($model);
+}
 
 foreach ($rows as $row) {
 

@@ -19,24 +19,26 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
 	public $value_field = 'value_string';
 
-	public function getValue($attribute) {
+    public function LoadAttributesFromElements($attribute) {
+        $value = [];
 
-    	if (!isset($this->owner->values[$attribute])) {
-    		$this->loadAttributesFromElements($attribute);
-    	}
+        foreach ($this->owner->itemsElements as $element) {
+            if ($element->element == $attribute) {
 
-        $values = [];
-
-        foreach ($this->owner->values[$attribute] as $value) {
-            if (!empty($value[$this->value_field])) {
-                $values[] = $value[$this->value_field];
+                if ($element->value_string !== null)
+                    
+                $value[] = [
+                    'id'=>$element->id,
+                    'value_text' =>$element->value_text,
+                    'value_int' =>$element->value_int,
+                    'value_string' =>$element->value_string,
+                    'value_float' =>$element->value_float,
+                ];
             }
         }
 
-    	return $values;
-
+        return $this->owner->values[$attribute] = $value;
     }
-
 
     public function setValue($attribute,$value) {
 
@@ -63,9 +65,9 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                     $a[$this->value_field] = $v;
 
                     $va[] = $a;
-
                 }
 
+                
             }
 
             $this->owner->values[$attribute] = $va;
@@ -82,7 +84,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
             $a[$this->value_field] = $value;
                  
-            $this->owner->values[$attribute] = [$a];
+            $this->owner->values[$attribute] = $a;
         }
 
         return true;

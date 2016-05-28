@@ -23,9 +23,10 @@ class Categories extends \worstinme\zoo\models\Categories
             ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
             [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
             [['params'], 'safe'],
-            [['name', 'alias','image'], 'string', 'max' => 255],
-            [['metaDescription','metaKeywords','content','intro'], 'string'],
+            [['name', 'alias','image','preview','subtitle'], 'string', 'max' => 255],
+            [['metaDescription','metaKeywords','content','intro','quote'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
+            ['lang','string','max'=>255,'skipOnEmpty'=>true],
 
             //defaults
             ['state', 'default', 'value' => 1],
@@ -34,9 +35,6 @@ class Categories extends \worstinme\zoo\models\Categories
         ];
     }
 
-
-
-
     public function setMetaTitle($s) {
         $params = $this->params; $params['metaTitle'] = $s;
         return $this->params = $params;
@@ -44,6 +42,21 @@ class Categories extends \worstinme\zoo\models\Categories
 
     public function setImage($s) {
         $params = $this->params; $params['image'] = $s;
+        return $this->params = $params;
+    }
+
+    public function setPreview($s) {
+        $params = $this->params; $params['preview'] = $s;
+        return $this->params = $params;
+    }
+
+    public function setSubtitle($s) {
+        $params = $this->params; $params['subtitle'] = $s;
+        return $this->params = $params;
+    }
+
+    public function setQuote($s) {
+        $params = $this->params; $params['quote'] = $s;
         return $this->params = $params;
     }
 

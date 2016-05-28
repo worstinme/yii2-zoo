@@ -17,11 +17,8 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
                 'preset' => 'standart',
                 'allowedContent' => true,
                 'height'=>'200px',
-                'toolbar' => [
-                    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-                    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
-                ],
-                'contentsCss'=>Yii::$app->cache->get('frontendCss-'.$model->app->name),
+                'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
+                'contentsCss'=>Yii::$app->zoo->cke_editor_css,
         ])
     ])?>
 

@@ -10,7 +10,7 @@ class TemplateHelper
 {
     public static $types = [
         'column-1' => ['tag'=>false],
-        'column-2' => ['tag'=>'div','options'=>['class'=>'uk-grid uk-grid-width-medium-1-2 uk-grid-match'],'itemTag'=>'div'],
+        'column-2' => ['tag'=>'div','options'=>['data'=>['uk-grid-margin'=>""],'class'=>'uk-grid uk-grid-width-medium-1-2 uk-grid-match'],'itemTag'=>'div'],
         'column-3' => ['tag'=>'div','options'=>['class'=>'uk-grid uk-grid-width-medium-1-3'],'itemTag'=>'div'],
         'double-2-1' => ['tag'=>'div','options'=>['class'=>'uk-grid uk-grid-width-medium-2-3'],'itemTag'=>'div'],
         'double-1-2' => ['tag'=>'div','options'=>['class'=>'uk-grid uk-grid-width-medium-1-3'],'itemTag'=>'div'],
@@ -71,7 +71,7 @@ class TemplateHelper
                             self::$types[$row['type']] : 
                             ['tag'=>null,'class'=>null,'delimiter'=>"\n"];
 
-                if (!empty($type['tag']) && !empty($type['options'])) {
+                if (!empty($type['tag']) && !empty($type['options']) && count($items) > 1) {
                     echo Html::beginTag($type['tag'],$type['options']);
                 }
                 
@@ -91,7 +91,7 @@ class TemplateHelper
 
                 }
 
-                if (!empty($type['tag'])) {
+                if (!empty($type['tag']) && !empty($type['options']) && count($items) > 1) {
                     echo Html::endTag($type['tag']);
                 }
 
@@ -143,9 +143,15 @@ class TemplateHelper
 
     protected static function renderElement($model,$element,$params = []) {
 
-        if (!empty($model->elements[$element])) {
+        if (!empty($model->elements[$element]) && !empty($model->$element)) {
+
+            $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$element.'.php';
+
+            if (!is_file(Yii::getAlias($element_view_path))) {
+                $element_view_path = '@worstinme/zoo/elements/'.$model->elements[$element]->type.'/view.php';
+            }
             
-            return '<div class="element element-'.$element.'">'.Yii::$app->view->render('@worstinme/zoo/elements/'.$model->elements[$element]->type.'/view.php',[
+            return '<div class="element element-'.$element.'">'.Yii::$app->view->render($element_view_path,[
                 'model'=>$model,
                 'attribute'=>$element,
                 'params'=>$params,

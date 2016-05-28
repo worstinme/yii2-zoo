@@ -28,13 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	            'preset' => 'standart',
                 'allowedContent' => true,
                 'height'=>'200px',
-                'toolbar' => [
-				    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-				    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
-				],
-                'contentsCss'=>[
-                    '/css/site.css',
-                ],
+                
+                'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
+                'contentsCss'=>Yii::$app->zoo->cke_editor_css,
 	        ]),
 	]); ?>
 
@@ -43,13 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	            'preset' => 'standart',
                 'allowedContent' => true,
                 'height'=>'200px',
-                'toolbar' => [
-				    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-				    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
-				],
-                'contentsCss'=>[
-                    '/css/site.css',
-                ],
+                
+                'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
+                'contentsCss'=>Yii::$app->zoo->cke_editor_css,
 	        ]),
 	]); ?>
 

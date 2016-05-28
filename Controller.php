@@ -22,13 +22,7 @@ class Controller extends \yii\web\Controller
 
         if (!Yii::$app->has('zoo')) {
             Yii::$app->set('zoo',[ 'class'=>'\worstinme\zoo\Zoo' ]);
-        }  
-
-        \yii\base\Event::on('\yii\web\View', \yii\web\View::EVENT_END_PAGE,function($event){
-            if (Yii::$app->cache->get('frontendCss-'.$this->id) === false) {
-                Yii::$app->cache->set('frontendCss-'.$this->id,array_keys($event->sender->cssFiles));
-            }
-        });
+        } 
 
     }
 
@@ -41,6 +35,8 @@ class Controller extends \yii\web\Controller
         if (($this->app = Applications::find()->where(['name'=>$this->id])->one()) === null) {
             throw new NotFoundHttpException('The application does named "'.$this->id.'"not exist.');
         }
+
+        $this->app->lang = Yii::$app->zoo->lang;
 
         return true; 
     }

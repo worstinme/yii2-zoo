@@ -42,8 +42,23 @@ class Categories extends \yii\db\ActiveRecord
     }
 
     //metaTitle
+    public function getSubtitle() {
+        return !empty($this->params['subtitle']) ? $this->params['subtitle'] : null;
+    }
+
+    //metaTitle
     public function getImage() {
         return !empty($this->params['image']) ? $this->params['image'] : null;
+    }
+
+    //metaTitle
+    public function getQuote() {
+        return !empty($this->params['quote']) ? $this->params['quote'] : null;
+    }
+
+    //preview
+    public function getPreview() {
+        return !empty($this->params['preview']) ? $this->params['preview'] : null;
     }
 
     //metaKeywords
@@ -98,15 +113,21 @@ class Categories extends \yii\db\ActiveRecord
 
         if ($this->parent_id != null && $this->parent !== null) {
             if ($this->parent->parent_id != null && $this->parent->parent !== null) {
-                return ['/'.$this->app->name.'/abc','a'=>$this->parent->parent->alias,'b'=>$this->parent->alias,'c'=>$this->alias];
+                $url = ['/'.$this->app->name.'/abc','a'=>$this->parent->parent->alias,'b'=>$this->parent->alias,'c'=>$this->alias];
             }
             else {
-                return ['/'.$this->app->name.'/ab','a'=>$this->parent->alias,'b'=>$this->alias];
+                $url =  ['/'.$this->app->name.'/ab','a'=>$this->parent->alias,'b'=>$this->alias];
             }
         }
         else {
-            return ['/'.$this->app->name.'/a','a'=>$this->alias];
+            $url =  ['/'.$this->app->name.'/a','a'=>$this->alias];
         }
+
+        if (!empty($this->lang)) {
+            $url['lang'] = $this->lang;
+        }
+
+        return $url;
 
     }
 

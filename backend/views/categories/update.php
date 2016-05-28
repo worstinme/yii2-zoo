@@ -23,11 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $form->field($model, 'name')->textInput(["data-aliascreate"=>"#categories-alias"])  ?>
 
     <?= $form->field($model, 'alias')->textInput()  ?>
+    
+    <?= $form->field($model, 'subtitle')->textInput()  ?>
 
     <?= $form->field($model, 'parent_id')
 		    	->dropDownList($app->catlist,['prompt'=>Yii::t('backend','Корневая категория')]); ?> 
 
 	<?= $form->field($model, 'image')->widget(\mihaildev\elfinder\InputFile::className(), [
+	    'language'      => 'ru',
+	    'controller'    => 'elfinder',     
+	    'template'      => '<div class="uk-form-row">{input}{button}</div>',
+	    'options'       => ['class' => 'uk-from-controls'],
+	    'buttonOptions' => ['class' => 'uk-button uk-button-primary'],
+	    'multiple'      => false       // возможность выбора нескольких файлов
+	]);?>
+
+	<?= $form->field($model, 'preview')->widget(\mihaildev\elfinder\InputFile::className(), [
 	    'language'      => 'ru',
 	    'controller'    => 'elfinder',     
 	    'template'      => '<div class="uk-form-row">{input}{button}</div>',
@@ -45,13 +56,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	        'preset' => 'standart',
             'allowedContent' => true,
             'height'=>'200px',
-            'toolbar' => [
-			    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-			    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
-			],
-            'contentsCss'=>[
-                '/css/site.css',
-            ],
+            'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
+            'contentsCss'=>Yii::$app->zoo->cke_editor_css,
 	    ]),
 	]); ?>
 
@@ -60,17 +66,24 @@ $this->params['breadcrumbs'][] = $this->title;
 	        'preset' => 'standart',
             'allowedContent' => true,
             'height'=>'200px',
-            'toolbar' => [
-			    ['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-			    '-','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
-			],
-            'contentsCss'=>[
-                '/css/site.css',
-            ],
+            'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
+            'contentsCss'=>Yii::$app->zoo->cke_editor_css,
+	    ]),
+	]); ?>
+
+	<?= $form->field($model, 'quote')->widget(\mihaildev\ckeditor\CKEditor::className(), [
+	    'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
+	        'preset' => 'standart',
+            'allowedContent' => true,
+            'height'=>'200px',
+            'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
+            'contentsCss'=>Yii::$app->zoo->cke_editor_css,
 	    ]),
 	]); ?>
 
 	<hr>
+
+	<?= $form->field($model, 'lang')->dropDownList(Yii::$app->zoo->languages, ['prompt' => 'язык категории']); ?>
 
 	<?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
 

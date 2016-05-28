@@ -114,7 +114,9 @@ $script = <<< JS
 			var key = $(this).data("row");
 
 			if (key == 'default') {
-				data.rows[data.rows.length] = row;
+				
+				console.log(Object.keys(data.rows).length);
+				data.rows[Object.keys(data.rows).length] = row;
 			}
 			else {
 				data.rows[key] = row;

@@ -280,14 +280,20 @@ class Items extends \yii\db\ActiveRecord
     public function getUrl() {
 
         if ($this->app->simpleItemLinks) {
-            return ['/'.$this->app->name.'/a','a'=> $this->id ];
+            $url = ['/'.$this->app->name.'/a','a'=> $this->id ];
         }
         elseif ($this->parentCategory !== null) {
-            return ['/'.$this->app->name.'/ab','a'=> $this->parentCategory->alias,'b'=> !empty($this->alias) ? $this->alias :  $this->id ];
+            $url =  ['/'.$this->app->name.'/ab','a'=> $this->parentCategory->alias,'b'=> !empty($this->alias) ? $this->alias :  $this->id ];
         }
         else {
-            return ['/'.$this->app->name.'/a','a'=> !empty($this->alias) ? $this->alias :  $this->id ];
+            $url =  ['/'.$this->app->name.'/a','a'=> !empty($this->alias) ? $this->alias :  $this->id ];
         }   
+
+        if ($this->lang !== null) {
+            $url['lang'] = $this->lang;
+        }
+
+        return $url;
     }
 
     public function getBreadcrumbs($selfUrl = false) {
@@ -346,7 +352,6 @@ class Items extends \yii\db\ActiveRecord
             if (!in_array($attribute, $this->attributes()) && $attribute != 'category') {
 
                 $attributes[] = $attribute;
-                
 
                 if ($this->elements[$attribute]->multiple) {
                     foreach ($value as $v) {

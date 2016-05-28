@@ -7,6 +7,7 @@ use yii\helpers\Json;
 
 class Applications extends \yii\db\ActiveRecord
 {
+    public $lang;
     private $catlist;
     private $templatesConfig;
 
@@ -42,7 +43,10 @@ class Applications extends \yii\db\ActiveRecord
     }
 
     public function getCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['state'=>1])->orderBy('sort ASC')->inverseOf('app');
+        $categories = $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['state'=>1]);
+        if ($this->lang !== null) 
+            $categories->andWhere(['lang'=>$this->lang]);
+        return $categories->orderBy('sort ASC')->inverseOf('app');
     }
 
     public function getItems() {
@@ -160,6 +164,10 @@ class Applications extends \yii\db\ActiveRecord
 
     
     public function getUrl() {
+
+        if (!empty(Yii::$app->zoo->languages)) {
+            return ['/'.$this->name.'/index','lang'=>Yii::$app->zoo->lang];
+        }
         return ['/'.$this->name.'/index'];
     }
 

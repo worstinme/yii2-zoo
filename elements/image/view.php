@@ -19,7 +19,7 @@ if(!empty($model->{$attribute})) {
 		echo Html::a($image, $model->{$attribute} ,['data'=>['pjax'=>0,'uk-lightbox'=>true]]) ;
 	}
 	else {
-		echo !empty($params['asUrl']) && $params['asUrl'] ? Html::a($image, $model->url,['data-pjax'=>0]) : $image;
+		echo !empty($params['asUrl']) && $params['asUrl'] ? Html::a($image, $model->url,['data-pjax'=>0,'class'=>'uk-thumbnail']) : $image;
 	}
 
 }

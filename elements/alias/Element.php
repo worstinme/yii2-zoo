@@ -70,10 +70,10 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	private function checkUniqueSlug( $slug )
 	{
 
-		$condition = $this->owner->tablename().'.alias = :out_attribute';
-		$params = [ ':out_attribute' => $slug ];
+		$condition = $this->owner->tablename().'.alias = :out_attribute AND '.$this->owner->tablename().'.lang = :lang';
+		$params = [':out_attribute' => $slug, ':lang' => $this->owner->lang];
 		if ( !$this->owner->isNewRecord ) {
-			$condition .= ' and '.$this->owner->tablename().'.id != :pk';
+			$condition .= ' AND '.$this->owner->tablename().'.id != :pk';
 			$params[':pk'] = $this->owner->id;
 		}
 

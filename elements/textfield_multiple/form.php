@@ -12,6 +12,6 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
 	<?php foreach ($model->{$attribute} as $key=>$value): ?>
 	<?= Html::activeInput('text', $model, $attribute."[".$key."]",['class'=>'uk-width-1-1']); ?>	
 	<?php endforeach ?>
-	<?= Html::activeInput('text', $model, $attribute."[]",['class'=>'uk-width-1-1']); ?>	
+	<?= Html::activeInput('text', $model, $attribute."[]",['class'=>'uk-width-1-1']); ?><span class="uk-button"><i class="uk-icon-plus"></i></span>
 	<div class="uk-form-help-block uk-text-danger"></div>
 </div>

@@ -55,10 +55,12 @@ class BaseElementBehavior extends \yii\base\Behavior
     	if ($this->multiple === false) {
     		return isset($this->owner->values[$attribute][$this->value_field]) ? $this->owner->values[$attribute][$this->value_field] : null;
     	}
-    	else {
+    	elseif (!empty($this->owner->values[$attribute][$this->value_field])) {
+            return $this->owner->values[$attribute][$this->value_field];
+        }
+        else {
     		return yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute],$this->value_field);
     	}
-
     }
 
     public function setValue($attribute,$value) {
