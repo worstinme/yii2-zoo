@@ -22,7 +22,7 @@ class Zoo extends \yii\base\Component {
 
 	public $cke_editor_css;
 	
-	public $languages = ['ru'=>'Русский','en'=>'English'];
+	public $languages;
 
 	public $callbacks = [];
 
@@ -116,19 +116,7 @@ class Zoo extends \yii\base\Component {
     }
 
     public function getLang() {
-
-    	$lang = Yii::$app->request->get('lang',$this->defaultLang);
-
-    	$languages = [
-    		'ru'=>'ru-RU',
-    		'en'=>'en-GB',
-    	];
-
-    	if (isset($languages[$lang])) {
-    		Yii::$app->language = $languages[$lang];
-    	}
-
-    	return $lang;
+    	return Yii::$app->request->get('lang',$this->defaultLang);
     }
 
 }
