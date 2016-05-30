@@ -43,9 +43,11 @@ $this->registerJs($js, $this::POS_READY);
 
 			<?= $form->field($model, 'type')->dropdownlist(Yii::$app->controller->module->elements,['disabled'=>'disabled'])?>
 
+		    <?= $form->field($model, 'name')->textInput(['disabled'=>'disabled'])  ?>
+
 			<?= $form->field($model, 'label')->textInput()  ?>
 
-		    <?= $form->field($model, 'name')->textInput(['disabled'=>'disabled'])  ?>
+		    <?= $form->field($model, 'adminHint')->textarea(['rows'=>3])  ?>
 
 		    <?= $form->field($model, 'sorter')->checkbox() ?>
 

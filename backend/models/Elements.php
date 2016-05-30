@@ -25,6 +25,8 @@ class Elements extends \worstinme\zoo\models\Elements
             [['name', 'type','label'], 'required'],
             [['name', 'type','label'], 'string', 'max' => 255],
 
+            [['adminHint'], 'string'],
+
             ['name', 'match', 'pattern' => '#^[\w_]+$#i'],
             ['type', 'match', 'pattern' => '#^[\w_]+$#i'],
 
@@ -65,6 +67,7 @@ class Elements extends \worstinme\zoo\models\Elements
             'type'=>Yii::t('backend', 'Тип элемента'),
             'refresh'=>Yii::t('backend', 'Обновлять поле?'),
             'sorter'=>'Использовать поле в сортировке',
+            'adminHint'=>Yii::t('backend', 'Подсказка к полю в форме админки'),
         ];
 
         if (isset($this->labels) && count($this->labels)) {
@@ -86,6 +89,16 @@ class Elements extends \worstinme\zoo\models\Elements
 
     public function renderParams($params) {
         return '';
+    }
+
+    public function getAdminHint() {
+        return isset($this->params['adminHint'])?$this->params['adminHint']:null; 
+    }
+
+    public function setAdminHint($s) { 
+        $params = $this->params;
+        $params['adminHint'] = $s; 
+        return $this->params = $params;
     }
 
     public function setSorter($s) { 
