@@ -33,10 +33,11 @@ class Controller extends \yii\web\Controller
         }
 
         if (($this->app = Applications::find()->where(['name'=>$this->id])->one()) === null) {
-            throw new NotFoundHttpException('The application does named "'.$this->id.'"not exist.');
+            throw new NotFoundHttpException('The application named "'.$this->id.'" does not exist.');
         }
 
         $this->app->lang = Yii::$app->zoo->lang;
+        Yii::$app->language = $this->app->lang;
 
         return true; 
     }
