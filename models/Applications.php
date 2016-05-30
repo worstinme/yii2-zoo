@@ -39,13 +39,16 @@ class Applications extends \yii\db\ActiveRecord
     } 
 
     public function getParentCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0,'state'=>1])->orderBy('sort ASC');
+        $categories = $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0,'state'=>1]);
+        if ($this->lang !== null) 
+            $categories->andWhere(['lang'=>$this->lang]);
+        return $categories->orderBy('sort ASC');
     }
 
     public function getCategories() {
         $categories = $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['state'=>1]);
         if ($this->lang !== null) 
-            $categories->andWhere(['lang'=>$this->lang]);
+            $categories->andWhere(['lang'=>Yii::$app->zoo->lang]);
         return $categories->orderBy('sort ASC')->inverseOf('app');
     }
 
