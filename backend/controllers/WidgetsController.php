@@ -21,7 +21,7 @@ class WidgetsController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index', 'update', 'delete','create'],
-                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin','moder'],
                     ],
                 ],
             ],

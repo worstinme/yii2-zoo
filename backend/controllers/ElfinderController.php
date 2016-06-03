@@ -21,7 +21,7 @@ class ElfinderController extends Controller
                     [
                         'allow' => true,
                         'actions' => ['index'],
-                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin','moder'],
                     ],
                 ],
             ],

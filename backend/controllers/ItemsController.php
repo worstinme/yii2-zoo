@@ -49,7 +49,8 @@ class ItemsController extends Controller
         $searchModel->app_id = $app->id;
         $searchModel->regBehaviors();
 
-        if ($this->module->accessRoles === null && !Yii::$app->user->can('admin')) {
+        if ($this->module->accessRoles === null && !Yii::$app->user->can('admin') 
+                && !Yii::$app->user->can('accessStrange')) {
             $searchModel->user_id = Yii::$app->user->identity->id;
         }
 
@@ -152,7 +153,7 @@ class ItemsController extends Controller
             $model->regBehaviors();
         }
         else {
-            if ($this->module->accessRoles === null && !Yii::$app->user->can('admin') && $model->user_id !== Yii::$app->user->identity->id) {
+            if ($this->module->accessRoles === null && !Yii::$app->user->can('admin') && !Yii::$app->user->can('accessStrange') && $model->user_id !== Yii::$app->user->identity->id) {
                 Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Доступ запрещён'));
                 return $this->redirect(['index','app'=>$app->id]);
             }
@@ -220,7 +221,7 @@ class ItemsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (($this->module->accessRoles === null && !Yii::$app->user->can('admin')) && Yii::$app->user->identity->id != $model->user_id) {
+        if (($this->module->accessRoles === null && !Yii::$app->user->can('admin'))  && !Yii::$app->user->can('accessStrange') && Yii::$app->user->identity->id != $model->user_id) {
             Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Удаление не разрешено'));
             return $this->redirect(['index','app'=>$model->app_id]);
         }
