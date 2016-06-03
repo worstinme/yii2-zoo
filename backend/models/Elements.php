@@ -91,10 +91,6 @@ class Elements extends \worstinme\zoo\models\Elements
         return '';
     }
 
-    public function getAdminHint() {
-        return isset($this->params['adminHint'])?$this->params['adminHint']:null; 
-    }
-
     public function setAdminHint($s) { 
         $params = $this->params;
         $params['adminHint'] = $s; 

@@ -53,6 +53,10 @@ class Elements extends \yii\db\ActiveRecord
     public function getFormView() {
         return '@worstinme/zoo/elements/'.$this->type.'/form';
     }
+    
+    public function getAdminHint() {
+        return isset($this->params['adminHint'])?$this->params['adminHint']:null; 
+    }
 
     //related
     public function getRelated() { 
