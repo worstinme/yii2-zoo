@@ -5,6 +5,7 @@ body.admin {
     background-size: cover;
     min-height: calc(100vh - 30px);
     padding-bottom: 30px;
+    font-family: 'Roboto Condensed';
 }
 body > nav.uk-navbar {
 	box-shadow: 0 0 2px rgba(0, 0, 0, 0.11);
@@ -14,6 +15,9 @@ body > nav.uk-navbar {
 	    max-width: 1360px;
 	    padding: 0 35px;
 	}
+}
+.uk-navbar-nav>li>a {
+    font-family: 'Roboto Condensed';
 }
 .uk-panel-box {
 	background: #fff;
@@ -173,4 +177,13 @@ a.uk-icon-star {
 }
 .row+.row {
 	margin-top:10px;
+}
+
+@media (max-width: 767px) {
+	.uk-container-center {
+		padding:0;
+	}
+	.uk-panel-box {
+		padding:5px;
+	}
 }

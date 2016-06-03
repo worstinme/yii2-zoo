@@ -10,6 +10,8 @@ class AdminAssets extends AssetBundle
 
     public $css = [
         'css'=>'css/admin.css',
+        'https://fonts.googleapis.com/css?family=Roboto+Condensed:400,500,700,300,400italic,900&subset=latin,cyrillic',
+        'https://fonts.googleapis.com/css?family=Roboto:400,500,700,300,400italic,900&subset=latin,cyrillic',
     ];
 
     public $js = [
