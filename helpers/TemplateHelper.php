@@ -37,7 +37,7 @@ class TemplateHelper
 
             foreach ($template['rows'] as $position=>$row) {
 
-                self::renderRow($model,$row);
+                self::renderRow($model,$row,$templateName);
 
             }
         }
@@ -54,16 +54,16 @@ class TemplateHelper
 
         if (is_array($template['rows']) && !empty($template['rows'][$position])) {
 
-            self::renderRow($model,$template['rows'][$position]);
+            self::renderRow($model,$template['rows'][$position],$templateName);
             
         }
 	}
 
-    protected static function renderRow($model,$row) {
+    protected static function renderRow($model,$row,$templateName = null) {
 
         if (!empty($row['items'])) {
 
-            $items = static::renderItems($model,$row['items']);
+            $items = static::renderItems($model,$row['items'],$templateName);
 
             if (count($items)) {
 
@@ -101,7 +101,7 @@ class TemplateHelper
 
     }
 
-    protected static function renderItems($model,$items,$array=[]) {
+    protected static function renderItems($model,$items,$templateName,$array=[]) {
 
         if (is_array($items) && count($items)) {
 
@@ -111,7 +111,7 @@ class TemplateHelper
 
                 if (!empty($item['element'])) {
 
-                    if (($a = self::renderElement($model, $item['element'], !empty($item['params'])?$item['params']:[])) !== null) {
+                    if (($a = self::renderElement($model, $item['element'], !empty($item['params'])?$item['params']:[],$templateName)) !== null) {
                         $elements[] = $a;
                     }
 
@@ -119,7 +119,7 @@ class TemplateHelper
                         
                         foreach ($item['items'] as $it) {
                              if (!empty($it['element'])) {
-                                if (($b = self::renderElement($model, $it['element'], !empty($it['params'])?$it['params']:[])) !== null) {
+                                if (($b = self::renderElement($model, $it['element'], !empty($it['params'])?$it['params']:[],$templateName)) !== null) {
                                     $elements[] = $b;
                                 }
                             }
@@ -141,21 +141,54 @@ class TemplateHelper
 
     }
 
-    protected static function renderElement($model,$element,$params = []) {
+    protected static function renderElement($model,$attribute,$params = [],$templateName = null) {
 
-        if (!empty($model->elements[$element]) && !empty($model->$element)) {
 
-            $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$element.'.php';
+        if (!empty($model->elements[$attribute]) && (!empty($model->$attribute) || $templateName == 'form')) {
 
-            if (!is_file(Yii::getAlias($element_view_path))) {
-                $element_view_path = '@worstinme/zoo/elements/'.$model->elements[$element]->type.'/view.php';
+            $element = $model->elements[$attribute];
+
+            if ($templateName == 'form') {
+
+                $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$attribute.'_form.php';
+
+                if (!is_file(Yii::getAlias($element_view_path))) {
+                    $element_view_path = '@worstinme/zoo/elements/'.$element->type.'/form.php';
+                }
+
+                $refresh = $element->refresh ? 'refresh' : '';
+
+                if (in_array($attribute, $model->renderedElements)) {
+
+                    return '<div class="uk-form-row element element-'.$attribute.' '.$refresh.'">'.Yii::$app->view->render($element_view_path,[
+                        'model'=>$model,
+                        'attribute'=>$attribute,
+                        'element'=>$element,
+                        'params'=>$params,
+                    ]).'</div>'; 
+
+                }
+                else return null;
+
+            }
+            else {
+
+                $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$attribute.'.php';
+
+                if (!is_file(Yii::getAlias($element_view_path))) {
+                    $element_view_path = '@worstinme/zoo/elements/'.$element->type.'/view.php';
+                }
+
+                return '<div class="element element-'.$attribute.'">'.Yii::$app->view->render($element_view_path,[
+                    'model'=>$model,
+                    'attribute'=>$attribute,
+                    'element'=>$element,
+                    'params'=>$params,
+                ]).'</div>'; 
+
             }
             
-            return '<div class="element element-'.$element.'">'.Yii::$app->view->render($element_view_path,[
-                'model'=>$model,
-                'attribute'=>$element,
-                'params'=>$params,
-            ]).'</div>'; 
+            
 
         }
 

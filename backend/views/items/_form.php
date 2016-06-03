@@ -16,35 +16,9 @@ if (count($model->errors)) {
     echo $form->errorSummary($model);
 }
 
-foreach ($rows as $row) {
+echo \worstinme\zoo\helpers\TemplateHelper::render($model,'form');
 
-        $class = !empty($row['params']) && !empty($row['params']['column'])?'uk-grid uk-grid-width-medium-1-'.$row['params']['column']:'row';
-
-        ?><div class="<?=$class?>"><?php
-        
-        foreach ($row['items'] as $item) { 
-
-            $element = $model->elements[$item['element']];
-
-            $refresh = $element->refresh ? 'refresh' : '';
-
-            if (in_array($item['element'],$model->renderedElements)): ?>
-                <div class="element element-<?=$item['element']?> uk-form-row <?=$refresh?>">
-                <?=$this->render('@worstinme/zoo/elements/'.$element->type.'/form.php',[
-                    'model'=>$model,
-                    'attribute'=>$item['element'],
-                    'params'=>!empty($item['params'])?$item['params']:[],
-                ]);?>       
-                </div>
-            <?php else: ?>
-                <div class="element element-<?=$item['element']?> <?=$refresh?>"></div>
-            <?php endif;
-
-        }
-
-        ?></div><?php
-
-} ?>
+?>
 
 
 <hr>
