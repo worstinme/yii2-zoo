@@ -21,6 +21,7 @@ if (empty($thumbnail) && $height > 0) {
 	$config['height'] = $height;
 }
 
+
 $config = \yii\helpers\Json::encode($config);
 
 ?>
@@ -35,13 +36,12 @@ $config = \yii\helpers\Json::encode($config);
     </ul>
     <a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-previous" data-uk-slideshow-item="previous"></a>
     <a href="" class="uk-slidenav uk-slidenav-contrast uk-slidenav-next" data-uk-slideshow-item="next"></a>
-    </ul>
 
     <?php if (count($model->$attribute) > 10): ?>
     
    	<div class="uk-slidenav-position uk-margin-top" data-uk-slider="{}">
 	    <div class="uk-slider-container">
-	         <ul class="uk-slider uk-grid uk-hidden-small uk-grid-width-medium-1-10 uk-grid-small">
+	         <ul class="uk-slider uk-grid uk-hidden-small uk-grid-width-1-5 uk-grid-width-medium-1-10 uk-grid-small">
 	            <?php foreach ($model->$attribute as $key=> $image): ?>
 					<li data-uk-slideshow-item="<?=$key?>"><?=Html::img('/thumbnails/160-120/'.ltrim($image,"/"));?></li>
 				<?php endforeach ?>
@@ -53,7 +53,7 @@ $config = \yii\helpers\Json::encode($config);
 
 	<?php else: ?>
 
-	<ul class="uk-grid uk-hidden-small uk-grid-width-medium-1-10 uk-grid-small">
+	<ul class="uk-grid uk-grid-width-1-6 uk-grid-width-medium-1-10 uk-grid-small">
 	    <?php foreach ($model->$attribute as $key=> $image): ?>
 			<li data-uk-slideshow-item="<?=$key?>"><?=Html::img('/thumbnails/160-120/'.ltrim($image,"/"));?>
 		<?php endforeach ?>
