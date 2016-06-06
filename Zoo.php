@@ -22,7 +22,7 @@ class Zoo extends \yii\base\Component {
 
 	public $cke_editor_css;
 	
-	public $languages;
+	public $languages = [];
 
 	public $callbacks = [];
 
