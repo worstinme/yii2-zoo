@@ -49,7 +49,7 @@ echo \worstinme\zoo\helpers\TemplateHelper::render($model,'form');
 </div>
 
 <div class="uk-form-row uk-margin-top">
-    <?=Html::submitButton('Продолжить',['class'=>'uk-button uk-button-success'])?>
+    <?=Html::submitButton('Сохранить',['class'=>'uk-button uk-button-success'])?>
 </div>
 
 <?php ActiveForm::end();  ?>
