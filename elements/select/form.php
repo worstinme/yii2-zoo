@@ -2,13 +2,13 @@
 
 use yii\helpers\Html;
 
-$this->registerJs($model->addValidators($this,'name'), 5);
+$this->registerJs($model->addValidators($this,$attribute), 5);
 
 ?>
 
-<?= Html::activeLabel($model, 'name',['class'=>'uk-form-label']); ?>
+<?= Html::activeLabel($model, $attribute, ['class'=>'uk-form-label']); ?>
 
 <div class="uk-from-controls">
-	<?= Html::activeInput('text', $model, $attribute,['class'=>'uk-width-1-1']); ?>
+	<?= Html::activeDropDownList($model, $attribute, $element->variants, ['option' => 'value']); ?>
 	<div class="uk-form-help-block uk-text-danger"></div>
 </div>

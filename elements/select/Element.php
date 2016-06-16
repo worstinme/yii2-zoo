@@ -11,7 +11,6 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	{
 		return [
 			[$attributes,'string'],
-			[$attributes,'required'],
 		];
 	}
 
