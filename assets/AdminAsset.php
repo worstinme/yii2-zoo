@@ -4,7 +4,7 @@ namespace worstinme\zoo\assets;
 
 use yii\web\AssetBundle;
 
-class AdminAssets extends AssetBundle
+class AdminAsset extends AssetBundle
 {
     public $sourcePath = '@worstinme/zoo/assets';
 
@@ -24,6 +24,6 @@ class AdminAssets extends AssetBundle
     ];
 
     public $publishOptions = [
-        'forceCopy'=>true,
+        'forceCopy'=> YII_ENV_DEV ? true : false,
     ];
 }

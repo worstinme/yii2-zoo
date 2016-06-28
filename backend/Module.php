@@ -12,7 +12,7 @@ class Module extends \yii\base\Module
 
     public $controllerNamespace = 'worstinme\zoo\backend\controllers';
 
-
+    public $layout = '@worstinme/zoo/backend/views/layouts/backend';
 
     public function init()
     {

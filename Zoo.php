@@ -15,6 +15,7 @@ class Zoo extends \yii\base\Component {
 	public $elementsPath = '@app/components/elements';
 	public $renderersPath = '@app/components/renderers';
 	public $defaultLang = 'ru';
+	public $frontendPath;
 
 	public $cke_editor_toolbar = [
 		['Bold', 'Italic','Underline','-','NumberedList', 'BulletedList', '-', 'Link', 'Unlink','Styles','Font','FontSize','Format','TextColor','BGColor','-','Blockquote','CreateDiv','-','Image','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','Outdent','Indent','-','RemoveFormat','Source','Maximize']
@@ -117,6 +118,10 @@ class Zoo extends \yii\base\Component {
 
     public function getLang() {
     	return Yii::$app->request->get('lang',$this->defaultLang);
+    }
+
+    public function getApplications() {
+    	return Applications::find()->where(['app_alias'=>[$this->frontendPath,'@app']])->all();
     }
 
 }

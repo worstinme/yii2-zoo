@@ -17,12 +17,12 @@ class Controller extends \yii\web\Controller
 
     private $application;
 
-	public function render($view, $params = [])
+    public function render($view, $params = [])
     {
-        \worstinme\zoo\assets\AdminAssets::register($this->view);
-    	return parent::render($view, $params);
+        \worstinme\zoo\assets\AdminAsset::register($this->view);
+        return parent::render($view, $params);
     }
-    
+  
     public function getApp() {
 
         if ($this->application === null) 

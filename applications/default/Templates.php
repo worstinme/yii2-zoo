@@ -3,15 +3,14 @@
 return [  
 
 	'form'=>[
-		'renderer'=>'uikit_grid',
-		'rendererViewPath'=>'@worstinme/zoo/renderers/uikit_grid/view',
 		'rows'=>[
 			[	
-				'params'=>['column'=>1],
 				'items'=>[
 					['element'=>'category'],
 					['element'=>'name'],
 					['element'=>'alias'],
+					['element'=>'data'],
+					['element'=>'preview'],
 					['element'=>'intro'],
 					['element'=>'content'],
 				],
@@ -19,13 +18,12 @@ return [
 		],
 	],
 	'full'=>[
-		'renderer'=>'uikit_grid',
-		'rendererViewPath'=>'@worstinme/zoo/renderers/uikit_grid/view',
 		'rows'=>[
 			[	
-				'params'=>['column'=>1],
 				'items'=>[
 					['element'=>'name'],
+					['element'=>'data'],
+					['element'=>'preview'],
 					['element'=>'intro'],
 					['element'=>'content'],
 				],
@@ -33,14 +31,12 @@ return [
 		],
 	],
 	'teaser'=>[
-		'renderer'=>'uikit_grid',
-		'rendererViewPath'=>'@worstinme/zoo/renderers/uikit_grid/view',
 		'rows'=>[
 			[	
-				'params'=>['column'=>1],
 				'items'=>[
 					['element'=>'name','params'=>['asUrl'=>true,'tag'=>'h2']],
 					['element'=>'intro'],
+					['element'=>'data'],
 				],
 			],
 		],

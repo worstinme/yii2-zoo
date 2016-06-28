@@ -42,16 +42,19 @@ $this->title = Yii::t('backend','Приложения');
 
 	<p><?=Yii::t('backend','У вас еще нет ни одного приложения')?></p>
 
+	<?php if (Yii::$app->user->can('superadmin')): ?>
+
 	<hr class="uk-margin-large-top">
 
 	<h2><?=Yii::t('backend','Создать приложение')?></h2>
-
 
 	<?php $form = ActiveForm::begin(['action'=>['/'.Yii::$app->controller->module->id.'/default/create'],'id' => 'login-form','layout'=>'stacked','field_width'=>'large','field_size'=>'large']); ?>
 	                    
 	    <?= $form->field($model, 'title')->textInput()  ?>
 
 	    <?= $form->field($model, 'name')->textInput()  ?>
+
+	    <?= $form->field($model, 'app_alias')->textInput(['placeholder'=>'@app'])  ?>
 
 	    <?= $form->field($model, 'model_table_name')->textInput()  ?>
 
@@ -62,6 +65,8 @@ $this->title = Yii::t('backend','Приложения');
 	    </div>
 
 	<?php ActiveForm::end(); ?>
+		
+	<?php endif ?>
 
 <?php endif ?>
 

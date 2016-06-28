@@ -17,6 +17,16 @@ return [
 		'type'=>'alias',
 		'related'=>'name',
 	],
+	'data'=>[
+		'label'=>'Дата',
+		'type'=>'datepicker',
+		'required'=>true,
+	],
+	'preview'=>[
+		'label'=>'Изображение',
+		'type'=>'image',
+		'required'=>true,
+	],
 	'intro'=>[
 		'label'=>'Вступление',
 		'type'=>'textarea',

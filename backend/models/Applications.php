@@ -34,10 +34,24 @@ class Applications extends \worstinme\zoo\models\Applications
             ['title', 'required'],
             ['title', 'string', 'max' => 255],
 
+            ['app_alias', 'validateAppAlias'],
 
             [['content','intro','metaDescription','metaKeywords'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
         ];
+    }
+
+    public function validateAppAlias($attribute, $params)
+    {
+        if (!is_dir(Yii::getAlias($this->$attribute.'/controllers/'))) {
+            $this->addError($attribute, Yii::getAlias($this->$attribute.'/controllers/').' is not exist');
+        }
+        if (!is_dir(Yii::getAlias($this->$attribute.'/views/'))) {
+            $this->addError($attribute, Yii::getAlias($this->$attribute.'/views/').' is not exist');
+        }
+        if (!is_dir(Yii::getAlias($this->$attribute.'/models/'))) {
+            $this->addError($attribute, Yii::getAlias($this->$attribute.'/models/').' is not exist');
+        }
     }
 
     public function attributeLabels()
@@ -146,7 +160,7 @@ class Applications extends \worstinme\zoo\models\Applications
 
         }
 
-      /*  if ($this->modelName !== null) {
+        if ($this->modelName !== null) {
 
             $model = Yii::$app->view->render('@worstinme/zoo/applications/default/models/Items',[
                 'modelName'=>$this->modelName,
@@ -162,7 +176,7 @@ class Applications extends \worstinme\zoo\models\Applications
 
             file_put_contents(Yii::getAlias('@app/models/Search'.$this->modelName.'.php'),$searchModel);
 
-        } */
+        } 
 
         return true;
     }
@@ -295,6 +309,15 @@ class Applications extends \worstinme\zoo\models\Applications
         foreach ($this->items as $element) $element->delete();
 
         unlink(Yii::getAlias('@app/controllers/'.$this->controllerName.'.php'));
+
+        if ($this->modelName !== null ) {
+            if (is_file(Yii::getAlias('@app/models/'.$this->modelName.'.php'))) {
+                unlink(Yii::getAlias('@app/models/'.$this->modelName.'.php'));
+            }
+            if (is_file(Yii::getAlias('@app/models/Search'.$this->modelName.'.php'))) {
+                unlink(Yii::getAlias('@app/models/Search'.$this->modelName.'.php'));
+            }
+        }
 
         $controller = strtolower($this->name);
 

@@ -24,13 +24,18 @@ class DefaultController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['update', 'create','elfinder','delete'],
+                        'actions' => ['update', 'create','elfinder'],
                         'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
                     ],
                     [
                         'allow' => true,
                         'actions' => ['index'],
                         'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin','moder'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['create','delete'],
+                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['superadmin'],
                     ],
                 ],
             ],
@@ -45,9 +50,16 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
-    	$applications = Applications::find()->All();
+    	$applications = Yii::$app->zoo->applications;
 
         $model = new Applications;
+
+        if (Yii::$app->zoo->frontendPath === null || !is_dir(Yii::getAlias(Yii::$app->zoo->frontendPath))) {
+            $model->app_alias = '@app';
+        }
+        else {
+            $model->app_alias = Yii::$app->zoo->frontendPath;
+        }
 
         return $this->render('index',[
             'applications'=>$applications,
@@ -61,6 +73,13 @@ class DefaultController extends Controller
     {
         
         $model = new Applications;
+
+        if (Yii::$app->zoo->frontendPath === null || !is_dir(Yii::getAlias(Yii::$app->zoo->frontendPath))) {
+            $model->app_alias = '@app';
+        }
+        else {
+            $model->app_alias = Yii::$app->zoo->frontendPath;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
