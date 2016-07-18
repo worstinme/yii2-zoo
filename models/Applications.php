@@ -97,7 +97,7 @@ class Applications extends \yii\db\ActiveRecord
 
     //metaKeywords
     public function getMetaKeywords() {
-        return !empty($his->params['metaKeywords']) ? $this->params['metaKeywords'] : null;
+        return !empty($this->params['metaKeywords']) ? $this->params['metaKeywords'] : null;
     }
 
 
