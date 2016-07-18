@@ -64,7 +64,7 @@ use yii\helpers\ArrayHelper;
                             ['label' => 'Зарегистрироваться', 'url' => ['/user/default/signup'],]
                         ]
                     ] :
-                    ['label' =>Yii::$app->user->identity->username,'url' => ['/user/profile/index'],
+                    ['label' =>Yii::$app->user->identity->username,'url' => ['/user/default/update'],
                         'items'=>[
                             ['label' => 'Выйти',
                                                     'url' => ['/user/default/logout'],
@@ -80,6 +80,7 @@ use yii\helpers\ArrayHelper;
 
 <section id="content" class="uk-container uk-container-center uk-margin-top">  
     <?= Alert::widget() ?>
+    <?= Breadcrumbs::widget(['homeLink' => ['label' => 'Админка','url' => ['/zooadmin/default/index'],],'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
     <?= $content ?>
 </section>
 
