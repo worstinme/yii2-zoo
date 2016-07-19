@@ -98,13 +98,8 @@ body > nav.uk-navbar {
 	background: #fefefe;
 }
 
-.uk-breadcrumb {
-	margin: 0;
-}
-.uk-breadcrumb li {
-	font-size: 12px;
-	line-height: 1;
-}
+
+
 .items-actions {
 	padding:5px 8px;
 	background: #fff;
