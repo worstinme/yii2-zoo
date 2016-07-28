@@ -20,7 +20,6 @@ class Items extends \yii\db\ActiveRecord
     private $renderedElements = [];
     private $elements_types;
 
-
     public $values = [];
     public $backend = false;
 
@@ -127,6 +126,7 @@ class Items extends \yii\db\ActiveRecord
             [['metaDescription','metaKeywords'], 'string'],
             [['metaTitle'], 'string', 'max' => 255],
             ['app_id','integer'],
+            [['flag','state',],'integer'],
         ];
 
         foreach ($this->elementsTypes as $behavior_name) {

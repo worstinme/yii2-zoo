@@ -7,7 +7,7 @@
 namespace worstinme\zoo\backend\controllers;
 
 use Yii;
-use worstinme\zoo\backend\models\Categories;
+use worstinme\zoo\models\Categories;
 use yii\web\NotFoundHttpException;
 
 class CategoriesController extends Controller

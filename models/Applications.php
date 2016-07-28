@@ -11,6 +11,9 @@ class Applications extends \yii\db\ActiveRecord
     private $catlist;
     private $templatesConfig;
 
+    const STATE_ACTIVE = 1;
+    const STATE_HIDDEN = 0;
+
     public static function tableName()
     {
         return '{{%zoo_applications}}';
@@ -39,10 +42,7 @@ class Applications extends \yii\db\ActiveRecord
     } 
 
     public function getParentCategories() {
-        $categories = $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0,'state'=>1]);
-        if ($this->lang !== null) 
-            $categories->andWhere(['lang'=>$this->lang]);
-        return $categories->orderBy('sort ASC');
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
     }
 
     public function getCategories() {

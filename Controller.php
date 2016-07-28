@@ -10,41 +10,39 @@ use worstinme\zoo\models\S as s;
 
 use yii\web\NotFoundHttpException;
 
-
 class Controller extends \yii\web\Controller
 {
-
     public $app;
 
-    public function init()
-    {
-        parent::init();
-
-        if (!Yii::$app->has('zoo')) {
-            Yii::$app->set('zoo',[ 'class'=>'\worstinme\zoo\Zoo' ]);
-        } 
-
-    }
-
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
+    public function init() {
 
         if (($this->app = Applications::find()->where(['name'=>$this->id])->one()) === null) {
             throw new NotFoundHttpException('The application named "'.$this->id.'" does not exist.');
         }
 
-        $this->app->lang = Yii::$app->zoo->lang;
-        Yii::$app->language = $this->app->lang;
+        $this->app->lang = substr(Yii::$app->request->get('lang',Yii::$app->language), 0, 2);
+
+        Yii::trace('Language: '.$this->app->lang);
+
+        parent::init();
+    }
+
+    public function beforeAction($action)
+    {
+        if ($action->id == 'index') {
+            Yii::trace('Change action: '.$action->id);
+        }
+
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
 
         return true; 
     }
 
     public function actionIndex()
     {
-    	return $this->renderApplication();
+    	return $this->runAction('application',['app'=>$this->app]);
     }
 
     public function actionA($a)
@@ -121,32 +119,6 @@ class Controller extends \yii\web\Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
-    public function getApp() {
-
-        if ($this->application === null) {
-            
-            $app = Yii::$app->request->get('app');
-
-            $application = Applications::find()->where(['name'=>$app])->one();
-
-            if($application === null && Yii::$app->controller->action->id == 'frontpage') {
-                $page_id = Yii::$app->request->get('page_id');
-                if (($page = Items::findOne($page_id)) !== null) {
-                    $application = Applications::find()->where(['id'=>$page->app_id])->one();
-                }
-            }
-
-            if ($application === null) {
-                throw new NotFoundHttpException('The requested page does not exist.');
-            }
-
-            $this->application = $application;
-        }
-        
-        return $this->application;
-    }
-
     public function actionSearch() {
 
         $searchModel = new s();
@@ -163,7 +135,7 @@ class Controller extends \yii\web\Controller
 
     }
 
-    protected function renderApplication($app = null) {
+    public function actionApplication($app = null) {
 
         $app = $app === null ? $this->app : $app;
 

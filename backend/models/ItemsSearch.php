@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\models\Items;
 
 /**
  * ItemsSearch represents the model behind the search form about `worstinme\zoo\models\Items`.

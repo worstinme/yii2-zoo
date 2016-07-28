@@ -7,6 +7,8 @@ use worstinme\zoo\backend\models\Menu as MenuModel;
 class Menu extends \worstinme\uikit\Nav
 {
     public $name;
+    public $options;
+    public $cache;
 
     public function init()
     {

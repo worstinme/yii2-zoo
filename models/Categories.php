@@ -3,7 +3,6 @@
 namespace worstinme\zoo\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use yii\helpers\Json;
 
 class Categories extends \yii\db\ActiveRecord
@@ -12,6 +11,32 @@ class Categories extends \yii\db\ActiveRecord
     public static function tableName()
     {
         return '{{%zoo_categories}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            \yii\behaviors\TimestampBehavior::className(),
+        ];
+    }
+
+    public function rules()
+    {
+        return [
+            [['name', 'alias', 'app_id'], 'required'],
+            ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
+            [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
+            [['params'], 'safe'],
+            [['name', 'alias','image','preview','subtitle'], 'string', 'max' => 255],
+            [['metaDescription','metaKeywords','content','intro','quote'], 'string'],
+            [['metaTitle'], 'string', 'max' => 255],
+            ['lang','string','max'=>255,'skipOnEmpty'=>true],
+
+            //defaults
+            ['state', 'default', 'value' => 1],
+            ['parent_id', 'default', 'value' => 0],
+
+        ];
     }
 
     public function afterFind()
@@ -36,29 +61,52 @@ class Categories extends \yii\db\ActiveRecord
         return parent::afterSave($insert, $changedAttributes);
     }
 
-    //metaTitle
+    
+
+    public function getSubtitle() {
+        return !empty($this->params['subtitle']) ? $this->params['subtitle'] : null;
+    }
+
+    public function setSubtitle($s) {
+        $params = $this->params; $params['subtitle'] = $s;
+        return $this->params = $params;
+    }
+
+    public function getImage() {
+        return !empty($this->params['image']) ? $this->params['image'] : null;
+    }
+
+    public function setImage($s) {
+        $params = $this->params; $params['image'] = $s;
+        return $this->params = $params;
+    }
+
+    public function getQuote() {
+        return !empty($this->params['quote']) ? $this->params['quote'] : null;
+    }
+
+    public function setQuote($s) {
+        $params = $this->params; $params['quote'] = $s;
+        return $this->params = $params;
+    }
+
+    public function getPreview() {
+        return !empty($this->params['preview']) ? $this->params['preview'] : null;
+    }
+
+    public function setPreview($s) {
+        $params = $this->params; $params['preview'] = $s;
+        return $this->params = $params;
+    }
+
     public function getMetaTitle() {
         return !empty($this->params['metaTitle']) ? $this->params['metaTitle'] : $this->name;
     }
 
     //metaTitle
-    public function getSubtitle() {
-        return !empty($this->params['subtitle']) ? $this->params['subtitle'] : null;
-    }
-
-    //metaTitle
-    public function getImage() {
-        return !empty($this->params['image']) ? $this->params['image'] : null;
-    }
-
-    //metaTitle
-    public function getQuote() {
-        return !empty($this->params['quote']) ? $this->params['quote'] : null;
-    }
-
-    //preview
-    public function getPreview() {
-        return !empty($this->params['preview']) ? $this->params['preview'] : null;
+    public function setMetaTitle($s) {
+        $params = $this->params; $params['metaTitle'] = $s;
+        return $this->params = $params;
     }
 
     //metaKeywords
@@ -66,19 +114,37 @@ class Categories extends \yii\db\ActiveRecord
         return !empty($this->params['metaKeywords']) ? $this->params['metaKeywords'] : null;
     }
 
+    public function setMetaKeywords($s) {
+        $params = $this->params; $params['metaKeywords'] = $s;
+        return $this->params = $params;
+    }
+
     //metaDescription
     public function getMetaDescription() {
         return !empty($this->params['metaDescription']) ? $this->params['metaDescription'] : null;
     }
 
-    //metaDescription
+    public function setMetaDescription($s) {
+        $params = $this->params; $params['metaDescription'] = $s;
+        return $this->params = $params;
+    }
+
     public function getContent() {
         return !empty($this->params['content']) ? $this->params['content'] : null;
     }
 
-    //metaDescription
+    public function setContent($s) {
+        $params = $this->params; $params['content'] = $s;
+        return $this->params = $params;
+    }
+
     public function getIntro() {
         return !empty($this->params['intro']) ? $this->params['intro'] : null;
+    }
+
+    public function setIntro($s) {
+        $params = $this->params; $params['intro'] = $s;
+        return $this->params = $params;
     }
 
     public function getTemplate($name) {
@@ -140,6 +206,18 @@ class Categories extends \yii\db\ActiveRecord
         }
         $crumbs[] = ['label'=>$this->app->title,'url'=>$this->app->url];
         return array_reverse($crumbs);
+    }
+
+    public function afterDelete()
+    {
+        $db = Yii::$app->db;
+
+        $db->createCommand()->delete('{{%zoo_items_categories}}', ['category_id'=>$this->id])->execute();
+        $db->createCommand()->delete('{{%zoo_elements_categories}}', ['category_id'=>$this->id])->execute();
+        $db->createCommand()->update('{{%zoo_categories}}',['parent_id'=>$this->parent_id], ['parent_id'=>$this->id])->execute();
+        
+        parent::afterDelete();
+        
     }
 
 }

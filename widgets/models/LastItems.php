@@ -8,7 +8,7 @@ use worstinme\zoo\models\Applications;
 use worstinme\zoo\models\Categories;
 use worstinme\zoo\models\Elements;
 
-class LastItems extends \yii\base\Model
+class LastItems extends \worstinme\widgets\widgets\widget
 {
     public $sort;
     public $desc;

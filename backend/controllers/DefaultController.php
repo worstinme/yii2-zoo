@@ -8,7 +8,7 @@ namespace worstinme\zoo\backend\controllers;
 
 use Yii;
 use worstinme\zoo\backend\models\Applications;
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\models\Items;
 
 use yii\web\NotFoundHttpException;
 

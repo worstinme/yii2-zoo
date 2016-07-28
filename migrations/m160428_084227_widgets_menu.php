@@ -7,17 +7,6 @@ class m160428_084227_widgets_menu extends Migration
     public function safeUp()
     {
 
-        $this->createTable('{{%zoo_widgets}}', [
-            'id' => $this->primaryKey(),   
-            'type' => $this->string(),         
-            'name' => $this->string()->notNull(),
-            'position' => $this->string(),
-            'bound' => $this->string(),
-            'params'=> $this->text(),
-            'updated_at' => $this->integer(),
-            'state'=> $this->smallInteger()->defaultValue(0),
-        ], $tableOptions);
-
         $this->createTable('{{%zoo_menu}}', [
             'id' => $this->primaryKey(),   
             'type' => $this->string(),         
@@ -38,7 +27,6 @@ class m160428_084227_widgets_menu extends Migration
 
     public function safeDown()
     {
-        $this->dropTable('{{%zoo_widgets}}');
         $this->dropTable('{{%zoo_menu}}');
     }
 

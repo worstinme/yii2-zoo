@@ -16,15 +16,6 @@ class Module extends \yii\base\Module
 
     public function init()
     {
-        parent::init();
-
-        if (!Yii::$app->has('zoo')) {
-
-            Yii::$app->set('zoo',[ 'class'=>'\worstinme\zoo\Zoo' ]);
-
-        }
-
-
         $this->registerTranslations();      
     }
 

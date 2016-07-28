@@ -68,15 +68,6 @@ class Applications extends \worstinme\zoo\models\Applications
         ];
     }
 
-    public function getParentCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
-    }
-
-    public function getCategories() {
-        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->orderBy('sort ASC');
-    }
-
-
     public function setTemplate($name,$template) {
         $params = !empty($this->templates) ? \yii\helpers\Json::decode($this->templates) : []; 
         $params[$name] = $template; 

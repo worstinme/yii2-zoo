@@ -3,8 +3,6 @@
 use worstinme\uikit\ActiveForm;
 use yii\helpers\Html;
 
-use worstinme\zoo\backend\models\Items;
-
 $this->title = Yii::t('backend','Приложения');
 
 ?>
