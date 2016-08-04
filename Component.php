@@ -49,7 +49,7 @@ class Component extends \yii\base\Component {
     }
 
     public function getApplications() {
-    	return Applications::find()->where(['app_alias'=>[$this->frontendPath,'@app']])->all();
+    	return Applications::find()->where(['app_alias'=>[$this->frontendPath,'@app']])->indexBy('id')->all();
     }
 
 }

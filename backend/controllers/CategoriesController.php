@@ -82,7 +82,7 @@ class CategoriesController extends Controller
             'model'=> $model,
         ]);
     }
-
+ 
     public function actionDelete() {
 
         $app = $this->getApp();
