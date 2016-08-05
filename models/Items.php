@@ -138,6 +138,12 @@ class Items extends \yii\db\ActiveRecord
             }
         }
 
+        foreach ($this->getRenderedElements() as $attribute) {
+            if ($this->elements[$attribute]->required) {
+                $rules[] = [$attribute,'required'];
+            }
+        }
+
         return $rules;
     }
 

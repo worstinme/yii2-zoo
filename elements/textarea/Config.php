@@ -22,7 +22,7 @@ class Config extends \yii\base\Behavior
     public function getLabels()
     {
         return [
-            'editor' => Yii::t('backend', 'Редактор CKEditor'),
+            'editor' => Yii::t('backend', 'Редактор'),
         ];
     }
 

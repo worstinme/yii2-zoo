@@ -144,7 +144,7 @@ class TemplateHelper
     protected static function renderElement($model,$attribute,$params = [],$templateName = null) {
 
 
-        if (!empty($model->elements[$attribute]) && (!empty($model->$attribute) || $templateName == 'form')) {
+        if (!empty($model->elements[$attribute]) && (!empty($model->$attribute) || $templateName == 'form' || $templateName == 'submission')) {
 
             $element = $model->elements[$attribute];
 
@@ -154,6 +154,34 @@ class TemplateHelper
 
                 if (!is_file(Yii::getAlias($element_view_path))) {
                     $element_view_path = '@worstinme/zoo/elements/'.$element->type.'/form.php';
+                }
+
+                $refresh = $element->refresh ? 'refresh' : '';
+
+                if (in_array($attribute, $model->renderedElements)) {
+
+                    return '<div class="uk-form-row element element-'.$attribute.' '.$refresh.'">'.Yii::$app->view->render($element_view_path,[
+                        'model'=>$model,
+                        'attribute'=>$attribute,
+                        'element'=>$element,
+                        'params'=>$params,
+                    ]).'</div>'; 
+
+                }
+                else return null;
+
+            }
+            elseif ($templateName == 'submission') {
+
+                $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$attribute.'_submission.php';
+
+                if (!is_file(Yii::getAlias($element_view_path))) {
+                    
+                    $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$attribute.'_form.php';
+
+                    if (!is_file(Yii::getAlias($element_view_path))) {
+                        $element_view_path = '@worstinme/zoo/elements/'.$element->type.'/form.php';
+                    }
                 }
 
                 $refresh = $element->refresh ? 'refresh' : '';
