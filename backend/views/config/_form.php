@@ -12,13 +12,13 @@ use worstinme\uikit\ActiveForm;
 
     <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
 
-    
-
     <?php if (Yii::$app->request->get('name') !== null): ?>
     	<?= $form->field($model, 'name')->textInput(['maxlength' => true,'disabled'=>true,'class'=>'uk-disabled']) ?>
     <?php else: ?>
     	<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
     <?php endif ?>
+
+    <?= $form->field($model, 'category')->textInput(['option' => 'value']); ?>
 
     <?= $form->field($model, 'value')->textarea(['rows' => 6,'class'=>'uk-width-medium-2-3']) ?>
 

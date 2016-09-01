@@ -16,7 +16,7 @@ class Config extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'value'], 'required'],
-            [['value'], 'string'],
+            [['value','category'], 'string'],
             ['name', 'trim'],
             [['name','comment'], 'string', 'max' => 255],
         ];
