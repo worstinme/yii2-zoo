@@ -42,7 +42,7 @@ use yii\helpers\ArrayHelper;
                     ],
                 ]),
             ], 
-            ['label' => 'Виджеты','encodeLabels'=>false, 'url' => ['/zooadmin/widgets/index'],], 
+            ['label' => 'Виджеты', 'url' => ['/widgets/default/index'],],
             ['label' => 'Настройки','encodeLabels'=>false, 'url' => ['/zooadmin/config/index'],],
             ['label' => 'Файлы','encodeLabels'=>false, 'url' => ['/zooadmin/elfinder/index']],
             ['label' => 'Меню', 'url' => ['/zooadmin/menu/index']], 
