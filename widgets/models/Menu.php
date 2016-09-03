@@ -3,7 +3,7 @@
 namespace worstinme\zoo\widgets\models;
 
 use Yii;
-use worstinme\zoo\backend\models\Menu;
+use worstinme\zoo\backend\models\Menu as M;
 
 class Menu extends \yii\base\Model
 {
@@ -40,7 +40,7 @@ class Menu extends \yii\base\Model
     }
 
     public function getMenuList() {
-        return Menu::find()->select(['menu'])->distinct()->indexBy('menu')->column();
+        return M::find()->select(['menu'])->distinct()->indexBy('menu')->column();
     }
 
 }
