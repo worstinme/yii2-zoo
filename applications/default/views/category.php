@@ -27,9 +27,9 @@ $pjaxId = $app->name.'-category';
 	<?= $category->intro?>
 
     <div class="uk-grid uk-grid-width-medium-1-3">
-    <? foreach ($category->related as $related): ?>
+    <?php foreach ($category->related as $related): ?>
         <div><?=  Html::a($related->name, $related->url); ?></div>
-    <? endforeach ?>
+    <?php endforeach ?>
     </div>
 
     <?= ListView::widget([

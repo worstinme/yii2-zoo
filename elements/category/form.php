@@ -24,7 +24,7 @@ $multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
 		<?php if (count($model->category)): ?>
 		<?php $i=0;foreach ($model->category as $key => $category_id): ?>
 			<?php if ($category_id > 0): ?>		
-				<? $related_cats = ArrayHelper::map(\worstinme\zoo\models\Categories::find()->where(['parent_id'=>$category_id])->all(),'id','name'); ?>
+				<?php $related_cats = ArrayHelper::map(\worstinme\zoo\models\Categories::find()->where(['parent_id'=>$category_id])->all(),'id','name'); ?>
 				<?php if (count($related_cats)): $i++; ?>
 				<div class="related-category-select uk-margin-top">
 					<?=Html::activeDropDownList($model,$attribute.'['.($key+1).']',$related_cats,['prompt'=>'выбрать из списка','class'=>'uk-width-1-1  category-select'])?>	

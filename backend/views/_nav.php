@@ -49,7 +49,7 @@ if (isset($items) && is_array($items) && count($items)) {
 
 ?>
 <div class="items-filters">
-<? NavBar::begin(['container'=>false,'offcanvas'=>false,'brandUrl' => false,'options'=>['class'=>'application-nav']]); ?>
+<?php NavBar::begin(['container'=>false,'offcanvas'=>false,'brandUrl' => false,'options'=>['class'=>'application-nav']]); ?>
 
     <?=Nav::widget([
         'navbar'=>true,
