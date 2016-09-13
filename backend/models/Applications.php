@@ -143,9 +143,9 @@ class Applications extends \worstinme\zoo\models\Applications
 
         foreach ($files as $file) {
 
-            $view = str_replace([Yii::getAlias('@worstinme/zoo/applications/default/views/'),".php"],"",$file);
+            $view = str_replace([Yii::getAlias('@worstinme/zoo/applications/default/views'),".php"],"",$file);
 
-            $text = file_get_contents(Yii::getAlias('@worstinme/zoo/applications/default/views/'.$view).'.php');
+            $text = file_get_contents(Yii::getAlias('@worstinme/zoo/applications/default/views'.$view).'.php');
 
             file_put_contents(Yii::getAlias('@app/views/'.$controller.'/'.$view).'.php',$text);
 
