@@ -40,11 +40,6 @@ class Controller extends \yii\web\Controller
         return true; 
     }
 
-    public function actionIndex()
-    {
-    	return $this->runAction('application',['app'=>$this->app]);
-    }
-
     public function actionA($a)
     {
     	if (($category = Categories::find()->where(['alias'=>$a,'app_id'=>$this->app->id])->one()) !== null) {
@@ -135,7 +130,7 @@ class Controller extends \yii\web\Controller
 
     }
 
-    public function actionApplication($app = null) {
+    public function actionIndex($app = null) {
 
         $app = $app === null ? $this->app : $app;
 
