@@ -10,7 +10,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 	public function rules($attributes)
 	{
 		return [
-			[$attributes,'string'],
+			[$attributes,'number'],
 			[$attributes,'required'],
 		];
 	}
