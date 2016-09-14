@@ -35,6 +35,24 @@ class Component extends \yii\base\Component {
 		return $this->menu;
 	}
 
+    public function findShortcodes($content) {
+
+        $shortcode = new \worstinme\zoo\helpers\ShortcodeHelper;
+        $shortcode->callbacks = $this->callbacks();
+
+        return $shortcode->parse($content);
+    }
+
+    public function callbacks() {
+
+        return array_merge([
+            'uk-slideshow'=>['worstinme\uikit\widgets\Slideshow','widget'],
+            'widget'=>['worstinme\widgets\widgets\Widget','widget'],
+            'teaser'=>['worstinme\zoo\widgets\Teaser','widget'],
+            'youtube'=>['worstinme\zoo\widgets\Youtube','widget'],
+        ],$this->callbacks);
+    }
+
 	public function config($name, $default = null) {
 
 		if (($config = Config::find()->where(['name'=>$name])->one()) !== null) {
