@@ -196,16 +196,25 @@ class ItemsController extends Controller
                 ];
             }
         }
-        elseif ($model->load(Yii::$app->request->post()) && $model->save()) {
+        elseif (Yii::$app->request->isAjax) {
 
-            if (Yii::$app->request->isAjax) {
-                Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return [
                     'success' => true,
                     'model' => $model->getAttributes(),
                 ];
             }
-
+            else {
+                return [
+                    'success' => false,
+                    'model' => $model->getAttributes(),
+                    'errors'=>$model->errors,
+                ];
+            }
+        }
+        elseif($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал сохранён'));
             return $this->redirect(['index','app'=>$app->id]);
         }
