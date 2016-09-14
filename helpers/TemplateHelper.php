@@ -33,18 +33,22 @@ class TemplateHelper
 
         $template = $model->getTemplate($templateName);
 
+        $html = null;
+
         if (is_array($template['rows']) && count($template['rows'])) {
 
             foreach ($template['rows'] as $position=>$row) {
 
-                self::renderRow($model,$row,$templateName);
+                $html .= self::renderRow($model,$row,$templateName);
 
             }
         }
 
+        return $html;
+
     }
 
-	public static function renderPosition($model,$templateName,$position) {
+    public static function renderPosition($model,$templateName,$position) {
 
         if ($model === null) {
             throw new InvalidParamException("wrong model");
@@ -52,52 +56,60 @@ class TemplateHelper
 
         $template = $model->getTemplate($templateName);
 
+        $html = null;
+
         if (is_array($template['rows']) && !empty($template['rows'][$position])) {
 
-            self::renderRow($model,$template['rows'][$position],$templateName);
-            
+            $html .= self::renderRow($model,$template['rows'][$position],$templateName);
+
         }
-	}
+
+        return $html;
+    }
 
     protected static function renderRow($model,$row,$templateName = null) {
 
         if (!empty($row['items'])) {
 
+            $html = null;
+
             $items = static::renderItems($model,$row['items'],$templateName);
 
             if (count($items)) {
 
-                $type = !empty($row['type']) && in_array($row['type'],self::types()) ? 
-                            self::$types[$row['type']] : 
-                            ['tag'=>null,'class'=>null,'delimiter'=>"\n"];
+                $type = !empty($row['type']) && in_array($row['type'],self::types()) ?
+                    self::$types[$row['type']] :
+                    ['tag'=>null,'class'=>null,'delimiter'=>"\n"];
 
                 if (!empty($type['tag']) && !empty($type['options']) && count($items) > 1) {
-                    echo Html::beginTag($type['tag'],$type['options']);
+                    $html .= Html::beginTag($type['tag'],$type['options']);
                 }
-                
+
                 foreach ($items as $elements) {
 
                     if (!empty($type['itemTag'])) {
-                        echo Html::beginTag($type['itemTag']);
+                        $html .=  Html::beginTag($type['itemTag']);
                     }
-                    
+
                     foreach ($elements as $element) {
-                        echo $element;
+                        $html .= $element;
                     }
 
                     if (!empty($type['itemTag'])) {
-                        echo Html::endTag($type['itemTag']);
-                    } 
+                        $html .= Html::endTag($type['itemTag']);
+                    }
 
                 }
 
                 if (!empty($type['tag']) && !empty($type['options']) && count($items) > 1) {
-                    echo Html::endTag($type['tag']);
+                    $html .= Html::endTag($type['tag']);
                 }
 
             }
 
         }
+
+        return $html;
 
     }
 
@@ -116,9 +128,9 @@ class TemplateHelper
                     }
 
                     if (!empty($item['items']) && is_array($item['items'])) {
-                        
+
                         foreach ($item['items'] as $it) {
-                             if (!empty($it['element'])) {
+                            if (!empty($it['element'])) {
                                 if (($b = self::renderElement($model, $it['element'], !empty($it['params'])?$it['params']:[],$templateName)) !== null) {
                                     $elements[] = $b;
                                 }
@@ -165,7 +177,7 @@ class TemplateHelper
                         'attribute'=>$attribute,
                         'element'=>$element,
                         'params'=>$params,
-                    ]).'</div>'; 
+                    ]).'</div>';
 
                 }
                 else return null;
@@ -176,7 +188,7 @@ class TemplateHelper
                 $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$attribute.'_submission.php';
 
                 if (!is_file(Yii::getAlias($element_view_path))) {
-                    
+
                     $element_view_path = '@app/views/'.$model->app->name.'/elements/'.$attribute.'_form.php';
 
                     if (!is_file(Yii::getAlias($element_view_path))) {
@@ -193,7 +205,7 @@ class TemplateHelper
                         'attribute'=>$attribute,
                         'element'=>$element,
                         'params'=>$params,
-                    ]).'</div>'; 
+                    ]).'</div>';
 
                 }
                 else return null;
@@ -212,11 +224,11 @@ class TemplateHelper
                     'attribute'=>$attribute,
                     'element'=>$element,
                     'params'=>$params,
-                ]).'</div>'; 
+                ]).'</div>';
 
             }
-            
-            
+
+
 
         }
 
