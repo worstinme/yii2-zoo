@@ -59,11 +59,11 @@ class S extends Items
 
             $e = $element->name;
 
-            if (!in_array($e, $this->attributes()) && ($element->filter || $element->search)) {
+            if (!in_array($e, $this->attributes()) && ($element->filter || $element->search || $e == $this->app->defaultOrder)) {
 
                 $value = $this->$e;
 
-                if ((is_array($value) && count($value) > 0) || (!is_array($value) && !empty($value))) {
+                if ($e == $this->app->defaultOrder || ((is_array($value) && count($value) > 0) || (!is_array($value) && !empty($value)))) {
 
                     $this->query->leftJoin([$e=>ItemsElements::tablename()], $e.".item_id = ".Items::tablename().".id AND ".$e.".element = '".$e."'");
                     $this->query->andFilterWhere([$e.'.value_string'=>$value]);
@@ -93,21 +93,7 @@ class S extends Items
         }
 
         $sort = [
-            'attributes' => [
-                'name' => [
-                    'asc' => [Items::tablename().'.name' => SORT_ASC],
-                    'desc' => [Items::tablename().'.name' => SORT_DESC],
-                    'default' => SORT_ASC,
-                    'label'=>'наменованию',
-                ],
-                'created' => [
-                    'asc' => [Items::tablename().'.created_at' => SORT_ASC],
-                    'desc' => [Items::tablename().'.created_at' => SORT_DESC],
-                    'default' => SORT_ASC,
-                    'label'=>'дате создания',
-                ],
-            ], 
-            'defaultOrder'=>'created',   
+            'defaultOrder'=>[ $this->app->defaultOrder => $this->app->defaultOrderDesc ? SORT_DESC: SORT_ASC],
         ];
 
         if (!empty($this->search)) {

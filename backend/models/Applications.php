@@ -27,7 +27,7 @@ class Applications extends \worstinme\zoo\models\Applications
             ['model_table_name', 'modelFileExists','when' => function($model) { return $model->isNewRecord;}, ],
             ['example','exampleExists','when' => function($model) { return $model->isNewRecord;}, ],
 
-            [['filters','itemsSearch','itemsSort','itemsColumns','defaultPageSize'],'integer'],
+            [['filters','itemsSearch','itemsSort','defaultOrderDesc','itemsColumns','defaultPageSize'],'integer'],
 
             ['simpleItemLinks','integer'],
             
@@ -37,7 +37,7 @@ class Applications extends \worstinme\zoo\models\Applications
             ['app_alias', 'validateAppAlias'],
 
             [['content','intro','metaDescription','metaKeywords'], 'string'],
-            [['metaTitle'], 'string', 'max' => 255],
+            [['metaTitle','defaultOrder'], 'string', 'max' => 255],
         ];
     }
 
@@ -102,6 +102,16 @@ class Applications extends \worstinme\zoo\models\Applications
 
     public function setDefaultPageSize($s) {
         $params = $this->params; $params['defaultPageSize'] = $s;
+        return $this->params = $params;
+    }
+
+    public function setDefaultOrder($s) {
+        $params = $this->params; $params['defaultOrder'] = $s;
+        return $this->params = $params;
+    }
+
+    public function setDefaultOrderDesc($s) {
+        $params = $this->params; $params['defaultOrderDesc'] = $s;
         return $this->params = $params;
     }
 

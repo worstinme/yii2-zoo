@@ -1,15 +1,21 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use worstinme\uikit\ActiveForm;
-use worstinme\zoo\models\Item;
+use worstinme\zoo\models\Items;
 
 $this->title = Yii::t('backend','Настройки приложения');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
+$sort_attributes = []; //ArrayHelper::map($model->elements,'name','label');
+
+foreach ((new Items)->attributes() as $attribute) {
+	$sort_attributes[$attribute] = $attribute;
+}
 
 ?>
 <?=$this->render('/_nav',['app'=>$model])?>
@@ -77,6 +83,10 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?= $form->field($model, 'itemsSearch')->checkbox(); ?>
 
 	<?= $form->field($model, 'itemsSort')->checkbox(); ?>
+
+	<?= $form->field($model, 'defaultOrder')->dropDownList($sort_attributes); ?>
+
+	<?= $form->field($model, 'defaultOrderDesc')->checkbox(); ?>
 
 	<?= $form->field($model, 'itemsColumns')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
 

@@ -87,6 +87,14 @@ class Applications extends \yii\db\ActiveRecord
         return !empty($this->params['defaultPageSize']) ? $this->params['defaultPageSize'] : 24;
     }
 
+    public function getDefaultOrder() {
+        return !empty($this->params['defaultOrder']) ? $this->params['defaultOrder'] : 'created_at';
+    }
+
+    public function getDefaultOrderDesc() {
+        return !empty($this->params['defaultOrderDesc']) ? $this->params['defaultOrderDesc'] : null;
+    }
+
     public function getItemsColumns() {
         return !empty($this->params['itemsColumns']) ? $this->params['itemsColumns'] : 1;
     }
