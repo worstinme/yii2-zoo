@@ -91,6 +91,10 @@ class Applications extends \yii\db\ActiveRecord
         return !empty($this->params['defaultOrder']) ? $this->params['defaultOrder'] : 'created_at';
     }
 
+    public function getOrder() {
+        return $this->defaultOrder.' '.($this->defaultOrderDesc ? 'DESC' : 'ASC');
+    }
+
     public function getDefaultOrderDesc() {
         return !empty($this->params['defaultOrderDesc']) ? $this->params['defaultOrderDesc'] : null;
     }
