@@ -54,7 +54,7 @@ class ImageHelper
     {
         $filename = FileHelper::normalizePath(Yii::getAlias($filename));
         if (!is_file($filename)) {
-            throw new FileNotFoundException("File $filename doesn't exist");
+            throw new \Exception("File $filename doesn't exist");
         }
         $cachePath = Yii::getAlias('@webroot/' . self::$cacheAlias);
         $thumbnailFileExt = strrchr($filename, '.');
