@@ -13,7 +13,15 @@ $multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
 
 	<?= Html::activeLabel($model, 'category',['class'=>'uk-form-label']); ?>
 
-	<?=Html::activeDropDownList($model,$attribute,$model->app->catlist,['class'=>'uk-width-1-1','multiple'=>'multiple','size'=>10])?>
+	<?= \vova07\select2\Widget::widget([
+		'model' => $model,
+		'attribute' => 'category',
+		'options' => [
+			'multiple' => true,
+			'placeholder' => 'Choose item',
+		],
+		'items' => $model->app->catlist,
+	]) ?>
 
 <?php elseif(($parent_categories = ArrayHelper::map(Yii::$app->controller->app->parentCategories,'id','name')) !==null && count($parent_categories)): ?>
 

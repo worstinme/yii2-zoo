@@ -16,7 +16,8 @@
         "mihaildev/yii2-elfinder" : "*",
         "mihaildev/yii2-ckeditor" : "*",
         "worstinme/yii2-jodit" : "*",
-        "yiisoft/yii2-imagine": "*"
+        "yiisoft/yii2-imagine": "*",
+        "vova07/yii2-select2-widget": "*"
     },
     "autoload": {
         "psr-4": {
