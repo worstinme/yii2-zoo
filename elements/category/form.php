@@ -20,6 +20,9 @@ $multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
 			'multiple' => true,
 			'placeholder' => 'Choose item',
 		],
+		'settings' => [
+			'width' => '100%',
+		],
 		'items' => $model->app->catlist,
 	]) ?>
 
