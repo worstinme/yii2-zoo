@@ -1,6 +1,6 @@
 <?php
 
-namespace worstinme\zoo\elements\select;
+namespace worstinme\zoo\elements\select_multiple;
 
 use Yii;
 use yii\db\ActiveRecord;
@@ -11,6 +11,7 @@ class Config extends \yii\base\Behavior
 
     public $iconClass = 'uk-icon-align-left';
 
+    public $_multiple = true;
 
     public function getRules()
     {
@@ -31,7 +32,7 @@ class Config extends \yii\base\Behavior
     }
 
     public function getConfigView() {
-        return '@worstinme/zoo/elements/select/_settings';
+        return '@worstinme/zoo/elements/select_multiple/_settings';
     }
 
     public function getVariantsType(){

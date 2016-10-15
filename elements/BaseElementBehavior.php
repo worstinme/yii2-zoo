@@ -59,7 +59,7 @@ class BaseElementBehavior extends \yii\base\Behavior
             return $this->owner->values[$attribute][$this->value_field];
         }
         else {
-    		return yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute],$this->value_field);
+    		return \yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute],$this->value_field);
     	}
     }
 
@@ -79,8 +79,8 @@ class BaseElementBehavior extends \yii\base\Behavior
 
     			foreach ($value as $key => $v) {
     				$a = [
-    					'value_text' =>null,
-						'value_int' =>null,
+    					'value_text' => null,
+						'value_int' => null,
 						'value_string' =>null,
 						'value_float' =>null,
     				];
@@ -96,8 +96,8 @@ class BaseElementBehavior extends \yii\base\Behavior
     		else {
 
     			$a = [
-    					'value_text' =>null,
-						'value_int' =>null,
+    					'value_text' => null,
+						'value_int' => null,
 						'value_string' =>null,
 						'value_float' =>null,
     				];
