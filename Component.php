@@ -47,7 +47,7 @@ class Component extends \yii\base\Component {
 
         return array_merge([
             'uk-slideshow'=>['worstinme\uikit\widgets\Slideshow','widget'],
-            'widget'=>['worstinme\widgets\widgets\Widget','widget'],
+            'widget'=>['worstinme\widgets\widgets\WidgetId','widget'],
             'teaser'=>['worstinme\zoo\widgets\Teaser','widget'],
             'youtube'=>['worstinme\zoo\widgets\Youtube','widget'],
         ],$this->callbacks);
