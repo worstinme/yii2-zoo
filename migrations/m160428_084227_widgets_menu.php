@@ -14,7 +14,6 @@ class m160428_084227_widgets_menu extends Migration
             'menu' => $this->string(),
             'params'=> $this->text(),
             'parent_id' => $this->integer()->defaultValue(0),
-            'type' => $this->integer()->notNull(),
             'application_id' => $this->integer()->defaultValue(0),
             'category_id' => $this->integer()->defaultValue(0),
             'item_id' => $this->integer()->defaultValue(0),
