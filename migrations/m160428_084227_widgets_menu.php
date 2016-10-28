@@ -7,6 +7,12 @@ class m160428_084227_widgets_menu extends Migration
     public function safeUp()
     {
 
+        $tableOptions = null;
+
+        if ($this->db->driverName === 'mysql') {
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
+        }
+
         $this->createTable('{{%zoo_menu}}', [
             'id' => $this->primaryKey(),   
             'type' => $this->string(),         
