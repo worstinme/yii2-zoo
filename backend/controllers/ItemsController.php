@@ -216,7 +216,9 @@ class ItemsController extends Controller
         }
         elseif($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал сохранён'));
-            return $this->redirect(['index','app'=>$app->id]);
+            if (Yii::$app->request->post('save') == 'close') {
+                return $this->redirect(['index','app'=>$app->id]);
+            }
         }
 
 

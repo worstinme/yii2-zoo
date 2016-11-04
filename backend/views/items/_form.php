@@ -49,7 +49,8 @@ echo \worstinme\zoo\helpers\TemplateHelper::render($model,'form');
 </div>
 
 <div class="uk-form-row uk-margin-top">
-    <?=Html::submitButton('Сохранить',['class'=>'uk-button uk-button-success'])?>
+    <?=Html::submitButton('Сохранить',['name'=>'save','value'=>'continue','class'=>'uk-button uk-button-success'])?>
+    <?=Html::submitButton('Сохранить и закрыть',['name'=>'save','value'=>'close','class'=>'uk-button uk-button-primary'])?>
 </div>
 
 <?php ActiveForm::end();  ?>
