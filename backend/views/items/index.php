@@ -84,6 +84,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'contentOptions'=>['class'=>'uk-text-center'],
         ],
         [
+            'attribute'=>'lang',
+            'filter'=>Yii::$app->zoo->languages,
+            'headerOptions'=>['class'=>'uk-text-center','style'=>'width:60px;'],
+            'contentOptions'=>['class'=>'uk-text-center'],
+        ],
+        [
             'attribute'=>'category',
             'filter'=>Yii::$app->controller->app->catlist,
             'label'=>'Категории',

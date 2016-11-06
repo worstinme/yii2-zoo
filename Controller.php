@@ -21,7 +21,7 @@ class Controller extends \yii\web\Controller
         }
 
         $this->app->lang = substr(Yii::$app->request->get('lang',Yii::$app->language), 0, 2);
-
+        Yii::$app->language = $this->app->lang;
         Yii::trace('Language: '.$this->app->lang);
 
         parent::init();

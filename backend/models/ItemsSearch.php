@@ -29,6 +29,7 @@ class ItemsSearch extends Items
             [['search'],'safe'],
             [['category'],'safe'],
             ['withoutCategory','integer'],
+            [['lang'],'string'],
         ];
 
         foreach ($this->elementsTypes as $behavior_name) {
@@ -95,6 +96,7 @@ class ItemsSearch extends Items
         }
 
         $this->query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
+        $this->query->andFilterWhere([Items::tablename().'.lang'=>$this->lang]);
         $this->query->andFilterWhere([Items::tablename().'.user_id'=>$this->user_id]);
 
         $query = clone $this->query;
