@@ -219,6 +219,9 @@ class ItemsController extends Controller
             if (Yii::$app->request->post('save') == 'close') {
                 return $this->redirect(['index','app'=>$app->id]);
             }
+            else {
+                return $this->redirect(['create','app'=>$app->id,'id'=>$model->id]);
+            }
         }
 
 
