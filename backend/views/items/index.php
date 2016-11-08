@@ -86,6 +86,9 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute'=>'lang',
             'filter'=>Yii::$app->zoo->languages,
+            'value'=>function($model) {
+                return $model->lang ? $model->lang : '—';
+            },
             'headerOptions'=>['class'=>'uk-text-center','style'=>'width:60px;'],
             'contentOptions'=>['class'=>'uk-text-center'],
         ],

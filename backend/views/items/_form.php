@@ -65,6 +65,9 @@ foreach ($model->elements as $element) {
     if ($element->refresh) {
         $refresh_el[] = "#".Html::getInputId($model,$element->name);
     }
+    if ($element->related) {
+        $refresh_el[] = "#".Html::getInputId($model,$element->related);
+    }
 }
      
 $refresh_el = implode(",",$refresh_el);

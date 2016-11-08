@@ -3,10 +3,9 @@
 namespace worstinme\zoo\backend\controllers;
 
 use Yii;
-
 use worstinme\zoo\models\Items;
 use worstinme\zoo\backend\models\ItemsSearch;
-
+use worstinme\zoo\helpers\Inflector;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -172,7 +171,11 @@ class ItemsController extends Controller
                     elseif($model->elements[$element]->refresh) {
                         $renderElements[] = $element;
                         $removeElements[] = $element;
-                    }   
+                    }
+                    elseif($model->elements[$element]->related && $model->isAttributeChanged($model->elements[$element]->related)) {
+                        $renderElements[] = $element;
+                        $removeElements[] = $element;
+                    }
                 }
 
                 $renders = [];
@@ -229,7 +232,17 @@ class ItemsController extends Controller
             'model'=>$model,
         ]); 
         
-    } 
+    }
+
+    public function actionAliasCreate()
+    {
+        $alias = Inflector::slug(Yii::$app->request->post('name'));
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'alias' => $alias,
+            'code' => 100,
+        ];
+    }
 
     public function actionDelete($id)
     {

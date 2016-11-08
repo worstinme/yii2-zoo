@@ -6,6 +6,7 @@
  */
 namespace worstinme\zoo\backend\controllers;
 
+use worstinme\zoo\helpers\Inflector;
 use Yii;
 use worstinme\zoo\models\Categories;
 use yii\web\NotFoundHttpException;
@@ -34,6 +35,16 @@ class CategoriesController extends Controller
                     'sort' => ['post'],
                 ],
             ],
+        ];
+    }
+
+    public function actionAliasCreate()
+    {
+        $alias = Inflector::slug(Yii::$app->request->post('name'));
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'alias' => $alias,
+            'code' => 100,
         ];
     }
 

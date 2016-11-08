@@ -17,6 +17,10 @@ class Categories extends \yii\db\ActiveRecord
     {
         return [
             \yii\behaviors\TimestampBehavior::className(),
+            [
+                'class' => \worstinme\zoo\behaviors\SluggableBehavior::className(),
+                'uniqueValidator'=>['attributes'=>'alias','targetAttribute'=>['alias','lang']],
+            ],
         ];
     }
 
@@ -60,8 +64,6 @@ class Categories extends \yii\db\ActiveRecord
         $this->params = Json::decode($this->params);
         return parent::afterSave($insert, $changedAttributes);
     }
-
-    
 
     public function getSubtitle() {
         return !empty($this->params['subtitle']) ? $this->params['subtitle'] : null;
