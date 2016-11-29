@@ -14,4 +14,6 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 		];
 	}
 
+    public $value_field = 'value_int';
+
 }
