@@ -24,6 +24,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($model, 'alias')->textInput() ?>
 
+        <?= $form->field($model, 'lang')->dropDownList(Yii::$app->zoo->languages, ['prompt' => 'язык категории']); ?>
+
         <?= $form->field($model, 'subtitle')->textInput() ?>
 
         <?= $form->field($model, 'parent_id')
@@ -82,8 +84,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
 
         <hr>
-
-        <?= $form->field($model, 'lang')->dropDownList(Yii::$app->zoo->languages, ['prompt' => 'язык категории']); ?>
 
         <?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
 

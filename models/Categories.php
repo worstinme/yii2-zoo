@@ -26,7 +26,7 @@ class Categories extends \yii\db\ActiveRecord
 
     public function rules()
     {
-        return [
+        $rules =  [
             [['name', 'alias', 'app_id'], 'required'],
             ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
             [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
@@ -36,11 +36,18 @@ class Categories extends \yii\db\ActiveRecord
             [['metaTitle'], 'string', 'max' => 255],
             ['lang','string','max'=>255,'skipOnEmpty'=>true],
 
+
             //defaults
             ['state', 'default', 'value' => 1],
             ['parent_id', 'default', 'value' => 0],
 
         ];
+
+        if (count(Yii::$app->zoo->languages)) {
+            $rules[] = ['lang','required'];
+        }
+
+        return $rules;
     }
 
     public function afterFind()

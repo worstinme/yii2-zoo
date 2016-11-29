@@ -87,6 +87,10 @@ class Elements extends \worstinme\zoo\models\Elements
         }
     }
 
+    public function getApp() {
+        return $this->hasOne(Applications::className(),['id'=>'app_id']);
+    }
+
     public function renderParams($params) {
         return '';
     }

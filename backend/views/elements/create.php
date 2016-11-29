@@ -50,8 +50,8 @@ $script = <<< JS
 
 	$("[data-aliascreate]").on('change',function(){
 		var item = $(this),aliastarget = $($(this).data('aliascreate'));
-		$.post('$alias_create_url',{alias:item.val(),'nodelimiter':'true'}, function(data) {
-				aliastarget.val(data);
+		$.post('$alias_create_url',{name:item.val(),'nodelimiter':true}, function(data) {
+				aliastarget.val(data.alias);
 				aliastarget.trigger( "change" );
 		});
 	});

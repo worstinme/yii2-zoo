@@ -159,7 +159,10 @@ class ItemsController extends Controller
         }
 
         if (Yii::$app->request->post("reload") == 'true') {
-            if ($model->load(Yii::$app->request->post()) && $model->validate() || true) {
+
+            $model->load(Yii::$app->request->post());
+
+            if ($model->validate() || true) {
                 $renderedElements = Yii::$app->request->post("renderedElements",[]);
                 $renderElements = [];
                 $removeElements = [];
@@ -184,6 +187,7 @@ class ItemsController extends Controller
                     $path = '@worstinme/zoo/elements/'.$model->elements[$element]['type'].'/form.php';
                     $renders[$element] = $this->renderAjax($path,[
                                 'model'=>$model,
+                                'element'=>$model->elements[$element],
                                 'attribute'=>$element,
                             ]);
                 }

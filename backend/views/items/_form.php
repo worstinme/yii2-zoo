@@ -90,7 +90,7 @@ form.on("change",'$refresh_el', function() {
                     form.yiiActiveForm('remove', 'element-'+data.removeElements[i]);
                 }
                 for (var i in data.renderElements) {
-                    form.find(".element-"+i).html(data.renderElements[i]);
+                    form.find(".element-"+i).removeClass('uk-hidden').html(data.renderElements[i]);
                 }                
                 renderedElements = data.renderedElements;
                 console.log(data);

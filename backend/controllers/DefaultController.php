@@ -6,6 +6,7 @@
  */
 namespace worstinme\zoo\backend\controllers;
 
+use worstinme\zoo\helpers\Inflector;
 use Yii;
 use worstinme\zoo\backend\models\Applications;
 use worstinme\zoo\models\Items;
@@ -45,6 +46,21 @@ class DefaultController extends Controller
                     'delete' => ['post','delete'],
                 ],
             ],
+        ];
+    }
+
+    public function actionAliasCreate()
+    {
+        $alias = Inflector::slug(Yii::$app->request->post('name'));
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        if  (Yii::$app->request->post('nodelimiter')) {
+            $alias = str_replace("-","_",$alias);
+        }
+
+        return [
+            'alias' => $alias,
+            'code' => 100,
         ];
     }
 

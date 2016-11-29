@@ -180,7 +180,7 @@ class TemplateHelper
                     ]).'</div>';
 
                 }
-                else return null;
+                else return '<div class="uk-form-row uk-hidden element element-'.$attribute.' '.$refresh.'"></div>';
 
             }
             elseif ($templateName == 'submission') {
