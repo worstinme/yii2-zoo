@@ -49,7 +49,6 @@ class Controller extends \yii\web\Controller
             return $this->renderCategory($category);
         }
         elseif (($model = $this->app->getItems()->where([Items::tablename().'.alias'=>$a])->orWhere([Items::tablename().'.id'=>$a])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
-            // материал дефолтного приложения по алиасу
             return $this->renderItem($model);
         }
 
