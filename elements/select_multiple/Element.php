@@ -44,9 +44,9 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     public function setValue($attribute, $value)
     {
 
-        if (!isset($this->owner->values[$attribute])) {
+        /*if (!isset($this->owner->values[$attribute])) {
             $this->loadAttributesFromElements($attribute);
-        }
+        }*/
 
         $va = [];
 
@@ -72,7 +72,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
         }
 
-        $this->owner->values[$attribute] = [];
+        $this->owner->values[$attribute] = $va;
 
         return true;
     }
