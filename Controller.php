@@ -37,69 +37,75 @@ class Controller extends \yii\web\Controller
             return false;
         }
 
-        return true; 
+        return true;
     }
 
     public function actionA($a)
     {
-    	if (($category = Categories::find()->where(['alias'=>$a,'app_id'=>$this->app->id])->one()) !== null) {
+        $lang = count(Yii::$app->zoo->languages) > 1 ? Yii::$app->language : null;
+
+        if (($category = Categories::find()->where(['alias'=>$a,'app_id'=>$this->app->id])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
             // материал дефолтного приложения по алиасу
             return $this->renderCategory($category);
         }
-        elseif (($model = $this->app->getItems()->where([Items::tablename().'.alias'=>$a])->orWhere([Items::tablename().'.id'=>$a])->one()) !== null) {
+        elseif (($model = $this->app->getItems()->where([Items::tablename().'.alias'=>$a])->orWhere([Items::tablename().'.id'=>$a])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
             // материал дефолтного приложения по алиасу
             return $this->renderItem($model);
         }
-        
+
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
     public function actionAb($a,$b)
     {
-        if (($parent_cat = Categories::find()->where(['app_id'=>$this->app->id,'alias'=>$a])->one()) !== null) {
+        $lang = count(Yii::$app->zoo->languages) > 1 ? Yii::$app->language : null;
+
+        if (($parent_cat = Categories::find()->where(['app_id'=>$this->app->id,'alias'=>$a])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
             // приложение -> категория по алиасу
-            if (($category = Categories::find()->where(['app_id'=>$this->app->id,'parent_id'=>$parent_cat->id,'alias'=>$b])->one()) !== null) {
-                
+            if (($category = Categories::find()->where(['app_id'=>$this->app->id,'parent_id'=>$parent_cat->id,'alias'=>$b])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
+
                 return $this->renderCategory($category);
             }
-            elseif(($model = Items::find()->where(['app_id'=>$this->app->id,'alias'=>$b])->one()) !== null) {
+            elseif(($model = Items::find()->where(['app_id'=>$this->app->id,'alias'=>$b])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
                 // приложение -> материал по алиасу
                 return $this->renderItem($model);
             }
             elseif(($model = Items::find()->where(['app_id'=>$this->app->id,'id'=>$b])->one()) !== null) {
                 // приложение -> материал по ID
                 return $this->renderItem($model);
-            }  
-        }       
+            }
+        }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
     public function actionAbc($a,$b,$c)
     {
+        $lang = count(Yii::$app->zoo->languages) > 1 ? Yii::$app->language : null;
+
         if (($app = Applications::find()->where(['name'=>$a])->one()) !== null) {
 
-            if (($parent_cat = Categories::find()->where(['app_id'=>$app->id,'alias'=>$b])->one()) !== null) {
+            if (($parent_cat = Categories::find()->where(['app_id'=>$app->id,'alias'=>$b])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
                 // приложение -> категория по алиасу
                 if (($category = Categories::find()->where(['app_id'=>$app->id,'parent_id'=>$parent_cat->id,'alias'=>$c])->one()) !== null) {
-                    
+
                     return $this->renderCategory($category);
                 }
-                elseif(($model = Items::find()->where(['app_id'=>$app->id,'alias'=>$c])->one()) !== null) {
+                elseif(($model = Items::find()->where(['app_id'=>$app->id,'alias'=>$c])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
                     // приложение -> материал по алиасу
                     return $this->renderItem($model);
                 }
                 elseif(($model = Items::find()->where(['app_id'=>$app->id,'id'=>$c])->one()) !== null) {
                     // приложение -> материал по ID
                     return $this->renderItem($model);
-                }  
+                }
             }
-            
+
         }
         else {
 
-            if (($category = Categories::find()->where(['app_id'=>1,'alias'=>$a])->one()) !== null) {
-                if(($model = Items::find()->where(['app_id'=>1,'alias'=>$b])->one()) !== null && $model->parentCategory->alias == $a) {
+            if (($category = Categories::find()->where(['app_id'=>1,'alias'=>$a])->andFilterWhere(['lang'=>$lang])->one()) !== null) {
+                if(($model = Items::find()->where(['app_id'=>1,'alias'=>$b])->andFilterWhere(['lang'=>$lang])->one()) !== null && $model->parentCategory->alias == $a) {
                     // приложение -> материал по алиасу
                     return $this->renderItem($model);
                 }
@@ -120,7 +126,7 @@ class Controller extends \yii\web\Controller
         $searchModel->app_id = $app->id;
         $searchModel->regBehaviors();
 
-        $dataProvider = $searchModel->data(Yii::$app->request->queryParams); 
+        $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->render('search', [
             'app'=>$app,
@@ -138,7 +144,7 @@ class Controller extends \yii\web\Controller
         $searchModel->app_id = $app->id;
         $searchModel->regBehaviors();
 
-        $dataProvider = $searchModel->data(Yii::$app->request->queryParams); 
+        $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->render('application', [
             'app'=>$app,

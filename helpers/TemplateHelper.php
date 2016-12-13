@@ -87,7 +87,7 @@ class TemplateHelper
 
                 foreach ($items as $elements) {
 
-                    if (!empty($type['itemTag'])) {
+                    if (!empty($type['itemTag']) && $templateName != 'form') {
                         $html .=  Html::beginTag($type['itemTag']);
                     }
 
@@ -95,7 +95,7 @@ class TemplateHelper
                         $html .= $element;
                     }
 
-                    if (!empty($type['itemTag'])) {
+                    if (!empty($type['itemTag']) && $templateName != 'form') {
                         $html .= Html::endTag($type['itemTag']);
                     }
 
