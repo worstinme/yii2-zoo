@@ -9,7 +9,7 @@ $multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
 
 ?>
 
-<?php //if ($multiselect && count($model->app->catlist)): ?>
+<?php if ($multiselect && count($model->app->catlist)): ?>
 
 	<?= Html::activeLabel($model, 'category',['class'=>'uk-form-label']); ?>
 
@@ -26,7 +26,7 @@ $multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
 		'items' => $model->app->catlist,
 	]) ?>
 
-<?php /*elseif(($parent_categories = ArrayHelper::map(Yii::$app->controller->app->parentCategories,'id','name')) !==null && count($parent_categories)): ?>
+<?php elseif(($parent_categories = ArrayHelper::map(Yii::$app->controller->app->parentCategories,'id','name')) !==null && count($parent_categories)): ?>
 
 	<?= Html::activeLabel($model, 'category',['class'=>'uk-form-label']); ?>
 		
@@ -51,4 +51,4 @@ $multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
 		<div class="uk-form-help-block uk-text-danger"></div>
 	</div>
 
-<?php endif; */?>
+<?php endif; ?>
