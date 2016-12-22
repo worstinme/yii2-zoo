@@ -15,7 +15,7 @@ $config = [
 ];
 
 if (empty($thumbnail) && $height > 0) {
-	$config['height'] = $height;
+	//$config['height'] = $height;
 }
 
 if (!empty($params['kenburns']) && $params['kenburns']) {
