@@ -171,7 +171,7 @@ class Categories extends \yii\db\ActiveRecord
 
     public function getItems()
     {
-        return $this->hasMany(Items::className(),['id'=>'item_id'])->viaTable('{{%zoo_items_categories}}',['category_id'=>'id']);
+        return $this->hasMany(Items::className(),['id'=>'item_id'])->viaTable('{{%zoo_items_categories}}',['category_id'=>'id'])->andWhere(['state'=>1]);
     } 
 
     public function getParent()
