@@ -8,14 +8,15 @@ use worstinme\zoo\helpers\ImageHelper;
 
 $width = isset($params['width']) ? (int)$params['width'] : null;
 $height = isset($params['height']) ? (int)$params['height'] : null;
+$sliderHeight = isset($params['sliderHeight']) ? (int)$params['sliderHeight'] : null;
 
 $config = [
 	'kenburns'=>false,
 	'autoplay'=>true,
 ];
 
-if (empty($thumbnail) && $height > 0) {
-	//$config['height'] = $height;
+if ($sliderHeight > 0) {
+	$config['height'] = $sliderHeight;
 }
 
 if (!empty($params['kenburns']) && $params['kenburns']) {
