@@ -62,6 +62,14 @@ class Component extends \yii\base\Component {
 		return $default;
 	}
 
+	public function getConfigs($name, $additions = [], $after = false) {
+	    $column = Config::find()->select('value')->where(['name'=>$name])->indexBy('id')->column();
+	    if (count($additions) && is_array($additions)) {
+	        return $after ? $column + $additions : $additions + $column;
+        }
+	    return $column;
+    }
+
   	public function getLang() {
   	  	return Yii::$app->request->get('lang',$this->defaultLang);
     }
