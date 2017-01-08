@@ -72,7 +72,6 @@ class Component extends \yii\base\Component {
 
     public function getConfigValues($ids, $separator = ", ", $additions = []) {
         $column = Config::find()->select('value')->where(['id'=>$ids])->column();
-
         if (count($additions) && is_array($additions)) {
             foreach ($ids as $id) {
                 if (isset($additions[$id])) {
@@ -80,8 +79,7 @@ class Component extends \yii\base\Component {
                 }
             }
         }
-
-        return implode($separator, $additions);
+        return implode($separator, $column);
     }
 
   	public function getLang() {
