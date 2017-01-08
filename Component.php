@@ -70,6 +70,20 @@ class Component extends \yii\base\Component {
 	    return $column;
     }
 
+    public function getConfigValues($ids, $separator = ", ", $additions = []) {
+        $column = Config::find()->select('value')->where(['id'=>$ids])->column();
+
+        if (count($additions) && is_array($additions)) {
+            foreach ($ids as $id) {
+                if (isset($additions[$id])) {
+                    $column[] = $additions[$id];
+                }
+            }
+        }
+
+        return implode($separator, $additions);
+    }
+
   	public function getLang() {
   	  	return Yii::$app->request->get('lang',$this->defaultLang);
     }
