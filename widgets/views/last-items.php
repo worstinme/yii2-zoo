@@ -3,11 +3,13 @@
 use yii\helpers\Html;
 
 ?>
-
-<ul>
-	<?php foreach ($items as $key => $item): ?>
-	<li>
-		<?=\worstinme\zoo\helpers\TemplateHelper::render($item,'list-item')?>
-	</li>
-	<?php endforeach ?>
+<?php if (!empty($title)): ?>
+    <h3 class="uk-panel-title"><?= Html::encode($title) ?></h3>
+<?php endif ?>
+<ul<?= $list_class ? ' class="' . $list_class . '"' : '' ?>>
+    <?php foreach ($items as $key => $item): ?>
+        <li>
+            <?= \worstinme\zoo\helpers\TemplateHelper::render($item, 'list-item') ?>
+        </li>
+    <?php endforeach ?>
 </ul>

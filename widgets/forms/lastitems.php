@@ -6,17 +6,17 @@ use yii\widgets\Pjax;
 
 ?>
 
-<?php Pjax::begin(['id'=>'pjax','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?> 
+<?php Pjax::begin(['id'=>'pjax','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?>
 
 <?= $form->field($model, 'app_id')->dropDownList($model->applications,['prompt'=>'Выбрать приложение']); ?>
 
 <?php if ($model->app_id): ?>
 
-<?= $form->field($model, 'categories')->dropDownList($model->catlist); ?>	
+    <?= $form->field($model, 'categories')->dropDownList($model->catlist); ?>
 
 <?php endif ?>
 
-<?= $form->field($model, 'sort')->dropDownList($model->elements); ?>	
+<?= $form->field($model, 'sort')->dropDownList($model->elements); ?>
 
 <?php Pjax::end(); ?>
 
@@ -25,6 +25,8 @@ use yii\widgets\Pjax;
 <?= $form->field($model, 'desc')->checkbox(); ?>
 
 <?= $form->field($model, 'list_class')->textInput(); ?>
+
+<?= $form->field($model, 'title')->textInput(); ?>
 
 <?php $script = <<<JAVASCRIPT
 

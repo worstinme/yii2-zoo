@@ -11,6 +11,7 @@ use worstinme\zoo\models\Elements;
 class LastItems extends \yii\base\Model
 {
     public $sort;
+    public $title;
     public $desc;
     public $flag;
     public $app_id;
@@ -33,7 +34,7 @@ class LastItems extends \yii\base\Model
     public function rules()
     {
         return [
-            [['sort','list_class'],'string'],
+            [['sort','list_class','title'],'string'],
             [['desc','flag','app_id'],'integer'],
             ['categories','each','rule'=>['integer']],
         ];
@@ -60,7 +61,7 @@ class LastItems extends \yii\base\Model
             ->from('{{%zoo_elements}}')
             ->leftJoin(['c'=>'{{%zoo_elements_categories}}'],'c.element_id = {{%zoo_elements}}.id')
             ->where(['c.category_id'=>count($this->categories)?$this->categories:0,'app_id'=>$this->app_id])
-            ->groupBy('{{%zoo_elements}}.name') 
+            ->groupBy('{{%zoo_elements}}.name')
             ->all();
 
         $result = [];
