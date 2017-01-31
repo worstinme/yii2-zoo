@@ -7,8 +7,8 @@ use yii\helpers\Html;
     <h3 class="uk-panel-title"><?= Html::encode($title) ?></h3>
 <?php endif ?>
 
-<div class="last-items-list">
-    <ul<?= $list_class ? ' class="' . $list_class . '"' : '' ?>>
+<div class="last-items-list <?= !empty($container_class) ? $container_class : '' ?>">
+    <ul<?= !empty($list_class) ? ' class="' . $list_class . '"' : '' ?>>
         <?php foreach ($items as $key => $item): ?>
             <li>
                 <?= \worstinme\zoo\helpers\TemplateHelper::render($item, 'list-item') ?>

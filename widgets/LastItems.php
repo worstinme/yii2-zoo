@@ -16,6 +16,7 @@ class LastItems extends \worstinme\widgets\widgets\Widget
     public $categories;
     public $template = 'related';
     public $list_class;
+    public $container_class;
 
     public function init()
     {
