@@ -58,6 +58,7 @@ class LastItems extends \worstinme\widgets\widgets\Widget
             'items'=>$items,
             'title'=>$this->title,
             'list_class'=>$this->list_class,
+            'container_class'=>$this->container_class,
         ]);
     }
 
