@@ -22,6 +22,8 @@ use yii\widgets\Pjax;
 
 <?= $form->field($model, 'flag')->checkbox(); ?>
 
+<?= $form->field($model, 'limit')->textInput(); ?>
+
 <?= $form->field($model, 'desc')->checkbox(); ?>
 
 <?= $form->field($model, 'list_class')->textInput(); ?>
