@@ -11,6 +11,7 @@ class LastItems extends \worstinme\widgets\widgets\Widget
     public $sort;
     public $title;
     public $desc;
+    public $limit = 10;
     public $flag;
     public $app_id;
     public $categories;
@@ -52,7 +53,7 @@ class LastItems extends \worstinme\widgets\widgets\Widget
             }
         }
 
-        $items = $query->all();
+        $items = $query->groupBy('{{%zoo_items}}.id')->limit($this->limit)->all();
 
         return $this->render('last-items',[
             'items'=>$items,

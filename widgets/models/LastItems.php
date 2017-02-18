@@ -1,45 +1,78 @@
 <?php
 
-use yii\helpers\Html;
-use worstinme\uikit\ActiveForm;
-use yii\widgets\Pjax;
+namespace worstinme\zoo\widgets\models;
 
-?>
+use Yii;
+use worstinme\zoo\models\Items;
+use worstinme\zoo\models\Applications;
+use worstinme\zoo\models\Categories;
+use worstinme\zoo\models\Elements;
 
-<?php Pjax::begin(['id'=>'pjax','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?>
+class LastItems extends \yii\base\Model
+{
+    public $sort;
+    public $title;
+    public $desc;
+    public $limit;
+    public $flag;
+    public $app_id;
+    public $categories;
+    public $template = 'related';
+    public $list_class;
+    public $container_class;
 
-<?= $form->field($model, 'app_id')->dropDownList($model->applications,['prompt'=>'Выбрать приложение']); ?>
+    public static function getName() {
+        return 'Last Items';
+    }
 
-<?php if ($model->app_id): ?>
+    public static function getDescription() {
+        return 'Displays last items';
+    }
 
-    <?= $form->field($model, 'categories')->dropDownList($model->catlist); ?>
+    public static function getFormView() {
+        return '@worstinme/zoo/widgets/forms/lastitems';
+    }
 
-<?php endif ?>
+    public function rules()
+    {
+        return [
+            [['sort','list_class','title','container_class'],'string'],
+            [['desc','flag','app_id','limit'],'integer'],
+            ['categories','each','rule'=>['integer']],
+        ];
+    }
 
-<?= $form->field($model, 'sort')->dropDownList($model->elements); ?>
+    public function attributeLabels()
+    {
+        return [
+            'content' => Yii::t('backend', 'Html & text'),
+        ];
+    }
 
-<?php Pjax::end(); ?>
+    public function getApplications() {
+        return Applications::find()->select(['title'])->indexBy('id')->column();
+    }
 
-<?= $form->field($model, 'flag')->checkbox(); ?>
+    public function getCatlist() {
+        return !empty(Yii::$app->zoo->applications[$this->app_id])?Yii::$app->zoo->applications[$this->app_id]->catlist:[];
+    }
 
-<?= $form->field($model, 'desc')->checkbox(); ?>
+    public function getElements() {
+        $elements = (new \yii\db\Query())
+            ->select(['{{%zoo_elements}}.label','{{%zoo_elements}}.name'])
+            ->from('{{%zoo_elements}}')
+            ->leftJoin(['c'=>'{{%zoo_elements_categories}}'],'c.element_id = {{%zoo_elements}}.id')
+            ->where(['c.category_id'=>count($this->categories)?$this->categories:0,'app_id'=>$this->app_id])
+            ->groupBy('{{%zoo_elements}}.name')
+            ->all();
 
-<?= $form->field($model, 'list_class')->textInput(); ?>
+        $result = [];
 
-<?= $form->field($model, 'container_class')->textInput(); ?>
+        foreach ($elements as $key => $value) {
+            $result[$value['name']] = $value['label'];
+        }
 
-<?= $form->field($model, 'title')->textInput(); ?>
+        return $result;
+    }
 
-<?php $script = <<<JAVASCRIPT
-
-$.pjax.defaults.scrollTo = false;
-
-$("#pjax").on("change","#lastitems-app_id",function(){
-	$(this).parents("form")
-		.append($('<input />').attr('type', 'hidden').attr('name', "reload").attr('value', "true"))
-		.submit();
-});
-
-JAVASCRIPT;
-
-$this->registerJs($script,$this::POS_READY);
+}
