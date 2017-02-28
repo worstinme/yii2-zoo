@@ -41,6 +41,10 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
         return $this->owner->values[$attribute] = $value;
     }
 
+    public function getAlternates() {
+        return \worstinme\zoo\models\Items::find()->where(['id'=>$this->getValue('alternate')])->all();
+    }
+
     public function setValue($attribute, $value)
     {
 
