@@ -153,7 +153,7 @@ class TemplateHelper
 
     }
 
-    protected static function renderElement($model,$attribute,$params = [],$templateName = null) {
+    public static function renderElement($model,$attribute,$params = [],$templateName = null) {
 
 
         if (!empty($model->elements[$attribute]) && (!empty($model->$attribute) || $templateName == 'form' || $templateName == 'submission')) {
