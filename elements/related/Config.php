@@ -40,10 +40,10 @@ class Config extends \yii\base\Behavior
     public function setRelatedCategories($s){
         $params = $this->owner->params;
         if(is_array($s))
-        foreach ($s as $key=>$value) {
-            if (empty($value))
-                unset($s[$key]);
-        }
+            foreach ($s as $key=>$value) {
+                if (empty($value))
+                    unset($s[$key]);
+            }
         $params['relatedCategories'] = $s;
         return $this->owner->params = $params;
     }
@@ -59,9 +59,10 @@ class Config extends \yii\base\Behavior
     }
 
     public function getItems() {
-        $items = ArrayHelper::map(Items::find()->joinWith(['categories'])->where(['category_id'=>$this->relatedCategories])->all(),'id','name');
-
-        return $items;
+        return ArrayHelper::map( count($this->relatedCategories) ?
+            Items::find()->joinWith(['categories'])->where(['category_id'=>$this->relatedCategories])->all() :
+            Items::find()->joinWith(['categories'])->where([Items::tableName().'.app_id'=>$this->owner->app_id])->all()
+            ,'id','name');
     }
 
 }

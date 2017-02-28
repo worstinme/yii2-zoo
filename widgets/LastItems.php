@@ -39,17 +39,23 @@ class LastItems extends \worstinme\widgets\widgets\Widget
         if (!empty($this->sort) && !in_array($this->sort, $model->attributes())) {
             $query->leftJoin(['e'=>'{{%zoo_items_elements}}'], "e.item_id = {{%zoo_items}}.id AND e.element = '".$this->sort."'");
             if ($this->desc) {
-                $query->orderBy('e.value_int DESC, e.value_string DESC');
+                $query->orderBy('e.value_int DESC, e.value_string DESC, {{%zoo_items}}.created_at DESC');
             }
             else {
-                $query->orderBy('e.value_int ASC, e.value_string ASC');
+                $query->orderBy('e.value_int ASC, e.value_string ASC, {{%zoo_items}}.created_at ASC');
             }
         }
-        else {
+        elseif($this->sort == 'created_at') {
             if ($this->desc) {
-                $query->orderBy('{{%zoo_items}}.'.$this->sort.' DESC');
+                $query->orderBy('{{%zoo_items}}.created_at DESC');
             } else {
-                $query->orderBy('{{%zoo_items}}.'.$this->sort.' ASC');
+                $query->orderBy('{{%zoo_items}}.created_at ASC');
+            }
+        } else {
+            if ($this->desc) {
+                $query->orderBy('{{%zoo_items}}.'.$this->sort.' DESC, {{%zoo_items}}.created_at DESC');
+            } else {
+                $query->orderBy('{{%zoo_items}}.'.$this->sort.' ASC, {{%zoo_items}}.created_at ASC');
             }
         }
 

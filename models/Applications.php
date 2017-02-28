@@ -180,7 +180,7 @@ class Applications extends \yii\db\ActiveRecord
     
     public function getUrl() {
 
-        if (!empty(Yii::$app->zoo->languages)) {
+        if (count(Yii::$app->zoo->languages) > 1) {
             return ['/'.$this->name.'/index','lang'=>Yii::$app->zoo->lang];
         }
         return ['/'.$this->name.'/index'];
