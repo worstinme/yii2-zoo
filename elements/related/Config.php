@@ -2,6 +2,7 @@
 
 namespace worstinme\zoo\elements\related;
 
+use worstinme\zoo\models\Applications;
 use worstinme\zoo\models\Items;
 use Yii;
 use yii\db\Query;
@@ -17,6 +18,7 @@ class Config extends \yii\base\Behavior
     {
         return [
             ['relatedCategories', 'each', 'rule'=>['string','max'=>255]],
+            ['relatedApplication','integer'],
             ['viaTableName', 'string','max'=>255],
         ];
     }
@@ -48,6 +50,16 @@ class Config extends \yii\base\Behavior
         return $this->owner->params = $params;
     }
 
+    public function getRelatedApplication(){
+        return !empty($this->owner->params['relatedApplication'])?$this->owner->params['relatedApplication']:null;
+    }
+
+    public function setRelatedApplication($s){
+        $params = $this->owner->params;
+        $params['relatedApplication'] = $s;
+        return $this->owner->params = $params;
+    }
+
     public function getViaTableName(){
         return !empty($this->owner->params['viaTableName'])?$this->owner->params['viaTableName']:null;
     }
@@ -59,6 +71,9 @@ class Config extends \yii\base\Behavior
     }
 
     public function getItems() {
+        if ($this->relatedApplication) {
+            return ArrayHelper::map(Items::find()->where([Items::tableName().'.app_id'=>$this->relatedApplication])->all(),'id','name');
+        }
         return ArrayHelper::map( count($this->relatedCategories) ?
             Items::find()->joinWith(['categories'])->where(['category_id'=>$this->relatedCategories])->all() :
             Items::find()->joinWith(['categories'])->where([Items::tableName().'.app_id'=>$this->owner->app_id])->all()

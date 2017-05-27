@@ -7,7 +7,7 @@ use worstinme\zoo\backend\models\Menu as M;
 
 class Menu extends \yii\base\Model
 {
-    public $name;
+    public $menu;
     public $class;
     public $navbar;
 
@@ -26,8 +26,8 @@ class Menu extends \yii\base\Model
     public function rules()
     {
         return [
-            ['name','required'],
-            [['name','class'],'string','max'=>255],
+            ['menu','required'],
+            [['menu','class'],'string','max'=>255],
             [['navbar'],'integer'],
         ];
     }
@@ -35,7 +35,7 @@ class Menu extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'name' => Yii::t('backend', 'Menu'),
+            'menu' => Yii::t('backend', 'Menu'),
         ];
     }
 

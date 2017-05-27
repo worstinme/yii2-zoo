@@ -6,7 +6,7 @@ use yii\helpers\Html;
 
 $this->title = $model->isNewRecord ? Yii::t('backend','Создание элемента') : $model->title;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Элементы'), 'url' => ['elements','app'=>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;

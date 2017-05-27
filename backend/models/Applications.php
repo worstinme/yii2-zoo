@@ -336,4 +336,15 @@ class Applications extends \worstinme\zoo\models\Applications
         
     }
 
+    public function getParentCategories() {
+        return $this->hasMany(Categories::className(), ['app_id' => 'id'])->where(['parent_id'=>0])->orderBy('sort ASC');
+    }
+
+    public function getCategories() {
+        $categories = $this->hasMany(Categories::className(), ['app_id' => 'id']);
+        if(count(Yii::$app->zoo->languages) > 1)
+            $categories->andWhere(['lang'=>Yii::$app->zoo->lang]);
+        return $categories->orderBy('sort ASC')->inverseOf('app');
+    }
+
 }

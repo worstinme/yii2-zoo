@@ -7,15 +7,16 @@ use worstinme\zoo\backend\models\Menu as MenuModel;
 class Menu extends \worstinme\uikit\Nav
 {
     public $name;
+    public $menu;
     public $options;
     public $cache;
 
     public function init()
     {
 
-        if ($this->name !== null) {
+        if ($this->menu !== null) {
 
-            $cache_key = 'menu-'.$this->name;
+            $cache_key = 'menu-'.$this->menu;
 
             $items = Yii::$app->cache->get($cache_key);
 
@@ -23,7 +24,7 @@ class Menu extends \worstinme\uikit\Nav
 
                 $items = $this->items;
 
-                $menus = MenuModel::find()->where(['menu'=>$this->name])->andWhere('parent_id IS NULL')->orderBy('sort')->all();
+                $menus = MenuModel::find()->where(['menu'=>$this->menu])->andWhere('parent_id IS NULL')->orderBy('sort')->all();
 
                 foreach ($menus as $name) {
 

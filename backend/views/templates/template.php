@@ -6,7 +6,7 @@ use yii\helpers\Html;
 \worstinme\uikit\assets\Notify::register($this);
 
 $this->title = Yii::t('backend','Шаблон отображения <em>'.$name.'</em>');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 

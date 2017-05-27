@@ -1,9 +1,13 @@
 <?php
 
+use worstinme\zoo\models\Applications;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 ?>
+
+
+<?= $form->field($model, 'relatedApplication')->dropDownList(ArrayHelper::map(Applications::find()->where(['<>','id',$model->app_id])->all(),'id','name'), ['prompt'=>'Select app']); ?>
 
 <div class="uk-form-row">
     <?= Html::activeLabel($model, 'relatedCategories', ['class'=>'uk-form-label']); ?>

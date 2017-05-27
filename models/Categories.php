@@ -29,7 +29,7 @@ class Categories extends \yii\db\ActiveRecord
         $rules =  [
             [['name', 'alias', 'app_id'], 'required'],
             ['alias', 'match', 'pattern' => '#^[\w_-]+$#i'],
-            [['parent_id', 'app_id', 'sort', 'state', 'created_at', 'updated_at'], 'integer'],
+            [['parent_id', 'app_id', 'sort', 'state', 'flag','created_at', 'updated_at'], 'integer'],
             [['params'], 'safe'],
             [['name', 'alias','image','preview','subtitle'], 'string', 'max' => 255],
             [['metaDescription','metaKeywords','content','intro','quote'], 'string'],
@@ -166,7 +166,7 @@ class Categories extends \yii\db\ActiveRecord
 
     public function getRelated()
     {
-        return $this->hasMany(Categories::className(), ['parent_id' => 'id'])->orderBy('sort ASC');
+        return $this->hasMany(Categories::className(), ['parent_id' => 'id'])->where(['state'=>1])->orderBy('sort ASC');
     } 
 
     public function getItems()
