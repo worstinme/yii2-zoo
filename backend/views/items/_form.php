@@ -51,8 +51,10 @@ echo \worstinme\zoo\helpers\TemplateHelper::render($model,'form');
 <div class="uk-form-row uk-margin-top">
     <?=Html::submitButton('Сохранить',['name'=>'save','value'=>'continue','class'=>'uk-button uk-button-success'])?>
     <?=Html::submitButton('Сохранить и закрыть',['name'=>'save','value'=>'close','class'=>'uk-button uk-button-primary'])?>
+    <?php if(!$model->isNewRecord): ?>
+        <?=Html::submitButton('Создать дубликат',['name'=>'duplicate','value'=>'1','class'=>'uk-button uk-button-danger'])?>
+    <?php endif ?>
 </div>
-
 <?php ActiveForm::end();  ?>
 
 </div>
@@ -76,6 +78,8 @@ $renderedElements = Json::encode($model->renderedElements);
 
 // echo Html::hiddenInput('renderedElements', $renderedElements, ['option' => 'value']);
 
+$action = \yii\helpers\Url::to(['create','app'=>$model->app_id]);
+
 $js = <<<JS
 var form = $("#form");
 var renderedElements = $renderedElements;
@@ -98,7 +102,11 @@ form.on("change",'$refresh_el', function() {
             }
         ); 
     }        
-})
+}).on("click","[name=duplicate]",function(){
+    var title = $("#items-name");
+    title.val('COPY ' + title.val());
+    form.attr("action","$action");
+});
 JS;
 
 $this->registerJs($js, $this::POS_READY); ?>
