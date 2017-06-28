@@ -20,7 +20,7 @@ class Menu extends \worstinme\uikit\Nav
 
             $items = Yii::$app->cache->get($cache_key);
 
-            if ($items === false) {
+            if (true || $items === false) {
 
                 $items = $this->items;
 
@@ -47,11 +47,19 @@ class Menu extends \worstinme\uikit\Nav
 
     public function processItem($menu) {
 
-        $item = [
-            'label' => $menu->name,
-            'encodeLabels'=>false,
-            'url' => $menu->getUrl(),
-        ];
+
+        if ($menu->type == 6) {
+            $item = '<div class="html">'.$menu->content.'</div>';
+        }
+        else {
+            $item = [
+                'label' => $menu->name,
+                'encodeLabels'=>false,
+                'url' => $menu->getUrl(),
+            ];
+        }
+
+
 
         if ($menu->active !== null) {
             $item['active'] =  $menu->active;

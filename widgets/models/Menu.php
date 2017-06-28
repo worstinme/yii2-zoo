@@ -35,7 +35,7 @@ class Menu extends \yii\base\Model
     public function attributeLabels()
     {
         return [
-            'menu' => Yii::t('backend', 'Menu'),
+            'menu' => 'Menu'
         ];
     }
 

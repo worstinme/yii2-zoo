@@ -30,7 +30,7 @@ class Menu extends \yii\db\ActiveRecord
             [['item_id'],'required','when' => function($model) {return in_array($model->type, [3]); }],
             [['url'],'required','when' => function($model) {return in_array($model->type, [4,5]); }],
             [['application_id', 'category_id', 'item_id', 'parent_id', 'sort', 'type'], 'integer'],
-            [['url'], 'string'],
+            [['url','content'], 'string'],
             [['name','menu'], 'string', 'max' => 255],
             ['menu', 'match', 'pattern' => '#^[\w_-]+$#i'],
         ];
@@ -61,6 +61,7 @@ class Menu extends \yii\db\ActiveRecord
             3=>Yii::t('backend','Материал'),
             4=>Yii::t('backend','JSON параметры'),
             5=>Yii::t('backend','Произвольная ссылка'),
+            6=>Yii::t('backend','Widget'),
         ];
     }
 
@@ -111,6 +112,9 @@ class Menu extends \yii\db\ActiveRecord
             return true;
         }
         elseif($this->type == 4 || $this->type == 5) {
+            return true;
+        }
+        if ($this->type == 6) {
             return true;
         }
         return false;
