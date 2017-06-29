@@ -221,13 +221,24 @@ class ItemsController extends Controller
                 ];
             }
         }
-        elseif($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал сохранён'));
-            if (Yii::$app->request->post('save') == 'close') {
-                return $this->redirect(['index','app'=>$app->id]);
+        elseif ($model->load(Yii::$app->request->post())) {
+            if (Yii::$app->request->post('duplicate')) {
+                $model->name = 'COPY ' . $model->name;
             }
-            else {
-                return $this->redirect(['create','app'=>$app->id,'id'=>$model->id]);
+            if ($model->save()) {
+
+                if (Yii::$app->request->post('duplicate')) {
+                    Yii::$app->getSession()->setFlash('success', Yii::t('backend', 'Материал скопирован и сохранён'));
+                } else {
+                    Yii::$app->getSession()->setFlash('success', Yii::t('backend', 'Материал сохранён'));
+                }
+
+
+                if (Yii::$app->request->post('save') == 'close') {
+                    return $this->redirect(['index', 'app' => $app->id]);
+                } else {
+                    return $this->redirect(['create', 'app' => $app->id, 'id' => $model->id]);
+                }
             }
         }
 

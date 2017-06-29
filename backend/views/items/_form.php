@@ -102,9 +102,8 @@ form.on("change",'$refresh_el', function() {
             }
         ); 
     }        
-}).on("click","[name=duplicate]",function(){
-    var title = $("#items-name");
-    title.val('COPY ' + title.val());
+})
+.on("click","[name=duplicate]", function(){
     form.attr("action","$action");
 });
 JS;
