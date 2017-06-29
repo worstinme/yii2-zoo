@@ -224,6 +224,7 @@ class ItemsController extends Controller
         elseif ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->post('duplicate')) {
                 $model->name = 'COPY ' . $model->name;
+                $model->state = 0;
             }
             if ($model->save()) {
 
