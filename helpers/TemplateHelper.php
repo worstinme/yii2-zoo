@@ -173,11 +173,11 @@ class TemplateHelper
                 if (in_array($attribute, $model->renderedElements)) {
 
                     return '<div class="uk-form-row element element-'.$attribute.' '.$refresh.'">'.Yii::$app->view->render($element_view_path,[
-                        'model'=>$model,
-                        'attribute'=>$attribute,
-                        'element'=>$element,
-                        'params'=>$params,
-                    ]).'</div>';
+                            'model'=>$model,
+                            'attribute'=>$attribute,
+                            'element'=>$element,
+                            'params'=>$params,
+                        ]).'</div>';
 
                 }
                 else return '<div class="uk-form-row uk-hidden element element-'.$attribute.' '.$refresh.'"></div>';
@@ -201,11 +201,11 @@ class TemplateHelper
                 if (in_array($attribute, $model->renderedElements)) {
 
                     return '<div class="uk-form-row element element-'.$attribute.' '.$refresh.'">'.Yii::$app->view->render($element_view_path,[
-                        'model'=>$model,
-                        'attribute'=>$attribute,
-                        'element'=>$element,
-                        'params'=>$params,
-                    ]).'</div>';
+                            'model'=>$model,
+                            'attribute'=>$attribute,
+                            'element'=>$element,
+                            'params'=>$params,
+                        ]).'</div>';
 
                 }
                 else return null;
@@ -219,12 +219,14 @@ class TemplateHelper
                     $element_view_path = '@worstinme/zoo/elements/'.$element->type.'/view.php';
                 }
 
-                return '<div class="element element-'.$attribute.'">'.Yii::$app->view->render($element_view_path,[
+                $t = Yii::$app->view->render($element_view_path,[
                     'model'=>$model,
                     'attribute'=>$attribute,
                     'element'=>$element,
                     'params'=>$params,
-                ]).'</div>';
+                ]);
+
+                return $templateName == 'blank' ? $t : '<div class="element element-'.$attribute.'">'.$t.'</div>';
 
             }
 

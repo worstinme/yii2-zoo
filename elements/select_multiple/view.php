@@ -1,5 +1,7 @@
 <?php
 
-use yii\helpers\Html; 
+use yii\helpers\Html;
 
-echo $model->$attribute;
+echo implode(", ", array_map(function ($i) use($element) {
+    return $element->variants[$i] ?? $i;
+}, $model->{$attribute}));
