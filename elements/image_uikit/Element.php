@@ -13,9 +13,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
     public function rules($attributes)
     {
         return [
-            [$attributes, function ($attribute, $params, $validator) {
-
-            }],
+            [$attributes, 'safe'],
         ];
     }
 
