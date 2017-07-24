@@ -47,7 +47,7 @@ class ItemsSearch extends Items
     public function attributeLabels()
     {
         $labels = [
-            'search' => Yii::t('backend', 'Поиск'),
+            'search' => Yii::t('zoo', 'Поиск'),
             'withoutCategory'=>'Показать материалы без категорий'
         ];
 

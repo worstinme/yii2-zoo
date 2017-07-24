@@ -1,0 +1,38 @@
+.uploaded-images  a[class*=uk-icon]{
+    position: absolute;
+    right:10px;
+    top:10px;
+    display: block;
+    height:30px;
+    line-height: 30px;
+    text-align: center;
+    background: rgba(255,255,255,0.8);
+    width:30px;
+}
+
+.uploaded-images  a.uk-icon-edit {
+    right:inherit;
+    left:20px;
+}
+.uploaded-images  a.uk-icon-font {
+    right:inherit;
+    left:60px;
+}
+
+.uploaded-images  a.uk-icon-trash {
+    color:red;
+}
+
+.uploaded-images  a.uk-icon-arrows {
+    width:40px;
+    height:40px;
+    line-height: 40px;
+    font-size:20px;
+    color:#000;
+    top:inherit;
+    bottom:10px;
+}
+
+.uploaded-images .image {
+    position: relative;
+}

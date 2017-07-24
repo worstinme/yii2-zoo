@@ -4,11 +4,11 @@ use worstinme\uikit\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$this->title = $model->isNewRecord ? Yii::t('backend', 'Создание категории') : $model->name;
+$this->title = $model->isNewRecord ? Yii::t('zoo', 'Создание категории') : $model->name;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['application', 'app' => $app->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Категории'), 'url' => ['categories', 'app' => $app->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'Категории'), 'url' => ['categories', 'app' => $app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= $this->render('/_nav', ['model' => $model]) ?>
 
     <div class="uk-panel uk-panel-box">
-        <h2><?= Yii::t('backend', 'Создание категории') ?></h2>
+        <h2><?= Yii::t('zoo', 'Создание категории') ?></h2>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'layout' => 'stacked', 'field_width' => 'large']); ?>
 
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'subtitle')->textInput() ?>
 
         <?= $form->field($model, 'parent_id')
-            ->dropDownList($app->catlist, ['prompt' => Yii::t('backend', 'Корневая категория')]); ?>
+            ->dropDownList($app->catlist, ['prompt' => Yii::t('zoo', 'Корневая категория')]); ?>
 
         <?= $form->field($model, 'image')->widget(\mihaildev\elfinder\InputFile::className(), [
             'language' => 'ru',
@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
 
         <div class="uk-form-row uk-margin-large-top">
-            <?= Html::submitButton($model->isNewRecord ? Yii::t('backend', 'Создать') : Yii::t('backend', 'Сохранить'), ['class' => 'uk-button uk-button-success uk-button-large']) ?>
+            <?= Html::submitButton($model->isNewRecord ? Yii::t('zoo', 'Создать') : Yii::t('zoo', 'Сохранить'), ['class' => 'uk-button uk-button-success uk-button-large']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

@@ -56,12 +56,12 @@ class Menu extends \yii\db\ActiveRecord
 
     public function getTypes() {
         return [
-            1=>Yii::t('backend','Приложение'),
-            2=>Yii::t('backend','Категория'),
-            3=>Yii::t('backend','Материал'),
-            4=>Yii::t('backend','JSON параметры'),
-            5=>Yii::t('backend','Произвольная ссылка'),
-            6=>Yii::t('backend','Widget'),
+            1=>Yii::t('zoo','Приложение'),
+            2=>Yii::t('zoo','Категория'),
+            3=>Yii::t('zoo','Материал'),
+            4=>Yii::t('zoo','JSON параметры'),
+            5=>Yii::t('zoo','Произвольная ссылка'),
+            6=>Yii::t('zoo','Widget'),
         ];
     }
 

@@ -6,7 +6,7 @@ use yii\helpers\Url;
 use worstinme\uikit\ActiveForm;
 
 $this->title = Yii::$app->controller->app->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];    
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?> 
@@ -34,11 +34,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'contentOptions'=>['class'=>'uk-text-center'],
         ],
         [
+            'attribute' => 'id',
+            'headerOptions'=>['class'=>'uk-text-center'],
+            'contentOptions'=>['class'=>'uk-text-center'],
+        ],
+        [
             'attribute'=>'search',
             'label'=>'Наименование',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]])." ".Html::a('<i class="uk-icon-external-link"></i>', $model->url, ['title' => Yii::t('backend', 'Открыть на сайте'),
+                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]])." ".Html::a('<i class="uk-icon-external-link"></i>', $model->url, ['title' => Yii::t('zoo', 'Открыть на сайте'),
                         'target'=>'_blank','data'=>['pjax'=>false], 'style'=>'float:right;color:#468847',
                 ]);
             },
@@ -117,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'buttons'=>[
               'delete' => function ($url, $model) {     
                 return Html::a('<i class="uk-icon-trash"></i>', $url, [
-                        'title' => Yii::t('backend', 'Удалить'),
+                        'title' => Yii::t('zoo', 'Удалить'),
                         'data'=>[
                             'method'=>'post',
                             'confirm'=>'Точно удалить?',

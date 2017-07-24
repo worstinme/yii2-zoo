@@ -4,8 +4,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use worstinme\uikit\ActiveForm;
 
-$this->title = Yii::t('backend', 'Категории');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
+$this->title = Yii::t('zoo', 'Категории');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/' . Yii::$app->controller->module->id . '/items/index', 'app' => Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'parent_id' => 0,
     ]) ?>
 <?php else: ?>
-    <p><?=Yii::t('backend','Create first category')?></p>
+    <p><?=Yii::t('zoo','Create first category')?></p>
 <?php endif ?>
 
 <?php

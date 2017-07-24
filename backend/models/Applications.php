@@ -17,7 +17,7 @@ class Applications extends \worstinme\zoo\models\Applications
         return [
             ['name', 'required','when' => function($model) { return $model->isNewRecord;}, ],
             ['name', 'match', 'pattern' => '#^[\w_]+$#i','when' => function($model) { return $model->isNewRecord;}, ],
-            ['name', 'unique', 'targetClass' => Applications::className(), 'message' => Yii::t('backend', 'Такое приложение уже есть')],
+            ['name', 'unique', 'targetClass' => Applications::className(), 'message' => Yii::t('zoo', 'Такое приложение уже есть')],
             ['name', 'string', 'min' => 2, 'max' => 255,'when' => function($model) { return $model->isNewRecord;}, ],
             ['name', 'controllerFileExists','when' => function($model) { return $model->isNewRecord;}, ],
             ['name', 'viewFolderExists','when' => function($model) { return $model->isNewRecord;}, ],
@@ -57,14 +57,14 @@ class Applications extends \worstinme\zoo\models\Applications
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('backend', 'ID'),
-            'name' => Yii::t('backend', 'Системное имя приложения'),
-            'title' => Yii::t('backend', 'Название приложения'),
-            'sort' => Yii::t('backend', 'Sort'),
-            'state' => Yii::t('backend', 'State'),
-            'created_at' => Yii::t('backend', 'Created At'),
-            'updated_at' => Yii::t('backend', 'Updated At'),
-            'params' => Yii::t('backend', 'Params'),
+            'id' => Yii::t('zoo', 'ID'),
+            'name' => Yii::t('zoo', 'Системное имя приложения'),
+            'title' => Yii::t('zoo', 'Название приложения'),
+            'sort' => Yii::t('zoo', 'Sort'),
+            'state' => Yii::t('zoo', 'State'),
+            'created_at' => Yii::t('zoo', 'Created At'),
+            'updated_at' => Yii::t('zoo', 'Updated At'),
+            'params' => Yii::t('zoo', 'Params'),
         ];
     }
 

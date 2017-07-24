@@ -4,11 +4,11 @@ use worstinme\uikit\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$this->title = $model->isNewRecord ? Yii::t('backend','Создание элемента') : $model->label;
+$this->title = $model->isNewRecord ? Yii::t('zoo','Создание элемента') : $model->label;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Элементы'), 'url' => ['elements','app'=>$app->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Элементы'), 'url' => ['/'.Yii::$app->controller->module->id.'/elements/index','app'=>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 $js = <<<JS
@@ -68,7 +68,7 @@ $this->registerJs($js, $this::POS_READY);
 			<hr>
 
 			<div class="uk-form-row uk-margin-large-top">
-		        <?= Html::submitButton($model->isNewRecord ? Yii::t('backend','Создать') : Yii::t('backend','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
+		        <?= Html::submitButton($model->isNewRecord ? Yii::t('zoo','Создать') : Yii::t('zoo','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
 		    </div>
 
 	    </div>

@@ -3,16 +3,16 @@
 use worstinme\uikit\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = Yii::t('backend','Настройки приложения').':'.$model->title;
+$this->title = Yii::t('zoo','Настройки приложения').':'.$model->title;
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
 <div class="applications update uk-margin-top">
 
-<h2><?=Yii::t('backend','Создание приложения')?></h2>
+<h2><?=Yii::t('zoo','Создание приложения')?></h2>
 
 <?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'large','field_size'=>'large']); ?>
                     
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                  
     <div class="uk-form-row">
-        <?= Html::submitButton(Yii::t('backend','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
+        <?= Html::submitButton(Yii::t('zoo','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
     </div>
 
 <?php ActiveForm::end(); ?>

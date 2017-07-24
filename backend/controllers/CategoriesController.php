@@ -84,7 +84,7 @@ class CategoriesController extends Controller
                 ];
             }
             
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Успешно'));
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Успешно'));
             return $this->redirect(['index','app'=>$app->id,'parent_id'=>$model->parent_id]);
         }
 
@@ -140,7 +140,7 @@ class CategoriesController extends Controller
         $category = Categories::findOne($category_id);
 
         if ($category === null && $redirect) {
-            Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Категория не существует'));
+            Yii::$app->getSession()->setFlash('warning', Yii::t('zoo','Категория не существует'));
             return $this->redirect(['categories']);
         }
         elseif ($category === null) {

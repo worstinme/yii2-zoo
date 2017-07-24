@@ -11,7 +11,7 @@ $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValid
         
 <div class="uk-grid uk-margin-top">
     <div class="uk-width-medium-1-3">
-    <?= $form->field($model, 'type')->dropDownList($model->types,['prompt'=>Yii::t('backend','Выбрать тип меню'),'class'=>'uk-width-1-1'])  ?>
+    <?= $form->field($model, 'type')->dropDownList($model->types,['prompt'=>Yii::t('zoo','Выбрать тип меню'),'class'=>'uk-width-1-1'])  ?>
     </div>
     <div class="uk-width-medium-1-3">
     <?= $form->field($model, 'menu')->textInput(['class'=>'uk-width-1-1'])  ?>
@@ -20,17 +20,17 @@ $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValid
     </div>
     <div class="uk-width-medium-1-3 uk-grid-margin">
     <?php if ($model->applications): ?>
-        <?= $form->field($model, 'application_id')->dropDownList($model->applications,['prompt'=>Yii::t('backend','Выбрать приложение'),'class'=>'uk-width-1-1'])  ?>
+        <?= $form->field($model, 'application_id')->dropDownList($model->applications,['prompt'=>Yii::t('zoo','Выбрать приложение'),'class'=>'uk-width-1-1'])  ?>
     <?php endif ?>
     </div>
     <div class="uk-width-medium-1-3 uk-grid-margin">
     <?php if ($model->categories): ?>
-        <?= $form->field($model, 'category_id')->dropDownList($model->categories,['prompt'=>Yii::t('backend','Выбрать категорию'),'class'=>'uk-width-1-1'])  ?>
+        <?= $form->field($model, 'category_id')->dropDownList($model->categories,['prompt'=>Yii::t('zoo','Выбрать категорию'),'class'=>'uk-width-1-1'])  ?>
     <?php endif ?>
     </div>
     <div class="uk-width-medium-1-3 uk-grid-margin">
     <?php if ($model->items): ?>
-        <?= $form->field($model, 'item_id')->dropDownList($model->items,['prompt'=>Yii::t('backend','Выбрать материал'),'class'=>'uk-width-1-1'])  ?>
+        <?= $form->field($model, 'item_id')->dropDownList($model->items,['prompt'=>Yii::t('zoo','Выбрать материал'),'class'=>'uk-width-1-1'])  ?>
     <?php endif ?>
     </div>
 </div>
@@ -65,7 +65,7 @@ $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked', 'enableClientValid
 
     <?= $form->field($model, 'name')->textInput(['class'=>'uk-width-1-1'])  ?>
 
-    <?= $form->field($model, 'parent_id')->dropDownList($model->parents,['prompt'=>Yii::t('backend','Родительский пункт меню')])  ?>
+    <?= $form->field($model, 'parent_id')->dropDownList($model->parents,['prompt'=>Yii::t('zoo','Родительский пункт меню')])  ?>
 
     <div class="uk-form-row">
         <?=Html::submitButton('Продолжить',['class'=>'uk-button uk-button-success'])?>

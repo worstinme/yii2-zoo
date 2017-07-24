@@ -6,8 +6,8 @@ use yii\helpers\Url;
 use worstinme\uikit\ActiveForm;
 use worstinme\zoo\models\Items;
 
-$this->title = Yii::t('backend','Настройки приложения');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['index']];
+$this->title = Yii::t('zoo','Настройки приложения');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -59,13 +59,13 @@ foreach ((new Items)->attributes() as $attribute) {
 	<?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true,'class'=>'uk-width-1-1']) ?>
 
 	<div class="uk-form-row uk-margin-large-top">
-	    <?= Html::submitButton(Yii::t('backend','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
+	    <?= Html::submitButton(Yii::t('zoo','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
 	</div> 
 
 	<div class="uk-form-row uk-margin-large-top uk-margin-large-bottom">
 
 	<?=Html::a('<i class="uk-icon-trash"></i> Удалить приложение', ['/'.Yii::$app->controller->module->id.'/default/delete','app'=>$model->id], [
-        'title' => Yii::t('backend', 'Удалить'),
+        'title' => Yii::t('zoo', 'Удалить'),
         'target'=>'_blank',
         'data'=>['method'=>'post','confirm'=>'Вы точно хотите удалить приложение?',],
     ]); ?>

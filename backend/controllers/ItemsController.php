@@ -153,7 +153,7 @@ class ItemsController extends Controller
         }
         else {
             if ($this->module->accessRoles === null && !Yii::$app->user->can('admin') && !Yii::$app->user->can('accessStrange') && $model->user_id !== Yii::$app->user->identity->id) {
-                Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Доступ запрещён'));
+                Yii::$app->getSession()->setFlash('warning', Yii::t('zoo','Доступ запрещён'));
                 return $this->redirect(['index','app'=>$app->id]);
             }
         }
@@ -229,9 +229,9 @@ class ItemsController extends Controller
             if ($model->save()) {
 
                 if (Yii::$app->request->post('duplicate')) {
-                    Yii::$app->getSession()->setFlash('success', Yii::t('backend', 'Материал скопирован и сохранён'));
+                    Yii::$app->getSession()->setFlash('success', Yii::t('zoo', 'Материал скопирован и сохранён'));
                 } else {
-                    Yii::$app->getSession()->setFlash('success', Yii::t('backend', 'Материал сохранён'));
+                    Yii::$app->getSession()->setFlash('success', Yii::t('zoo', 'Материал сохранён'));
                 }
 
 
@@ -265,13 +265,13 @@ class ItemsController extends Controller
         $model = $this->findModel($id);
 
         if (($this->module->accessRoles === null && !Yii::$app->user->can('admin'))  && !Yii::$app->user->can('accessStrange') && Yii::$app->user->identity->id != $model->user_id) {
-            Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Удаление не разрешено'));
+            Yii::$app->getSession()->setFlash('warning', Yii::t('zoo','Удаление не разрешено'));
             return $this->redirect(['index','app'=>$model->app_id]);
         }
 
         $model->delete();
 
-        Yii::$app->getSession()->setFlash('success', Yii::t('backend','Материал удалён, окончательно и безповоротно. Совсем. Не вернуть его уже.'));
+        Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Материал удалён, окончательно и безповоротно. Совсем. Не вернуть его уже.'));
 
         return $this->redirect(['index','app'=>$model->app_id]);
     }

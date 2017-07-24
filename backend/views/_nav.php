@@ -9,7 +9,7 @@ $app = Yii::$app->controller->app;
 
 $subnav = [
 
-    ['label' => '<i class="uk-icon-plus"></i> '.Yii::t('backend','Материал'), 
+    ['label' => '<i class="uk-icon-plus"></i> '.Yii::t('zoo','Материал'),
         'linkOptions'=>['class'=>'uk-button-primary'],
         'url' => ['/'.Yii::$app->controller->module->id.'/items/create','app'=>$app->id],],
 
@@ -21,16 +21,16 @@ $mainnav = [
 ];
 
 if ($this->context->module->accessRoles !== null || Yii::$app->user->can('admin') || (Yii::$app->user->can('moder') && Yii::$app->user->can('zoo_edit_category'))) {
-    $subnav[] = ['label' => '<i class="uk-icon-plus"></i> '.Yii::t('backend','Категория'), 
+    $subnav[] = ['label' => '<i class="uk-icon-plus"></i> '.Yii::t('zoo','Категория'),
         'linkOptions'=>['class'=>'uk-button-success'],
         'url' => ['/'.Yii::$app->controller->module->id.'/categories/update','app'=>$app->id],];
 
     $mainnav = array_merge($mainnav,[
-        ['label' => Yii::t('backend','Категории'), 
+        ['label' => Yii::t('zoo','Категории'),
                 'url' => ['/'.Yii::$app->controller->module->id.'/categories/index','app'=>$app->id],], 
-        ['label' => Yii::t('backend','Элементы'), 
+        ['label' => Yii::t('zoo','Элементы'),
             'url' => ['/'.Yii::$app->controller->module->id.'/elements/index','app'=>$app->id],], 
-        ['label' => Yii::t('backend','Шаблоны'), 
+        ['label' => Yii::t('zoo','Шаблоны'),
             'url' => ['/'.Yii::$app->controller->module->id.'/templates/index','app'=>$app->id],], 
 
         ['label' => '<i class="uk-icon-cog"></i>', 

@@ -53,21 +53,21 @@ class Elements extends \worstinme\zoo\models\Elements
     public function attributeLabels()
     {
         $labels = [
-            'id' => Yii::t('backend', 'ID'),
-            'title' => Yii::t('backend', 'Название поля (Label)'),
-            'name' => Yii::t('backend', 'Системное название поля'),
-            'type' => Yii::t('backend', 'Type'),
-            'required' => Yii::t('backend', 'Обязательно для заполнения?'),
-            'filter' => Yii::t('backend', 'Использовать в фильтре?'),
-            'params' => Yii::t('backend', 'Params'),
-            'placeholder'=>Yii::t('backend', 'Placeholder'),
-            'categories'=>Yii::t('backend', 'Категории'),
-            'allcategories'=>Yii::t('backend', 'Все категории'),
-            'types'=>Yii::t('backend', 'Типы материалов'),
-            'type'=>Yii::t('backend', 'Тип элемента'),
-            'refresh'=>Yii::t('backend', 'Обновлять поле?'),
+            'id' => Yii::t('zoo', 'ID'),
+            'title' => Yii::t('zoo', 'Название поля (Label)'),
+            'name' => Yii::t('zoo', 'Системное название поля'),
+            'type' => Yii::t('zoo', 'Type'),
+            'required' => Yii::t('zoo', 'Обязательно для заполнения?'),
+            'filter' => Yii::t('zoo', 'Использовать в фильтре?'),
+            'params' => Yii::t('zoo', 'Params'),
+            'placeholder'=>Yii::t('zoo', 'Placeholder'),
+            'categories'=>Yii::t('zoo', 'Категории'),
+            'allcategories'=>Yii::t('zoo', 'Все категории'),
+            'types'=>Yii::t('zoo', 'Типы материалов'),
+            'type'=>Yii::t('zoo', 'Тип элемента'),
+            'refresh'=>Yii::t('zoo', 'Обновлять поле?'),
             'sorter'=>'Использовать поле в сортировке',
-            'adminHint'=>Yii::t('backend', 'Подсказка к полю в форме админки'),
+            'adminHint'=>Yii::t('zoo', 'Подсказка к полю в форме админки'),
         ];
 
         if (isset($this->labels) && count($this->labels)) {

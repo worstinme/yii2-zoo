@@ -58,7 +58,7 @@ class ElementsController extends Controller
         $model->app_id = $app->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Элемент создан. Необходимо его настроить.'));
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Элемент создан. Необходимо его настроить.'));
             return $this->redirect(['update','app'=>$app->id,'element'=>$model->id]);
         }
 
@@ -73,12 +73,12 @@ class ElementsController extends Controller
         $app = $this->getApp();
 
         if (($model = Elements::findOne(Yii::$app->request->get('element'))) === null) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Элемент не найден'));
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Элемент не найден'));
             return $this->redirect(['index','app'=>$app->id]);
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Настройка элемента сохранены'));
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Настройка элемента сохранены'));
             return $this->redirect(['index','app'=>$app->id]);
         }
 

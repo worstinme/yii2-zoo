@@ -16,16 +16,28 @@ class Module extends \yii\base\Module
 
     public function init()
     {
-        $this->registerTranslations();      
+        $this->registerTranslations();
     }
 
     public function registerTranslations()
 	{
-	    Yii::$app->i18n->translations['backend'] = [
+	    Yii::$app->i18n->translations['zoo'] = [
 	        'class' => 'yii\i18n\PhpMessageSource',
 	        'sourceLanguage' => 'ru-RU',
 	        'basePath' => '@worstinme/zoo/messages',
 	    ];
+
+	    foreach ($this->elements as $key=>$element) {
+            Yii::$app->i18n->translations['zoo/'.$key] = [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'sourceLanguage' => 'ru-RU',
+                'basePath' => '@worstinme/zoo/elements/'.$key.'/messages',
+                'fileMap' => [
+                    'zoo/'.$key => 'element.php',
+                ],
+            ];
+        }
+
 	}
 
     public function getElements() {

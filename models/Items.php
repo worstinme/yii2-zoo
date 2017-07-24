@@ -22,6 +22,7 @@ class Items extends \yii\db\ActiveRecord
 
     public $values = [];
     public $backend = false;
+    public $_oldValues = [];
 
     public function __get($name)
     {
@@ -184,6 +185,14 @@ class Items extends \yii\db\ActiveRecord
         }
 
         return $elements;
+    }
+
+    public function setOldValue($name,$value) {
+        return $this->_oldValues[$name] = $value;
+    }
+
+    public function getOldValue($name) {
+        return $this->_oldValues[$name]??null;
     }
 
     /*  public function getElementParam($element,$param,$default = null)
@@ -380,8 +389,15 @@ class Items extends \yii\db\ActiveRecord
         } else return false;
     }
 
+    public function load($data, $formName = null)
+    {
+        return parent::load($data, $formName);
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
+
+        parent::afterSave($insert, $changedAttributes);
 
         foreach ($this->values as $attribute => $value) {
 
@@ -427,7 +443,6 @@ class Items extends \yii\db\ActiveRecord
 
         }
 
-        return parent::afterSave($insert, $changedAttributes);
     }
 
     public function afterDelete()

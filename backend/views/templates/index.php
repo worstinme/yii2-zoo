@@ -3,8 +3,8 @@
 use yii\helpers\Html;
 use worstinme\uikit\ActiveForm;
 
-$this->title = Yii::t('backend','Шаблоны отображения');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('backend','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
+$this->title = Yii::t('zoo','Шаблоны отображения');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 

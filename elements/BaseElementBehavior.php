@@ -8,6 +8,14 @@ use yii\db\ActiveRecord;
 use yii\validators\RequiredValidator;
 use yii\validators\Validator;
 
+/**
+ * ActiveRecord is the base class for classes representing relational data in terms of objects.
+ *
+ * See [[\yii\db\ActiveRecord]] for a concrete implementation.
+ *
+ * @property Items|\worstinme\zoo\models\Items $owner
+ */
+
 class BaseElementBehavior extends \yii\base\Behavior
 {
 
@@ -39,11 +47,12 @@ class BaseElementBehavior extends \yii\base\Behavior
     	}
 
     	return $this->owner->values[$attribute] = $this->multiple ? $value : (isset($value[0]) ? $value[0] : [
-					'value_text' =>null,
-					'value_int' =>null,
-					'value_string' =>null,
-					'value_float' =>null,
-				]);
+            'value_text' =>null,
+            'value_int' =>null,
+            'value_string' =>null,
+            'value_float' =>null,
+        ]);
+
 	}
 
     public function getValue($attribute) {
@@ -53,14 +62,16 @@ class BaseElementBehavior extends \yii\base\Behavior
     	}
 
     	if ($this->multiple === false) {
-    		return isset($this->owner->values[$attribute][$this->value_field]) ? $this->owner->values[$attribute][$this->value_field] : null;
+    		$v = isset($this->owner->values[$attribute][$this->value_field]) ? $this->owner->values[$attribute][$this->value_field] : null;
     	}
     	elseif (!empty($this->owner->values[$attribute][$this->value_field])) {
-            return $this->owner->values[$attribute][$this->value_field];
+            $v = $this->owner->values[$attribute][$this->value_field];
         }
         else {
-    		return \yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute],$this->value_field);
+            $v = \yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute],$this->value_field);
     	}
+
+    	return $v;
     }
 
     public function setValue($attribute,$value) {
@@ -110,4 +121,5 @@ class BaseElementBehavior extends \yii\base\Behavior
 
         return true;
     }
+
 }

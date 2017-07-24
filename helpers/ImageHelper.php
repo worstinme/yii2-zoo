@@ -3,6 +3,7 @@
 namespace worstinme\zoo\helpers;
 
 use Yii;
+use yii\base\Exception;
 use yii\helpers\Html;
 use yii\helpers\FileHelper;
 use yii\imagine\Image;
@@ -54,7 +55,7 @@ class ImageHelper
     {
         $filename = FileHelper::normalizePath(Yii::getAlias($filename));
         if (!is_file($filename)) {
-            throw new \Exception("File $filename doesn't exist");
+            throw new Exception("File $filename doesn't exist");
         }
         $cachePath = Yii::getAlias('@webroot/' . self::$cacheAlias);
         $thumbnailFileExt = strrchr($filename, '.');

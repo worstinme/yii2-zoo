@@ -3,12 +3,12 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 
-$this->title = Yii::t('backend', 'Menu');
+$this->title = Yii::t('zoo', 'Menu');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="applications items-index">
 
-    <?= Html::a(Yii::t('backend','Добавить пункт меню'), ['update'], ['class' => 'uk-button uk-button-success']); ?>
+    <?= Html::a(Yii::t('zoo','Добавить пункт меню'), ['update'], ['class' => 'uk-button uk-button-success']); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'buttons'=>[
                       'delete' => function ($url, $model) {     
                         return Html::a('<i class="uk-icon-trash"></i>', $url, [
-                                'title' => Yii::t('backend', 'Удалить'),
+                                'title' => Yii::t('zoo', 'Удалить'),
                                 'data'=>[
                                     'confirm'=>'Are u sure?',
                                     'method'=>'post',

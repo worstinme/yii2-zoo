@@ -17,7 +17,7 @@ $positions = $searchModel->query()->select(['position'])->distinct()->indexBy('p
 ?>
 <div class="widgets-index">
 
-    <?= Html::a(Yii::t('backend','Создать виджет'), ['create'], ['class' => 'uk-button uk-button-success']); ?>
+    <?= Html::a(Yii::t('zoo','Создать виджет'), ['create'], ['class' => 'uk-button uk-button-success']); ?>
 
     <?php if (empty($searchModel->position)): ?>
 

@@ -108,7 +108,7 @@ class DefaultController extends Controller
                 '$controller/<b:[\w\-]+>'=>'$controller/default/ab',\n
                 '$controller'=>'$controller/default/index',")."</code>";
             
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Приложение добавлено. Добавьте в web.php правила для обработки ссылок'.$urlRules)); 
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Приложение добавлено. Добавьте в web.php правила для обработки ссылок'.$urlRules));
 
             return $this->redirect(['index']);
             
@@ -127,7 +127,7 @@ class DefaultController extends Controller
         $model = $this->getApp();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('backend','Настройки сохранены'));
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Настройки сохранены'));
         }
 
         return $this->render('update', [
@@ -142,10 +142,10 @@ class DefaultController extends Controller
         $model = $this->getApp();
 
         if ($model !== null && $model->delete()) {
-            Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Приложение удалено.'));
+            Yii::$app->getSession()->setFlash('warning', Yii::t('zoo','Приложение удалено.'));
         }
         else {
-            Yii::$app->getSession()->setFlash('warning', Yii::t('backend','Что-то пошло не так.'));
+            Yii::$app->getSession()->setFlash('warning', Yii::t('zoo','Что-то пошло не так.'));
         }
 
         return $this->redirect(['index']);
