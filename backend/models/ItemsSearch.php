@@ -106,7 +106,7 @@ class ItemsSearch extends Items
         return $dataProvider = new ActiveDataProvider([
             'query' => $query->groupBy(Items::tablename().'.id'),
             'pagination' => [
-                'pageSize' => 30,
+                'pageSize' => Yii::$app->request->get('per-page',30),
             ],
         ]);
     }
