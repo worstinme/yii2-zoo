@@ -12,7 +12,7 @@ use yii\helpers\Html;
 <div class="uk-form-row">
     <?= Html::activeLabel($model, 'relatedCategories', ['class'=>'uk-form-label']); ?>
     <div class="uk-form-controls">
-        <?= \vova07\select2\Widget::widget([
+        <?= \worstinme\zoo\helpers\Select2Widget::widget([
             'model' => $model,
             'attribute' => 'relatedCategories',
             'options' => [

@@ -7,13 +7,15 @@ $this->registerJs($model->addValidators($this,$attribute), 5);
 
 $multiselect = isset($params['multiselect']) ? (int)$params['multiselect'] : 0;
 
+\worstinme\zoo\assets\Select2Asset::register($this);
+
 ?>
 
 <?php if ($multiselect && count($model->app->catlist)): ?>
 
 	<?= Html::activeLabel($model, 'category',['class'=>'uk-form-label']); ?>
 
-	<?= \vova07\select2\Widget::widget([
+	<?= \worstinme\zoo\helpers\Select2Widget::widget([
 		'model' => $model,
 		'attribute' => 'category',
 		'options' => [
