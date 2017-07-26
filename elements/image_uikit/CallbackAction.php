@@ -54,6 +54,8 @@ class CallbackAction extends BaseCallbackAction
                     'image'=>[
                         'source'=>$tmpDir . $filename,
                         'tmp'=>1,
+                        'caption'=>'',
+                        'alt'=>'',
                     ]
                 ]),
                 'code' => 100,
