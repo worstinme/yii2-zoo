@@ -75,8 +75,9 @@ class ImageHelper
         $image = Image::getImagine()->open($filename);
 
         if ($height===null) {
-            $height = round($image->getSize()->getWidth()/$width*$image->getSize()->getHeight());
+            $height = round($width/$image->getSize()->getWidth()*$image->getSize()->getHeight());
         }
+
         $box = new Box($width, $height);
         $image = $image->thumbnail($box, $mode);
 

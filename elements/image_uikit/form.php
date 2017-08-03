@@ -93,7 +93,7 @@ var progressbar = $(".progressbar-$element->id"),
                progressbar.addClass("uk-hidden");
             }, 250);
             console.log(response);
-            if (response.code !== undefined && response.code == 100) {
+            if (response.code !== undefined && response.code == 200) {
                 $('.images-$element->id').append(response.image);
             } else {
                 UIkit.notify(response.message, {status:'danger'})

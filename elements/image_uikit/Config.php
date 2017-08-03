@@ -18,6 +18,8 @@ class Config extends BaseConfigBehavior
             [['dir','temp'], 'string','max'=>255],
             ['spread','integer'],
             ['rename','integer'],
+            ['horizontalResizeWidth','integer'],
+            ['verticalResizeWidth','integer'],
             ['maxFileSize','integer'],
         ];
     }
@@ -30,6 +32,8 @@ class Config extends BaseConfigBehavior
             'rename' => Yii::t('zoo/image_uikit', 'RENAME'),
             'temp'=>Yii::t('zoo/image_uikit', 'TEMP_DIR'),
             'maxFileSize'=>Yii::t('zoo/image_uikit', 'MAX_FILE_SIZE'),
+            'horizontalResizeWidth'=>Yii::t('zoo/image_uikit', 'HORIZONTAL_RESIZE_WIDTH'),
+            'verticalResizeWidth'=>Yii::t('zoo/image_uikit', 'VERTICAL_RESIZE_WIDTH'),
         ];
     }
 
@@ -70,6 +74,30 @@ class Config extends BaseConfigBehavior
     {
         $params = $this->owner->params;
         $params['rename'] = $a;
+        return $this->owner->params = $params;
+    }
+
+    public function getHorizontalResizeWidth()
+    {
+        return isset($this->owner->params['horizontalResizeWidth'])?$this->owner->params['horizontalResizeWidth']:0;
+    }
+
+    public function setHorizontalResizeWidth($a)
+    {
+        $params = $this->owner->params;
+        $params['horizontalResizeWidth'] = $a;
+        return $this->owner->params = $params;
+    }
+
+    public function getVerticalResizeWidth()
+    {
+        return isset($this->owner->params['verticalResizeWidth'])?$this->owner->params['verticalResizeWidth']:0;
+    }
+
+    public function setVerticalResizeWidth($a)
+    {
+        $params = $this->owner->params;
+        $params['verticalResizeWidth'] = $a;
         return $this->owner->params = $params;
     }
 

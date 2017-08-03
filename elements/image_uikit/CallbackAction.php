@@ -43,19 +43,21 @@ class CallbackAction extends BaseCallbackAction
             $width = $image->getSize()->getWidth();
             $height = $image->getSize()->getHeight();
 
-            if ($width>$height && $width > 1280) {
-                $newWidth = 1280;
-            }
-            elseif($width<$height && $width > 1024) {
-                $newWidth = 1024;
-            }
-            else {
-                $newWidth = $width;
-            }
+            if ($this->element->horizontalResizeWidth && $this->element->verticalResizeWidth) {
 
-            $newHeight = round($newWidth/$width*$height);
+                if ($width > $height && $width > $this->element->horizontalResizeWidth) {
+                    $newWidth = (int)$this->element->horizontalResizeWidth;
+                } elseif ($width < $height && $width > $this->element->verticalResizeWidth) {
+                    $newWidth = (int)$this->element->verticalResizeWidth;
+                } else {
+                    $newWidth = $width;
+                }
 
-            $image->thumbnail(new \Imagine\Image\Box($newWidth,$newHeight))->save(Yii::getAlias('@app') . $tmpDir . $filename);
+                $newHeight = round($newWidth / $width * $height);
+
+                $image->thumbnail(new \Imagine\Image\Box($newWidth, $newHeight))->save(Yii::getAlias('@app') . $tmpDir . $filename);
+
+            }
 
             $sessionName = 'images-' . $this->element->name;
 
@@ -64,37 +66,43 @@ class CallbackAction extends BaseCallbackAction
             $images[] = [
                 'tmp' => true,
                 'source' => $tmpDir . $filename,
-                'width'=>$newWidth,
-                'height'=>$newHeight,
+                'width' => $newWidth ?? $width,
+                'height' => $newHeight ?? $height,
             ];
 
             Yii::$app->session->set($sessionName, $images);
 
             return [
-                'image'=> $this->controller->renderPartial('@worstinme/zoo/elements/image_uikit/_input',[
-                    'model'=>$model,
-                    'attribute'=>$this->element->name,
-                    'image'=>[
-                        'source'=>$tmpDir . $filename,
-                        'tmp'=>1,
-                        'caption'=>'',
-                        'alt'=>'',
+                'image' => $this->controller->renderPartial('@worstinme/zoo/elements/image_uikit/_input', [
+                    'model' => $model,
+                    'attribute' => $this->element->name,
+                    'image' => [
+                        'source' => $tmpDir . $filename,
+                        'tmp' => 1,
+                        'caption' => '',
+                        'alt' => '',
                     ]
                 ]),
-                'code' => 100,
+                'code' => 200,
             ];
 
+        }
+        else {
+            return [
+                'code'=>0,
+                'message'=> implode(" ",array_map(function($a) { return implode(" ", $a); }, $upload->errors)),
+            ];
         }
 
     }
 
     protected function checkFileName($file, $dir, $m = '')
     {
-        if (!is_file($dir.$m.$file)) {
-            return $m.$file;
+        if (!is_file($dir . $m . $file)) {
+            return $m . $file;
         }
 
-        return $this->checkFileName($file,$dir,$m+1);
+        return $this->checkFileName($file, $dir, (int)$m + 1);
 
     }
 
