@@ -37,7 +37,7 @@ class ImageHelper
      * the exact $width and $height specified
      * @return \Imagine\Image\ImageInterface
      */
-    public static function thumbnail($filename, $width, $height, $mode = self::THUMBNAIL_OUTBOUND, $quality = null)
+    public static function thumbnail($filename, $width, $height = null, $mode = self::THUMBNAIL_OUTBOUND, $quality = null)
     {
         return Image::getImagine()->open(self::thumbnailFile($filename, $width, $height, $mode, $quality));
     }
@@ -51,7 +51,7 @@ class ImageHelper
      * @return string
      * @throws FileNotFoundException
      */
-    public static function thumbnailFile($filename, $width, $height, $mode = self::THUMBNAIL_OUTBOUND, $quality = null)
+    public static function thumbnailFile($filename, $width, $height = null, $mode = self::THUMBNAIL_OUTBOUND, $quality = null)
     {
         $filename = FileHelper::normalizePath(Yii::getAlias($filename));
         if (!is_file($filename)) {
@@ -72,8 +72,12 @@ class ImageHelper
         if (!is_dir($thumbnailFilePath)) {
             mkdir($thumbnailFilePath, 0755, true);
         }
-        $box = new Box($width, $height);
         $image = Image::getImagine()->open($filename);
+
+        if ($height===null) {
+            $height = round($image->getSize()->getWidth()/$width*$image->getSize()->getHeight());
+        }
+        $box = new Box($width, $height);
         $image = $image->thumbnail($box, $mode);
 
         $options = [
@@ -91,7 +95,7 @@ class ImageHelper
      * @param string $mode
      * @return string
      */
-    public static function thumbnailFileUrl($filename, $width, $height, $mode = self::THUMBNAIL_OUTBOUND, $quality = null)
+    public static function thumbnailFileUrl($filename, $width, $height = null, $mode = self::THUMBNAIL_OUTBOUND, $quality = null)
     {
         $filename = FileHelper::normalizePath(Yii::getAlias($filename));
         $cacheUrl = Yii::getAlias('@web/' . self::$cacheAlias);
@@ -110,7 +114,7 @@ class ImageHelper
      * @param array $options options similarly with \yii\helpers\Html::img()
      * @return string
      */
-    public static function thumbnailImg($filename, $width, $height, $mode = self::THUMBNAIL_OUTBOUND, $options = [], $quality = null)
+    public static function thumbnailImg($filename, $width, $height = null, $mode = self::THUMBNAIL_OUTBOUND, $options = [], $quality = null)
     {
         $filename = FileHelper::normalizePath(Yii::getAlias($filename));
         try {

@@ -2,10 +2,12 @@
 
 namespace worstinme\zoo\elements\image_uikit;
 
+
 use worstinme\zoo\helpers\ImageHelper;
 use Yii;
 use worstinme\zoo\elements\BaseCallbackAction;
 use yii\helpers\Json;
+use yii\imagine\Image;
 use yii\web\UploadedFile;
 
 class CallbackAction extends BaseCallbackAction
@@ -36,6 +38,25 @@ class CallbackAction extends BaseCallbackAction
 
             $upload->file->saveAs(Yii::getAlias('@app') . $tmpDir . $filename);
 
+            $image = \yii\imagine\Image::getImagine()->open(Yii::getAlias('@app') . $tmpDir . $filename);
+
+            $width = $image->getSize()->getWidth();
+            $height = $image->getSize()->getHeight();
+
+            if ($width>$height && $width > 1280) {
+                $newWidth = 1280;
+            }
+            elseif($width<$height && $width > 1024) {
+                $newWidth = 1024;
+            }
+            else {
+                $newWidth = $width;
+            }
+
+            $newHeight = round($newWidth/$width*$height);
+
+            $image->thumbnail(new \Imagine\Image\Box($newWidth,$newHeight))->save(Yii::getAlias('@app') . $tmpDir . $filename);
+
             $sessionName = 'images-' . $this->element->name;
 
             $images = Yii::$app->session->get($sessionName, []);
@@ -43,6 +64,8 @@ class CallbackAction extends BaseCallbackAction
             $images[] = [
                 'tmp' => true,
                 'source' => $tmpDir . $filename,
+                'width'=>$newWidth,
+                'height'=>$newHeight,
             ];
 
             Yii::$app->session->set($sessionName, $images);

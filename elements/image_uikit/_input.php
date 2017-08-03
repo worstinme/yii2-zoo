@@ -10,7 +10,7 @@ $file = Yii::getAlias($image['tmp'] ? '@app' : '@webroot') . $image['source'];
 
 <div class="image uk-grid-margin">
     <?php if (is_file($file)): ?>
-        <a href="<?= ImageHelper::thumbnailFileUrl($file, 940, 640) ?>" class="uk-display-block" data-uk-lightbox>
+        <a href="<?= $image['tmp'] ? ImageHelper::thumbnailFileUrl($file, 940) : $image['source'] ?>" class="uk-display-block" data-uk-lightbox>
             <?= ImageHelper::thumbnailImg($file, 250, 250) ?>
         </a>
         <a class="uk-icon-trash" data-remove-image="<?= $image['source'] ?>"></a>
