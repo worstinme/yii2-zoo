@@ -3,6 +3,7 @@
 namespace worstinme\zoo\models;
 
 use Yii;
+use yii\db\Query;
 use yii\helpers\Json;
 
 class Applications extends \yii\db\ActiveRecord
@@ -150,6 +151,11 @@ class Applications extends \yii\db\ActiveRecord
 
         return $this->catlist;
         
+    }
+
+    public function getSchedules() {
+        return (new Query())->select(['id','mo','tu','we','th','fr','sa','su','start_at','finish_at'])
+            ->from('{{%zoo_schedule}}')->indexBy('id')->all();
     }
 
     protected function processCatlist($categories,$parent_id = 0,$delimiter = null, $array=[]) {
