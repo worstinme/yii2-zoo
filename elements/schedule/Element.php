@@ -56,7 +56,12 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
                 if (isset($val[$this->value_field]) && isset($schedules[$val[$this->value_field]])) {
 
-                    $v[] = $schedules[$val[$this->value_field]];
+                    $sc = $schedules[$val[$this->value_field]];
+
+                    $sc['start_at'] = str_pad($sc['start_at'], 4,"0",STR_PAD_LEFT);
+                    $sc['finish_at'] = str_pad($sc['finish_at'], 4,"0",STR_PAD_LEFT);
+
+                    $v[] = $sc;
 
                 }
             }
@@ -86,8 +91,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                     $q = (new Query())
                         ->select('id')
                         ->from('{{%zoo_schedule}}')
-                        ->where(['start_at'=>!empty($v['start_at']) ? $v['start_at'] : '0000'])
-                        ->andWhere([
+                        ->where([
                             'mo'=>$v['mo']?1:0,
                             'tu'=>$v['tu']?1:0,
                             'we'=>$v['we']?1:0,
@@ -95,11 +99,11 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                             'fr'=>$v['fr']?1:0,
                             'sa'=>$v['sa']?1:0,
                             'su'=>$v['su']?1:0,
-                            'start_at'=>$v['start_at'],
-                            'finish_at'=>$v['finish_at'],
+                            'start_at'=> (int) str_replace(":","",$v['start_at']),
+                            'finish_at'=> (int) str_replace(":","",$v['finish_at']),
                         ])->scalar();
 
-                    if ($q === false) {
+                    if (!$q) {
 
                         Yii::$app->db->createCommand()->insert('{{%zoo_schedule}}',[
                             'mo'=>$v['mo']?1:0,
@@ -109,8 +113,8 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
                             'fr'=>$v['fr']?1:0,
                             'sa'=>$v['sa']?1:0,
                             'su'=>$v['su']?1:0,
-                            'start_at'=>$v['start_at'],
-                            'finish_at'=>$v['finish_at'],
+                            'start_at'=>(int)str_replace(":","",$v['start_at']),
+                            'finish_at'=>(int)str_replace(":","",$v['finish_at']),
                         ])->execute();
 
                         $q = Yii::$app->db->lastInsertID;
