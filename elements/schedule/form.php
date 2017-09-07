@@ -20,8 +20,7 @@ $input_id = Html::getInputId($model, $attribute);
 
 <div class="uk-from-controls">
     <?php foreach ($model->{$attribute} as $key => $value): ?>
-        <div class="uk-grid schedule-row uk-margin-small-top">
-            <div class="uk-width-medium-1-3">
+        <p>
                 <div class="uk-button-group">
                     <label class="uk-button"><?= Html::activeCheckbox($model, $attribute . "[" . $key . "][mo]", ['label' => 'Mo']) ?></label>
                     <label class="uk-button"><?= Html::activeCheckbox($model, $attribute . "[" . $key . "][tu]", ['label' => 'Tu']) ?></label>
@@ -31,8 +30,6 @@ $input_id = Html::getInputId($model, $attribute);
                     <label class="uk-button"><?= Html::activeCheckbox($model, $attribute . "[" . $key . "][sa]", ['label' => 'Sa']) ?></label>
                     <label class="uk-button"><?= Html::activeCheckbox($model, $attribute . "[" . $key . "][su]", ['label' => 'Su']) ?></label>
                 </div>
-            </div>
-            <div class="uk-width-medium-1-6">
                 <?= \yii\widgets\MaskedInput::widget([
                     'model' => $model,
                     'attribute' => $attribute . "[" . $key . "][start_at]",
@@ -45,16 +42,12 @@ $input_id = Html::getInputId($model, $attribute);
                     'mask' => '99:99',
                     'options' => ['size'=>4],
                 ]) ?>
-            </div>
-            <div class="uk-width-medium-1-6">
                 <?php if ($key==0) : ?>
                     <a id="items-schedule" class="uk-button" onclick="$(this).trigger('change')"><i class="uk-icon-plus"></i></a>
                 <?php elseif($key<count($model->{$attribute})-1): ?>
                     <a class="uk-button" onclick="$(this).parents('.schedule-row').remove()"><i class="uk-icon-times"></i></a>
                 <?php endif; ?>
-            </div>
-        </div>
-
+        </p>
     <?php endforeach ?>
     <div class="uk-form-help-block uk-text-danger"></div>
 </div>
