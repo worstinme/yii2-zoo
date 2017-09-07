@@ -6,6 +6,10 @@ $this->registerJs($model->addValidators($this, $attribute), 5);
 
 $input_id = Html::getInputId($model, $attribute);
 
+$v = $model->{$attribute};
+
+$v[] = ['mo' => 0, 'tu' => 0, 'we' => 0, 'th' => 0, 'fr' => 0, 'sa' => 0, 'su' => 0, 'start_at' => '0000', 'finish_at' => 2400];
+
 ?>
 
 <?php if (!empty($element->adminHint)): ?>
@@ -19,7 +23,7 @@ $input_id = Html::getInputId($model, $attribute);
 <?php endif ?>
 
 <div class="uk-from-controls">
-    <?php foreach ($model->{$attribute} as $key => $value): ?>
+    <?php foreach ($v as $key => $value): ?>
         <p>
                 <div class="uk-button-group">
                     <label class="uk-button"><?= Html::activeCheckbox($model, $attribute . "[" . $key . "][mo]", ['label' => 'Mo']) ?></label>

@@ -68,8 +68,6 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
         }
 
-        $v[] = ['mo' => 0, 'tu' => 0, 'we' => 0, 'th' => 0, 'fr' => 0, 'sa' => 0, 'su' => 0, 'start_at' => '0000', 'finish_at' => 2400];
-
         return $v;
     }
 
