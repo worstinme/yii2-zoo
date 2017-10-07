@@ -143,6 +143,7 @@ class Items extends \yii\db\ActiveRecord
             [['metaTitle'], 'string', 'max' => 255],
             ['app_id', 'integer'],
             [['flag', 'state',], 'integer'],
+            ['alternateIds','safe'],
         ];
 
         foreach ($this->elementsTypes as $behavior_name) {
@@ -193,6 +194,28 @@ class Items extends \yii\db\ActiveRecord
 
     public function getOldValue($name) {
         return $this->_oldValues[$name]??null;
+    }
+
+    public function getAlternates() {
+        $params = $this->params !== null ? Json::decode($this->params) : [];
+        $alternates = $params['alternateIds']??[];
+        return self::findAll(['id'=>$alternates]);
+    }
+
+    public function getAlternateIds() {
+        $params = $this->params !== null ? Json::decode($this->params) : [];
+        return isset($params['alternateIds']) && is_array($params['alternateIds']) ? $params['alternateIds'] : [];
+    }
+
+    public function setAlternateIds($array) {
+        $params = $this->params !== null ? Json::decode($this->params) : [];
+        $params['alternateIds'] = [];
+        if (is_array($array)) {
+            foreach ($array as &$a) {
+                $params['alternateIds'][] = (int)$a;
+            }
+        }
+        return $this->params = Json::encode($params);
     }
 
     /*  public function getElementParam($element,$param,$default = null)

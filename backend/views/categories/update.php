@@ -1,6 +1,8 @@
 <?php
 
 use worstinme\uikit\ActiveForm;
+use worstinme\zoo\models\Categories;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
@@ -10,6 +12,14 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'Приложения
 $this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['application', 'app' => $app->id]];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'Категории'), 'url' => ['categories', 'app' => $app->id]];
 $this->params['breadcrumbs'][] = $this->title;
+
+$items = ArrayHelper::map(Categories::find()
+    ->where(['app_id' => $model->app_id])
+    ->andFilterWhere(['<>', 'id', $model->id])
+    ->orderBy('lang, name')
+    ->all(), 'id', function ($model) {
+    return $model->name . ' / ' . strtoupper($model->lang);
+});
 
 ?>
 
@@ -84,6 +94,17 @@ $this->params['breadcrumbs'][] = $this->title;
         ]); ?>
 
         <hr>
+
+        <?= $form->field($model, 'alternateIds')->widget(\worstinme\zoo\helpers\Select2Widget::className(), [
+            'options' => [
+                'multiple' => true,
+                'placeholder' => 'Choose alternates'
+            ],
+            'settings' => [
+                'width' => '100%',
+            ],
+            'items' => $items,
+        ]); ?>
 
         <?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
 
