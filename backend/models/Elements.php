@@ -34,7 +34,7 @@ class Elements extends \worstinme\zoo\models\Elements
 
             ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
 
-            [['filter','adminFilter','search', 'required', 'allcategories','refresh','sorter'], 'integer'],
+            [['filter','adminFilter','search', 'required', 'allcategories','refresh','sorter','ownColumn'], 'integer'],
 
             [['related'], 'match', 'pattern' => '#^[\w_]+$#i'],
 
@@ -68,6 +68,7 @@ class Elements extends \worstinme\zoo\models\Elements
             'refresh'=>Yii::t('zoo', 'Обновлять поле?'),
             'sorter'=>'Использовать поле в сортировке',
             'adminHint'=>Yii::t('zoo', 'Подсказка к полю в форме админки'),
+            'ownColumn'=>Yii::t('zoo','Выделить отдельную колонку'),
         ];
 
         if (isset($this->labels) && count($this->labels)) {
@@ -138,16 +139,29 @@ class Elements extends \worstinme\zoo\models\Elements
         return $this->params = $params;
     }
 
-    public function setSearch($filter) { 
+    public function setSearch($filter) {
         $params = $this->params;
-        $params['search'] = $filter; 
+        $params['search'] = $filter;
         return $this->params = $params;
     }
 
     public function setAllcategories($a)
     {
         $params = $this->params;
-        $params['allcategories'] = $a; 
+        $params['allcategories'] = $a;
+        return $this->params = $params;
+    }
+
+    public function setOwnColumn($filter) {
+        $params = $this->params;
+        $params['ownColumn'] = $filter;
+        return $this->params = $params;
+    }
+
+    public function setOwnColumn($a)
+    {
+        $params = $this->params;
+        $params['ownColumn'] = $a;
         return $this->params = $params;
     }
 
