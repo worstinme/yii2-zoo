@@ -15,7 +15,7 @@ $elementnames = ArrayHelper::map($searchModel->elements,'name','label');
 foreach ($searchModel->elements as $element) {
 	if (!in_array($element->name,$searchModel->attributes())) {
 
-		if ($element->adminFilter) {
+		if ($element->admin_filter) {
 			$elements[$element->name] = $element->label;
 		}
 		

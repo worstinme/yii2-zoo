@@ -10,11 +10,21 @@ use Yii;
 
 use worstinme\zoo\backend\models\Applications;
 
+use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
 
 class Controller extends \yii\web\Controller
 {
     private $application;
+
+    public function init()
+    {
+        if (!Yii::$app->db->createCommand('SELECT apply_time FROM {{migration}} WHERE version = :version',['version'=>'m171030_150738_elements_fix'])->queryScalar()) {
+            throw new InvalidConfigException('Необходимо применить миграции');
+        }
+
+        parent::init();
+    }
 
     public function render($view, $params = [])
     {

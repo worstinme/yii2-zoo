@@ -2,9 +2,12 @@
 
 namespace worstinme\zoo\backend\models;
 
+use worstinme\zoo\models\Items;
+use worstinme\zoo\models\ItemsElements;
 use Yii;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
+use yii\rbac\Item;
 
 class Elements extends \worstinme\zoo\models\Elements
 {
@@ -22,30 +25,29 @@ class Elements extends \worstinme\zoo\models\Elements
     {
         $rules = [
 
-            [['name', 'type','label'], 'required'],
-            [['name', 'type','label'], 'string', 'max' => 255],
+            [['name', 'type', 'label'], 'required'],
+            [['name', 'type', 'label'], 'string', 'max' => 255],
 
-            [['adminHint'], 'string'],
+            [['admin_hint'], 'string'],
 
             ['name', 'match', 'pattern' => '#^[\w_]+$#i'],
             ['type', 'match', 'pattern' => '#^[\w_]+$#i'],
 
             [['name', 'app_id'], 'unique', 'targetAttribute' => ['name', 'app_id']],
 
-            ['categories','each','rule'=>['integer']],//,'when' => function($model) { return $model->allcategories == 0; }, ],
+            ['categories', 'each', 'rule' => ['integer']],//,'when' => function($model) { return $model->all_categories == 0; }, ],
 
-            [['filter','adminFilter','search', 'required', 'allcategories','refresh','sorter','ownColumn'], 'integer'],
+            [['filter', 'admin_filter', 'search', 'required', 'all_categories', 'refresh', 'sorter', 'own_column'], 'integer'],
 
             [['related'], 'match', 'pattern' => '#^[\w_]+$#i'],
 
-            [['params'],'safe'],
+            [['params'], 'safe'],
 
         ];
 
         if (isset($this->rules) && count($this->rules)) {
             return ArrayHelper::merge($rules, $this->rules);
-        }
-        else {
+        } else {
             return $rules;
         }
     }
@@ -60,124 +62,68 @@ class Elements extends \worstinme\zoo\models\Elements
             'required' => Yii::t('zoo', 'Обязательно для заполнения?'),
             'filter' => Yii::t('zoo', 'Использовать в фильтре?'),
             'params' => Yii::t('zoo', 'Params'),
-            'placeholder'=>Yii::t('zoo', 'Placeholder'),
-            'categories'=>Yii::t('zoo', 'Категории'),
-            'allcategories'=>Yii::t('zoo', 'Все категории'),
-            'types'=>Yii::t('zoo', 'Типы материалов'),
-            'type'=>Yii::t('zoo', 'Тип элемента'),
-            'refresh'=>Yii::t('zoo', 'Обновлять поле?'),
-            'sorter'=>'Использовать поле в сортировке',
-            'adminHint'=>Yii::t('zoo', 'Подсказка к полю в форме админки'),
-            'ownColumn'=>Yii::t('zoo','Выделить отдельную колонку'),
+            'placeholder' => Yii::t('zoo', 'Placeholder'),
+            'categories' => Yii::t('zoo', 'Категории'),
+            'all_categories' => Yii::t('zoo', 'Все категории'),
+            'types' => Yii::t('zoo', 'Типы материалов'),
+            'type' => Yii::t('zoo', 'Тип элемента'),
+            'refresh' => Yii::t('zoo', 'Обновлять поле?'),
+            'sorter' => 'Использовать поле в сортировке',
+            'admin_hint' => Yii::t('zoo', 'Подсказка к полю в форме админки'),
+            'own_column' => Yii::t('zoo', 'Выделить отдельную колонку'),
         ];
 
         if (isset($this->labels) && count($this->labels)) {
             return ArrayHelper::merge($labels, $this->labels);
-        }
-        else {
+        } else {
             return $labels;
         }
     }
 
-    public function getIcon() {
+    public function getIcon()
+    {
         if (isset($this->iconClass)) {
-            return \yii\helpers\Html::i('',['class'=>$this->iconClass]);
-        }
-        else {
-            return \yii\helpers\Html::i('',['class'=>$this->icon]);
+            return \yii\helpers\Html::i('', ['class' => $this->iconClass]);
+        } else {
+            return \yii\helpers\Html::i('', ['class' => $this->icon]);
         }
     }
 
-    public function getApp() {
-        return $this->hasOne(Applications::className(),['id'=>'app_id']);
+    public function getApp()
+    {
+        return $this->hasOne(Applications::className(), ['id' => 'app_id']);
     }
 
-    public function renderParams($params) {
+    public function renderParams($params)
+    {
         return '';
     }
 
-    public function setAdminHint($s) { 
-        $params = $this->params;
-        $params['adminHint'] = $s; 
-        return $this->params = $params;
-    }
-
-    public function setSorter($s) { 
-        $params = $this->params;
-        $params['sorter'] = $s; 
-        return $this->params = $params;
-    }
-
-    public function setRelated($related) { 
-        $params = $this->params;
-        $params['related'] = $related; 
-        return $this->params = $params;
-    }
-
-
-    public function setRequired($related) { 
-        $params = $this->params;
-        $params['required'] = $related; 
-        return $this->params = $params;
-    }
-
-    public function setRefresh($refresh) { 
-        $params = $this->params;
-        $params['refresh'] = $refresh; 
-        return $this->params = $params;
-    }
-
-    public function setFilter($filter) { 
-        $params = $this->params;
-        $params['filter'] = $filter; 
-        return $this->params = $params;
-    }
-
-    public function setAdminFilter($filter) { 
-        $params = $this->params;
-        $params['adminFilter'] = $filter; 
-        return $this->params = $params;
-    }
-
-    public function setSearch($filter) {
-        $params = $this->params;
-        $params['search'] = $filter;
-        return $this->params = $params;
-    }
-
-    public function setAllcategories($a)
+    //сделать множественным
+    public function setRelated($related)
     {
-        $params = $this->params;
-        $params['allcategories'] = $a;
-        return $this->params = $params;
+        $params = !empty($this->params) ? Json::decode($this->params) : [];;
+        $params['related'] = $related;
+        return $this->params = Json::encode($params);
     }
 
-    public function setOwnColumn($filter) {
-        $params = $this->params;
-        $params['ownColumn'] = $filter;
-        return $this->params = $params;
-    }
-
-    public function setOwnColumn($a)
-    {
-        $params = $this->params;
-        $params['ownColumn'] = $a;
-        return $this->params = $params;
-    }
+    // TODO :  заменить search на text_index
 
     //categories
-    public function getCategories() {
+    public function getCategories()
+    {
         if (!count($this->categories)) {
             $this->categories = (new \yii\db\Query())
-                    ->select('category_id')
-                    ->from('{{%zoo_elements_categories}}')
-                    ->where(['element_id'=>$this->id])
-                    ->column();
+                ->select('category_id')
+                ->from('{{%zoo_elements_categories}}')
+                ->where(['element_id' => $this->id])
+                ->column();
         }
         return $this->categories;
     }
 
-    public function setCategories($array) {
+    public function setCategories($array)
+    {
         $this->categories = $array;
     }
 
@@ -187,36 +133,88 @@ class Elements extends \worstinme\zoo\models\Elements
         $db = Yii::$app->db;
 
         if (!$insert) {
-            $db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id'=>$this->id])->execute();
+            $db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id' => $this->id])->execute();
         }
 
-        $params = Json::decode($this->params);
+        $changedParams = array_key_exists('params', $changedAttributes) ? Json::decode($changedAttributes['params']) : [];
 
-        $allcategories = isset($params['allcategories']) ? $params['allcategories'] : 1;
+        if (array_key_exists('own_column', $changedParams) && $this->own_column == 1 && $this->own_column != $changedParams['own_column']) {
 
+            $table = Yii::$app->db->schema->getTableSchema(Items::tableName());
 
-        if ($allcategories) {
+            if (!isset($table->columns[$this->name])) {
+
+                Yii::$app->db->createCommand()->addColumn(Items::tableName(), $this->name, 'INTEGER(11)')->execute();
+
+                $elements = ItemsElements::find()
+                    ->select(['ie.item_id', 'ie.value_int'])
+                    ->from(['ie' => ItemsElements::tableName()])
+                    ->leftJoin(['e' => Elements::tableName()], 'e.name = ie.element')
+                    ->where(['element' => $this->name, 'e.app_id' => $this->app_id])
+                    ->all();
+
+                foreach ($elements as $element) {
+                    Yii::$app->db->createCommand()->update(Items::tableName(), [$this->name => $element['value_int']], ['id' => $element['item_id']])->execute();
+                }
+
+                Yii::$app->db->createCommand()->createIndex('fx-' . $this->name, Items::tableName(), $this->name)->execute();
+                Yii::$app->db->createCommand()->delete(ItemsElements::tableName(), ['element' => $this->name])->execute();
+                Yii::$app->db->getSchema()->refresh();
+
+            }
+        }
+
+        if (array_key_exists('own_column', $changedParams) && $this->own_column == 0 && $this->own_column != $changedParams['own_column']) {
+
+            $table = Yii::$app->db->schema->getTableSchema(Items::tableName());
+
+            if (isset($table->columns[$this->name])) {
+
+                $items = Items::find()
+                    ->select(['id', $this->name])
+                    ->where(['app_id' => $this->app_id])
+                    ->asArray()
+                    ->all();
+
+                foreach ($items as $item) {
+
+                    Yii::$app->db->createCommand()->insert(ItemsElements::tableName(), [
+                        'item_id' => $item['id'],
+                        'element' => $this->name,
+                        'value_int' => $item[$this->name],
+                    ])->execute();
+
+                }
+
+                Yii::$app->db->createCommand()->dropColumn(Items::tableName(), $this->name)->execute();
+                Yii::$app->db->getSchema()->refresh();
+
+            }
+
+        }
+
+        if ($this->all_categories) {
             $db->createCommand()->insert('{{%zoo_elements_categories}}', [
-                    'element_id' => $this->id,
-                    'category_id' => 0,
-                ])->execute();
-        }
-        elseif (is_array($this->categories) && count($this->categories)) {
+                'element_id' => $this->id,
+                'category_id' => 0,
+            ])->execute();
+        } elseif (is_array($this->categories) && count($this->categories)) {
             foreach ($this->categories as $category) {
                 $db->createCommand()->insert('{{%zoo_elements_categories}}', [
-                        'element_id' => $this->id,
-                        'category_id' => (int)$category,
-                    ])->execute();
-            }    
+                    'element_id' => $this->id,
+                    'category_id' => (int)$category,
+                ])->execute();
+            }
         }
-        
+
+
         return parent::afterSave($insert, $changedAttributes);
-    } 
+    }
 
     public function afterDelete()
     {
         parent::afterDelete();
-        Yii::$app->db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id'=>$this->id])->execute();
+        Yii::$app->db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id' => $this->id])->execute();
 
     }
 

@@ -8,11 +8,11 @@ $input_id = Html::getInputId($model,$attribute);
 
 ?>
 
-<?php if (!empty($element->adminHint)): ?>
+<?php if (!empty($element->admin_hint)): ?>
 	<i class="uk-icon-info-circle uk-float-right" data-uk-toggle="{target:'.hint-<?=$input_id?>'}"></i>
 	<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?> 
 	<p class="hint-<?=$input_id?> uk-hidden">
-	    <?=$element->adminHint?>
+	    <?=$element->admin_hint?>
 	</p>	
 <?php else: ?>
 	<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?> 

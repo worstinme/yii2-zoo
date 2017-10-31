@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $js = <<<JS
 
-	$("#elements-allcategories").on("click",function(){
+	$("#elements-all_categories").on("click",function(){
 		console.log($(this).val());
 		if ($(this).is(":checked")) {
 			$('.field-elements-categories').addClass('uk-hidden')
@@ -47,7 +47,7 @@ $this->registerJs($js, $this::POS_READY);
 
 			<?= $form->field($model, 'label')->textInput()  ?>
 
-		    <?= $form->field($model, 'adminHint')->textarea(['rows'=>3])  ?>
+		    <?= $form->field($model, 'admin_hint')->textarea(['rows'=>3])  ?>
 
 		    <?= $form->field($model, 'sorter')->checkbox() ?>
 
@@ -57,13 +57,15 @@ $this->registerJs($js, $this::POS_READY);
 
 		    <?= $form->field($model, 'required')->checkbox() ?>
 
-			<?= $form->field($model, 'adminFilter')->checkbox() ?>
+			<?= $form->field($model, 'admin_filter')->checkbox() ?>
 
 			<?= $form->field($model, 'filter')->checkbox() ?>
 
 			<?= $form->field($model, 'search')->checkbox() ?>
 
-			<?= $form->field($model, 'refresh')->checkbox() ?>
+            <?= $form->field($model, 'refresh')->checkbox() ?>
+
+            <?= $form->field($model, 'own_column')->checkbox() ?>
 
 			<hr>
 
@@ -90,9 +92,9 @@ $this->registerJs($js, $this::POS_READY);
 
 			<legend>Зависимости:</legend>
 
-			<?= $form->field($model, 'allcategories')->checkbox() ?>
+			<?= $form->field($model, 'all_categories')->checkbox() ?>
 
-			<?= $form->field($model, 'categories',['options'=>['class'=>$model->allcategories == 1?'uk-hidden':'']])->dropdownlist($app->catlist,['multiple' => 'multiple','size'=>(count($app->catlist) > 9 ? 10 : count($app->catlist)+3)]) ?>
+			<?= $form->field($model, 'categories',['options'=>['class'=>$model->all_categories == 1?'uk-hidden':'']])->dropdownlist($app->catlist,['multiple' => 'multiple','size'=>(count($app->catlist) > 9 ? 10 : count($app->catlist)+3)]) ?>
 
 
 		</div>

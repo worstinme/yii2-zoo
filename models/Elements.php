@@ -22,7 +22,6 @@ class Elements extends \yii\db\ActiveRecord
 
     public function afterFind()
     {
-        $this->params = !empty($this->params) ? Json::decode($this->params) : [];
 
         if ($this->type !== null  && is_file(Yii::getAlias('@worstinme/zoo').'/elements/'.$this->type.'/Config.php')) {
             $element = '\worstinme\zoo\elements\\'.$this->type.'\Config';
@@ -34,67 +33,14 @@ class Elements extends \yii\db\ActiveRecord
         return parent::afterFind();
     }
 
-    public function beforeSave($insert) {
-        if (parent::beforeSave($insert)) {
-
-            $this->params = Json::encode($this->params);
-            
-            return true;
-        }
-        else return false;
-    }
-
-    public function afterSave($insert, $changedAttributes)
-    {   
-        $this->params = Json::decode($this->params);
-        return parent::afterSave($insert, $changedAttributes);
-    }
-
     public function getFormView() {
         return '@worstinme/zoo/elements/'.$this->type.'/form';
     }
-    
-    public function getAdminHint() {
-        return isset($this->params['adminHint'])?$this->params['adminHint']:null; 
-    }
 
     //related
-    public function getRelated() { 
-        return !empty($this->params['related'])?$this->params['related']:null; 
-    }
-
-    //required
-    public function getRequired() { 
-        return isset($this->params['required'])?$this->params['required']:null; 
-    }
-
-    //refresh
-    public function getRefresh() { 
-        return isset($this->params['refresh'])?$this->params['refresh']:null; 
-    }
-
-    //sorter
-    public function getSorter() { 
-        return isset($this->params['sorter'])?$this->params['sorter']:null; 
-    }
-
-    //filter
-    public function getFilter() { 
-        return isset($this->params['filter'])?$this->params['filter']:null; 
-    }
-    //filter
-    public function getAdminFilter() { 
-        return isset($this->params['adminFilter'])?$this->params['adminFilter']:null; 
-    }
-    //filter
-    public function getSearch() { 
-        return isset($this->params['search'])?$this->params['search']:null; 
-    }
-
-    //allcategories
-    public function getAllcategories()
-    {
-        return isset($this->params['allcategories'])?$this->params['allcategories']:1; 
+    public function getRelated() {
+        $params = !empty($this->params) ? Json::decode($this->params) : [];
+        return !empty($params['related'])?$params['related']:null; 
     }
 
 }

@@ -287,7 +287,7 @@ class Applications extends \worstinme\zoo\models\Applications
                     $element->setAttributes($params);
                     $element->name = $key;
                     $element->app_id = $this->id;
-                    $element->allcategories = 1;
+                    $element->all_categories = 1;
 
                     if (!$element->save()) {
                         print_R($element->errors);

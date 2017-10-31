@@ -59,7 +59,7 @@ class S extends Items
 
             $e = $element->name;
 
-            if (!in_array($e, $this->attributes()) && ($element->filter || $element->search || $e == $this->app->defaultOrder)) {
+            if (!in_array($e, $this->attributes()) && ($element->filter || $e == $this->app->defaultOrder)) {
 
                 $value = $this->$e;
 

@@ -3,6 +3,7 @@
 namespace worstinme\zoo;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use worstinme\zoo\models\Applications;
@@ -25,8 +26,17 @@ class Component extends \yii\base\Component {
 
 	private $menu;
 
+    public function init()
+    {
+        if (YII_ENV_DEV && !Yii::$app->db->createCommand('SELECT apply_time FROM {{migration}} WHERE version = :version',['version'=>'m171030_150738_elements_fix'])->queryScalar()) {
+            throw new InvalidConfigException('Необходимо применить миграции php yii migrate --migrationPath=@worstinme/zoo/migrations');
+        }
 
-	public function getMenu() {
+        parent::init();
+    }
+
+
+    public function getMenu() {
 
 		if ($this->menu === null) {
 			$this->menu = new \worstinme\zoo\models\Menu;

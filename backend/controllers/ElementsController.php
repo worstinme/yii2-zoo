@@ -79,7 +79,7 @@ class ElementsController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Настройка элемента сохранены'));
-            return $this->redirect(['index','app'=>$app->id]);
+           // return $this->redirect(['index','app'=>$app->id]);
         }
 
         return $this->render('update', [
