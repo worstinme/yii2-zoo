@@ -61,8 +61,6 @@ $this->registerJs($js, $this::POS_READY);
 
 			<?= $form->field($model, 'filter')->checkbox() ?>
 
-			<?= $form->field($model, 'search')->checkbox() ?>
-
             <?= $form->field($model, 'refresh')->checkbox() ?>
 
             <?= $form->field($model, 'own_column')->checkbox() ?>
