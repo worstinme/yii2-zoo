@@ -37,7 +37,7 @@ class Elements extends \worstinme\zoo\models\Elements
 
             ['categories', 'each', 'rule' => ['integer']],//,'when' => function($model) { return $model->all_categories == 0; }, ],
 
-            [['filter', 'admin_filter', 'search', 'required', 'all_categories', 'refresh', 'sorter', 'own_column'], 'integer'],
+            [['filter', 'admin_filter', 'required', 'all_categories', 'refresh', 'sorter', 'own_column'], 'integer'],
 
             [['related'], 'match', 'pattern' => '#^[\w_]+$#i'],
 
@@ -58,7 +58,6 @@ class Elements extends \worstinme\zoo\models\Elements
             'id' => Yii::t('zoo', 'ID'),
             'title' => Yii::t('zoo', 'Название поля (Label)'),
             'name' => Yii::t('zoo', 'Системное название поля'),
-            'type' => Yii::t('zoo', 'Type'),
             'required' => Yii::t('zoo', 'Обязательно для заполнения?'),
             'filter' => Yii::t('zoo', 'Использовать в фильтре?'),
             'params' => Yii::t('zoo', 'Params'),
