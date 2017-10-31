@@ -135,7 +135,7 @@ class Elements extends \worstinme\zoo\models\Elements
             $db->createCommand()->delete('{{%zoo_elements_categories}}', ['element_id' => $this->id])->execute();
         }
 
-        $changedParams = array_key_exists('params', $changedAttributes) ? Json::decode($changedAttributes['params']) : [];
+        $changedParams = array_key_exists('params', $changedAttributes) ? (array) Json::decode($changedAttributes['params']) : [];
 
         if (array_key_exists('own_column', $changedParams) && $this->own_column == 1 && $this->own_column != $changedParams['own_column']) {
 
