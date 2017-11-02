@@ -17,7 +17,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
     public $multiple = true;
 
-    public $value_field = 'value_string';
+    public $value_field = 'value_int';
 
     public function LoadAttributesFromElements($attribute)
     {
@@ -26,7 +26,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
         foreach ($this->owner->itemsElements as $element) {
             if ($element->element == $attribute) {
 
-                if ($element->value_string !== null)
+                if ($element->{$this->value_field} !== null)
 
                     $value[] = [
                         'id' => $element->id,
