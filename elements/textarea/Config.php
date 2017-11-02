@@ -29,14 +29,14 @@ class Config extends \yii\base\Behavior
 
     public function getEditor()
     {
-        return isset($this->owner->params['editor'])?$this->owner->params['editor']:0; 
+        return isset($this->owner->paramsArray['editor'])?$this->owner->paramsArray['editor']:0;
     }
 
     public function setEditor($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['editor'] = $a; 
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
 

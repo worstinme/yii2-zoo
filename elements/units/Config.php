@@ -34,12 +34,12 @@ class Config extends \yii\base\Behavior
 
     public function getRelated_fields()
     {
-        return isset($this->owner->params['related_fields'])?$this->owner->params['related_fields']:[]; 
+        return isset($this->owner->paramsArray['related_fields'])?$this->owner->paramsArray['related_fields']:[];
     }
 
     public function setRelated_fields($array)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
 
         if (is_array($array) && count($array)) {
             foreach ($array as $key => $value) {
@@ -50,7 +50,7 @@ class Config extends \yii\base\Behavior
         }        
 
         $params['related_fields'] = $array; 
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
 

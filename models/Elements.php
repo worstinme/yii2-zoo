@@ -43,4 +43,12 @@ class Elements extends \yii\db\ActiveRecord
         return !empty($params['related'])?$params['related']:null; 
     }
 
+    public function getParamsArray() {
+        return !empty($this->params) ? Json::decode($this->params) : [];
+    }
+
+    public function setParamsArray($array) {
+        return $this->params = Json::encode($array);
+    }
+
 }

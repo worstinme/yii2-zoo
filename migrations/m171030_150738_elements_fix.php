@@ -25,14 +25,14 @@ class m171030_150738_elements_fix extends Migration
             $params = $element['params'] ? \yii\helpers\Json::decode($element['params']) : [];
 
             $this->db->createCommand()->update('{{zoo_elements}}',[
-                'admin_hint'=>$params['admin_hint']??0,
+                'admin_hint'=>$params['adminHint']??0,
                 'sorter'=>$params['sorter']??0,
                 'filter'=>$params['filter']??0,
-                'admin_filter'=>$params['admin_filter']??0,
+                'admin_filter'=>$params['adminFilter']??0,
                 'refresh'=>$params['refresh']??0,
                 'required'=>$params['required']??0,
                 'text_index'=>$params['text_index']??0,
-                'all_categories'=>$params['all_categories']??0,
+                'all_categories'=>$params['allCategories']??0,
             ],['id'=>$element['id']])->execute();
 
         }

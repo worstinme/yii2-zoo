@@ -43,86 +43,86 @@ class Config extends BaseConfigBehavior
 
     public function getDir()
     {
-        return isset($this->owner->params['dir'])?$this->owner->params['dir']:'@webroot/images/';
+        return isset($this->owner->paramsArray['dir'])?$this->owner->paramsArray['dir']:'@webroot/images/';
     }
 
     public function setDir($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['dir'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getMaxFileSize()
     {
-        return isset($this->owner->params['maxFileSize'])?$this->owner->params['maxFileSize']:4;
+        return isset($this->owner->paramsArray['maxFileSize'])?$this->owner->paramsArray['maxFileSize']:4;
     }
 
     public function setMaxFileSize($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['maxFileSize'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getRename()
     {
-        return isset($this->owner->params['rename'])?$this->owner->params['rename']:0;
+        return isset($this->owner->paramsArray['rename'])?$this->owner->paramsArray['rename']:0;
     }
 
     public function setRename($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['rename'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getHorizontalResizeWidth()
     {
-        return isset($this->owner->params['horizontalResizeWidth'])?$this->owner->params['horizontalResizeWidth']:0;
+        return isset($this->owner->paramsArray['horizontalResizeWidth'])?$this->owner->paramsArray['horizontalResizeWidth']:0;
     }
 
     public function setHorizontalResizeWidth($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['horizontalResizeWidth'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getVerticalResizeWidth()
     {
-        return isset($this->owner->params['verticalResizeWidth'])?$this->owner->params['verticalResizeWidth']:0;
+        return isset($this->owner->paramsArray['verticalResizeWidth'])?$this->owner->paramsArray['verticalResizeWidth']:0;
     }
 
     public function setVerticalResizeWidth($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['verticalResizeWidth'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getSpread()
     {
-        return isset($this->owner->params['spread'])?$this->owner->params['spread']:1;
+        return isset($this->owner->paramsArray['spread'])?$this->owner->paramsArray['spread']:1;
     }
 
     public function setSpread($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['spread'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getTemp()
     {
-        return isset($this->owner->params['temp'])?$this->owner->params['temp']:'@app/runtime/uploads';
+        return isset($this->owner->paramsArray['temp'])?$this->owner->paramsArray['temp']:'@app/runtime/uploads';
     }
 
     public function setTemp($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['temp'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
 

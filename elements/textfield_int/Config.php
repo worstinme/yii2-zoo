@@ -34,14 +34,14 @@ class Config extends \yii\base\Behavior
 
     public function getAutocomplete()
     {
-        return isset($this->owner->params['autocomplete'])?$this->owner->params['autocomplete']:0; 
+        return isset($this->owner->paramsArray['autocomplete'])?$this->owner->paramsArray['autocomplete']:0;
     }
 
     public function setAutocomplete($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['autocomplete'] = $a; 
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
 

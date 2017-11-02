@@ -34,14 +34,14 @@ class Config extends \yii\base\Behavior
 
     public function getCheckboxLabel()
     {
-        return isset($this->owner->params['checkboxLabel'])?$this->owner->params['checkboxLabel']:null;
+        return isset($this->owner->paramsArray['checkboxLabel'])?$this->owner->paramsArray['checkboxLabel']:null;
     }
 
     public function setCheckboxLabel($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['checkboxLabel'] = $a;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getConfigView() {

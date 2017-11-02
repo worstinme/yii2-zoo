@@ -36,13 +36,13 @@ class Config extends \yii\base\Behavior
     }
 
     public function getVariantsType(){
-        return !empty($this->owner->params['variantsType'])?$this->owner->params['variantsType']:null; 
+        return !empty($this->owner->paramsArray['variantsType'])?$this->owner->paramsArray['variantsType']:null;
     }
 
     public function setVariantsType($s){
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['variantsType'] = $s;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getVariantsTypes() {
@@ -54,13 +54,13 @@ class Config extends \yii\base\Behavior
     }
 
     public function getVariantsParams(){
-        return !empty($this->owner->params['variantsParams'])?$this->owner->params['variantsParams']:null; 
+        return !empty($this->owner->paramsArray['variantsParams'])?$this->owner->paramsArray['variantsParams']:null;
     }
 
     public function setVariantsParams($s){
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['variantsParams'] = $s;
-        return $this->owner->params = $params; 
+        return $this->owner->paramsArray = $params;
     }
 
     public function getVariants() {
@@ -77,12 +77,12 @@ class Config extends \yii\base\Behavior
 
     public function getVariant()
     {
-        return !empty($this->owner->params['variant'])?$this->owner->params['variant']:[]; 
+        return !empty($this->owner->paramsArray['variant'])?$this->owner->paramsArray['variant']:[];
     }
 
     public function setVariant($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
 
         if (is_array($a) && count($a)) {
 	        foreach ($a as $key => $value) {
@@ -94,7 +94,7 @@ class Config extends \yii\base\Behavior
 
         $params['variant'] = $a; 
 
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
 

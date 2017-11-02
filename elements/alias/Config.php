@@ -30,14 +30,14 @@ class Config extends \yii\base\Behavior
 
     public function getRelatedField()
     {
-        return isset($this->owner->params['relatedField'])?$this->owner->params['relatedField']:0; 
+        return isset($this->owner->paramsArray['relatedField'])?$this->owner->paramsArray['relatedField']:0;
     }
 
     public function setRelatedField($a)
     {
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['relatedField'] = $a; 
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
 

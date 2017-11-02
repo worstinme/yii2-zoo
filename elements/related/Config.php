@@ -36,38 +36,38 @@ class Config extends \yii\base\Behavior
     }
 
     public function getRelatedCategories(){
-        return !empty($this->owner->params['relatedCategories'])?$this->owner->params['relatedCategories']:[];
+        return !empty($this->owner->paramsArray['relatedCategories'])?$this->owner->paramsArray['relatedCategories']:[];
     }
 
     public function setRelatedCategories($s){
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         if(is_array($s))
             foreach ($s as $key=>$value) {
                 if (empty($value))
                     unset($s[$key]);
             }
         $params['relatedCategories'] = $s;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getRelatedApplication(){
-        return !empty($this->owner->params['relatedApplication'])?$this->owner->params['relatedApplication']:null;
+        return !empty($this->owner->paramsArray['relatedApplication'])?$this->owner->paramsArray['relatedApplication']:null;
     }
 
     public function setRelatedApplication($s){
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['relatedApplication'] = $s;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getViaTableName(){
-        return !empty($this->owner->params['viaTableName'])?$this->owner->params['viaTableName']:null;
+        return !empty($this->owner->paramsArray['viaTableName'])?$this->owner->paramsArray['viaTableName']:null;
     }
 
     public function setViaTableName($s){
-        $params = $this->owner->params;
+        $params = $this->owner->paramsArray;
         $params['viaTableName'] = $s;
-        return $this->owner->params = $params;
+        return $this->owner->paramsArray = $params;
     }
 
     public function getItems() {
