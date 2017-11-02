@@ -32,7 +32,7 @@ class m171030_150738_elements_fix extends Migration
                 'refresh'=>$params['refresh']??0,
                 'required'=>$params['required']??0,
                 'text_index'=>$params['text_index']??0,
-                'all_categories'=>$params['allCategories']??0,
+                'all_categories'=>$params['allcategories']??0,
             ],['id'=>$element['id']])->execute();
 
         }
