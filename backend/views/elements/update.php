@@ -65,6 +65,8 @@ $this->registerJs($js, $this::POS_READY);
 
             <?= $form->field($model, 'own_column')->checkbox() ?>
 
+            <?= $form->field($model, 'text_index')->checkbox() ?>
+
 			<hr>
 
 			<div class="uk-form-row uk-margin-large-top">

@@ -143,7 +143,7 @@ class Items extends \yii\db\ActiveRecord
             [['metaTitle'], 'string', 'max' => 255],
             ['app_id', 'integer'],
             [['flag', 'state',], 'integer'],
-            ['alternateIds','safe'],
+            ['alternateIds', 'safe'],
         ];
 
         foreach ($this->elementsTypes as $behavior_name) {
@@ -188,26 +188,31 @@ class Items extends \yii\db\ActiveRecord
         return $elements;
     }
 
-    public function setOldValue($name,$value) {
+    public function setOldValue($name, $value)
+    {
         return $this->_oldValues[$name] = $value;
     }
 
-    public function getOldValue($name) {
-        return $this->_oldValues[$name]??null;
+    public function getOldValue($name)
+    {
+        return $this->_oldValues[$name] ?? null;
     }
 
-    public function getAlternates() {
+    public function getAlternates()
+    {
         $params = $this->params !== null ? Json::decode($this->params) : [];
-        $alternates = $params['alternateIds']??[];
-        return self::findAll(['id'=>$alternates]);
+        $alternates = $params['alternateIds'] ?? [];
+        return self::findAll(['id' => $alternates]);
     }
 
-    public function getAlternateIds() {
+    public function getAlternateIds()
+    {
         $params = $this->params !== null ? Json::decode($this->params) : [];
         return isset($params['alternateIds']) && is_array($params['alternateIds']) ? $params['alternateIds'] : [];
     }
 
-    public function setAlternateIds($array) {
+    public function setAlternateIds($array)
+    {
         $params = $this->params !== null ? Json::decode($this->params) : [];
         $params['alternateIds'] = [];
         if (is_array($array)) {
@@ -422,6 +427,7 @@ class Items extends \yii\db\ActiveRecord
 
         parent::afterSave($insert, $changedAttributes);
 
+
         foreach ($this->values as $attribute => $value) {
 
             $elements = [];
@@ -464,6 +470,47 @@ class Items extends \yii\db\ActiveRecord
                     $elements)->execute();
             }
 
+        }
+
+        $text_index = [];
+
+        foreach ($this->elements as $element) {
+
+            if ($element->text_index) {
+                if (isset($this->{$element->name})) {
+                    $vv = $this->{$element->name};
+                    if (is_array($vv)) {
+                        foreach ($vv as $v) {
+                            if (is_scalar($v)) {
+                                $text_index[] = $v;
+                            }
+                        }
+                    } elseif (is_scalar($vv)) {
+                        $text_index[] = $vv;
+                    }
+                }
+            }
+        }
+
+        if (count($text_index)) {
+            $index = mb_strtolower(strip_tags(implode(" ", $text_index)));
+            $index = str_replace("&nbsp;", " ", $index);
+            $index = str_replace("&quot;", "", $index);
+            $index = trim($index);
+            if (($old_index = Yii::$app->db->createCommand('SELECT search FROM {{%zoo_search}} WHERE item_id = :item_id', ['item_id' => $this->id])->queryScalar()) !== false) {
+                if ($old_index != $index) {
+                    Yii::$app->db->createCommand()->update('{{%zoo_search}}', [
+                        'search' => $index,
+                    ], [
+                        'item_id' => $this->id,
+                    ])->execute();
+                }
+            } else {
+                Yii::$app->db->createCommand()->insert('{{%zoo_search}}', [
+                    'item_id' => $this->id,
+                    'search' => $index,
+                ])->execute();
+            }
         }
 
     }

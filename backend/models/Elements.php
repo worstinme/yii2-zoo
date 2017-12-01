@@ -37,7 +37,7 @@ class Elements extends \worstinme\zoo\models\Elements
 
             ['categories', 'each', 'rule' => ['integer']],//,'when' => function($model) { return $model->all_categories == 0; }, ],
 
-            [['filter', 'admin_filter', 'required', 'all_categories', 'refresh', 'sorter', 'own_column'], 'integer'],
+            [['filter', 'admin_filter', 'required', 'all_categories', 'refresh', 'sorter', 'own_column', 'text_index'], 'integer'],
 
             [['related'], 'match', 'pattern' => '#^[\w_]+$#i'],
 
@@ -70,6 +70,7 @@ class Elements extends \worstinme\zoo\models\Elements
             'sorter' => 'Использовать поле в сортировке',
             'admin_hint' => Yii::t('zoo', 'Подсказка к полю в форме админки'),
             'own_column' => Yii::t('zoo', 'Выделить отдельную колонку'),
+            'text_index' => Yii::t('zoo', 'Добавлять в fulltext index'),
         ];
 
         if (isset($this->labels) && count($this->labels)) {
@@ -98,15 +99,13 @@ class Elements extends \worstinme\zoo\models\Elements
         return '';
     }
 
-    //сделать множественным
+    // TODO :  сделать множественным
     public function setRelated($related)
     {
         $params = !empty($this->params) ? Json::decode($this->params) : [];;
         $params['related'] = $related;
         return $this->params = Json::encode($params);
     }
-
-    // TODO :  заменить search на text_index
 
     //categories
     public function getCategories()
