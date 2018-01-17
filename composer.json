@@ -21,13 +21,21 @@
             "worstinme\\zoo\\": ""
         }
     },
-    "extra": {
-        "bootstrap": "worstinme\\zoo\\Bootstrap"
-    },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/worstinme/yii2-elfinder"
-        }
+            "type": "package",
+            "package": {
+                "name": "mihaildev/yii2-elfinder",
+                "version": "dev-master",
+                "source": {
+                    "url": "https://github.com/worstinme/yii2-elfinder.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "classmap": [""]
+                }
+            }
+        },
     ]
 }
