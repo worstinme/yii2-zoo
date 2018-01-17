@@ -2,36 +2,24 @@
 
 use yii\helpers\Html;
 
-$this->registerJs($model->addValidators($this,$attribute), 5); 
+$input_id = Html::getInputId($model, $element->attributeName);
 
-$input_id = Html::getInputId($model,$attribute);
+if ($element->editor) {
 
-?>
+    echo \mihaildev\ckeditor\CKEditor::widget([
+        'model' => $model,
+        'attribute' => $element->attributeName,
+        'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'], [
+            'preset' => 'standart',
+            'allowedContent' => true,
+            'height' => '200px',
+            'toolbar' => [
+                ['Bold', 'Italic', 'Underline', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', 'Styles', 'Font', 'FontSize', 'Format', 'TextColor', 'BGColor', '-', 'Blockquote', 'CreateDiv', '-', 'Image', 'Table', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'Outdent', 'Indent', '-', 'RemoveFormat', 'Source', 'Maximize']
+            ],
+            // 'contentsCss' => Yii::$app->zoo->cke_editor_css,
+        ]),
+    ]);
 
-<?php if (!empty($element->admin_hint)): ?>
-    <i class="uk-icon-info-circle uk-float-right" data-uk-toggle="{target:'.hint-<?=$input_id?>'}"></i>
-    <?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?> 
-    <p class="hint-<?=$input_id?> uk-hidden">
-        <?=$element->admin_hint?>
-    </p>    
-<?php else: ?>
-    <?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?> 
-<?php endif ?>
-
-<div class="uk-from-controls">
-    
-    <?=\mihaildev\ckeditor\CKEditor::widget([
-        'model'=>$model,
-        'attribute'=>$attribute,
-        'editorOptions' => \mihaildev\elfinder\ElFinder::ckeditorOptions(['elfinder', 'path' => '/'],[
-                'preset' => 'standart',
-                'allowedContent' => true,
-                'height'=>'200px',
-                'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
-                'contentsCss'=>Yii::$app->zoo->cke_editor_css,
-        ])
-    ])?>
-
-    <div class="uk-form-help-block uk-text-danger"></div>
-
-</div>
+} else {
+    echo Html::activeTextarea($model, $element->attributeName, ['rows' => 3, 'class' => 'uk-textarea']);
+}

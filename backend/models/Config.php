@@ -4,14 +4,8 @@ namespace worstinme\zoo\backend\models;
 
 use Yii;
 
-class Config extends \yii\db\ActiveRecord
+class Config extends \worstinme\zoo\models\Config
 {
-
-    public static function tableName()
-    {
-        return '{{%zoo_config}}';
-    }
-
     public function rules()
     {
         return [

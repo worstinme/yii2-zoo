@@ -4,19 +4,22 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use worstinme\uikit\ActiveForm;
 
-$this->title = Yii::t('zoo', 'Категории');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/' . Yii::$app->controller->module->id . '/items/index', 'app' => Yii::$app->controller->app->id]];
+$this->title = Yii::t('zoo', 'CATEGORIES_INDEX_TITLE');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'APPLICATIONS_INDEX_BREADCRUMB'), 'url' => ['applications/index']];
+$this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['items/index', 'app' =>$app->id]];
 $this->params['breadcrumbs'][] = $this->title;
+
+$parent_categories = \worstinme\zoo\backend\models\Categories::find()
+    ->where(['app_id'=> $app->id, 'parent_id'=>0])
+    ->orderBy('sort')
+    ->indexBy('id')
+    ->all();
 
 ?>
 
-<?= $this->render('/_nav', ['app' => $app]) ?>
-
-<?php if (count(Yii::$app->controller->app->parentCategories)): ?>
-
+<?php if (count($parent_categories)): ?>
     <?= $this->render('_categories', [
-        'categories' => Yii::$app->controller->app->parentCategories,
+        'categories' => $parent_categories,
         'parent_id' => 0,
     ]) ?>
 <?php else: ?>
@@ -24,9 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php endif ?>
 
 <?php
-
-\worstinme\uikit\assets\Nestable::register($this);
-\worstinme\uikit\assets\Notify::register($this);
 
 $category_sort_url = Url::toRoute(['sort']);
 $alias_create_url = Url::toRoute(['alias-create']);

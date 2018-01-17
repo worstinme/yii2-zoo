@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 
-$this->registerJs($model->addValidators($this, $attribute), 5);
-
 $input_id = Html::getInputId($model, $attribute);
 
 \worstinme\zoo\assets\Select2Asset::register($this);

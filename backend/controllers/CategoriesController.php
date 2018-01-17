@@ -9,35 +9,10 @@ namespace worstinme\zoo\backend\controllers;
 use worstinme\zoo\helpers\Inflector;
 use Yii;
 use worstinme\zoo\backend\models\Categories;
-use yii\web\NotFoundHttpException;
+use yii\helpers\ArrayHelper;
 
 class CategoriesController extends Controller
 {
-
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'update', 'delete','sort'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'update', 'delete','sort'],
-                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => \yii\filters\VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post','delete'],
-                    'sort' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     public function actionAliasCreate()
     {
         $alias = Inflector::slug(Yii::$app->request->post('name'));
@@ -69,7 +44,6 @@ class CategoriesController extends Controller
     public function actionUpdate() {
 
         $app = $this->getApp();
-
         $model = $this->getCategory();
 
         $model->app_id = $app->id;
@@ -88,9 +62,20 @@ class CategoriesController extends Controller
             return $this->redirect(['index','app'=>$app->id,'parent_id'=>$model->parent_id]);
         }
 
+        $categories = Categories::find()->where(['app_id' => $this->app->id])->orderBy('sort ASC')->all();
+
+        $catlist = $this->processCatlist(ArrayHelper::toArray($categories, [
+            Categories::className() => [
+                'id',
+                'parent_id',
+                'name',
+            ],
+        ]));
+
         return $this->render('update', [
             'app' => $app,
             'model'=> $model,
+            'catlist'=>$catlist,
         ]);
     }
  

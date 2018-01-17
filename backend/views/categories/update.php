@@ -1,6 +1,6 @@
 <?php
 
-use worstinme\uikit\ActiveForm;
+use worstinme\zoo\widgets\ActiveForm;
 use worstinme\zoo\models\Categories;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -23,43 +23,41 @@ $items = ArrayHelper::map(Categories::find()
 
 ?>
 
-<?= $this->render('/_nav', ['model' => $model]) ?>
-
     <div class="uk-panel uk-panel-box">
         <h2><?= Yii::t('zoo', 'Создание категории') ?></h2>
 
-        <?php $form = ActiveForm::begin(['id' => 'login-form', 'layout' => 'stacked', 'field_width' => 'large']); ?>
+        <?php $form = ActiveForm::begin(['options'=>['class'=>'uk-form-horizontal']]); ?>
 
-        <?= $form->field($model, 'name')->textInput() ?>
+        <?= $form->field($model, 'name')->textInput(['class'=>'uk-input']) ?>
 
-        <?= $form->field($model, 'alias')->textInput() ?>
+        <?= $form->field($model, 'alias')->textInput(['class'=>'uk-input']) ?>
 
-        <?= $form->field($model, 'lang')->dropDownList(Yii::$app->zoo->languages, ['prompt' => 'язык категории']); ?>
+        <?= $form->field($model, 'lang')->dropDownList(Yii::$app->zoo->languages, ['class'=>'uk-select','prompt' => 'язык категории']); ?>
 
-        <?= $form->field($model, 'subtitle')->textInput() ?>
+        <?= $form->field($model, 'subtitle')->textInput(['class'=>'uk-input']) ?>
 
         <?= $form->field($model, 'parent_id')
-            ->dropDownList($app->catlist, ['prompt' => Yii::t('zoo', 'Корневая категория')]); ?>
+            ->dropDownList($catlist, ['class'=>'uk-select','prompt' => Yii::t('zoo', 'Корневая категория')]); ?>
 
         <?= $form->field($model, 'image')->widget(\mihaildev\elfinder\InputFile::className(), [
             'language' => 'ru',
             'controller' => 'elfinder',
-            'template' => '<div class="uk-form-row">{input}{button}</div>',
-            'options' => ['class' => 'uk-from-controls'],
-            'buttonOptions' => ['class' => 'uk-button uk-button-primary'],
+            'template' => '<div class="uk-margin" uk-margin><div  uk-form-custom="target: true">{input}</div>{button}</div>',
+            'options' => ['class' => 'uk-input uk-form-width-medium'],
+            'buttonOptions' => ['class' => 'uk-button uk-button-default'],
             'multiple' => false       // возможность выбора нескольких файлов
         ]); ?>
 
         <?= $form->field($model, 'preview')->widget(\mihaildev\elfinder\InputFile::className(), [
             'language' => 'ru',
             'controller' => 'elfinder',
-            'template' => '<div class="uk-form-row">{input}{button}</div>',
-            'options' => ['class' => 'uk-from-controls'],
-            'buttonOptions' => ['class' => 'uk-button uk-button-primary'],
+            'template' => '<div class="uk-margin" uk-margin><div  uk-form-custom="target: true">{input}</div>{button}</div>',
+            'options' => ['class' => 'uk-input uk-form-width-medium'],
+            'buttonOptions' => ['class' => 'uk-button uk-button-default'],
             'multiple' => false       // возможность выбора нескольких файлов
         ]); ?>
 
-        <?= $form->field($model, 'state')->checkbox(); ?>
+        <?= $form->field($model, 'state')->checkbox(['class'=>'uk-checkbox']); ?>
 
         <hr>
 
@@ -68,8 +66,6 @@ $items = ArrayHelper::map(Categories::find()
                 'preset' => 'standart',
                 'allowedContent' => true,
                 'height' => '200px',
-                'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
-                'contentsCss' => Yii::$app->zoo->cke_editor_css,
             ]),
         ]); ?>
 
@@ -78,8 +74,6 @@ $items = ArrayHelper::map(Categories::find()
                 'preset' => 'standart',
                 'allowedContent' => true,
                 'height' => '200px',
-                'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
-                'contentsCss' => Yii::$app->zoo->cke_editor_css,
             ]),
         ]); ?>
 
@@ -88,29 +82,18 @@ $items = ArrayHelper::map(Categories::find()
                 'preset' => 'standart',
                 'allowedContent' => true,
                 'height' => '200px',
-                'toolbar' => Yii::$app->zoo->cke_editor_toolbar,
-                'contentsCss' => Yii::$app->zoo->cke_editor_css,
             ]),
         ]); ?>
 
         <hr>
 
-        <?= $form->field($model, 'alternateIds')->widget(\worstinme\zoo\helpers\Select2Widget::className(), [
-            'options' => [
-                'multiple' => true,
-                'placeholder' => 'Choose alternates'
-            ],
-            'settings' => [
-                'width' => '100%',
-            ],
-            'items' => $items,
-        ]); ?>
+        <?= $form->field($model, 'alternateIds')->dropDownList($items,['multiple'=>true,'class'=>'uk-select'])?>
 
-        <?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
+        <?= $form->field($model, 'meta_title')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
 
-        <?= $form->field($model, 'metaDescription')->textarea(['rows' => 2, 'class' => 'uk-width-1-1']) ?>
+        <?= $form->field($model, 'meta_description')->textarea(['rows' => 2, 'class' => 'uk-width-1-1']) ?>
 
-        <?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
+        <?= $form->field($model, 'meta_keywords')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
 
         <div class="uk-form-row uk-margin-large-top">
             <?= Html::submitButton($model->isNewRecord ? Yii::t('zoo', 'Создать') : Yii::t('zoo', 'Сохранить'), ['class' => 'uk-button uk-button-success uk-button-large']) ?>
@@ -131,7 +114,7 @@ $('body')
 .on('change','#categories-name',function(){ 
     $.post('$url',{name:$('#categories-name').val()},function(data){ 
         if ($('#categories-alias').val()) { 
-            UIkit.modal.confirm('Replace alias? '+data.alias, function(){ 
+            UIkit.modal.confirm('Replace alias? '+data.alias).then(function(){ 
                 $('#categories-alias').val(data.alias) 
             }); 
         } else $('#categories-alias').val(data.alias)

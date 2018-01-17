@@ -15,10 +15,23 @@ class CallbackController extends Controller
 
         $actions = [];
 
-        foreach ($this->module->elements as $element => $name) {
+        $elements = [];
 
-            if (is_file(Yii::getAlias('@worstinme/zoo/elements').DIRECTORY_SEPARATOR.$element.DIRECTORY_SEPARATOR.'CallbackAction.php')) {
-                $actions[$element] = 'worstinme\zoo\elements\\'.$element.'\CallbackAction';
+        foreach ($this->app->elements as $element) {
+            if (!in_array($element->type, $elements)) {
+                $elements[] = $element->type;
+                if (is_file(Yii::getAlias('@worstinme/zoo/elements').DIRECTORY_SEPARATOR.$element->type.DIRECTORY_SEPARATOR.'CallbackAction.php')) {
+                    $actions[$element->type] = 'worstinme\zoo\elements\\'.$element->type.'\CallbackAction';
+                }
+            }
+        }
+
+        foreach ($this->app->systemElements as $element) {
+            if (!in_array($element->type, $elements)) {
+                $elements[] = $element->type;
+                if (is_file(Yii::getAlias('@worstinme/zoo/elements/system').DIRECTORY_SEPARATOR.$element->type.DIRECTORY_SEPARATOR.'CallbackAction.php')) {
+                    $actions[$element->type] = 'worstinme\zoo\elements\system\\'.$element->type.'\CallbackAction';
+                }
             }
         }
 

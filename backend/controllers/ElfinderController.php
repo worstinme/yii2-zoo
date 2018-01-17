@@ -11,17 +11,17 @@ use yii\web\NotFoundHttpException;
 
 class ElfinderController extends Controller
 {
+    public $subnav = false;
+
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index'],
-                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin','moder'],
+                        'roles' => Yii::$app->zoo->adminAccessRoles,
                     ],
                 ],
             ],
@@ -33,6 +33,4 @@ class ElfinderController extends Controller
         return $this->render('index');
 
     }
-
-
 }

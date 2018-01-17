@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 
 
-$this->registerJs($model->addValidators($this,$attribute), 5);
-
 ?>
 
 <?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>

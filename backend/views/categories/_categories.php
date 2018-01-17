@@ -5,37 +5,39 @@ use yii\helpers\Html;
 $related = isset($related) ? $related : false;
 
 ?>
-<ul class="<?=$related ? 'uk-nestable-list' : 'uk-nestable'?>"<?=$related ? '' :' data-uk-nestable="{handleClass:\'uk-nestable-handle\'}"'?> data-parent-id="<?=$parent_id?>">
-	<?php foreach ($categories as $category): ?>
-	    <li class="uk-collapsed uk-nestable-item" data-item-id="<?=$category->id?>">
-	        <div class="uk-nestable-panel">
-	            <i class="uk-nestable-handle uk-icon uk-icon-bars uk-margin-small-right"></i>
-	            <div data-nestable-action="toggle" class="uk-nestable-toggle uk-margin-small-right"></div>
-		        <?=Html::a($category->name,['update','app'=>$category->app_id,'category'=>$category->id])?> / <?=$category->alias?>
+<ul class="nestable <?=$related?'related':'parent'?>  parent-<?= $parent_id ?>" data-parent-id="<?= $parent_id ?>" uk-sortable="group: group; handle: .uk-sortable-handle" <?=$related?'hidden':''?>>
+    <?php if (count($categories)): ?>
+        <?php foreach ($categories as $category): ?>
+            <li class="uk-nestable-item" data-item-id="<?= $category->id ?>">
+                <div class="nestable-panel">
+                  <!--  <span class="uk-sortable-handle uk-margin-small-right" uk-icon="icon: table"></span> -->
+                    <span class="parent-<?= $category->id ?> uk-margin-small-right" uk-icon="icon: plus" uk-toggle="target: .parent-<?= $category->id ?>"></span>
+                    <span class="parent-<?= $category->id ?> uk-margin-small-right" uk-icon="icon: minus" uk-toggle="target: .parent-<?= $category->id ?>" hidden></span>
+                    #<?= $category->id ?>
+                    <?= Html::a($category->name, ['update', 'app' => $category->app_id, 'category' => $category->id]) ?>
+                    / <?= $category->alias ?>
 
-                <?=Html::a('','#',['onClick' => "var link=$(this);$.ajax({url:'".\yii\helpers\Url::to(['update','app'=>$category->app_id, 'category'=>$category->id])."',type:'POST',data: {'".$category->formName()."[state]':link.data('state')==0?1:0},success: function(data){if (data.success) {if(data.model.state == 1) link.attr('class','uk-margin-left uk-icon-check-circle'); else link.attr('class','uk-margin-left uk-icon-times-circle'); link.data('state',data.model.state)}}})",'class'=>"uk-margin-left uk-icon-".($category->state==1 ? 'check' :'times')."-circle",'data'=>['pjax'=>0,'state'=>$category->state]])?>
+                    <?= Html::a('<i uk-icon="icon: check"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['update', 'app' => $category->app_id, 'category' => $category->id]) . "',type:'POST',data: {'" . $category->formName() . "[state]':0},success: function(data){ if(data.success) { $('.state-button-$category->id').toggleClass('uk-hidden'); } }})", 'class' => "uk-margin-large-left state-button-".$category->id.($category->state ? null : " uk-hidden")]) ?>
+                    <?= Html::a('<i uk-icon="icon: close"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['update', 'app' => $category->app_id, 'category' => $category->id]) . "',type:'POST',data: {'" . $category->formName() . "[state]':1},success: function(data){ if(data.success) { $('.state-button-$category->id').toggleClass('uk-hidden'); } }})", 'class' => "uk-margin-large-left state-button-".$category->id.($category->state ? " uk-hidden" : null)]) ?>
 
-                <?=Html::a('','#',['onClick' => "var link=$(this);$.ajax({url:'".\yii\helpers\Url::to(['update','app'=>$category->app_id, 'category'=>$category->id])."',type:'POST',data: {'".$category->formName()."[flag]':link.data('state')==0?1:0},success: function(data){if (data.success) {if(data.model.flag == 1) link.attr('class','uk-margin-left uk-icon-flag'); else link.attr('class','uk-margin-left uk-icon-flag-o'); link.data('state',data.model.flag)}}})",'class'=>"uk-margin-left uk-icon-".($category->flag==1 ? 'flag' :'flag-o'),'data'=>['pjax'=>0,'state'=>$category->flag]])?>
+                    <?= Html::a('<i uk-icon="icon: trash"></i>', ['delete', 'app' => Yii::$app->controller->app->id, 'category' => $category->id], [
+                        'class' => 'uk-float-right',
+                        'data' => [
+                            'method' => 'post',
+                            'confirm' => 'Уверены что хотите удалить категорию ' . $category->name . '?',
+                        ],
+                    ]) ?>
 
-                <?=Html::a('<i class="uk-icon-trash"></i>',['delete','app'=>Yii::$app->controller->app->id,'category'=>$category->id],[
-		        		'class'=>'uk-float-right uk-margin-right',
-		        		'data'=>[
-		        			'method'=>'post',
-		        			'confirm'=>'Уверены что хотите удалить категорию '.$category->name.'?',
-		        		],
-		        ])?> 
 
-		        
+                    <i class="uk-float-right uk-margin-right"></i>
+                </div>
 
-		        <i class="uk-float-right uk-margin-right"><?=$category->id?></i>
-			</div>
-			<?php if ($category->getRelated()->count()): ?>
-		        <?= $this->render('_categories', [
-				    'categories' => $category->related,
-				    'related' =>true,
-				    'parent_id'=>$category->id,
-				]) ?>
-		    <?php endif ?>
-		</li>					
-	<?php endforeach ?>
+                <?= $this->render('_categories', [
+                    'categories' => $category->related,
+                    'related' => true,
+                    'parent_id' => $category->id,
+                ]) ?>
+            </li>
+        <?php endforeach ?>
+    <?php endif ?>
 </ul>

@@ -12,15 +12,22 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "worstinme/yii2-uikit": "*",
-        "mihaildev/yii2-elfinder" : "*",
-        "mihaildev/yii2-ckeditor" : "*",
         "yiisoft/yii2-imagine": "*",
+        "mihaildev/yii2-elfinder" : "dev-master",
         "bower-asset/select2": "4.*"
     },
     "autoload": {
         "psr-4": {
             "worstinme\\zoo\\": ""
         }
-    }
+    },
+    "extra": {
+        "bootstrap": "worstinme\\zoo\\Bootstrap"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/worstinme/yii2-elfinder"
+        }
+    ]
 }

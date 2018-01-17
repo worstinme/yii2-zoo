@@ -7,10 +7,10 @@ use Yii;
 class Element extends \worstinme\zoo\elements\BaseElementBehavior
 {
 
-	public function rules($attributes)
+	public function rules()
 	{
 		return [
-			[$attributes,'safe'],
+			[$this->attribute,'safe'],
 			//[$attributes,'required'],
 		];
 	}
@@ -40,7 +40,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
         return $this->owner->values[$attribute] = $value;
     }
 
-    public function getValue($attribute) {
+    public function getValue() {
 
         if (!isset($this->owner->values[$attribute])) {
             $this->loadAttributesFromElements($attribute);
@@ -51,7 +51,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
         return $v;
     }
 
-    public function setValue($attribute,$value) {
+    public function setValue($value) {
 
         if (!isset($this->owner->values[$attribute])) {
             $this->loadAttributesFromElements($attribute);

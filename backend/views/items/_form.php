@@ -1,12 +1,11 @@
 <?php
 
-use worstinme\zoo\models\Items;
+use worstinme\zoo\backend\models\Items;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Json;
-use worstinme\uikit\ActiveForm;
+use worstinme\zoo\widgets\ActiveForm;
 
-$rows = $model->getTemplateRows('form');
+/** @var $model Items */
 
 $items = ArrayHelper::map(Items::find()
     ->where(['app_id' => $model->app_id])
@@ -16,61 +15,40 @@ $items = ArrayHelper::map(Items::find()
     return $model->name . ' / ' . strtoupper($model->lang);
 });
 
-
 ?>
 
-<div class="uk-panel uk-panel-box">
+<?php $form = ActiveForm::begin(['id' => 'form', 'options' => ['class' => 'uk-form-stacked']]); ?>
 
-    <?php $form = ActiveForm::begin(['id' => 'form', 'layout' => 'stacked', 'enableClientValidation' => false]);
-
-    if (count($model->errors)) {
-        echo $form->errorSummary($model);
-    }
-
-    echo \worstinme\zoo\helpers\TemplateHelper::render($model, 'form');
-
-    ?>
-
-
-    <hr>
-
-    <div class="uk-grid">
-
-        <div class="uk-width-medium-2-3">
-
-            <?= $form->field($model, 'alternateIds')->widget(\worstinme\zoo\helpers\Select2Widget::className(), [
-                'options' => [
-                    'multiple' => true,
-                    'placeholder' => 'Choose alternates'
-                ],
-                'settings' => [
-                    'width' => '100%',
-                ],
-                'items' => $items,
-            ]); ?>
-
-            <?= $form->field($model, 'metaTitle')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
-
-            <?= $form->field($model, 'metaDescription')->textarea(['rows' => 2, 'class' => 'uk-width-1-1']) ?>
-
-            <?= $form->field($model, 'metaKeywords')->textInput(['maxlength' => true, 'class' => 'uk-width-1-1']) ?>
-
-
+    <div class="uk-grid" uk-grid>
+        <div class="uk-width-2-3@m">
+            <?= $form->field($model, 'element_name')->element(); ?>
+            <?= $form->field($model, 'element_category')->element(); ?>
         </div>
-
-        <div class="uk-width-medium-1-3">
-
-            <?= $form->field($model, 'state')->dropDownList([
-                $model::STATE_HIDDEN => 'Hidden',
-                $model::STATE_ACTIVE => 'Active',
-            ], ['option' => 'value']); ?>
-
-            <?= $form->field($model, 'flag')->checkbox(['option' => 'value'])->label('&nbsp;'); ?>
-
+        <div class="uk-width-1-3@m">
+            <div class="uk-width-medium-1-3">
+                <?= $form->field($model, 'element_lang')->element(); ?>
+                <div class="uk-grid uk-child-width-1-2@m" uk-grid>
+                    <div>
+                        <?= $form->field($model, 'state')->checkbox(); ?>
+                    </div>
+                    <div>
+                        <?= $form->field($model, 'flag')->checkbox(['option' => 'value']); ?>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
-
+<?php foreach ($model->app->elements as $element) : ?>
+    <?= $form->field($model, $element->attributeName)->element(); ?>
+<?php endforeach; ?>
+    <div class="uk-grid">
+        <div class="uk-width-2-3@m">
+            <?= $form->field($model, 'element_alternate')->element(); ?>
+            <?= $form->field($model, 'element_meta_title')->element(); ?>
+            <?= $form->field($model, 'element_meta_description')->element(); ?>
+            <?= $form->field($model, 'element_meta_keywords')->element(); ?>
+        </div>
+    </div>
     <div class="uk-form-row uk-margin-top">
         <?= Html::submitButton('Сохранить', ['name' => 'save', 'value' => 'continue', 'class' => 'uk-button uk-button-success']) ?>
         <?= Html::submitButton('Сохранить и закрыть', ['name' => 'save', 'value' => 'close', 'class' => 'uk-button uk-button-primary']) ?>
@@ -78,59 +56,5 @@ $items = ArrayHelper::map(Items::find()
             <?= Html::submitButton('Создать дубликат', ['name' => 'duplicate', 'value' => '1', 'class' => 'uk-button uk-button-danger']) ?>
         <?php endif ?>
     </div>
-    <?php ActiveForm::end(); ?>
 
-</div>
-
-<?php
-
-$refresh_el = ['.category-select'];
-
-foreach ($model->elements as $element) {
-    if ($element->refresh) {
-        $refresh_el[] = "#" . Html::getInputId($model, $element->name);
-    }
-    if ($element->related) {
-        $refresh_el[] = "#" . Html::getInputId($model, $element->related);
-    }
-}
-
-$refresh_el = implode(",", $refresh_el);
-
-$renderedElements = Json::encode($model->renderedElements);
-
-// echo Html::hiddenInput('renderedElements', $renderedElements, ['option' => 'value']);
-
-$action = \yii\helpers\Url::to(['create', 'app' => $model->app_id]);
-
-$js = <<<JS
-var form = $("#form");
-var renderedElements = $renderedElements;
-
-form.on("change",'$refresh_el', function() {
-    if (!form.hasClass('update')) {
-        form.addClass('update');
-        $.post(location.href, form.serialize() + '&' + $.param({reload:'true','renderedElements':renderedElements}),
-            function(data){
-                for (var i in data.removeElements) {
-                    form.find(".element-"+data.removeElements[i]).html("");
-                    form.yiiActiveForm('remove', 'element-'+data.removeElements[i]);
-                }
-                for (var i in data.renderElements) {
-                    form.find(".element-"+i).removeClass('uk-hidden').html(data.renderElements[i]);
-                }                
-                renderedElements = data.renderedElements;
-                console.log(data);
-                form.removeClass('update');
-            }
-        ); 
-    }        
-})
-.on("click","[name=duplicate]", function(){
-    form.attr("action","$action");
-});
-JS;
-
-$this->registerJs($js, $this::POS_READY); ?>
-
-</div>
+<?php ActiveForm::end(); ?>

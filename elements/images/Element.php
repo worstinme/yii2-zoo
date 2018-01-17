@@ -3,91 +3,21 @@
 namespace worstinme\zoo\elements\images;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\db\BaseActiveRecord;
 
-class Element extends \worstinme\zoo\elements\BaseElementBehavior
+class Element extends \worstinme\zoo\elements\BaseElement
 {
 
-	public function rules($attributes)
-	{
-		return [
-			[$attributes,'each', 'rule' => ['string']],
-			//[$attributes,'required'],
-		];
-	}
+    public $iconClass = 'uk-icon-header';
 
-	public $multiple = true;
+    public $_multiple = true;
 
-	public $value_field = 'value_string';
+    public function init() {
 
-	public function LoadAttributesFromElements($attribute) {
-		$value = [];
+        parent::init();
 
-    	foreach ($this->owner->itemsElements as $element) {
-    		if ($element->element == $attribute) {
-
-                if ($element->value_string !== null)
-                    
-    			$value[] = [
-                    'id'=>$element->id,
-					'value_text' =>$element->value_text,
-					'value_int' =>$element->value_int,
-					'value_string' =>$element->value_string,
-					'value_float' =>$element->value_float,
-				];
-    		}
-    	}
-
-    	return $this->owner->values[$attribute] = $value;
-	}
-
-    public function setValue($attribute,$value) {
-
-        if (!isset($this->owner->values[$attribute])) {
-            $this->loadAttributesFromElements($attribute);
-        }
-
-        if (is_array($value)) {
-
-            $va = [];
-
-            foreach ($value as $key => $v) {
-               
-
-                if ($v !== null && !empty($v)) {
-
-                    $a = [
-                        'value_text' =>null,
-                        'value_int' =>null,
-                        'value_string' =>null,
-                        'value_float' =>null,
-                    ];
-
-                    $a[$this->value_field] = $v;
-
-                    $va[] = $a;
-                }
-
-                
-            }
-
-            $this->owner->values[$attribute] = $va;
-
-        }
-        else {
-
-            $a = [
-                    'value_text' =>null,
-                    'value_int' =>null,
-                    'value_string' =>null,
-                    'value_float' =>null,
-                ];
-
-            $a[$this->value_field] = $value;
-                 
-            $this->owner->values[$attribute] = $a;
-        }
-
-        return true;
     }
+
 
 }

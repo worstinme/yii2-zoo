@@ -9,21 +9,16 @@ $this->title = Yii::$app->controller->app->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-?> 
+?>
 
-<?=$this->render('/_nav')?>
+<?php  \yii\widgets\Pjax::begin(['id'=>'catalogue','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?>
 
-<?php  \yii\widgets\Pjax::begin(['id'=>'catalogue','timeout'=>5000,'options'=>['class'=>'uk-margin-top','data-uk-observe'=>true]]); ?> 
-
-<?php if (Yii::$app->controller->app->filters): ?>
-    <?= $this->render('_filter',['searchModel'=>$searchModel]); ?>
-<?php endif ?>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'summaryOptions'=>['class'=>'uk-text-center'],
-    'tableOptions'=> ['class' => 'uk-table uk-form uk-table-condensed uk-table-hover uk-table-bordered uk-margin-top'],
+    'tableOptions'=> ['class' => 'uk-table uk-table-striped uk-table-hover uk-table-small'],
     'options'=> ['class' => 'items'],
     'layout' => '{items}{summary}{pager}',
     'pager' => ['class'=> 'worstinme\zoo\helpers\LinkPager'],
@@ -43,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'label'=>'Наименование',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]])." ".Html::a('<i class="uk-icon-external-link"></i>', $model->url, ['title' => Yii::t('zoo', 'Открыть на сайте'),
+                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]])." ".Html::a('url', $model->url, ['data-pjax'=>0,'target'=>'_blank','title' => Yii::t('zoo', 'Открыть на сайте'),
                         'target'=>'_blank','data'=>['pjax'=>false], 'style'=>'float:right;color:#468847',
                 ]);
             },
@@ -98,8 +93,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'contentOptions'=>['class'=>'uk-text-center'],
         ],
         [
-            'attribute'=>'category',
-            'filter'=>Yii::$app->controller->app->catlist,
+            'attribute'=>'element_category',
+            'filter'=>$catlist,
             'label'=>'Категории',
             'format' => 'html',
             'value' => function ($model, $index, $widget) {
@@ -137,7 +132,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked']); ?>
 
-    <?=$this->render('_actions')?>
+    <?=$this->render('_actions',[
+        'parentCategories'=>$parentCategories,
+    ])?>
 
 <?php ActiveForm::end(); ?>
 

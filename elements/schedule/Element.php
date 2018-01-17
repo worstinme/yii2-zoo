@@ -8,10 +8,10 @@ use yii\db\Query;
 class Element extends \worstinme\zoo\elements\BaseElementBehavior
 {
 
-    public function rules($attributes)
+    public function rules()
     {
         return [
-            [$attributes, 'safe'],
+            [$this->attribute, 'safe'],
             //[$attributes,'required'],
         ];
     }
@@ -38,7 +38,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
         return $this->owner->values[$attribute] = $value;
     }
 
-    public function getValue($attribute)
+    public function getValue()
     {
 
         if (!isset($this->owner->values[$attribute])) {
@@ -71,7 +71,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
         return $v;
     }
 
-    public function setValue($attribute, $value)
+    public function setValue($value)
     {
 
         if (!isset($this->owner->values[$attribute])) {
@@ -144,7 +144,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
             $q = (new Query())
                 ->select('id')
-                ->from('{{%zoo_schedule}}')
+                ->from('{{%schedule}}')
                 ->where([
                     'mo' => $v['mo'],
                     'tu' => $v['tu'],
@@ -159,7 +159,7 @@ class Element extends \worstinme\zoo\elements\BaseElementBehavior
 
             if (!$q) {
 
-                Yii::$app->db->createCommand()->insert('{{%zoo_schedule}}', [
+                Yii::$app->db->createCommand()->insert('{{%schedule}}', [
                     'mo' => $v['mo'],
                     'tu' => $v['tu'],
                     'we' => $v['we'],

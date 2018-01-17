@@ -15,7 +15,14 @@ class Menu extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%zoo_menu}}';
+        return '{{%menu}}';
+    }
+
+    public static function get($alias,$items = []) {
+
+        $zoo_items = [];
+
+        return $items;
     }
 
     /**
@@ -84,8 +91,8 @@ class Menu extends \yii\db\ActiveRecord
 
             return \yii\helpers\ArrayHelper::map((new \yii\db\Query())
                         ->select([ 'a.name','a.id'])
-                        ->from(['a'=>'{{%zoo_items}}'])
-                        ->innerJoin(['b' => '{{%zoo_items_categories}}','b.item_id = a.id'])
+                        ->from(['a'=>'{{%items}}'])
+                        ->innerJoin(['b' => '{{%items_categories}}','b.item_id = a.id'])
                         ->where(['a.app_id'=>$this->application_id,'b.category_id' => $this->category_id])
                         ->groupBy('a.id')
                         ->all(),'id','name');
@@ -93,7 +100,7 @@ class Menu extends \yii\db\ActiveRecord
         elseif(in_array($this->type, [3])) {
             return \yii\helpers\ArrayHelper::map((new \yii\db\Query())
                         ->select([ 'a.name','a.id'])
-                        ->from(['a'=>'{{%zoo_items}}'])
+                        ->from(['a'=>'{{%items}}'])
                         ->where(['a.app_id'=>$this->application_id])
                         ->groupBy('a.id')
                         ->all(),'id','name');

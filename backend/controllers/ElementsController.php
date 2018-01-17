@@ -4,11 +4,15 @@
  * @copyright Copyright (c) 2014 Evgeny Zakirov
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace worstinme\zoo\backend\controllers;
 
+use worstinme\zoo\backend\models\Categories;
+use worstinme\zoo\elements\BaseElement;
 use Yii;
 use worstinme\zoo\backend\models\Elements;
 
+use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 
 class ElementsController extends Controller
@@ -17,28 +21,18 @@ class ElementsController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'create', 'update','delete'],
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index', 'create', 'update','delete'],
-                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => \yii\filters\VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post','delete'],
+                    'delete' => ['post', 'delete'],
                 ],
             ],
         ];
     }
 
-    public function actionIndex() {
-        
+    public function actionIndex()
+    {
+
         $app = $this->getApp();
 
         return $this->render('index', [
@@ -49,57 +43,94 @@ class ElementsController extends Controller
 
     // редактирование/создание полей
 
-    public function actionCreate() {
+    public function actionCreate()
+    {
 
         $app = $this->getApp();
 
-        $model = new Elements;
-
-        $model->app_id = $app->id;
+        $model = new BaseElement([
+            'app_id' => $app->id,
+        ]);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Элемент создан. Необходимо его настроить.'));
-            return $this->redirect(['update','app'=>$app->id,'element'=>$model->id]);
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo', 'ELEMENTS_CREATION_SUCCESS'));
+            return $this->redirect(['update', 'element' => $model->id, 'app' => $model->app_id]);
+        }
+
+        $elements = [];
+
+        foreach (Yii::$app->zoo->elementsPaths as $namespace => $path) {
+
+            $path = rtrim(Yii::getAlias($path), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+
+            $directories = glob($path . '*', GLOB_ONLYDIR);
+
+            foreach ($directories as $directory) {
+
+                $explode = explode(DIRECTORY_SEPARATOR, $directory);
+                $elementName = array_pop($explode);
+
+                if (class_exists($namespace . '\\' . $elementName . '\Element')) {
+                    $elements[] = $elementName;
+                }
+
+            }
+
         }
 
         return $this->render('create', [
             'app' => $app,
-            'model'=> $model,
+            'elements' => $elements,
+            'model' => $model,
         ]);
     }
 
-    public function actionUpdate() {
+    public function actionUpdate($element)
+    {
 
         $app = $this->getApp();
 
-        if (($model = Elements::findOne(Yii::$app->request->get('element'))) === null) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Элемент не найден'));
-            return $this->redirect(['index','app'=>$app->id]);
-        }
+        $model = $this->getElement($element);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success', Yii::t('zoo','Настройка элемента сохранены'));
-           // return $this->redirect(['index','app'=>$app->id]);
+            Yii::$app->getSession()->setFlash('success', Yii::t('zoo', 'ELEMENTS_UPDATE_SUCCESS'));
         }
+
+        $categories = Categories::find()->where(['app_id' => $this->app->id])->orderBy('sort ASC')->all();
+
+        $catlist = $this->processCatlist(ArrayHelper::toArray($categories, [
+            Categories::className() => [
+                'id',
+                'parent_id',
+                'name',
+            ],
+        ]));
 
         return $this->render('update', [
             'app' => $app,
-            'model'=> $model,
+            'model' => $model,
+            'catlist'=> $catlist,
         ]);
     }
 
-    public function actionDelete($element) {
+    public function actionDelete($element)
+    {
 
         $app = $this->getApp();
 
         if (Yii::$app->request->isPost) {
-            if (($fi= elements::findOne($element)) !== null) {
-                $fi->delete();
-            }
+            $this->getElement($element)->delete();
         }
 
-        return $this->redirect(['index','app'=>$app->id]);
+        return $this->redirect(['index', 'app' => $app->id]);
     }
 
+    protected function getElement($id)
+    {
+        if (($model = BaseElement::findOne($id)) !== null) {
+            return $model;
+        }
+        throw  new NotFoundHttpException('Element not found');
+    }
 
 }

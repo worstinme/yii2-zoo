@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 
-$this->registerJs($model->addValidators($this,$attribute), 5);
-
 $variants = is_array($element->variants) ? $element->variants : [];
 $input_id = Html::getInputId($model,$attribute);
 

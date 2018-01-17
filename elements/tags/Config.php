@@ -53,7 +53,7 @@ class Config extends \yii\base\Behavior
 
         return ArrayHelper::map((new Query())
             ->select(['value_string','count(item_id) as c'])
-            ->from('{{%zoo_items_elements}}')
+            ->from('{{%items_elements}}')
             ->groupBy('value_string')
             ->orderBy('c DESC')
             ->where(['element'=>$this->owner->name])

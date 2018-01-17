@@ -17,8 +17,6 @@ class AppHelper
             if ($handle === false) {
                 throw new InvalidParamException("Unable to open directory: $dir");
             }
-
-            
             
             while (($file = readdir($handle)) !== false) {
                 $path = $dir . DIRECTORY_SEPARATOR . $file;

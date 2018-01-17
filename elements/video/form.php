@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use mihaildev\elfinder\InputFile;
 
-$this->registerJs($model->addValidators($this,$attribute), 5);
 
 $input_id = Html::getInputId($model,$attribute);
 

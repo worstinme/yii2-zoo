@@ -1,63 +1,42 @@
 <?php
 
-use worstinme\uikit\ActiveForm;
-use yii\helpers\Url;
+use worstinme\zoo\widgets\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = $model->isNewRecord ? Yii::t('zoo','Создание элемента') : $model->title;
+$this->title = Yii::t('zoo', 'ELEMENTS_SELECT_TYPE_TITLE');
 
-$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
-$this->params['breadcrumbs'][] = ['label' => Yii::$app->controller->app->title, 'url' => ['/'.Yii::$app->controller->module->id.'/items/index','app'=>Yii::$app->controller->app->id]];
-$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Элементы'), 'url' => ['/'.Yii::$app->controller->module->id.'/elements/index','app'=>$app->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'APPLICATIONS_INDEX_BREADCRUMB'), 'url' => ['/zoo/default/index']];
+$this->params['breadcrumbs'][] = ['label' => $app->title, 'url' => ['/zoo/items/index', 'app' => $app->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'ELEMENTS_INDEX_BREADCRUMB'), 'url' => ['index', 'app' => $app->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?=$this->render('/_nav',['app'=>$app])?>
 <div class="uk-panel uk-panel-box">
-<h2><?=$this->title?></h2>
+    <h2><?= $this->title ?></h2>
 
-<?php $form = ActiveForm::begin(['id' => 'login-form','layout'=>'stacked','field_width'=>'full']); ?>    
+    <?php $form = ActiveForm::begin(); ?>
 
-	<div class="uk-grid">
+    <?= $form->field($model, 'label')->textInput(['class' => 'uk-input'])  ?>
 
-		<div class="uk-width-medium-2-3 uk-margin">
+    <?= $form->field($model, 'name')->textInput(['placeholder'=>'^[\w_]+', 'class' => 'uk-input']) ?>
 
-			<?= $form->field($model, 'type')->dropdownlist(Yii::$app->controller->module->elements,['prompt'=>' '])?>
+    <div class="uk-grid uk-child-width-1-5@s uk-grid-match uk-grid-small" uk-grid>
+        <?php foreach ($elements as $element): ?>
 
-			<?= $form->field($model, 'label')->textInput(["data-aliascreate"=>"#elements-name"])  ?>
-
-		    <?= $form->field($model, 'name')->textInput(['placeholder'=>'^[\w_]+'])  ?>
-
-	    </div>
-
-	</div>
-
-    <div class="uk-form-row uk-margin-large-top">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('zoo','Создать') : Yii::t('zoo','Сохранить'),['class'=>'uk-button uk-button-success uk-button-large']) ?>
+        <div>
+            <?= Html::a('<i class="uk-icon-cog"></i> ' . $element, null, [
+                'class' => 'uk-button uk-button-primary',
+                'data' => [
+                    'method' => 'post',
+                    'params' => [
+                        $model->formname() . "[type]" => $element,
+                    ]
+                ]
+            ]) ?>
+        </div>
+        <?php endforeach ?>
     </div>
 
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 </div>
-
-<?php
-
-$alias_create_url = Url::toRoute(['/'.Yii::$app->controller->module->id.'/default/alias-create']);
-
-$script = <<< JS
-
-(function($){
-
-	$("[data-aliascreate]").on('change',function(){
-		var item = $(this),aliastarget = $($(this).data('aliascreate'));
-		$.post('$alias_create_url',{name:item.val(),'nodelimiter':true}, function(data) {
-				aliastarget.val(data.alias);
-				aliastarget.trigger( "change" );
-		});
-	});
-
-})(jQuery);
-
-JS;
-
-$this->registerJs($script,\yii\web\View::POS_END);

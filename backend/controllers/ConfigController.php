@@ -7,34 +7,22 @@ use worstinme\zoo\backend\models\Config;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 
-class ConfigController extends Controller
+class ConfigController extends \yii\web\Controller
 {
-
-
     public function behaviors()
     {
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'update', 'delete','create'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['index', 'update', 'delete','create'],
-                        'roles' => $this->module->accessRoles !== null ? $this->module->accessRoles : ['admin'],
+                        'roles' => Yii::$app->zoo->adminAccessRoles,
                     ],
-                ],
-            ],
-            'verbs' => [
-                'class' => \yii\filters\VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post','delete'],
-                    'sort' => ['post'],
                 ],
             ],
         ];
     }
-
 
     public function actionIndex()
     {

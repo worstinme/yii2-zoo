@@ -4,39 +4,54 @@
  * @copyright Copyright (c) 2014 Evgeny Zakirov
  * @license http://opensource.org/licenses/MIT MIT
  */
+
 namespace worstinme\zoo\backend\controllers;
 
 use Yii;
-
-use worstinme\zoo\backend\models\Applications;
-
-use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
 
 class Controller extends \yii\web\Controller
 {
     private $application;
+    public $subnav = true;
 
-    public function render($view, $params = [])
+    public function behaviors()
     {
-        \worstinme\zoo\assets\AdminAsset::register($this->view);
-        return parent::render($view, $params);
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => Yii::$app->zoo->adminAccessRoles,
+                    ],
+                ],
+            ],
+        ];
     }
 
-    public function getApp() {
-
-        if ($this->application === null) 
-
-            if (($this->application = Applications::findOne(Yii::$app->request->get('app'))) === null)
-
-                throw new NotFoundHttpException('The requested page does not exist.');
-            
-        return $this->application;
+    public function getApp()
+    {
+        return Yii::$app->zoo->getApplication(Yii::$app->request->get('app'));
     }
 
     public function afterAction($action, $result)
     {
         Yii::$app->getUser()->setReturnUrl(Yii::$app->request->url);
         return parent::afterAction($action, $result);
+    }
+
+    protected function processCatlist($categories, $parent_id = 0, $delimiter = null, $array = [])
+    {
+        if (count($categories)) {
+            foreach ($categories as $key => $category) {
+                if ($category['parent_id'] == $parent_id) {
+                    $array[$category['id']] = (empty($delimiter) ? '' : $delimiter . ' ') . $category['name'];
+                    unset($categories[$key]);
+                    $array = $this->processCatlist($categories, $category['id'], $delimiter . '—', $array);
+                }
+            }
+        }
+        return $array;
     }
 }

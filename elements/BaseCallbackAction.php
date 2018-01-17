@@ -8,9 +8,8 @@
 
 namespace worstinme\zoo\elements;
 
-use worstinme\zoo\backend\models\Elements;
 use Yii;
-use worstinme\zoo\models\Items;
+use worstinme\zoo\backend\models\Items;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
@@ -20,9 +19,7 @@ class BaseCallbackAction extends Action
     public $element;
 
     public function init() {
-
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
     }
 
     public function runWithParams($params)
@@ -31,9 +28,7 @@ class BaseCallbackAction extends Action
             throw new InvalidConfigException(get_class($this) . ' must send Element Name.');
         }
 
-        if (($this->element = Elements::findOne(['name'=>$params['element']])) === null) {
-            throw new InvalidConfigException(get_class($this) . ' element '.$params['element'].' not found');
-        }
+        $this->element = $this->controller->app->getElement($params['element']);
 
         return parent::runWithParams($params);
 

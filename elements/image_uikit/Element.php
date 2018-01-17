@@ -3,171 +3,126 @@
 namespace worstinme\zoo\elements\image_uikit;
 
 use Yii;
-use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 
-class Element extends \worstinme\zoo\elements\BaseElementBehavior
+class Element extends \worstinme\zoo\elements\BaseElement
 {
 
-    public function rules($attributes)
+    public $iconClass = 'uk-icon-image';
+    public $_multiple = true;
+    public $temp = '@app/runtime/uploads';
+
+    public function getRules()
     {
         return [
-            [$attributes, 'safe'],
+            [['dir','webroot'], 'string','max'=>255],
+            ['spread','integer'],
+            ['rename','integer'],
+            ['horizontalResizeWidth','integer'],
+            ['verticalResizeWidth','integer'],
+            ['maxFileSize','integer'],
         ];
     }
 
-    public $multiple = true;
-    public $value_field = 'value_text';
-
-    public function getTempImages($attribute)
-    {
-        return Yii::$app->session->get('images-' . $attribute, []);
-    }
-
-    public function resetTempImages($attribute)
-    {
-        return Yii::$app->session->remove('images-' . $attribute);
-    }
-
-    public function getValue($attribute)
-    {
-        if (!isset($this->owner->values[$attribute])) {
-            $this->loadAttributesFromElements($attribute);
-        }
-
-        $v = \yii\helpers\ArrayHelper::getColumn($this->owner->values[$attribute], function ($a) {
-            return Json::decode($a[$this->value_field]);
-        });
-
-        return $v;
-    }
-
-    public function setValue($attribute, $value)
-    {
-        if (!isset($this->owner->values[$attribute])) {
-            $this->loadAttributesFromElements($attribute);
-            $this->owner->setOldValue($attribute, $this->owner->values[$attribute]);
-        }
-
-        $va = [];;
-
-        if (is_array($value)) {
-
-            foreach ($value as $key => $v) {
-                $a = [
-                    'value_text' => null,
-                    'value_int' => null,
-                    'value_string' => null,
-                    'value_float' => null,
-                ];
-
-
-                if (!empty($v)) {
-                    $a[$this->value_field] = Json::encode($v);
-                    $va[] = $a;
-                }
-
-            }
-
-        }
-
-        $this->owner->values[$attribute] = $va;
-
-
-        return true;
-    }
-
-    public function events()
+    public function getLabels()
     {
         return [
-            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
-            ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
-            ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
+            'dir' => Yii::t('zoo/image_uikit', 'DIR'),
+            'webroot' => Yii::t('zoo/image_uikit', 'WEBROOT'),
+            'spread' => Yii::t('zoo/image_uikit', 'SPREAD'),
+            'rename' => Yii::t('zoo/image_uikit', 'RENAME'),
+            'maxFileSize'=>Yii::t('zoo/image_uikit', 'MAX_FILE_SIZE'),
+            'horizontalResizeWidth'=>Yii::t('zoo/image_uikit', 'HORIZONTAL_RESIZE_WIDTH'),
+            'verticalResizeWidth'=>Yii::t('zoo/image_uikit', 'VERTICAL_RESIZE_WIDTH'),
         ];
     }
 
-    public function afterFind()
-    {
-        $attributes = $this->owner->getElementsByType('image_uikit');
-        foreach ($attributes as $attribute) {
-            $this->owner->setOldValue($attribute, $this->owner->{$attribute});
-        }
-
+    public function getConfigView() {
+        return '@worstinme/zoo/elements/image_uikit/_settings';
     }
 
-    public function afterSave()
+    public function getDir()
     {
-        $attributes = $this->owner->getElementsByType('image_uikit');
-
-        foreach ($attributes as $attribute) {
-
-            $element = $this->owner->elements[$attribute];
-
-            $images = $this->owner->{$attribute};
-
-            $files = ArrayHelper::getColumn($images, 'source');
-
-            if (count($images)) {
-
-                foreach ($images as $key => &$image) {
-
-                    if ($image['tmp']) {
-
-                        if (is_file(Yii::getAlias('@app') . $image['source'])) {
-                            $pathInfo = pathinfo('_' . $image['source'], PATHINFO_FILENAME);
-                            $newName = mb_substr($pathInfo, 1, mb_strlen($pathInfo, '8bit'), '8bit');
-                            $newExtension = strtolower(pathinfo($image['source'], PATHINFO_EXTENSION));
-
-                            $dir = $element->spread ? '/' . $element->dir . $this->owner->id . '/' : '/' . $element->dir;
-
-                            if (!is_dir(Yii::getAlias('@webroot') . $dir)) {
-                                mkdir(Yii::getAlias('@webroot') . $dir, 0777, true);
-                            }
-
-                            $newFile = $dir . $newName . '.' . $newExtension;
-
-                            if (rename(Yii::getAlias('@app') . $image['source'], Yii::getAlias('@webroot') . $newFile)) {
-                                $image['source'] = $newFile;
-                                $image['tmp'] = 0;
-                            } else {
-                                unset($images[$key]);
-                            }
-
-                        } else {
-                            unset($images[$key]);
-                        }
-                    }
-                }
-
-            } else {
-
-                Yii::$app->db->createCommand()->delete('{{%zoo_items_elements}}', ['item_id' => $this->owner->id, 'element' =>
-                    $attribute])->execute();
-            }
-
-            $oldImages = $this->owner->getOldValue($attribute);
-
-            if (is_array($oldImages)) {
-                foreach ($oldImages as $oldImage) {
-
-                    $file = Yii::getAlias($oldImage['tmp'] ? '@app' : '@webroot') . $oldImage['source'];
-
-                    if (!in_array($oldImage['source'], $files) && is_file($file)) {
-                        unlink($file);
-                    }
-
-                }
-            }
-
-            $this->owner->{$attribute} = $images;
-            $this->resetTempImages($attribute);
-
-        }
+        return isset($this->paramsArray['dir'])?$this->paramsArray['dir']:'@webroot/images/';
     }
 
-    public function afterDelete()
+    public function setDir($a)
     {
+        $params = $this->paramsArray;
+        $params['dir'] = trim($a,"\\/");
+        return $this->paramsArray = $params;
     }
+
+    public function getMaxFileSize()
+    {
+        return isset($this->paramsArray['maxFileSize'])?$this->paramsArray['maxFileSize']:4;
+    }
+
+    public function setMaxFileSize($a)
+    {
+        $params = $this->paramsArray;
+        $params['maxFileSize'] = $a;
+        return $this->paramsArray = $params;
+    }
+
+    public function getRename()
+    {
+        return isset($this->paramsArray['rename'])?$this->paramsArray['rename']:0;
+    }
+
+    public function setRename($a)
+    {
+        $params = $this->paramsArray;
+        $params['rename'] = $a;
+        return $this->paramsArray = $params;
+    }
+
+    public function getHorizontalResizeWidth()
+    {
+        return isset($this->paramsArray['horizontalResizeWidth'])?$this->paramsArray['horizontalResizeWidth']:0;
+    }
+
+    public function setHorizontalResizeWidth($a)
+    {
+        $params = $this->paramsArray;
+        $params['horizontalResizeWidth'] = $a;
+        return $this->paramsArray = $params;
+    }
+
+    public function getVerticalResizeWidth()
+    {
+        return isset($this->paramsArray['verticalResizeWidth'])?$this->paramsArray['verticalResizeWidth']:0;
+    }
+
+    public function setVerticalResizeWidth($a)
+    {
+        $params = $this->paramsArray;
+        $params['verticalResizeWidth'] = $a;
+        return $this->paramsArray = $params;
+    }
+
+    public function getSpread()
+    {
+        return isset($this->paramsArray['spread'])?$this->paramsArray['spread']:1;
+    }
+
+    public function setSpread($a)
+    {
+        $params = $this->paramsArray;
+        $params['spread'] = $a;
+        return $this->paramsArray = $params;
+    }
+
+    public function getWebroot()
+    {
+        return isset($this->paramsArray['webroot'])?$this->paramsArray['webroot']:'@webroot';
+    }
+
+    public function setWebroot($a)
+    {
+        $params = $this->paramsArray;
+        $params['webroot'] = trim($a,"\\/");
+        return $this->paramsArray = $params;
+    }
+
 
 }

@@ -1,0 +1,85 @@
+.mainnav.uk-navbar-container {
+    background: linear-gradient(to left, #28a5f5, #1e87f0);
+}
+.mainnav .uk-navbar-nav>li>a {
+    height: 60px;
+    position: relative;
+    color:rgba(255,255,255,0.8);
+}
+.mainnav .uk-navbar-nav>li.active>a {
+    color:#fff;
+}
+.mainnav .uk-navbar-nav>li>a::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 15px;
+    right: calc(102% - 15px);
+    bottom: 15px;
+    height: 1px;
+    background-color: currentColor;
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+    -webkit-transition-property: right;
+    transition-property: right;
+}
+.mainnav .uk-navbar-nav>li>a:hover::before,.mainnav .uk-navbar-nav>li.active>a::before {
+    right:15px;
+}
+
+.subnav .uk-navbar-nav>li>a
+{
+    height: 40px;
+    padding: 0 15px;
+    font-size: .775rem;
+}
+
+.uk-table-small td, .uk-table-small th {
+    padding: 4px 6px;
+}
+
+.uk-table-striped thead tr+tr {
+    border-top: 1px solid #e5e5e5;
+}
+
+
+.element_name .element_alias {
+    margin-left: 40px;
+    margin-top:5px!important;
+}
+
+.element_name .element_alias .uk-input {
+    height: 25px;
+    font-size: 90%;
+    padding-left:6px;
+}
+
+.element_name .element_alias .uk-input:not(:focus) {
+
+}
+
+.uk-table-small td, .uk-table-small th {
+    padding: 2px 5px;
+}
+
+.nestable {
+    margin:0;
+    list-style: none;
+    padding:5px;
+    border:1px dotted #eee;
+}
+.nestable>li+li {
+    padding-top:5px;
+}
+.nestable>li>.nestable-panel  {
+    padding:5px 10px;
+    border:1px solid #eee;
+}
+
+.nestable .nestable {
+    margin-left:40px;
+    margin-top:5px;
+}
+.nestable .nestable.uk-sortable-empty {
+    min-height: 36px;
+}

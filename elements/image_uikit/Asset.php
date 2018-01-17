@@ -11,7 +11,7 @@ use yii\web\AssetBundle;
 
 class Asset extends AssetBundle
 {
-    public $sourcePath = '@worstinme/zoo/elements/image_uikit';
+    public $sourcePath = '@worstinme/zoo/elements/image_uikit/assets';
     public $css = [
         'style.css',
     ];
@@ -19,6 +19,5 @@ class Asset extends AssetBundle
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'worstinme\uikit\UikitAsset',
     ];
 }

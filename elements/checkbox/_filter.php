@@ -9,7 +9,7 @@ $attribute_sq = $element->name.'.value_string';
 
 $j = false; foreach ($varQuery->join as $join)  if (isset($join[1][$element->name])) $j = true;  
 
-if (!$j) $varQuery->leftJoin([$element->name=>'{{%zoo_items_elements}}'], $element->name.".item_id = a.id AND ".$element->name.".element = '".$element->name."'"); 
+if (!$j) $varQuery->leftJoin([$element->name=>'{{%items_elements}}'], $element->name.".item_id = a.id AND ".$element->name.".element = '".$element->name."'");
 
 $variants = $varQuery->select($attribute_sq)
                 ->groupBy($attribute_sq)

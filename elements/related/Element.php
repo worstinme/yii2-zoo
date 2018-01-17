@@ -7,10 +7,10 @@ use Yii;
 class Element extends \worstinme\zoo\elements\BaseElementBehavior
 {
 
-	public function rules($attributes)
+	public function rules()
 	{
 		return [
-			[$attributes,'integer'],
+			[$this->attribute,'integer'],
 		];
 	}
 

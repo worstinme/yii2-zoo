@@ -27,10 +27,10 @@ if ($filter['element'] == 'parsed_category') {
 	$categories = (new \yii\db\Query())
 	    ->select(['value_string'])
 	    ->distinct()
-	    ->from('{{%zoo_items_elements}}')
+	    ->from('{{%items_elements}}')
 	    ->where(['element'=>'parsed_category']);
 
-	$categories = $searchModel->withoutCategory ? $categories->andWhere('item_id NOT IN (SELECT DISTINCT item_id FROM {{%zoo_items_categories}} WHERE 1)')->column(): $categories->column();
+	$categories = $searchModel->withoutCategory ? $categories->andWhere('item_id NOT IN (SELECT DISTINCT item_id FROM {{%items_categories}} WHERE 1)')->column(): $categories->column();
 
 	$variants = [];
 
@@ -60,8 +60,8 @@ else {
 
 	$variants = $filter['element'] !== null ? (new \yii\db\Query())
 	    ->select(['ie.value_string'])
-	    ->from(['ie'=>'{{%zoo_items_elements}}'])
-	    ->leftJoin(['i'=>'{{%zoo_items}}'],'i.id = ie.item_id')
+	    ->from(['ie'=>'{{%items_elements}}'])
+	    ->leftJoin(['i'=>'{{%items}}'],'i.id = ie.item_id')
 	    ->where(['ie.element'=>$filter['element'],'i.app_id'=>Yii::$app->controller->app->id])
 	    ->groupBy('value_string')
 	    ->orderBy('count(item_id) DESC')
@@ -79,7 +79,7 @@ else {
 
 		$j = false; if(count($varQuery->join) > 0) foreach ($varQuery->join as $join)  if (isset($join[1][$element->name])) $j = true;  
 
-		if (!$j) $varQuery->leftJoin([$filter['element']=>'{{%zoo_items_elements}}'], $filter['element'].".item_id = a.id AND ".$filter['element'].".element = '".$filter['element']."'"); 
+		if (!$j) $varQuery->leftJoin([$filter['element']=>'{{%items_elements}}'], $filter['element'].".item_id = a.id AND ".$filter['element'].".element = '".$filter['element']."'"); 
 
 		$variants = $varQuery->select($attribute_sq)
 		                ->groupBy($attribute_sq)

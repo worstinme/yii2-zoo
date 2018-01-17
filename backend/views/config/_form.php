@@ -1,28 +1,28 @@
 <?php
 
 use yii\helpers\Html;
-use worstinme\uikit\ActiveForm;
+use worstinme\zoo\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\admin\models\Config */
+/* @var $model worstinme\zoo\models\Config */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="config-form">
 
-    <?php $form = ActiveForm::begin(['layout'=>'horizontal']); ?>
+    <?php $form = ActiveForm::begin(['options' => ['class'=>'uk-form-horizontal']]); ?>
 
     <?php if (Yii::$app->request->get('name') !== null): ?>
-    	<?= $form->field($model, 'name')->textInput(['maxlength' => true,'disabled'=>true,'class'=>'uk-disabled']) ?>
+    	<?= $form->field($model, 'name')->textInput(['maxlength' => true,'disabled'=>true,'class'=>'uk-input uk-disabled']) ?>
     <?php else: ?>
-    	<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    	<?= $form->field($model, 'name')->textInput(['class'=>'uk-input','maxlength' => true]) ?>
     <?php endif ?>
 
-    <?= $form->field($model, 'category')->textInput(['option' => 'value']); ?>
+    <?= $form->field($model, 'category')->textInput(['class'=>'uk-input']); ?>
 
-    <?= $form->field($model, 'value')->textarea(['rows' => 6,'class'=>'uk-width-medium-2-3']) ?>
+    <?= $form->field($model, 'value')->textarea(['class'=>'uk-textarea','rows' => 4]) ?>
 
-    <?= $form->field($model, 'comment')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'comment')->textInput(['class'=>'uk-input','maxlength' => true]) ?>
 
     <div class="uk-form-row">
     	<div class="uk-form-controls">

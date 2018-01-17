@@ -1,1 +1,0 @@
-<span class="label"><?=$model->getAttributeLabel($attribute)?>:</span> <?=$model->{$attribute}?>
