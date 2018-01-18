@@ -14,6 +14,7 @@ use worstinme\zoo\backend\models\Elements;
 
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 class ElementsController extends Controller
 {
@@ -111,6 +112,28 @@ class ElementsController extends Controller
             'model' => $model,
             'catlist'=> $catlist,
         ]);
+    }
+
+    public function actionSort() {
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $sort = Yii::$app->request->post('sort');
+
+        if (is_array($sort)) {
+            foreach ($sort as $id => $index) {
+                if (($item = BaseElement::findOne($id)) !== null) {
+                    $item->updateAttributes(['sort'=>$index]);
+                }
+            }
+            return [
+                'message'=>Yii::t('zoo','SORTING_SUCCESSEFUL_MESSAGE'),
+            ];
+        }
+
+        return [
+            'message'=>Yii::t('zoo','SORTING_FAILED_MESSAGE'),
+        ];
     }
 
     public function actionDelete($element)

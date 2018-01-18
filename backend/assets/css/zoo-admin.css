@@ -83,3 +83,12 @@
 .nestable .nestable.uk-sortable-empty {
     min-height: 36px;
 }
+
+
+table tr:first-child a[data-up] {
+    display: none;
+}
+
+table tr:last-child a[data-down] {
+    display: none;
+}

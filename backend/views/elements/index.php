@@ -28,16 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if (count($app->elements)): ?>
         <tbody>
         <?php foreach ($app->elements as $key => $element): ?>
-            <tr>
+            <tr data-item-id="<?=$element->id?>">
                 <td>
                     <?= Html::a($element->label, ['update', 'element' => $element->id, 'app' => $app->id]) ?></td>
                 <td><?= $element->name ?></td>
                 <td><?= $element->type ?></td>
                 <td class="uk-text-right">
-                    <span uk-icon="icon: chevron-up"></span>
+                    <a data-up href="#"><span uk-icon="icon: chevron-up"></span></a>
                 </td>
                 <td class="uk-text-left">
-                    <span uk-icon="icon: chevron-down"></span>
+                    <a data-down href="#"><span uk-icon="icon: chevron-down"></span></a>
                 </td>
                 <td class="uk-text-right">
                     <?= Html::a(null, ['delete', 'element' => $element->id, 'app' => $app->id],
@@ -49,3 +49,36 @@ $this->params['breadcrumbs'][] = $this->title;
         </tbody>
     <?php endif ?>
 </table>
+
+<?php
+
+$url = \yii\helpers\Url::to(['sort']);
+
+$script = <<<JS
+    $(document).on("click","[data-up]", function(e) {
+        e.preventDefault();
+        var row = $(this).parents("tr");
+        row.prev().before(row);
+        var data = [];
+        row.parents("table").find("tr").each(function(index, item) {
+          data[$(this).data("item-id")] = index;
+        })
+        $.post("$url",{sort:data}).then(function(data) {
+            UIkit.notification(data.message);
+        });
+    });
+    $(document).on("click","[data-down]", function(e) {
+        e.preventDefault();
+        var row = $(this).parents("tr");
+        row.next().after(row);
+        var data = [];
+        row.parents("table").find("tr").each(function(index, item) {
+          data[$(this).data("item-id")] = index;
+        })
+        $.post("$url",{sort:data}).then(function(data) {
+            UIkit.notification(data.message);
+        });
+    });
+JS;
+
+$this->registerJs($script, $this::POS_READY);
