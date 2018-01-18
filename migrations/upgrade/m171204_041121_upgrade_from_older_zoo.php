@@ -18,7 +18,7 @@ class m171204_041121_upgrade_from_older_zoo extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB';
         }
 
-      /*   $this->alterColumn('{{%zoo_items}}','app_id',$this->string()->notNull());
+         $this->alterColumn('{{%zoo_items}}','app_id',$this->string()->notNull());
          $this->alterColumn('{{%zoo_categories}}','app_id',$this->string()->notNull());
          $this->alterColumn('{{%zoo_elements}}','app_id',$this->string()->notNull());
 
@@ -197,9 +197,20 @@ class m171204_041121_upgrade_from_older_zoo extends Migration
             'intro'=>$this->text(),
             'created_at'=>$this->integer()->unsigned()->notNull(),
             'updated_at'=>$this->integer()->unsigned()->notNull(),
-        ], $tableOptions); */
+        ], $tableOptions);
 
         $this->renameTable('{{%zoo_config}}','{{%config}}');
+        $this->renameTable('{{%zoo_menu}}','{{%menu}}');
+
+        $this->dropColumn('{{%menu}}','application_id');
+        $this->dropColumn('{{%menu}}','category_id');
+        $this->dropColumn('{{%menu}}','item_id');
+        $this->dropColumn('{{%menu}}','url');
+        $this->dropColumn('{{%menu}}','content');
+
+        $this->db->createCommand('DELETE FROM {{%menu}} WHERE 1')->execute();
+
+        $this->addColumn('{{%menu}}','lang', $this->string()->notNull());
 
         return true;
     }
