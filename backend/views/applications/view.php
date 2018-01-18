@@ -3,12 +3,13 @@
 use yii\helpers\Html;
 
 $this->title = Yii::t('zoo', 'APPLICATIONS_VIEW_TITLE');
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
 <h1><?=$app->title?></h1>
 
-<h2><?= Yii::t('zoo', 'APPLICATIONS_VIEW_LANGUAGES_TITLE') ?></h2>
+<h2><?= Yii::t('zoo', 'APPLICATIONS_CONTENTS_TITLE') ?></h2>
 
 <ul class="uk-subnav uk-subnav-divider">
 <?php foreach (Yii::$app->zoo->languages as $lang => $language) : ?>
