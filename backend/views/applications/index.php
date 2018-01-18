@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 
 $this->title = Yii::t('zoo','APPLICATIONS_INDEX_TITLE');
+$this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
