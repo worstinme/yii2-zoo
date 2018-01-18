@@ -1,6 +1,6 @@
 <?php
 
-namespace worstinme\zoo\backend;
+namespace worstinme\zoo\backend\models;
 
 use Yii;
 
@@ -12,7 +12,7 @@ class ApplicationsContent extends \worstinme\zoo\models\ApplicationsContent
     public function rules()
     {
         return [
-            [['app_id', 'lang', 'name', 'created_at', 'updated_at'], 'required'],
+            [['app_id', 'lang', 'name'], 'required'],
             [['meta_description', 'content', 'intro'], 'string'],
             [['created_at', 'updated_at'], 'integer'],
             [['app_id', 'lang', 'name', 'meta_title', 'meta_keywords'], 'string', 'max' => 255],
@@ -37,5 +37,16 @@ class ApplicationsContent extends \worstinme\zoo\models\ApplicationsContent
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            \yii\behaviors\TimestampBehavior::className(),
+        ];
+    }
+
+    public function getApp() {
+        return Yii::$app->zoo->getApplication($this->app_id);
     }
 }

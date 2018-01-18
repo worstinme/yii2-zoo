@@ -8,7 +8,7 @@
 
 namespace worstinme\zoo\backend\controllers;
 
-use worstinme\zoo\backend\ApplicationsContent;
+use worstinme\zoo\backend\models\ApplicationsContent;
 use Yii;
 
 class ApplicationsController extends Controller
