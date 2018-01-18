@@ -6,6 +6,8 @@ use Yii;
 use worstinme\zoo\models\Items;
 use worstinme\zoo\models\Applications;
 use worstinme\zoo\models\Categories;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 class Menu extends \yii\db\ActiveRecord
 {
@@ -18,7 +20,8 @@ class Menu extends \yii\db\ActiveRecord
         return '{{%menu}}';
     }
 
-    public static function get($alias,$items = []) {
+    public static function get($alias, $items = [])
+    {
 
         $zoo_items = [];
 
@@ -31,14 +34,22 @@ class Menu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type','name','menu'], 'required'],
-            [['category_id'],'required','when' => function($model) {return in_array($model->type, [2]); }],
-            [['application_id'],'required','when' => function($model) {return in_array($model->type, [1,2,3]); }],
-            [['item_id'],'required','when' => function($model) {return in_array($model->type, [3]); }],
-            [['url'],'required','when' => function($model) {return in_array($model->type, [4,5]); }],
-            [['application_id', 'category_id', 'item_id', 'parent_id', 'sort', 'type'], 'integer'],
-            [['url','content'], 'string'],
-            [['name','menu'], 'string', 'max' => 255],
+            [['type', 'name', 'menu', 'lang'], 'required'],
+            [['category'], 'required', 'when' => function ($model) {
+                return in_array($model->type, [2]);
+            }],
+            [['application'], 'required', 'when' => function ($model) {
+                return in_array($model->type, [1, 2, 3]);
+            }],
+            [['item'], 'required', 'when' => function ($model) {
+                return in_array($model->type, [3]);
+            }],
+            [['url'], 'required', 'when' => function ($model) {
+                return in_array($model->type, [4, 5]);
+            }],
+            [['category', 'item', 'parent_id', 'sort', 'type'], 'integer'],
+            [['link', 'content'], 'string'],
+            [['name', 'menu', 'application'], 'string', 'max' => 255],
             ['menu', 'match', 'pattern' => '#^[\w_-]+$#i'],
         ];
     }
@@ -49,146 +60,126 @@ class Menu extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'Label',
-            'application_id' => 'Application ID',
-            'category_id' => 'Category ID',
-            'item_id' => 'Item ID',
-            'parent_id' => 'Parent ID',
-            'sort' => 'Sort',
-            'type' => 'Type',
-            'url' => 'Url',
         ];
     }
 
-    public function getTypes() {
+    public function getTypes()
+    {
+
         return [
-            1=>Yii::t('zoo','Приложение'),
-            2=>Yii::t('zoo','Категория'),
-            3=>Yii::t('zoo','Материал'),
-            4=>Yii::t('zoo','JSON параметры'),
-            5=>Yii::t('zoo','Произвольная ссылка'),
-            6=>Yii::t('zoo','Widget'),
+            1 => Yii::t('zoo', 'MENU_TYPE_APPLICATION'),
+            2 => Yii::t('zoo', 'MENU_TYPE_CATEGORY'),
+            3 => Yii::t('zoo', 'MENU_TYPE_ITEM'),
+            4 => Yii::t('zoo', 'MENU_TYPE_JSON'),
+            5 => Yii::t('zoo', 'MENU_TYPE_LINK'),
+            6 => Yii::t('zoo', 'MENU_TYPE_WIDGET'),
         ];
+
     }
 
-    public function getApplications() {
-        if (in_array($this->type, [1,2,3])){
-            return Applications::find()->select(['title'])->indexBy('id')->column();
-        }
-        return null;
+    public function getApplication()
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        return isset($params['application']) ? $params['application'] : null;
     }
 
-    public function getCategories() {
-        if (in_array($this->type, [2,3]) && $this->application_id !== null && ($application = Applications::findOne($this->application_id)) !== null) {
-            return $application->catlist;
-        }
-        return null;
+    public function setApplication($value)
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        $params['application'] = $value;
+        return $this->params = Json::encode($params);
     }
 
-    public function getItems() {
-        if (in_array($this->type, [3]) && $this->category_id !== 0 && $this->category_id !== null) {
-
-            return \yii\helpers\ArrayHelper::map((new \yii\db\Query())
-                        ->select([ 'a.name','a.id'])
-                        ->from(['a'=>'{{%items}}'])
-                        ->innerJoin(['b' => '{{%items_categories}}','b.item_id = a.id'])
-                        ->where(['a.app_id'=>$this->application_id,'b.category_id' => $this->category_id])
-                        ->groupBy('a.id')
-                        ->all(),'id','name');
-        }
-        elseif(in_array($this->type, [3])) {
-            return \yii\helpers\ArrayHelper::map((new \yii\db\Query())
-                        ->select([ 'a.name','a.id'])
-                        ->from(['a'=>'{{%items}}'])
-                        ->where(['a.app_id'=>$this->application_id])
-                        ->groupBy('a.id')
-                        ->all(),'id','name');
-        }
-        return null;
+    public function getCategory()
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        return isset($params['category']) ? $params['category'] : null;
     }
 
-    public function getCheck() {
-        if ($this->type == 1 && $this->application_id !== null && Applications::findOne($this->application_id) !== null) {
-            return true;
-        }
-        elseif($this->type == 2 && $this->category_id !== null && Categories::findOne($this->category_id) !== null) {
-            return true;
-        }
-        elseif($this->type == 3 && $this->item_id > 0) {
-            return true;
-        }
-        elseif($this->type == 4 || $this->type == 5) {
-            return true;
-        }
-        if ($this->type == 6) {
-            return true;
-        }
-        return false;
+    public function setCategory($value)
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        $params['category'] = $value;
+        return $this->params = Json::encode($params);
     }
 
-    public function getRelated() {
+    public function getItem()
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        return isset($params['item']) ? $params['item'] : null;
+    }
+
+    public function setItem($value)
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        $params['item'] = $value;
+        return $this->params = Json::encode($params);
+    }
+
+    public function getLink()
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        return isset($params['link']) ? $params['link'] : null;
+    }
+
+    public function setLink($value)
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        $params['link'] = $value;
+        return $this->params = Json::encode($params);
+    }
+
+    public function getContent()
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        return isset($params['content']) ? $params['content'] : null;
+    }
+
+    public function setContent($value)
+    {
+        $params = $this->params ? Json::decode($this->params) : [];
+        $params['content'] = $value;
+        return $this->params = Json::encode($params);
+    }
+
+    public function getRelated()
+    {
         return $this->hasMany(Menu::className(), ['parent_id' => 'id'])->orderBy('sort ASC');
     }
 
-    public function getParents() {
+    public function getParents()
+    {
         if ($this->isNewRecord) {
-            return self::find()->select(['name'])->where(['menu'=>$this->menu])->indexBy('id')->column();
-        }
-        else {
-            return self::find()->select(['name'])->where(['<>','id',$this->id])->andWhere(['menu'=>$this->menu])->indexBy('id')->column();
+            return self::find()->select(['name'])->where(['menu' => $this->menu])->indexBy('id')->column();
+        } else {
+            return self::find()->select(['name'])->where(['<>', 'id', $this->id])->andWhere(['menu' => $this->menu])->indexBy('id')->column();
         }
     }
 
-    public function getActive() {
+    public function getUrl()
+    {
         switch ($this->type) {
-
-            case 3:
-                null;
-            break;
-            
-            default: null;
+            case 1:
+                return Yii::$app->zoo->getApplication($this->application)->getUrl($this->lang);
+            case 2:
+                if (($item = Items::find()->where([Items::tablename() . '.id' => $this->item_id])->one()) !== null) {
+                    return $item->url;
+                }
                 break;
-        }
-    }
+            case 3:
+                if (($category = Categories::findOne($this->category)) !== null) {
+                    return $category->url;
+                }
+                break;
+            case 4:
+                return \yii\helpers\Json::decode($this->content);
+            case 5:
+                return $this->link;
+            case 6:
+                return $this->content;
 
-    public function getUrl() {
-
-        if ($this->type == 4) {
-            return \yii\helpers\Json::decode($this->url);
         }
-        elseif ($this->type == 5) {
-            return $this->url;
-        }
-        elseif ($this->type == 1) {
-            if (($application = Applications::findOne($this->application_id)) !== null) {
-                return $application->url;
-            }
-        }
-        elseif ($this->type == 2) {
-            if (($category = Categories::findOne($this->category_id)) !== null) {
-                return $category->url;
-            }
-        }
-        elseif ($this->type == 3) {
-
-            $item = Items::find()->where([Items::tablename().'.id'=>$this->item_id])->one();
-
-            if ($item !== null) {
-                return $item->url;
-            } 
-        }
-
         return '#';
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            $this->updated_at = time();
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
