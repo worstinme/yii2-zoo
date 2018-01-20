@@ -13,7 +13,11 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     // TODO: добавить настройку BASE_URL для advanced yii
 
     public $json_field = true;
-    public $multiple = true;
+
+    public function getMultiple() {
+        return true;
+    }
+
     public $field = 'value_text';
 
     public function rules()

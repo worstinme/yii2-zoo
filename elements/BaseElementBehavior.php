@@ -18,15 +18,18 @@ class BaseElementBehavior extends \yii\base\Behavior
 {
     public $attribute;
 
-    public $multiple = false;
-
     public $field = 'value_string';
     public $json_field = false;
 
     protected $value;
+
     public $old_value;
 
     protected $_elements;
+
+    public function getMultiple() {
+        return false;
+    }
 
     public function init()
     {
