@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 
+/** @var $element \worstinme\zoo\elements\checkbox\Element */
 
 ?>
 
-<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
+<?php if ($element->multiple) : ?>
 
-<div class="uk-from-controls">
-    <?= Html::activeCheckbox($model, $attribute,['class'=>'uk-width-1-1','label'=>$element->checkboxLabel??$model->getAttributeLabel($attribute)]); ?>
-    <div class="uk-form-help-block uk-text-danger"></div>
-</div>
+    <?= Html::activeCheckboxList($model, $element->attributeName, $element->variants) ?>
+<?php else: ?>
+    <?= Html::activeCheckbox($model, $element->attributeName, ['class' => 'uk-checkbox', 'label' => !empty($element->checkboxLabel) ? $element->checkboxLabel : $model->getAttributeLabel($element->attributeName)]); ?>
+<?php endif; ?>
