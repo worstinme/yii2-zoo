@@ -189,22 +189,17 @@ class Component extends \yii\base\Component implements BootstrapInterface
                 foreach ($applications as $application) {
 
                     $root = [
-                        'path' => '/images/'.$application->id.'/',
-                        'name' => 'images/'.$application->id,
+                        'path' => '/images/' . $application->id . '/',
+                        'name' => $application->id,
                     ];
 
-                    if ($application->basePath !== null && $application->baseUrl !== null) {
-                        $root['baseUrl'] = $application->baseUrl;
-                        $root['basePath'] = $application->basePath;
-                    } else {
-                        $root['basePath'] = '@web';
-                        $root['baseUrl'] = '@webroot';
-                    }
+                    $root['baseUrl'] = $application->baseUrl !== null ? $application->baseUrl : '@web';
+                    $root['basePath'] = $application->basePath !== null ? $application->basePath : '@webroot';
 
                     $roots[$application->id] = $root;
 
-                    if (!is_dir(Yii::getAlias($root['basePath'].$root['path']))) {
-                        mkdir(Yii::getAlias($root['basePath'].$root['path']),0757, true);
+                    if (!is_dir(Yii::getAlias($root['basePath'] . $root['path']))) {
+                        mkdir(Yii::getAlias($root['basePath'] . $root['path']), 0757, true);
                     }
 
                 }
@@ -215,7 +210,6 @@ class Component extends \yii\base\Component implements BootstrapInterface
                     'roots' => $roots,
                 ];
             }
-
 
 
         }
