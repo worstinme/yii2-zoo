@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 
 class BaseElement extends \yii\db\ActiveRecord
 {
-    private $categories = [];
+    protected $categories;
 
     public static function tableName()
     {
@@ -123,18 +123,21 @@ class BaseElement extends \yii\db\ActiveRecord
         return 'element_' . $this->name;
     }
 
+    public function afterFind()
+    {
+        $this->categories = (new \yii\db\Query())
+            ->select('category_id')
+            ->from('{{%elements_categories}}')
+            ->where(['element_id' => $this->id])
+            ->column();
+        parent::afterFind();
+    }
+
     // TODO :  заменить search на text_index
 
     //categories
     public function getCategories()
     {
-        if (!count($this->categories)) {
-            $this->categories = (new \yii\db\Query())
-                ->select('category_id')
-                ->from('{{%elements_categories}}')
-                ->where(['element_id' => $this->id])
-                ->column();
-        }
         return $this->categories;
     }
 
@@ -152,7 +155,6 @@ class BaseElement extends \yii\db\ActiveRecord
     {
         return $this->params = Json::encode($array);
     }
-
 
     public function afterSave($insert, $changedAttributes)
     {
