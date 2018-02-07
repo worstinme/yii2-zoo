@@ -89,7 +89,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
                             $url .= $this->item_suffix !== null ? $this->item_suffix : ($this->suffix !== null ? $this->suffix : $manager->suffix);
 
-                            Yii::$app->cache->set($cache_key, $url, 30);
+                            Yii::$app->cache->set($cache_key, $url, $this->cache_duration);
                         }
 
                     }
@@ -143,7 +143,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
                             $url .= $this->suffix !== null ? $this->suffix : $manager->suffix;
 
-                            Yii::$app->cache->set($cache_key, $url, 30);
+                            Yii::$app->cache->set($cache_key, $url, $this->cache_duration);
                         }
 
                     }
@@ -197,7 +197,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                             $url .= $this->suffix !== null ? $this->suffix : $manager->suffix;
                         }
 
-                        Yii::$app->cache->set($cache_key, $url, 30);
+                        Yii::$app->cache->set($cache_key, $url, $this->cache_duration);
 
                     }
 
@@ -234,8 +234,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
     {
 
         if ($this->app->app_id === null || $this->app->app_id == Yii::$app->id) {
-
-            Yii::$app->cache->flush();
 
             Yii::beginProfile('parse for ' . $this->app_id, __METHOD__);
 
