@@ -41,17 +41,17 @@ class m171204_041121_upgrade_from_older_zoo extends Migration
              if (isset($params['metaTitle']) && !empty($params['metaTitle'])) {
                  $this->db->createCommand()->update('{{%zoo_items}}',[
                      'meta_title'=>$params['metaTitle']
-                 ])->execute();
+                 ],['id'=>$item['id']])->execute();
              }
              if (isset($params['metaKeywords']) && !empty($params['metaKeywords'])) {
                  $this->db->createCommand()->update('{{%zoo_items}}',[
                      'meta_keywords'=>$params['metaKeywords']
-                 ])->execute();
+                 ],['id'=>$item['id']])->execute();
              }
              if (isset($params['metaDescription']) && !empty($params['metaDescription'])) {
                  $this->db->createCommand()->update('{{%zoo_items}}',[
                      'meta_description'=>$params['metaDescription']
-                 ])->execute();
+                 ],['id'=>$item['id']])->execute();
              }
              if (isset($params['alternateIds']) && is_array($params['alternateIds'])) {
                  foreach ($params['alternateIds'] as $id) {
