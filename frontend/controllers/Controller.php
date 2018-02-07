@@ -4,10 +4,9 @@ namespace worstinme\zoo\frontend\controllers;
 
 use Yii;
 
-use worstinme\zoo\models\Applications;
 use worstinme\zoo\models\Items;
 use worstinme\zoo\models\Categories;
-use worstinme\zoo\models\S as s;
+use worstinme\zoo\frontend\models\ItemsSearch;
 
 use yii\web\NotFoundHttpException;
 
@@ -22,40 +21,34 @@ class Controller extends \yii\web\Controller
     {
         $this->app->lang = substr(Yii::$app->request->get('lang', Yii::$app->language), 0, 2);
         Yii::$app->language = $this->app->lang;
-        Yii::trace('Language: ' . $this->app->lang);
         parent::init();
     }
 
     public function actionSearch()
     {
-
-        $searchModel = new ItemsSearch();
-        $searchModel->app_id = $this->app->id;
+        $searchModel = new ItemsSearch([
+            'app_id'=>$this->app->id,
+        ]);
         $searchModel->regBehaviors();
-
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->render('search', [
-            'app' => $app,
+            'app' => $this->app,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-
     }
 
     public function actionIndex($app = null)
     {
-
-        $app = $app === null ? $this->app : $app;
-
-        $searchModel = new s();
-        $searchModel->app_id = $app->id;
+        $searchModel = new ItemsSearch([
+            'app_id'=>$this->app->id,
+        ]);
         $searchModel->regBehaviors();
-
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->render('application', [
-            'app' => $app,
+            'app' => $this->app,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -72,19 +65,17 @@ class Controller extends \yii\web\Controller
 
     public function actionCategory($id)
     {
-
-        $app = $category->app;
-
-        $searchModel = new s();
-        $searchModel->app_id = $app->id;
+        $category = $this->getCategory($id);
+        $searchModel = new ItemsSearch([
+            'app_id'=>$this->app->id,
+            'category'=>[$category->id]
+        ]);
         $searchModel->regBehaviors();
-        $searchModel->category = [$category->id];
-
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->render('category', [
+            'app' => $this->app,
             'category' => $category,
-            'app' => $app,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
