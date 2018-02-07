@@ -89,7 +89,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
                             $url .= $this->item_suffix !== null ? $this->item_suffix : ($this->suffix !== null ? $this->suffix : $manager->suffix);
 
-                            // Yii::$app->cache->set($cache_key, $url, 30);
+                            Yii::$app->cache->set($cache_key, $url, 30);
                         }
 
                     }
@@ -143,7 +143,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
                             $url .= $this->suffix !== null ? $this->suffix : $manager->suffix;
 
-                            // Yii::$app->cache->set($cache_key, $url, 30);
+                            Yii::$app->cache->set($cache_key, $url, 30);
                         }
 
                     }
@@ -197,7 +197,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                             $url .= $this->suffix !== null ? $this->suffix : $manager->suffix;
                         }
 
-                        // Yii::$app->cache->set($cache_key, $url, 30);
+                        Yii::$app->cache->set($cache_key, $url, 30);
 
                     }
 
@@ -456,7 +456,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
     protected function getParentCategoryUrl($model, $url = null)
     {
-        if ($model !== null && $model->parentCategory) {
+        if ($model !== null && $model->parent_category_id) {
             return $this->getParentCategoryUrl($model->parentCategory, $model->parentCategory->alias . ($url !== null ? '/' . $url : null));
         }
         return $url;
