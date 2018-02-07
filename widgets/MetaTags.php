@@ -2,6 +2,7 @@
 
 namespace worstinme\zoo\widgets;
 
+use worstinme\zoo\models\ApplicationsContent;
 use Yii;
 use worstinme\zoo\models\Categories;
 use worstinme\zoo\models\Items;
@@ -21,7 +22,7 @@ class MetaTags extends \yii\base\Widget
     {
         parent::init();
 
-        if (!($this->model instanceof Items || $this->model instanceof Categories)) {
+        if (!($this->model instanceof Items || $this->model instanceof Categories || $this->model instanceof ApplicationsContent)) {
             throw new InvalidConfigException('Model should be instance of Items or Categories');
         }
 
