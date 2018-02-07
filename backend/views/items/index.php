@@ -116,11 +116,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'template'=>'{delete}',
             'buttons'=>[
               'delete' => function ($url, $model) {     
-                return Html::a('<i class="uk-icon-trash"></i>', $url, [
-                        'title' => Yii::t('zoo', 'Удалить'),
+                return Html::a('<i uk-icon="icon: trash"></i>', $url, [
+                        'title' => Yii::t('zoo', 'DELETE'),
                         'data'=>[
                             'method'=>'post',
-                            'confirm'=>'Точно удалить?',
+                            'confirm'=>'DELETE_CONFIRM',
                         ],
                 ]);                                
               },

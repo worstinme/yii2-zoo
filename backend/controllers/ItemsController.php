@@ -274,14 +274,9 @@ class ItemsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if (($this->module->accessRoles === null && !Yii::$app->user->can('admin')) && !Yii::$app->user->can('accessStrange') && Yii::$app->user->identity->id != $model->user_id) {
-            Yii::$app->getSession()->setFlash('warning', Yii::t('zoo', 'Удаление не разрешено'));
-            return $this->redirect(['index', 'app' => $model->app_id]);
-        }
-
         $model->delete();
 
-        Yii::$app->getSession()->setFlash('success', Yii::t('zoo', 'Материал удалён, окончательно и безповоротно. Совсем. Не вернуть его уже.'));
+        Yii::$app->getSession()->setFlash('success', Yii::t('zoo', 'ITEM_REMOVED_SUCCESS'));
 
         return $this->redirect(['index', 'app' => $model->app_id]);
     }
