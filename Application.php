@@ -4,6 +4,8 @@ namespace worstinme\zoo;
 
 use worstinme\zoo\backend\models\Categories;
 use worstinme\zoo\elements\BaseElement;
+use worstinme\zoo\models\ApplicationsContent;
+use worstinme\zoo\models\Items;
 use Yii;
 use worstinme\zoo\backend\models\Elements;
 
@@ -56,9 +58,9 @@ class Application extends \yii\base\Component
             ];
 
             foreach ($elements as $key => $element) {
-                $this->_system['element_'.$key] = Yii::createObject([
+                $this->_system['element_' . $key] = Yii::createObject([
                     'class' => $element,
-                    'name' => 'element_'.$key,
+                    'name' => 'element_' . $key,
                     'app_id' => $this->id,
                 ]);
             }
@@ -99,9 +101,14 @@ class Application extends \yii\base\Component
         return Categories::find()->where(['app_id' => $this->id]);
     }
 
+    public function getContent($lang = null)
+    {
+        return ApplicationsContent::findOne(['app_id' => $this->id, 'lang' => $lang === null ? $this->lang : $lang]);
+    }
+
     public function getUrl($lang = null)
     {
-        return ['/'.$this->id . '/index','lang'=>$lang === null?$this->lang:$lang];
+        return ['/' . $this->id . '/index', 'lang' => $lang === null ? $this->lang : $lang];
     }
     /*
     перетащил из предыдущей модели
