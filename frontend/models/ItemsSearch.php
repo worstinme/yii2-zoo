@@ -47,7 +47,10 @@ class ItemsSearch extends Items
             $this->load($params);
         }
 
-        $this->query = self::find()->with(['itemsElements'])->joinWith(['categories']);
+        $this->query = self::find()
+            ->with(['itemsElements'])
+            ->joinWith(['categories'])
+            ->where([self::tableName().'.app_id'=>$this->app_id,self::tableName().'.lang'=>$this->lang]);
 
      /*   foreach ($this->elements as $element) {
 
