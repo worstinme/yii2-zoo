@@ -6,6 +6,7 @@ use Yii;
 
 class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 {
+    public $field ='value_text';
 
 	public function rules()
 	{
