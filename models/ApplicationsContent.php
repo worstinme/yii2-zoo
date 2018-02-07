@@ -28,4 +28,16 @@ class ApplicationsContent extends \yii\db\ActiveRecord
     {
         return '{{%applications_content}}';
     }
+
+    public function getApp() {
+        return Yii::$app->zoo->getApplication($this->app_id);
+    }
+
+    public function getUrl() {
+        return ['/' . $this->app->id . '/index', 'lang' =>$this->lang];
+    }
+
+    public function getAlternates() {
+        return ApplicationsContent::find()->where(['app_id'=>$this->app_id])->andWhere(['<>','lang',$this->lang])->all();
+    }
 }
