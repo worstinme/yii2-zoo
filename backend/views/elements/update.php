@@ -31,22 +31,22 @@ $this->registerJs($js, $this::POS_READY);
 
 ?>
 
-<div class="uk-panel uk-panel-box">		
-<h2><?=$this->title?></h2>
+<div class="uk-panel uk-panel-box">
+    <h2><?=$this->title?></h2>
 
-<?php $form = ActiveForm::begin(['options'=>['class'=>'uk-form-stacked']]); ?>
+    <?php $form = ActiveForm::begin(['options'=>['class'=>'uk-form-stacked']]); ?>
 
-	<div class="uk-grid">
+    <div class="uk-grid">
 
-		<div class="uk-width-2-3@m uk-margin">
+        <div class="uk-width-2-3@m uk-margin">
 
-			<?= $form->field($model, 'type')->textInput(['disabled'=>'disabled','class'=>'uk-input'])?>
+            <?= $form->field($model, 'type')->textInput(['disabled'=>'disabled','class'=>'uk-input'])?>
 
-		    <?= $form->field($model, 'name')->textInput(['disabled'=>'disabled','class'=>'uk-input'])  ?>
+            <?= $form->field($model, 'name')->textInput(['disabled'=>'disabled','class'=>'uk-input'])  ?>
 
-			<?= $form->field($model, 'label')->textInput(['class'=>'uk-input'])  ?>
+            <?= $form->field($model, 'label')->textInput(['class'=>'uk-input'])  ?>
 
-		    <?= $form->field($model, 'hint')->textarea(['rows'=>2,'class'=>'uk-textarea'])  ?>
+            <?= $form->field($model, 'hint')->textarea(['rows'=>2,'class'=>'uk-textarea'])  ?>
 
 
             <?php if (!empty($model->configView)): ?>
@@ -90,9 +90,9 @@ $this->registerJs($js, $this::POS_READY);
             </div>
 
         </div>
-		
 
-	</div>
 
-<?php ActiveForm::end(); ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 </div>

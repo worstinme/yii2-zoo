@@ -64,7 +64,7 @@ class Items extends \yii\db\ActiveRecord
     {
         return ['/'.$this->app_id.'/item', 'id' => $this->id, 'lang'=>$this->lang];
     }
-    
+
     public function getBreadcrumbs($selfUrl = false)
     {
         $crumbs[] = ['label' => $this->app->title, 'url' => $this->app->url];
