@@ -2,6 +2,7 @@
 
 namespace worstinme\zoo\frontend\controllers;
 
+use worstinme\zoo\models\ApplicationsContent;
 use Yii;
 
 use worstinme\zoo\models\Items;
@@ -39,16 +40,22 @@ class Controller extends \yii\web\Controller
         ]);
     }
 
-    public function actionIndex($app = null)
+    public function actionIndex()
     {
+        if (($model = ApplicationsContent::findOne(['app_id'=>$this->app->id,'lang'=>$this->app->lang])) === null) {
+            throw new NotFoundHttpException();
+        }
+
         $searchModel = new ItemsSearch([
             'app_id'=>$this->app->id,
         ]);
+
         $searchModel->regBehaviors();
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->render('application', [
             'app' => $this->app,
+            'model'=>$model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
