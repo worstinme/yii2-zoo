@@ -40,28 +40,6 @@ $this->beginContent(Yii::$app->zoo->backendLayout); ?>
                             ]),
                         ]); ?>
                     </div>
-                    <div class="uk-navbar-right">
-                        <?= Menu::widget([
-                            'encodeLabels' => false,
-                            'options' => ['class' => 'uk-navbar-nav uk-hidden-small'],
-                            'items' => [
-                                ['label' => '<i class="uk-icon-home"></i>', 'encodeLabels' => false, 'url' => '/', 'linkOptions' => ['target' => '_blank']],
-                                Yii::$app->user->isGuest ?
-                                    ['label' => 'Войти', 'url' => ['/user/default/login'],
-                                        'items' => [
-                                            ['label' => 'Зарегистрироваться', 'url' => ['/user/default/signup'],]
-                                        ]
-                                    ] :
-                                    ['label' => Yii::$app->user->identity->username, 'url' => ['/user/default/update'],
-                                        /* 'items' => [
-                                             ['label' => 'Выйти',
-                                                 'url' => ['/user/default/logout'],
-                                                 'linkOptions' => ['data-method' => 'post'],]
-                                         ] */
-                                    ],
-                            ],
-                        ]); ?>
-                    </div>
                 </nav>
             </div>
         </div>
