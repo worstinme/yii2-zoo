@@ -24,6 +24,8 @@ class Component extends \yii\base\Component implements BootstrapInterface
     /** @var boolean load backend module? */
     public $backend = false;
 
+    public $backendLayout = '@worstinme/zoo/backend/vews/layouts/wrap.php';
+
     /** @var array loaded applications objects */
     public $applications = [];
 
