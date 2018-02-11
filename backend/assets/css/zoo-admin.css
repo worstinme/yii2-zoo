@@ -1,15 +1,15 @@
-.mainnav.uk-navbar-container {
+.zoo .mainnav.uk-navbar-container {
     background: linear-gradient(to left, #28a5f5, #1e87f0);
 }
-.mainnav .uk-navbar-nav>li>a {
+.zoo .mainnav .uk-navbar-nav>li>a {
     height: 60px;
     position: relative;
     color:rgba(255,255,255,0.8);
 }
-.mainnav .uk-navbar-nav>li.active>a {
+.zoo .mainnav .uk-navbar-nav>li.active>a {
     color:#fff;
 }
-.mainnav .uk-navbar-nav>li>a::before {
+.zoo .mainnav .uk-navbar-nav>li>a::before {
     content: '';
     display: block;
     position: absolute;
@@ -23,72 +23,72 @@
     -webkit-transition-property: right;
     transition-property: right;
 }
-.mainnav .uk-navbar-nav>li>a:hover::before,.mainnav .uk-navbar-nav>li.active>a::before {
+.zoo .mainnav .uk-navbar-nav>li>a:hover::before,.mainnav .uk-navbar-nav>li.active>a::before {
     right:15px;
 }
 
-.subnav .uk-navbar-nav>li>a
+.zoo .subnav .uk-navbar-nav>li>a
 {
     height: 40px;
     padding: 0 15px;
     font-size: .775rem;
 }
 
-.uk-table-small td, .uk-table-small th {
+.zoo .uk-table-small td, .uk-table-small th {
     padding: 4px 6px;
 }
 
-.uk-table-striped thead tr+tr {
+.zoo .uk-table-striped thead tr+tr {
     border-top: 1px solid #e5e5e5;
 }
 
 
-.element_name .element_alias {
+.zoo .element_name .element_alias {
     margin-left: 40px;
     margin-top:5px!important;
 }
 
-.element_name .element_alias .uk-input {
+.zoo .element_name .element_alias .uk-input {
     height: 25px;
     font-size: 90%;
     padding-left:6px;
 }
 
-.element_name .element_alias .uk-input:not(:focus) {
+.zoo .element_name .element_alias .uk-input:not(:focus) {
 
 }
 
-.uk-table-small td, .uk-table-small th {
+.zoo .uk-table-small td, .uk-table-small th {
     padding: 2px 5px;
 }
 
-.nestable {
+.zoo .nestable {
     margin:0;
     list-style: none;
     padding:5px;
     border:1px dotted #eee;
 }
-.nestable>li+li {
+.zoo .nestable>li+li {
     padding-top:5px;
 }
-.nestable>li>.nestable-panel  {
+.zoo .nestable>li>.nestable-panel  {
     padding:5px 10px;
     border:1px solid #eee;
 }
 
-.nestable .nestable {
+.zoo .nestable .nestable {
     margin-left:40px;
     margin-top:5px;
 }
-.nestable .nestable.uk-sortable-empty {
+.zoo .nestable .nestable.uk-sortable-empty {
     min-height: 36px;
 }
 
 
-table tr:first-child a[data-up] {
+.zoo table tr:first-child a[data-up] {
     display: none;
 }
 
-table tr:last-child a[data-down] {
+.zoo table tr:last-child a[data-down] {
     display: none;
 }

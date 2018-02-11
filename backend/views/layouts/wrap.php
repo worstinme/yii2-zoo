@@ -23,6 +23,7 @@ use yii\widgets\Menu;
     <?php $this->head() ?>
 </head>
 <body class="admin">
+
 <?php $this->beginBody() ?>
 
 <?= $content?>
