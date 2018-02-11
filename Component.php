@@ -137,7 +137,7 @@ class Component extends \yii\base\Component implements BootstrapInterface
 
             $applications = [];
 
-            $files = \yii\helpers\FileHelper::findFiles(Yii::getAlias($this->applicationsConfigPath));
+            $files = \yii\helpers\FileHelper::findFiles(Yii::getAlias($this->applicationsConfigPath),['only'=>['*.php']]);
 
             foreach ($files as $file) {
                 $application = require($file);
