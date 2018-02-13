@@ -16,4 +16,7 @@ class Module extends \yii\base\Module
     /** @inheritdoc */
     public $controllerNamespace = 'worstinme\zoo\backend\controllers';
 
+    /** @var string The ZOO admin layout. */
+    public $layout = '@worstinme/zoo/backend/views/layouts/zoo';
+
 }
