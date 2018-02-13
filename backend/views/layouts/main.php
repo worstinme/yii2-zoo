@@ -24,7 +24,7 @@ $this->beginContent(Yii::$app->zoo->backendLayout); ?>
                             'activeCssClass' => 'uk-active',
                             'submenuTemplate' => "\n<div class=\"uk-navbar-dropdown\">\n<ul class=\"uk-nav uk-navbar-dropdown-nav\">\n{items}\n</ul>\n</div>\n",
                             'items' => array_filter([
-                                ['label' => 'NAV_APPLICATIONS', 'url' => ['/zoo/applications/index'],
+                                ['label' => Yii::t('zoo','NAV_APPLICATIONS'), 'url' => ['/zoo/applications/index'],
                                     'items' => \yii\helpers\ArrayHelper::toArray(Yii::$app->zoo->applications, [
                                         'worstinme\zoo\Application' => [
                                             'label' => 'title',
@@ -32,9 +32,9 @@ $this->beginContent(Yii::$app->zoo->backendLayout); ?>
                                                 return ['/zoo/items/index', 'app' => $app->id];
                                             },
                                         ],
-                                    ]),],['label' => 'NAV_ELFINDER', 'url' => ['/zoo/elfinder/index']],
-                                ['label' => 'NAV_MENU', 'url' => ['/zoo/menu/index']],
-                                ['label' => 'NAV_CONFIG', 'url' => ['/zoo/config/index']],
+                                    ]),],['label' => Yii::t('zoo','NAV_ELFINDER'), 'url' => ['/zoo/elfinder/index']],
+                                ['label' => Yii::t('zoo','NAV_MENU'), 'url' => ['/zoo/menu/index']],
+                                ['label' => Yii::t('zoo','NAV_CONFIG'), 'url' => ['/zoo/config/index']],
                             ]),
                         ]); ?>
                     </div>
