@@ -10,48 +10,29 @@ use worstinme\uikit\Nav;
 use yii\helpers\Html;
 use yii\widgets\Menu;
 
-\worstinme\zoo\backend\assets\AdminAsset::register($this);
+?>
 
-$this->beginContent(Yii::$app->zoo->backendLayout); ?>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>">
+<head>
+    <meta charset="<?= Yii::$app->charset ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
+</head>
+<body class="admin">
 
-    <div class="zoo">
-        <div class="mainnav uk-navbar-container">
-            <div class="uk-container uk-container-expand">
-                <nav class="uk-navbar" uk-navbar>
-                    <div class="uk-navbar-left">
-                        <?= Menu::widget([
-                            'options' => ['class' => 'uk-navbar-nav uk-hidden-small'],
-                            'activeCssClass' => 'uk-active',
-                            'submenuTemplate' => "\n<div class=\"uk-navbar-dropdown\">\n<ul class=\"uk-nav uk-navbar-dropdown-nav\">\n{items}\n</ul>\n</div>\n",
-                            'items' => array_filter([
-                                ['label' => Yii::t('zoo','NAV_APPLICATIONS'), 'url' => ['/zoo/applications/index'],
-                                    'items' => \yii\helpers\ArrayHelper::toArray(Yii::$app->zoo->applications, [
-                                        'worstinme\zoo\Application' => [
-                                            'label' => 'title',
-                                            'url' => function ($app) {
-                                                return ['/zoo/items/index', 'app' => $app->id];
-                                            },
-                                        ],
-                                    ]),],['label' => Yii::t('zoo','NAV_ELFINDER'), 'url' => ['/zoo/elfinder/index']],
-                                ['label' => Yii::t('zoo','NAV_MENU'), 'url' => ['/zoo/menu/index']],
-                                ['label' => Yii::t('zoo','NAV_CONFIG'), 'url' => ['/zoo/config/index']],
-                            ]),
-                        ]); ?>
-                    </div>
-                </nav>
-            </div>
-        </div>
+<?php $this->beginBody() ?>
 
-        <?php if (isset(Yii::$app->controller->subnav) && Yii::$app->controller->subnav) : ?>
-            <?= $this->render('_nav', [
-            ]) ?>
-        <?php endif; ?>
+<?= $content?>
 
-        <section id="content" class="uk-container uk-container-expand uk-margin-top">
-            <?= Alert::widget() ?>
-            <?= $content ?>
-        </section>
+<section class="uk-container uk-container-expand uk-margin-top">
+    <?= Breadcrumbs::widget(['homeLink' => ['label' => 'Админка', 'url' => ['/zooadmin/default/index'],], 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
+</section>
 
-    </div>
-
-<?php $this->endContent(); ?>
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>
