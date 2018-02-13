@@ -52,13 +52,13 @@ class Component extends \yii\base\Component implements BootstrapInterface
      *
      * @See [[GroupUrlRule::prefix]]
      */
-    public $urlPrefix = 'admin';
+    public $urlPrefix = 'zoo';
 
     /** @var array The rules to be used in URL management. */
     public $urlRules = [
-        'zoo' => 'applications/index',
-        'zoo/<action:(\w|-)+>' => 'default/<action>',
-        'zoo/<controller:\w+>/<action:(\w|-)+>' => '<controller>/<action>',
+        '' => 'applications/index',
+        '<controller:\w+>' => '<controller>/index',
+        '<controller:\w+>/<action:(\w|-)+>' => '<controller>/<action>',
     ];
 
     /** @var array Custom elements [namespace => path] */
