@@ -14,4 +14,18 @@ Configuration
 ],
 ```
 
+To replace backend module layouts (main.php or zoo.php) set view configurations for components section of Yii settings
 
+``` 
+'components'=>[
+    ...
+    'view' => [
+       'theme' => [
+           'pathMap' => [
+               '@worstinme/zoo/backend/views/layouts' => '@backend/views/layouts',
+           ],
+       ],
+    ],
+],
+```
+       
