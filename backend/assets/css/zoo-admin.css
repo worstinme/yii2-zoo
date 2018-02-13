@@ -1,15 +1,15 @@
-.zoo .mainnav.uk-navbar-container {
+.admin .mainnav.uk-navbar-container {
     background: linear-gradient(to left, #28a5f5, #1e87f0);
 }
-.zoo .mainnav .uk-navbar-nav>li>a {
+.admin .mainnav .uk-navbar-nav>li>a {
     height: 60px;
     position: relative;
     color:rgba(255,255,255,0.8);
 }
-.zoo .mainnav .uk-navbar-nav>li.active>a {
+.admin .mainnav .uk-navbar-nav>li.active>a {
     color:#fff;
 }
-.zoo .mainnav .uk-navbar-nav>li>a::before {
+.admin .mainnav .uk-navbar-nav>li>a::before {
     content: '';
     display: block;
     position: absolute;
@@ -23,7 +23,7 @@
     -webkit-transition-property: right;
     transition-property: right;
 }
-.zoo .mainnav .uk-navbar-nav>li>a:hover::before,.mainnav .uk-navbar-nav>li.active>a::before {
+.admin .mainnav .uk-navbar-nav>li>a:hover::before,.mainnav .uk-navbar-nav>li.active>a::before {
     right:15px;
 }
 

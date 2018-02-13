@@ -26,6 +26,21 @@ use yii\widgets\Menu;
 
 <?php $this->beginBody() ?>
 
+<div class="mainnav uk-navbar-container">
+    <div class="uk-container uk-container-expand">
+        <nav class="uk-navbar" uk-navbar>
+            <div class="uk-navbar-left">
+                <?= Menu::widget([
+                    'options' => ['class' => 'uk-navbar-nav uk-hidden-small'],
+                    'activeCssClass' => 'uk-active',
+                    'submenuTemplate' => "\n<div class=\"uk-navbar-dropdown\">\n<ul class=\"uk-nav uk-navbar-dropdown-nav\">\n{items}\n</ul>\n</div>\n",
+                    'items' => Yii::$app->getModule('zoo')->nav,
+                ]); ?>
+            </div>
+        </nav>
+    </div>
+</div>
+
 <?= $content?>
 
 <section class="uk-container uk-container-expand uk-margin-top">
