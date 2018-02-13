@@ -32,9 +32,7 @@ $this->beginContent(Yii::$app->zoo->backendLayout); ?>
                                                 return ['/zoo/items/index', 'app' => $app->id];
                                             },
                                         ],
-                                    ]),],
-                                Yii::$app->has('widgets') ? ['label' => 'Виджеты', 'url' => ['widgets/index']] : null,
-                                ['label' => 'NAV_ELFINDER', 'url' => ['/zoo/elfinder/index']],
+                                    ]),],['label' => 'NAV_ELFINDER', 'url' => ['/zoo/elfinder/index']],
                                 ['label' => 'NAV_MENU', 'url' => ['/zoo/menu/index']],
                                 ['label' => 'NAV_CONFIG', 'url' => ['/zoo/config/index']],
                             ]),
