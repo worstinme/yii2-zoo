@@ -8,6 +8,6 @@ class Element extends \worstinme\zoo\elements\system\Element
 {
     public function getIsAvailable()
     {
-        return count(Yii::$app->zoo->languages) ? true : false;
+        return true;
     }
 }

@@ -17,9 +17,10 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     {
         parent::attach($owner);
 
-        if ($owner->isNewRecord && count($languages = array_keys(Yii::$app->zoo->languages))) {
-            $this->setValue(array_shift($languages));
+        if ($owner->isNewRecord) {
+            $this->setValue(key(Yii::$app->zoo->languages));
         }
 
     }
+
 }
