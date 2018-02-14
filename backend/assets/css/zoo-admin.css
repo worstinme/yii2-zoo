@@ -92,3 +92,16 @@
 .zoo table tr:last-child a[data-down] {
     display: none;
 }
+
+.zoo tr.filters td input,.widgets tr.filters td {
+    padding:0;
+}
+.zoo tr.filters td input,.widgets tr.filters td select {
+    border:none;
+    width:100%;
+    display:block;
+    padding:0 5px;
+    background: #eff8fd;
+    height: 27px;
+    border-right: 1px solid #fff;
+}
