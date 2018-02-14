@@ -40,18 +40,4 @@ class Controller extends \yii\web\Controller
         Yii::$app->getUser()->setReturnUrl(Yii::$app->request->url);
         return parent::afterAction($action, $result);
     }
-
-    protected function processCatlist($categories, $parent_id = 0, $delimiter = null, $array = [])
-    {
-        if (count($categories)) {
-            foreach ($categories as $key => $category) {
-                if ($category['parent_id'] == $parent_id) {
-                    $array[$category['id']] = (empty($delimiter) ? '' : $delimiter . ' ') . $category['name'];
-                    unset($categories[$key]);
-                    $array = $this->processCatlist($categories, $category['id'], $delimiter . '—', $array);
-                }
-            }
-        }
-        return $array;
-    }
 }

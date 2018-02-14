@@ -32,7 +32,7 @@ class ItemsController extends Controller
 
         $categories = Categories::find()->where(['app_id' => $this->app->id])->orderBy('sort ASC')->all();
 
-        $catlist = $this->processCatlist(ArrayHelper::toArray($categories, [
+        $catlist = \worstinme\zoo\helpers\CategoriesHelper::processCatlist(ArrayHelper::toArray($categories, [
             Categories::className() => [
                 'id',
                 'parent_id',
