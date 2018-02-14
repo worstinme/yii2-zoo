@@ -31,8 +31,6 @@ class Module extends \yii\base\Module
                         },
                     ],
                 ]),], ['label' => Yii::t('zoo', 'NAV_ELFINDER'), 'url' => ['/zoo/elfinder/index']],
-            ['label' => Yii::t('zoo', 'NAV_MENU'), 'url' => ['/zoo/menu/index']],
-            ['label' => Yii::t('zoo', 'NAV_CONFIG'), 'url' => ['/zoo/config/index']],
         ]);
     }
 

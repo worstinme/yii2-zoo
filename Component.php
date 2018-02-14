@@ -12,7 +12,6 @@ use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use worstinme\zoo\models\Applications;
 use worstinme\zoo\backend\models\Widgets;
-use worstinme\zoo\backend\models\Config;
 use yii\i18n\PhpMessageSource;
 use yii\web\NotFoundHttpException;
 
@@ -77,38 +76,6 @@ class Component extends \yii\base\Component implements BootstrapInterface
         }
 
         return null;
-    }
-
-    public function config($name, $default = null)
-    {
-
-        if (($config = Config::find()->where(['name' => $name])->one()) !== null) {
-            return $config->value;
-        }
-
-        return $default;
-    }
-
-    public function getConfigs($name, $additions = [], $after = false)
-    {
-        $column = Config::find()->select('value')->where(['name' => $name])->indexBy('id')->column();
-        if (count($additions) && is_array($additions)) {
-            return $after ? $column + $additions : $additions + $column;
-        }
-        return $column;
-    }
-
-    public function getConfigValues($ids, $separator = ", ", $additions = [])
-    {
-        $column = Config::find()->select('value')->where(['id' => $ids])->column();
-        if (count($additions) && is_array($additions)) {
-            foreach ($ids as $id) {
-                if (isset($additions[$id])) {
-                    $column[] = $additions[$id];
-                }
-            }
-        }
-        return implode($separator, $column);
     }
 
     public function getLang()

@@ -199,7 +199,7 @@ class m171204_041121_upgrade_from_older_zoo extends Migration
             'updated_at'=>$this->integer()->unsigned()->notNull(),
         ], $tableOptions);
 
-        $this->renameTable('{{%zoo_config}}','{{%config}}');
+        $this->dropTable('{{%config}}');
         $this->renameTable('{{%zoo_menu}}','{{%menu}}');
 
         $this->dropColumn('{{%menu}}','application_id');
