@@ -33,7 +33,7 @@ class BaseElement extends \yii\db\ActiveRecord
             [['name', 'app_id'], 'unique', 'targetAttribute' => ['name', 'app_id']],
             ['categories', 'each', 'rule' => ['integer']],//,'when' => function($model) { return $model->all_categories == 0; }, ],
             ['all_categories', 'default', 'value' => 1],
-            [['filter', 'admin_filter', 'required', 'all_categories', 'refresh', 'sorter', 'own_column'], 'integer'],
+            [['required', 'all_categories', 'own_column'], 'integer'],
             [['related'], 'match', 'pattern' => '#^[\w_]+$#i'],
             [['params'], 'safe'],
 

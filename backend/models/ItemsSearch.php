@@ -68,21 +68,6 @@ class ItemsSearch extends Items
             $this->query = self::find()->where([Items::tablename().'.app_id' => $this->app_id ]);
         }
 
-        foreach ($this->app->elements as $element) {
-
-            $e = $element->name;
-
-            if (!in_array($e, $this->attributes()) && $element->filter) {
-                
-                if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
-
-                    $this->query->leftJoin([$e=>'{{%items_elements}}'], $e.".item_id = ".Items::tablename().".id AND ".$e.".element = '".$e."'");
-                    $this->query->andFilterWhere([$e.'.value_string'=>$this->$e]);
-                }
-
-            }
-        }
-
         $this->query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
         $this->query->andFilterWhere([Items::tablename().'.lang'=>$this->lang]);
 

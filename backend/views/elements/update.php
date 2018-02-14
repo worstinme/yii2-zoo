@@ -71,17 +71,9 @@ $this->registerJs($js, $this::POS_READY);
 
             <?= $form->field($model, 'required')->checkbox(['class'=>'uk-checkbox']) ?>
 
-            <?= $form->field($model, 'admin_filter')->checkbox(['class'=>'uk-checkbox']) ?>
-
-            <?= $form->field($model, 'filter')->checkbox(['class'=>'uk-checkbox']) ?>
-
-            <?= $form->field($model, 'refresh')->checkbox(['class'=>'uk-checkbox']) ?>
-
             <?php if ($model->itemsStore !== null) : ?>
                 <?= $form->field($model, 'own_column')->checkbox(['class'=>'uk-checkbox']) ?>
             <?php endif; ?>
-
-            <?= $form->field($model, 'sorter')->checkbox(['class'=>'uk-checkbox']) ?>
 
             <hr>
 
