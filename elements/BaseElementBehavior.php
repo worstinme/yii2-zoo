@@ -177,6 +177,7 @@ class BaseElementBehavior extends \yii\base\Behavior
     {
         return [
             ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
+            ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
             ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
             ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ];
@@ -262,6 +263,10 @@ class BaseElementBehavior extends \yii\base\Behavior
             }
 
         }
+    }
+
+    public function afterValidate() {
+        return true;
     }
 
     protected function getElement()
