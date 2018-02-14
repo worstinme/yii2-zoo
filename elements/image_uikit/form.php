@@ -32,10 +32,10 @@ $images = array_merge(is_array($model->{$element->attributeName}) ? $model->{$el
 <div class="js-upload-<?= $element->id ?> uk-placeholder uk-text-center uk-flex uk-flex-middle uk-flex-center">
     <div>
         <span uk-icon="icon: cloud-upload"></span><br>
-        <?= Yii::t('zoo/image_uikit', 'UPLOAD_FILE') ?>
+        <?= Yii::t('zoo', 'UPLOAD_FILE') ?>
         <br>
         <div uk-form-custom>
-            <span class="uk-link"><?= Yii::t('zoo/image_uikit', 'SELECT_FILE') ?></span>
+            <span class="uk-link"><?= Yii::t('zoo', 'SELECT_FILE') ?></span>
             <input class="upload-select-<?= $element->id ?>" type="file" multiple>
         </div>
         <progress id="js-progressbar-<?= $element->id ?>" class="uk-progress" value="0" max="100" hidden></progress>

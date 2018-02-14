@@ -56,7 +56,7 @@ class CallbackAction extends BaseCallbackAction
         }
 
         $upload = \yii\base\DynamicModel::validateData(['file' => UploadedFile::getInstanceByName('file')], [
-            [['file'], 'file', 'extensions' => 'jpg, png, jpeg', 'maxSize' => $this->element->maxFileSize * 1024 * 1024, 'mimeTypes' => 'image/jpeg, image/png', 'message' => Yii::t('zoo/image_uikit', 'Изображение должно быть до ' . $this->element->maxFileSize . 'мб jpg, jpeg, png не больше 10 шт')],
+            [['file'], 'file', 'extensions' => 'jpg, png, jpeg', 'maxSize' => $this->element->maxFileSize * 1024 * 1024, 'mimeTypes' => 'image/jpeg, image/png', 'message' => Yii::t('zoo', 'Изображение должно быть до ' . $this->element->maxFileSize . 'мб jpg, jpeg, png не больше 10 шт')],
         ]);
 
         if (!$upload->hasErrors()) {

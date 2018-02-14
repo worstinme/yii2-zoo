@@ -27,6 +27,6 @@ if ($image['tmp']) {
         <?= \yii\helpers\Html::activeHiddenInput($model, $element->attributeName . "[" . $key . "][tmp]", ['value' => $image['tmp']]) ?>
         <?= \yii\helpers\Html::activeHiddenInput($model, $element->attributeName . "[" . $key . "][sort]", ['value' => $key]) ?>
     <?php else: ?>
-        <span class="uk-text-danger"><?= Yii::t('zoo/image_uikit', 'FILE_NOT_FOUND') ?></span>
+        <span class="uk-text-danger"><?= Yii::t('zoo', 'FILE_NOT_FOUND') ?></span>
     <?php endif ?>
 </div>

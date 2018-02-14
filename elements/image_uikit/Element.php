@@ -26,13 +26,13 @@ class Element extends \worstinme\zoo\elements\BaseElement
     public function getLabels()
     {
         return [
-            'dir' => Yii::t('zoo/image_uikit', 'DIR'),
-            'webroot' => Yii::t('zoo/image_uikit', 'WEBROOT'),
-            'spread' => Yii::t('zoo/image_uikit', 'SPREAD'),
-            'rename' => Yii::t('zoo/image_uikit', 'RENAME'),
-            'maxFileSize'=>Yii::t('zoo/image_uikit', 'MAX_FILE_SIZE'),
-            'horizontalResizeWidth'=>Yii::t('zoo/image_uikit', 'HORIZONTAL_RESIZE_WIDTH'),
-            'verticalResizeWidth'=>Yii::t('zoo/image_uikit', 'VERTICAL_RESIZE_WIDTH'),
+            'dir' => Yii::t('zoo', 'DIR'),
+            'webroot' => Yii::t('zoo', 'WEBROOT'),
+            'spread' => Yii::t('zoo', 'SPREAD'),
+            'rename' => Yii::t('zoo', 'RENAME'),
+            'maxFileSize'=>Yii::t('zoo', 'MAX_FILE_SIZE'),
+            'horizontalResizeWidth'=>Yii::t('zoo', 'HORIZONTAL_RESIZE_WIDTH'),
+            'verticalResizeWidth'=>Yii::t('zoo', 'VERTICAL_RESIZE_WIDTH'),
         ];
     }
 
