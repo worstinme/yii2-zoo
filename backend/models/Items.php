@@ -62,14 +62,4 @@ class Items extends \worstinme\zoo\models\Items
         return $renderedElements;
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                $this->user_id = Yii::$app->user->identity->id;
-            }
-            return true;
-        } else return false;
-    }
-
 }

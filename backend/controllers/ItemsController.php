@@ -46,11 +46,6 @@ class ItemsController extends Controller
 
         \Yii::endProfile('Categories lists', 'zoo/backend');
 
-        /* if (!Yii::$app->user->can($this->module->adminAccessRoles)
-                 && !Yii::$app->user->can('accessStrange')) {
-             $searchModel->user_id = Yii::$app->user->identity->id;
-         } */
-
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         //print_r($searchModel->itemIds(Yii::$app->request->queryParams));
