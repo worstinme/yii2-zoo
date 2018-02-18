@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'tableOptions'=> ['class' => 'uk-table uk-table-striped uk-table-hover uk-table-small'],
     'options'=> ['class' => 'items'],
     'layout' => '{items}{summary}{pager}',
-    'pager' => ['class'=> 'worstinme\zoo\helpers\LinkPager'],
+    'pager' => ['class'=> 'worstinme\zoo\widgets\LinkPager'],
     'columns' => [
         [
             'class' => 'yii\grid\CheckboxColumn',
