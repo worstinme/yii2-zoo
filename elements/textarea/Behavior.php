@@ -19,7 +19,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     public function setValue($value)
     {
         // убираем хост приложения из ссылки к картинкам
-        if ($this->element->app->app_id != Yii::$app->id) {
+        if (!empty($value) && $this->element->app->app_id != Yii::$app->id) {
             $baseUrl = $this->element->app->baseUrl;
             if (!empty($baseUrl)) {
                 $doc = new \DOMDocument();
@@ -40,7 +40,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     public function getValue()
     {
         //добавляем хост приложения к ссылкам картинок если открываем материал в бэкенде
-        if ($this->element->app->app_id != Yii::$app->id) {
+        if (!empty($value) && $this->element->app->app_id != Yii::$app->id) {
             $baseUrl = $this->element->app->baseUrl;
             if (!empty($baseUrl)) {
                 $doc = new \DOMDocument();
