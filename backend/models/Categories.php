@@ -16,6 +16,10 @@ class Categories extends \worstinme\zoo\models\Categories
         return [
             \yii\behaviors\TimestampBehavior::className(),
             [
+                'class' => \worstinme\zoo\behaviors\ImageSrcHostBehavior::className(),
+                'attributes' => ['image', 'preview', 'icon'],
+            ],
+            [
                 'class' => \worstinme\zoo\behaviors\SluggableBehavior::className(),
                 'uniqueValidator' => ['attributes' => 'alias', 'targetAttribute' => ['alias', 'lang']],
             ],
@@ -34,7 +38,7 @@ class Categories extends \worstinme\zoo\models\Categories
             [['meta_description', 'meta_keywords', 'content', 'intro', 'quote'], 'string'],
             [['meta_title'], 'string', 'max' => 255],
             ['lang', 'string', 'max' => 255, 'skipOnEmpty' => true],
-            ['alternateIds', 'each','rule'=>['integer']],
+            ['alternateIds', 'each', 'rule' => ['integer']],
             //defaults
             ['state', 'default', 'value' => 1],
             ['parent_id', 'default', 'value' => 0],
@@ -48,14 +52,17 @@ class Categories extends \worstinme\zoo\models\Categories
         return $rules;
     }
 
-    public function afterFind() {
-        $this->alternateIds = (new Query())->select('alternate_id')->from('{{%categories_alternates}}')->where(['category_id'=>$this->id])->column();
+    public function afterFind()
+    {
+        $this->alternateIds = (new Query())->select('alternate_id')->from('{{%categories_alternates}}')->where(['category_id' => $this->id])->column();
+        return parent::afterFind();
     }
 
-    public static function buildTree($lang, $categories = null, $array = [], $prefix = null, $parent = 0) {
+    public static function buildTree($lang, $categories = null, $array = [], $prefix = null, $parent = 0)
+    {
 
         if ($categories === null) {
-            $categories = self::find()->select(['id','name','parent_id'])->where(['lang'=>$lang])->indexBy('id')->asArray()->all();
+            $categories = self::find()->select(['id', 'name', 'parent_id'])->where(['lang' => $lang])->indexBy('id')->asArray()->all();
         }
 
         if (count($categories)) {
