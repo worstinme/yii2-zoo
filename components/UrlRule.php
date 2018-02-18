@@ -46,7 +46,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
         Yii::$app->cache->flush();
 
-        if ($this->empty_lang === null && count(Yii::$app->zoo->languages < 2)) {
+        if ($this->empty_lang === null && count(Yii::$app->zoo->languages) < 2) {
             $this->empty_lang = Yii::$app->language;
         }
 
@@ -249,12 +249,8 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
                 $languages = [];
 
-                if (count(Yii::$app->zoo->languages)) {
-                    foreach (Yii::$app->zoo->languages as $language => $value) {
-                        $languages[$language] = $language == $this->empty_lang ? '' : $language;
-                    }
-                } else {
-                    $languages = [Yii::$app->language => ''];
+                foreach (Yii::$app->zoo->languages as $language => $value) {
+                    $languages[$language] = ($language == $this->empty_lang ? '' : $language);
                 }
 
                 foreach ($languages as $lang => $language) {
@@ -288,7 +284,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                                 ['lang' => $lang],
                             ];
 
-                            Yii::$app->cache->set($pathInfo,$data, $this->cache_duration);
+                            Yii::$app->cache->set($pathInfo, $data, $this->cache_duration);
 
                             Yii::endProfile('parse for ' . $this->app_id, __METHOD__);
 
@@ -355,7 +351,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                                             ['lang' => $lang, 'id' => $id],
                                         ];
 
-                                        Yii::$app->cache->set($pathInfo,$data, $this->cache_duration);
+                                        Yii::$app->cache->set($pathInfo, $data, $this->cache_duration);
 
                                         Yii::endProfile('parse for ' . $this->app_id, __METHOD__);
 
@@ -403,7 +399,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                                             ['lang' => $lang, 'id' => $id],
                                         ];
 
-                                        Yii::$app->cache->set($pathInfo,$data, $this->cache_duration);
+                                        Yii::$app->cache->set($pathInfo, $data, $this->cache_duration);
 
                                         Yii::endProfile('parse for ' . $this->app_id, __METHOD__);
 
@@ -413,14 +409,14 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
                                 }
 
-                                if (strpos($path,"/") === false) {
+                                if (strpos($path, "/") === false) {
 
                                     $data = [
-                                        $this->app_id . '/'.$path,
+                                        $this->app_id . '/' . $path,
                                         ['lang' => $lang],
                                     ];
 
-                                    Yii::$app->cache->set($pathInfo,$data, $this->cache_duration);
+                                    Yii::$app->cache->set($pathInfo, $data, $this->cache_duration);
 
                                     Yii::endProfile('parse for ' . $this->app_id, __METHOD__);
 
@@ -460,7 +456,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
     protected function getParentCategoryUrl($model, $url = null)
     {
-        if ($model !== null && $model->parent_category_id) {
+        if ($model !== null && (!empty($model->parent_category_id) || !empty($model->parent_id))) {
             return $this->getParentCategoryUrl($model->parentCategory, $model->parentCategory->alias . ($url !== null ? '/' . $url : null));
         }
         return $url;
