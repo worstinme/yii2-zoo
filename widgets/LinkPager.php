@@ -1,6 +1,6 @@
 <?php
 
-namespace worstinme\zoo\helpers;
+namespace worstinme\zoo\widgets;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
