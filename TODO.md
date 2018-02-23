@@ -1,0 +1,1 @@
+1. Переделать element name в таблице items_elements на id элемента
