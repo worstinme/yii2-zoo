@@ -21,11 +21,5 @@
         "psr-4": {
             "worstinme\\zoo\\": ""
         }
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/worstinme/yii2-elfinder"
-        }
-    ]
+    }
 }
