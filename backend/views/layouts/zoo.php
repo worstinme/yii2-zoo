@@ -4,7 +4,7 @@
 
 /* @var $content string */
 
-use worstinme\uikit\Alert;
+use worstinme\zoo\widgets\Alert;
 use worstinme\uikit\Breadcrumbs;
 use worstinme\uikit\Nav;
 use yii\helpers\Html;
