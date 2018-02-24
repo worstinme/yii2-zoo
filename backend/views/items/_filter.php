@@ -3,7 +3,7 @@
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use worstinme\uikit\ActiveForm; 
+use worstinme\zoo\widgets\ActiveForm;
 use app\modules\admin\models\ParserCategories;
 
 $filter  = Yii::$app->request->post('Filter');

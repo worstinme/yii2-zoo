@@ -1,8 +1,7 @@
 <?php
 
-use worstinme\uikit\Nav;
-use worstinme\uikit\NavBar;
 use yii\helpers\Html;
+use yii\widgets\Menu;
 
 $app = Yii::$app->controller->app;
 
@@ -38,20 +37,23 @@ if (isset($items) && is_array($items) && count($items)) {
     <div class="uk-container uk-container-expand">
         <nav class="uk-navbar" uk-navbar>
             <div class="uk-navbar-left">
-
-                <?= Nav::widget([
-                    'navbar' => true,
-                    'options' => ['data-uk-nav' => true],
+                <?= Menu::widget([
+                    'encodeLabels' => false,
+                    'options' => ['class' => 'uk-navbar-nav uk-hidden-small'],
+                    'activeCssClass' => 'uk-active',
+                    'submenuTemplate' => "\n<div class=\"uk-navbar-dropdown\">\n<ul class=\"uk-nav uk-navbar-dropdown-nav\">\n{items}\n</ul>\n</div>\n",
                     'items' => $mainnav,
                 ]); ?>
+            </div>
 
-
-                <?= Nav::widget([
-                    'navbar' => true,
-                    'options' => ['data-uk-nav' => true],
+            <div class="uk-navbar-right">
+                <?= Menu::widget([
+                    'options' => ['class' => 'uk-navbar-nav uk-hidden-small'],
+                    'activeCssClass' => 'uk-active',
+                    'submenuTemplate' => "\n<div class=\"uk-navbar-dropdown\">\n<ul class=\"uk-nav uk-navbar-dropdown-nav\">\n{items}\n</ul>\n</div>\n",
+                    'encodeLabels' => false,
                     'items' => $subnav,
                 ]); ?>
-
             </div>
 
         </nav>

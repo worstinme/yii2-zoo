@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
-use worstinme\uikit\ActiveForm;
+use worstinme\zoo\widgets\ActiveForm;
 
 $this->title = Yii::$app->controller->app->title;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('zoo','Приложения'), 'url' => ['/'.Yii::$app->controller->module->id.'/default/index']];
@@ -130,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ],
 ]); ?>
 
-<?php $form = ActiveForm::begin(['id'=>'form', 'layout'=>'stacked']); ?>
+<?php $form = ActiveForm::begin(['id'=>'form','options'=>['class'=>'uk-form-stacked']]); ?>
 
     <?=$this->render('_actions',[
         'parentCategories'=>$parentCategories,

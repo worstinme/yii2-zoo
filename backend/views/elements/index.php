@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use worstinme\uikit\ActiveForm;
 
 $this->title = Yii::t('zoo', 'Элементы');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('zoo', 'Приложения'), 'url' => ['/' . Yii::$app->controller->module->id . '/default/index']];
