@@ -52,10 +52,10 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
                     if (is_file(Yii::getAlias($image['source']))) {
 
                         $pathInfo = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
-                        $newName = mb_substr($pathInfo, 1, mb_strlen($pathInfo, '8bit'), '8bit');
+                        $newName = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
                         $newExtension = strtolower(pathinfo(Yii::getAlias($image['source']), PATHINFO_EXTENSION));
 
-                        $dir = $this->element->spread ? $this->element->dir . DIRECTORY_SEPARATOR . $this->owner->id : $this->element->dir;
+                        $dir = $this->element->spread ? ($this->element->dir . DIRECTORY_SEPARATOR . $this->owner->id) : $this->element->dir;
 
                         if (!is_dir(Yii::getAlias($dir))) {
                             mkdir(Yii::getAlias($dir), 0777, true);

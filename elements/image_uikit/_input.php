@@ -14,7 +14,7 @@ if ($image['tmp']) {
 
 <div class="image uk-grid-margin">
     <?php if (is_file($file)): ?>
-        <a href="<?= $image['tmp'] ? ImageHelper::thumbnailFileUrl($file, 940) : Yii::getAlias('@web') . $image['source'] ?>"
+        <a href="<?= $image['tmp'] ? ImageHelper::thumbnailFileUrl($file, 940) : $element->app->baseUrl . $image['source'] ?>"
            class="uk-display-block">
             <?= ImageHelper::thumbnailImg($file, 250, 250) ?>
         </a>

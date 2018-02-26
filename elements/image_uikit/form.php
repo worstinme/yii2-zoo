@@ -62,12 +62,13 @@ UIkit.upload('.js-upload-$element->id', {
     'data-type': 'json',
     allow : '*.(jpg|jpeg|gif|png)',
     complete: function (response) {
-        console.log(response);
-        if (response.responseJSON.code != undefined && response.responseJSON.code == 200) {
-            $('.images-$element->id').append(response.responseJSON.image);
+        data = JSON.parse(response.responseText);
+        console.log(data);
+        if (data.code != undefined && data.code == 200) {
+            $('.images-$element->id').append(data.image);
         } else {
             UIkit.notification({
-                message: response.responseJSON.message,
+                message: data.message,
                 status: 'danger',
                 pos: 'top-center',
                 timeout: 5000

@@ -42,7 +42,7 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public function getDir()
     {
-        return isset($this->paramsArray['dir'])?$this->paramsArray['dir']:'@webroot/images/';
+        return isset($this->paramsArray['dir'])?$this->paramsArray['dir']: ( $this->app->basePath . '/images/' );
     }
 
     public function setDir($a)
@@ -114,7 +114,7 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public function getWebroot()
     {
-        return isset($this->paramsArray['webroot'])?$this->paramsArray['webroot']:'@webroot';
+        return isset($this->paramsArray['webroot'])?$this->paramsArray['webroot'] : $this->app->basePath;
     }
 
     public function setWebroot($a)
