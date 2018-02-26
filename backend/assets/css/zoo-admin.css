@@ -93,10 +93,10 @@
     display: none;
 }
 
-.zoo tr.filters td input,.widgets tr.filters td {
+.zoo tr.filters td input,.zoo tr.filters td {
     padding:0;
 }
-.zoo tr.filters td input,.widgets tr.filters td select {
+.zoo tr.filters td input,.zoo  tr.filters td select {
     border:none;
     width:100%;
     display:block;
