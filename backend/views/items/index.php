@@ -23,14 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
     'layout' => '{items}{summary}{pager}',
     'pager' => ['class'=> 'worstinme\zoo\widgets\LinkPager'],
     'columns' => [
-        [
+       /* [
             'class' => 'yii\grid\CheckboxColumn',
             'headerOptions'=>['class'=>'uk-text-center'],
             'contentOptions'=>['class'=>'uk-text-center'],
-        ],
+        ], */
         [
             'attribute' => 'id',
-            'headerOptions'=>['class'=>'uk-text-center'],
+            'headerOptions'=>['class'=>'uk-text-center','style'=>'width:10px;'],
             'contentOptions'=>['class'=>'uk-text-center'],
         ],
         [
@@ -38,53 +38,44 @@ $this->params['breadcrumbs'][] = $this->title;
             'label'=>'Наименование',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]])." ".Html::a('url', $model->url, ['data-pjax'=>0,'target'=>'_blank','title' => Yii::t('zoo', 'Открыть на сайте'),
-                        'target'=>'_blank','data'=>['pjax'=>false], 'style'=>'float:right;color:#468847',
-                ]);
+                return Html::a($model->name,['create','app'=>$model->app_id, 'id'=>$model->id],['data'=>['pjax'=>0]]);
             },
         ],
         [
-            'attribute'=>'state',
-            'label'=>'',
+            'label'=>'#',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a('','#',['onClick' => "var link=$(this);
-                        $.ajax({url:'".Url::to(['create','app'=>$model->app_id, 'id'=>$model->id])."',type:'POST',
-                            data: {'".$model->formName()."[state]':link.data('state')==0?1:0},
-                            success: function(data){
-                                if (data.success) {
-                                    if(data.model.state == 1) link.attr('class','uk-icon-check-circle'); 
-                                    else link.attr('class','uk-icon-times-circle'); 
-                                    link.data('state',data.model.state)
-                                }
-                            }
-                        })",'class'=>"uk-icon-".($model->state==1 ? 'check' :'times')."-circle",'data'=>['pjax'=>0,'state'=>$model->state]]);
+                return Html::a('<span uk-icon="link">', $model->url, ['data-pjax'=>0,'target'=>'_blank','title' => Yii::t('zoo', 'Открыть на сайте'),
+                        'target'=>'_blank','data'=>['pjax'=>false],
+                    ]);
             },
-            'headerOptions'=>['class'=>'uk-text-center'],
-            'contentOptions'=>['class'=>'uk-text-center'],
+            'headerOptions' => ['class' => 'uk-text-center'],
+            'contentOptions' => ['class' => 'uk-text-center'],
         ],
         [
-            'attribute'=>'flag',
-            'label'=>'',
+            'attribute' => 'state',
+            'label' => '',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a('','#',['onClick' => "var link=$(this);
-                        $.ajax({url:'".Url::to(['create','app'=>$model->app_id, 'id'=>$model->id])."',type:'POST',
-                            data: {'".$model->formName()."[flag]':link.data('flag')==0?1:0},
-                            success: function(data){
-                                if (data.success) {
-                                    if(data.model.flag == 1) link.attr('class','uk-icon-star'); 
-                                    else link.attr('class','uk-icon-star-o'); 
-                                    link.data('flag',data.model.flag)
-                                }
-                            }
-                        })",'class'=>"uk-icon-star".($model->flag ? '' :'-o'),'data'=>['pjax'=>0,'flag'=>$model->flag]]);
+                return Html::a('<i uk-icon="icon: check" style="color: darkgreen"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[state]':0},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-".$model->id.($model->state ? null : " uk-hidden")]).
+                    Html::a('<i uk-icon="icon: check" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[state]':1},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-".$model->id.($model->state ? " uk-hidden" : null)]);
             },
-            'headerOptions'=>['class'=>'uk-text-center'],
-            'contentOptions'=>['class'=>'uk-text-center'],
+            'headerOptions' => ['class' => 'uk-text-center'],
+            'contentOptions' => ['class' => 'uk-text-center'],
         ],
         [
-            'attribute'=>'lang',
+            'attribute' => 'flag',
+            'label' => '',
+            'format' => 'raw',
+            'value' => function ($model, $index, $widget) {
+                return Html::a('<i uk-icon="icon: star" style="color: gold"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[flag]':0},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-".$model->id.($model->flag ? null : " uk-hidden")]).
+                    Html::a('<i uk-icon="icon: star" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[flag]':1},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-".$model->id.($model->flag ? " uk-hidden" : null)]);
+            },
+            'headerOptions' => ['class' => 'uk-text-center'],
+            'contentOptions' => ['class' => 'uk-text-center'],
+        ],
+        [
+            'attribute'=>'language',
             'filter'=>Yii::$app->zoo->languages,
             'value'=>function($model) {
                 return $model->lang ? $model->lang : '—';
