@@ -2,7 +2,7 @@
 
 namespace worstinme\zoo\elements\money;
 
-class Config extends \worstinme\zoo\elements\BaseElement
+class Element extends \worstinme\zoo\elements\BaseElement
 {
 
     public $defaultStore = 'value_float';
