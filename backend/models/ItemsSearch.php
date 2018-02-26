@@ -17,6 +17,7 @@ class ItemsSearch extends Items
     public $search;
     public $query;
     public $withoutCategory;
+    public $language;
 
     public $isSearch = true;
     /**
@@ -28,7 +29,7 @@ class ItemsSearch extends Items
             [['search'],'safe'],
             [['category'],'safe'],
             ['withoutCategory','integer'],
-            [['lang'],'string'],
+            [['language'],'string'],
         ];
 
         foreach ($this->getBehaviors() as $behavior) {
@@ -56,20 +57,20 @@ class ItemsSearch extends Items
         $this->load($params);
 
         if ($this->withoutCategory) {
-            $this->query = self::find()->where(['app_id' => $this->app_id ]);
+            $this->query = Items::find()->where(['app_id' => $this->app_id ]);
             $this->query->andWhere('id NOT IN (SELECT DISTINCT item_id FROM {{%items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
-            $this->query = self::find();
+            $this->query = Items::find();
             $this->query->leftJoin(['category'=>'{{%items_categories}}'], "category.item_id = ".Items::tablename().".id");
             $this->query->andFilterWhere(['category.category_id'=>$this->category]);
         }
         else {
-            $this->query = self::find()->where([Items::tablename().'.app_id' => $this->app_id ]);
+            $this->query = Items::find()->where([Items::tablename().'.app_id' => $this->app_id ]);
         }
 
         $this->query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
-        $this->query->andFilterWhere([Items::tablename().'.lang'=>$this->lang]);
+        $this->query->andFilterWhere([Items::tablename().'.lang'=>$this->language]);
 
         $query = clone $this->query;
 
@@ -118,5 +119,10 @@ class ItemsSearch extends Items
         $query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
 
         return $query->groupBy(Items::tablename().'.id')->column();
+    }
+
+    public function formName()
+    {
+        return '';
     }
 }
