@@ -20,6 +20,7 @@ class Items extends \worstinme\zoo\models\Items
     public function rules()
     {
         $rules = [
+            [['state','flag'],'boolean'],
            //
         ];
 
