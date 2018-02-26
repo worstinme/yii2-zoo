@@ -129,7 +129,9 @@ class CategoriesController extends Controller
             return $this->redirect(['categories']);
         }
         elseif ($category === null) {
-            return new Categories;
+            return new Categories([
+                'lang'=>array_keys(Yii::$app->zoo->languages)[0]
+            ]);
         }
 
         return $category;

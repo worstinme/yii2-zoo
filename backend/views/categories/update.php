@@ -32,7 +32,7 @@ $items = ArrayHelper::map(Categories::find()
 
         <?= $form->field($model, 'alias')->textInput(['class'=>'uk-input']) ?>
 
-        <?= $form->field($model, 'lang')->dropDownList(Yii::$app->zoo->languages, ['class'=>'uk-select','prompt' => 'язык категории']); ?>
+        <?= $form->field($model, 'lang')->dropDownList(Yii::$app->zoo->languages, ['class'=>'uk-select']); ?>
 
         <?= $form->field($model, 'subtitle')->textInput(['class'=>'uk-input']) ?>
 
