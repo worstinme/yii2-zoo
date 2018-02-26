@@ -52,6 +52,9 @@ class ItemsSearch extends Items
             ->joinWith(['categories'])
             ->where([self::tableName().'.app_id'=>$this->app_id,self::tableName().'.lang'=>$this->lang]);
 
+        $this->query->andFilterWhere([self::tableName().'.flag'=>$this->flag]);
+        $this->query->andFilterWhere([self::tableName().'.state'=>$this->state]);
+
      /*   foreach ($this->elements as $element) {
 
             $e = $element->name;
