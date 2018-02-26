@@ -22,17 +22,20 @@ class Element extends \worstinme\zoo\elements\BaseElement
         ];
     }
 
+    public function getConfigView() {
+        return '@worstinme/zoo/elements/textarea/_settings';
+    }
 
     public function getEditor()
     {
-        return isset($this->owner->paramsArray['editor']) ? $this->owner->paramsArray['editor'] : 1;
+        return isset($this->paramsArray['editor']) ? $this->paramsArray['editor'] : 1;
     }
 
     public function setEditor($a)
     {
-        $params = $this->owner->paramsArray;
+        $params = $this->paramsArray;
         $params['editor'] = $a;
-        return $this->owner->paramsArray = $params;
+        return $this->paramsArray = $params;
     }
 
 
