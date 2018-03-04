@@ -19,7 +19,8 @@ class ItemsSearch extends Items
     public function rules()
     {
         $rules = [
-            [['search'], 'safe'],
+            [['search','element_category'], 'safe'],
+
         ];
 
     /*    foreach ($this->elementsTypes as $behavior_name) {
@@ -51,6 +52,8 @@ class ItemsSearch extends Items
             ->with(['itemsElements'])
             ->joinWith(['categories'])
             ->where([self::tableName().'.app_id'=>$this->app_id,self::tableName().'.lang'=>$this->lang]);
+
+        $this->query->andFilterWhere([Categories::tablename().'.id'=>$this->categoryTree($this->element_category)]);
 
         $this->query->andFilterWhere([self::tableName().'.flag'=>$this->flag]);
         $this->query->andFilterWhere([self::tableName().'.state'=>$this->state]);
@@ -104,6 +107,8 @@ class ItemsSearch extends Items
         if (empty($categories)) {
             return null;
         }
+
+        $categories = (array) $categories;
 
         $related = (new \yii\db\Query())
                 ->select('id')
