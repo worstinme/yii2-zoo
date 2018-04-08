@@ -48,7 +48,7 @@ class ItemsSearch extends Items
             $this->load($params);
         }
 
-        $this->query = self::find()
+        $this->query = parent::find()
             ->with(['itemsElements'])
             ->joinWith(['categories'])
             ->where([self::tableName().'.app_id'=>$this->app_id,self::tableName().'.lang'=>$this->lang]);
@@ -102,25 +102,6 @@ class ItemsSearch extends Items
     }
 
 
-    public function categoryTree($categories) {
 
-        if (empty($categories)) {
-            return null;
-        }
-
-        $categories = (array) $categories;
-
-        $related = (new \yii\db\Query())
-                ->select('id')
-                ->from('{{%categories}}')
-                ->where(['parent_id'=>$categories,'state'=>1])
-                ->column(); 
-
-        if (count($related) > 0) {
-            $related = $this->categoryTree($related);
-        }
-
-        return array_merge($categories,$related);
-    }
 
 }
