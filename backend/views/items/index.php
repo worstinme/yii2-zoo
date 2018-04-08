@@ -11,8 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<?php  \yii\widgets\Pjax::begin(['id'=>'catalogue','timeout'=>5000,'options'=>['data-uk-observe'=>true]]); ?>
-
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
@@ -57,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'label' => '',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a('<i uk-icon="icon: check" style="color: darkgreen"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[state]':0},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-".$model->id.($model->state ? null : " uk-hidden")]).
-                    Html::a('<i uk-icon="icon: check" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[state]':1},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-".$model->id.($model->state ? " uk-hidden" : null)]);
+                return Html::a('<i uk-icon="icon: check" style="color: darkgreen"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'Items[state]':0},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-".$model->id.($model->state ? null : " uk-hidden")]).
+                    Html::a('<i uk-icon="icon: check" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'Items[state]':1},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-".$model->id.($model->state ? " uk-hidden" : null)]);
             },
             'headerOptions' => ['class' => 'uk-text-center'],
             'contentOptions' => ['class' => 'uk-text-center'],
@@ -68,8 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'label' => '',
             'format' => 'raw',
             'value' => function ($model, $index, $widget) {
-                return Html::a('<i uk-icon="icon: star" style="color: gold"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[flag]':0},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-".$model->id.($model->flag ? null : " uk-hidden")]).
-                    Html::a('<i uk-icon="icon: star" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'" . $model->formName() . "[flag]':1},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-".$model->id.($model->flag ? " uk-hidden" : null)]);
+                return Html::a('<i uk-icon="icon: star" style="color: gold"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'Items[flag]':0},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-".$model->id.($model->flag ? null : " uk-hidden")]).
+                    Html::a('<i uk-icon="icon: star" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'Items[flag]':1},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-".$model->id.($model->flag ? " uk-hidden" : null)]);
             },
             'headerOptions' => ['class' => 'uk-text-center'],
             'contentOptions' => ['class' => 'uk-text-center'],
@@ -128,8 +126,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ])?>
 
 <?php ActiveForm::end(); ?>
-
-<?php  \yii\widgets\Pjax::end(); ?>
 
 
 
