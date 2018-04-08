@@ -27,7 +27,7 @@ class ItemsSearch extends Items
     {
         $rules = [
             [['search'],'safe'],
-            [['category'],'safe'],
+            [['element_category'],'safe'],
             ['withoutCategory','integer'],
             [['language'],'string'],
         ];
@@ -46,7 +46,8 @@ class ItemsSearch extends Items
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'search' => Yii::t('zoo', 'Поиск'),
-            'withoutCategory'=>'Показать материалы без категорий'
+            'withoutCategory'=>'Показать материалы без категорий',
+            'language'=>Yii::t('zoo','ITEMS_LANGUAGE'),
         ]);
 
     }
@@ -56,25 +57,20 @@ class ItemsSearch extends Items
         
         $this->load($params);
 
+        $this->query = parent::find()
+            ->joinWith(['categories'])
+            ->where([parent::tableName().'.app_id'=>$this->app_id]);
+
         if ($this->withoutCategory) {
-            $this->query = Items::find()->where(['app_id' => $this->app_id ]);
             $this->query->andWhere('id NOT IN (SELECT DISTINCT item_id FROM {{%items_categories}} WHERE category_id > 0)');
         }
-        elseif (!empty($this->category) && count($this->category)) {
-            $this->query = Items::find();
-            $this->query->leftJoin(['category'=>'{{%items_categories}}'], "category.item_id = ".Items::tablename().".id");
-            $this->query->andFilterWhere(['category.category_id'=>$this->category]);
-        }
-        else {
-            $this->query = Items::find()->where([Items::tablename().'.app_id' => $this->app_id ]);
-        }
 
-        $this->query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
-        $this->query->andFilterWhere([Items::tablename().'.lang'=>$this->language]);
+        $this->query->andFilterWhere([Categories::tablename().'.id'=>$this->categoryTree($this->element_category)]);
+        $this->query->andFilterWhere(['LIKE',parent::tablename().'.name',$this->search]);
+        $this->query->andFilterWhere([parent::tablename().'.lang'=>$this->language]);
 
         $query = clone $this->query;
-
-        $query->orderBy('created_at DESC, updated_at DESC');
+        $query->orderBy('created_at DESC');
 
         return $dataProvider = new ActiveDataProvider([
             'query' => $query->groupBy(Items::tablename().'.id'),
