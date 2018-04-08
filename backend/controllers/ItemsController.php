@@ -144,6 +144,7 @@ class ItemsController extends Controller
         if ($id === null || ($model = Items::findOne(["id" => $id])) === null) {
             $model = new Items([
                 'app_id' => $this->app->id,
+                'state'=>1,
             ]);
             $model->regBehaviors();
         }
