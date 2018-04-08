@@ -21,6 +21,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         // убираем хост приложения из ссылки к картинкам
         if ($this->element->editor && !empty($value) && $this->element->app->app_id != Yii::$app->id) {
             $baseUrl = $this->element->app->baseUrl;
+            $replaces = [];
             if (!empty($baseUrl)) {
                 $doc = new \DOMDocument();
                 $doc->loadHTML($value);
@@ -28,10 +29,13 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
                 foreach ($images as $img) {
                     $url = $img->getAttribute('src');
                     if (strpos($url,$baseUrl) === 0) {
-                        $img->setAttribute('src', substr($url,strlen($baseUrl)));
+                        $replaces[$url] = substr($url,strlen($baseUrl));
                     }
                 }
-                return parent::setValue($doc->saveHTML());
+                foreach ($replaces as $old => $new) {
+                    str_replace($old, $new, $value);
+                }
+                return parent::setValue($value);
             }
         }
         return parent::setValue($value);
@@ -42,17 +46,23 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         //добавляем хост приложения к ссылкам картинок если открываем материал в бэкенде
         if ($this->element->editor && !empty($value) && $this->element->app->app_id != Yii::$app->id) {
             $baseUrl = $this->element->app->baseUrl;
+            $replaces = [];
             if (!empty($baseUrl)) {
                 $doc = new \DOMDocument();
-                $doc->loadHTML(parent::getValue());
+                $html = parent::getValue();
+                $doc->loadHTML($html);
                 $images = $doc->getElementsByTagName('img');
                 foreach ($images as $img) {
                     $url = $img->getAttribute('src');
                     if (strpos($url,"/") === 0 && strpos($url,"//") !== 0) {
                         $img->setAttribute('src', $baseUrl.$url);
+                        $replaces[$url] = $baseUrl.$url;
                     }
                 }
-                return $doc->saveHTML();
+                foreach ($replaces as $old => $new) {
+                    str_replace($old, $new, $html);
+                }
+                return $html;
             }
         }
         return parent::getValue();
