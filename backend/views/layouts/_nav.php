@@ -20,15 +20,15 @@ if (Yii::$app->controller->id == 'categories') {
 }
 
 $mainnav = [
-    ['label' => '<span class="uk-margin-small-right" uk-icon="icon: thumbnails"></span>' . $app->title,'url' => ['/zoo/applications/view', 'app' => $app->id]],
     ['label' => Yii::t('zoo', 'NAV_APPLICATION_ITEMS'),'url' => ['/zoo/items/index', 'app' => $app->id]],
     ['label' => Yii::t('zoo', 'NAV_APPLICATION_CATEGORIES'),'url' => ['/zoo/categories/index', 'app' => $app->id]],
     ['label' => Yii::t('zoo', 'NAV_APPLICATION_ELEMENTS'),'url' => ['/zoo/elements/index', 'app' => $app->id]],
+    ['label' => Yii::t('zoo', 'NAV_APPLICATION_SETTINGS'),'url' => ['/zoo/applications/view', 'app' => $app->id]],
 ];
 
 
 if (isset($items) && is_array($items) && count($items)) {
-    $subnav = array_merge($items, $subnav);
+    $mainnav = array_merge($items, $subnav);
 }
 
 ?>
@@ -37,6 +37,7 @@ if (isset($items) && is_array($items) && count($items)) {
     <div class="uk-container uk-container-expand">
         <nav class="uk-navbar" uk-navbar>
             <div class="uk-navbar-left">
+                <span class="uk-navbar-item" href="#"><i class="uk-margin-small-right" uk-icon="icon: thumbnails"></i><?=$app->title?></span>
                 <?= Menu::widget([
                     'encodeLabels' => false,
                     'options' => ['class' => 'uk-navbar-nav uk-hidden-small'],
@@ -44,9 +45,6 @@ if (isset($items) && is_array($items) && count($items)) {
                     'submenuTemplate' => "\n<div class=\"uk-navbar-dropdown\">\n<ul class=\"uk-nav uk-navbar-dropdown-nav\">\n{items}\n</ul>\n</div>\n",
                     'items' => $mainnav,
                 ]); ?>
-            </div>
-
-            <div class="uk-navbar-right">
                 <?= Menu::widget([
                     'options' => ['class' => 'uk-navbar-nav uk-hidden-small'],
                     'activeCssClass' => 'uk-active',
