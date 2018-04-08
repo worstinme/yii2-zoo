@@ -31,7 +31,7 @@ class MetaTags extends \yii\base\Widget
     public function run()
     {
         if ($this->title !== false) {
-            $this->view->title = $this->title ? $this->title : $this->model->meta_title;
+            $this->view->title = $this->title ? $this->title : ($this->model->meta_title ? $this->model->meta_title : $this->model->name);
         }
 
         if ($this->keywords !== false) {
