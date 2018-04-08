@@ -78,4 +78,25 @@ class Items extends \yii\db\ActiveRecord
         return $crumbs;
     }
 
+    public function categoryTree($categories) {
+
+        if (empty($categories)) {
+            return null;
+        }
+
+        $categories = (array) $categories;
+
+        $related = (new \yii\db\Query())
+            ->select('id')
+            ->from('{{%categories}}')
+            ->where(['parent_id'=>$categories,'state'=>1])
+            ->column();
+
+        if (count($related) > 0) {
+            $related = $this->categoryTree($related);
+        }
+
+        return array_merge($categories,$related);
+    }
+
 }
