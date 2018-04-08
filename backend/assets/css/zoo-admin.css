@@ -33,7 +33,24 @@
     padding: 0 15px;
     font-size: .775rem;
 }
-
+.zoo .subnav .uk-navbar-nav>li.uk-active>a {
+    background: #80bfff;
+    color:#fff;
+}
+.zoo .subnav .uk-navbar-item {
+    height: 40px;
+    padding: 0 15px;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+.zoo .subnav ul+ul li {
+    font-weight: bold;
+    border-left:1px solid #80bfff;
+    border-right:1px solid #80bfff;
+}
+.zoo .subnav ul+ul li+li {
+    border-left:none;
+}
 .zoo .uk-table-small td, .uk-table-small th {
     padding: 4px 6px;
 }
@@ -104,4 +121,19 @@
     background: #eff8fd;
     height: 27px;
     border-right: 1px solid #fff;
+}
+
+.zoo .select2-container--default .select2-selection--multiple{
+    border-color:#e5e5e5;
+    border-radius: 0;
+    min-height: 40px;
+}
+.zoo .select2-container--default .select2-selection--multiple .select2-search__field {
+    margin-top: 11px;
+}
+.zoo .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    border:none;
+    border-radius: 0;
+    background: #e5e5e5;
+    line-height: 27px;
 }
