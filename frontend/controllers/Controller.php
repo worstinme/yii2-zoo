@@ -75,9 +75,10 @@ class Controller extends \yii\web\Controller
         $category = $this->getCategory($id);
         $searchModel = new ItemsSearch([
             'app_id'=>$this->app->id,
-            'category'=>[$category->id]
+            'state'=>1,
         ]);
         $searchModel->regBehaviors();
+        $searchModel->element_category = [$category->id];
         $dataProvider = $searchModel->data(Yii::$app->request->queryParams);
 
         return $this->render('category', [
