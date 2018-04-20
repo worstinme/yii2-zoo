@@ -9,6 +9,7 @@ use worstinme\zoo\models\Items;
 use worstinme\zoo\models\Categories;
 use worstinme\zoo\frontend\models\ItemsSearch;
 
+use yii\web\ConflictHttpException;
 use yii\web\NotFoundHttpException;
 
 class Controller extends \yii\web\Controller
@@ -43,11 +44,13 @@ class Controller extends \yii\web\Controller
     public function actionIndex()
     {
         if (($model = ApplicationsContent::findOne(['app_id'=>$this->app->id,'lang'=>$this->app->lang])) === null) {
-            throw new NotFoundHttpException();
+            $model = new ApplicationsContent(['app_id'=>$this->app->id,'lang'=>$this->app->lang]);
         }
 
         $searchModel = new ItemsSearch([
             'app_id'=>$this->app->id,
+            'state'=>1,
+            'flag'=>1,
         ]);
 
         $searchModel->regBehaviors();
