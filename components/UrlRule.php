@@ -445,7 +445,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
     protected function getAppHost()
     {
-        if ($this->app->app_id !== null && $this->app->app_id != Yii::$app->id) {
+        if (Yii::$app->zoo->backend) {
             if ($this->host === null) {
                 throw new InvalidConfigException('Application`s host should be defined');
             }
