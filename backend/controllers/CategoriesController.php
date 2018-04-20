@@ -98,18 +98,14 @@ class CategoriesController extends Controller
     public function actionSort() {
         $request = Yii::$app->request;
         if($request->isPost) {
-
-            if(($category = Categories::findOne($request->post('id'))) !== null) {
-                $category->parent_id = $request->post('parent_id');
-                $category->save();
-            }
-
-            $sort = $request->post('sort');
+            $parent_id = $request->post('parent_id') ?? 0;
+            $sort = $request->post('sort',[]);
 
             if(count($sort)) {
                 foreach ($sort as $key => $value) {
                     if(($category = Categories::findOne($key)) !== null) {
                         $category->sort = $value;
+                        $category->parent_id = $parent_id;
                         $category->save();
                     }
                 }
