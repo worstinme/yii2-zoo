@@ -37,12 +37,6 @@ class Component extends \yii\base\Component implements BootstrapInterface
         'class' => 'worstinme\zoo\components\UrlRule',
     ];
 
-    /**
-     * @var string Applications configs storage folder
-     *      e.g. @common/config/zoo
-     */
-    public $applicationsConfigPath = '@common/config/zoo';
-
     /** @var array application content languages * */
     public $languages = [];
 
@@ -103,91 +97,85 @@ class Component extends \yii\base\Component implements BootstrapInterface
     /** @inheritdoc */
     public function bootstrap($app)
     {
-        /* @var $module Module */
 
-        if (!$app->hasModule('zoo')) {
+        Yii::beginProfile('register_applications', 'app');
 
-            Yii::beginProfile('register_applications', 'app');
+        $applications = [];
 
-            $applications = [];
+        foreach ($app->zoo->applications as $application) {
 
-            $files = \yii\helpers\FileHelper::findFiles(Yii::getAlias($this->applicationsConfigPath), ['only' => ['*.php']]);
-
-            foreach ($files as $file) {
-                $application = require($file);
-                if ($this->backend || !isset($application['app_id']) || $application['app_id'] == $app->id) {
-                    if (!isset($application['class'])) {
-                        $application['class'] = '\worstinme\zoo\Application';
-                    }
-                    $applications[$application['id']] = Yii::createObject($application);
-                    $app->urlManager->addRules([
-                        ArrayHelper::merge($this->urlRuleComponent, $applications[$application['id']]->urlRuleComponent, [
-                            'app_id' => $application['id'],
-                        ])
-                    ], true);
-                }
+            if (!isset($application['class'])) {
+                $application['class'] = '\worstinme\zoo\Application';
             }
 
-            $app->zoo->applications = $applications;
+            $applications[$application['id']] = Yii::createObject($application);
 
-            Yii::endProfile('register_applications', 'app');
+            $app->urlManager->addRules([
+                ArrayHelper::merge($this->urlRuleComponent, $applications[$application['id']]->urlRuleComponent, [
+                    'app_id' => $application['id'],
+                ])
+            ], true);
 
-            if ($app instanceof ConsoleApplication) {
-                // load console module
-            } elseif ($this->backend) {
+        }
 
-                $configUrlRule = [
-                    'class' => 'yii\web\GroupUrlRule',
-                    'prefix' => $this->urlPrefix,
-                    'rules' => $this->urlRules,
-                ];
-                if ($this->urlPrefix != 'zoo') {
-                    $configUrlRule['routePrefix'] = 'zoo';
-                }
+        $app->zoo->applications = $applications;
 
-                $rule = Yii::createObject($configUrlRule);
+        Yii::endProfile('register_applications', 'app');
 
-                $app->urlManager->addRules([$rule], false);
+        if ($app instanceof ConsoleApplication) {
+            // load console module
+        } elseif ($this->backend) {
 
-                $app->setModule('zoo', [
-                    'class' => Module::className(),
-                ]);
+            $configUrlRule = [
+                'class' => 'yii\web\GroupUrlRule',
+                'prefix' => $this->urlPrefix,
+                'rules' => $this->urlRules,
+            ];
+            if ($this->urlPrefix != 'zoo') {
+                $configUrlRule['routePrefix'] = 'zoo';
+            }
 
-                if (!isset($app->get('i18n')->translations['zoo*'])) {
-                    $app->get('i18n')->translations['zoo*'] = [
-                        'class' => PhpMessageSource::className(),
-                        'basePath' => '@worstinme/zoo/messages',
-                        'sourceLanguage' => 'en-US'
-                    ];
-                }
+            $rule = Yii::createObject($configUrlRule);
 
-                $roots = [];
+            $app->urlManager->addRules([$rule], false);
 
-                foreach ($applications as $application) {
+            $app->setModule('zoo', [
+                'class' => Module::className(),
+            ]);
 
-                    $root = [
-                        'path' => '/images/' . $application->id . '/',
-                        'name' => $application->id,
-                    ];
-
-                    $root['baseUrl'] = $application->baseUrl !== null ? $application->baseUrl : '@web';
-                    $root['basePath'] = $application->basePath !== null ? $application->basePath : '@webroot';
-
-                    $roots[$application->id] = $root;
-
-                    if (!is_dir(Yii::getAlias($root['basePath'] . $root['path']))) {
-                        mkdir(Yii::getAlias($root['basePath'] . $root['path']), 0757, true);
-                    }
-
-                }
-
-                $app->controllerMap['elfinder'] = [
-                    'class' => 'mihaildev\elfinder\Controller',
-                    'access' => $this->adminAccessRoles,
-                    'roots' => $roots,
+            if (!isset($app->get('i18n')->translations['zoo*'])) {
+                $app->get('i18n')->translations['zoo*'] = [
+                    'class' => PhpMessageSource::className(),
+                    'basePath' => '@worstinme/zoo/messages',
+                    'sourceLanguage' => 'en-US'
                 ];
             }
 
+            $roots = [];
+
+            foreach ($applications as $application) {
+
+                $root = [
+                    'path' => '/images/' . $application->id . '/',
+                    'name' => $application->id,
+                ];
+
+                $root['baseUrl'] = $application->baseUrl !== null ? $application->baseUrl : '@web';
+                $root['basePath'] = $application->basePath !== null ? $application->basePath : '@webroot';
+
+                $roots[$application->id] = $root;
+
+                if (!is_dir(Yii::getAlias($root['basePath'] . $root['path']))) {
+                    mkdir(Yii::getAlias($root['basePath'] . $root['path']), 0757, true);
+                }
+
+            }
+
+            $app->controllerMap['elfinder'] = [
+                'class' => 'mihaildev\elfinder\Controller',
+                'access' => $this->adminAccessRoles,
+                'roots' => $roots,
+            ];
         }
 
     }
