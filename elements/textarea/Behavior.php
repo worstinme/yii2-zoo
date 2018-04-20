@@ -19,9 +19,8 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     public function setValue($value)
     {
         // убираем хост приложения из ссылки к картинкам
-        if ($this->element->editor && !empty($value) && $this->element->app->app_id != Yii::$app->id) {
-            $baseUrl = $this->element->app->baseUrl;
-            $replaces = [];
+        if ($this->element->editor && !empty($value) && Yii::$app->zoo->backend) {
+            $baseUrl = Yii::getAlias($this->element->app->baseUrl !== null ? $this->element->app->baseUrl : Yii::$app->zoo->elfinder['baseUrl']);
             if (!empty($baseUrl)) {
                 $doc = new \DOMDocument();
                 $doc->loadHTML($value);
@@ -33,7 +32,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
                     }
                 }
                 foreach ($replaces as $old => $new) {
-                    str_replace($old, $new, $value);
+                    $value = str_replace($old, $new, $value);
                 }
                 return parent::setValue($value);
             }
@@ -41,16 +40,14 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         return parent::setValue($value);
     }
 
-    public function getValue()
-    {
+    public function prepareTextareaValue($value) {
         //добавляем хост приложения к ссылкам картинок если открываем материал в бэкенде
-        if ($this->element->editor && !empty($value) && $this->element->app->app_id != Yii::$app->id) {
-            $baseUrl = $this->element->app->baseUrl;
+        if ($this->element->editor && !empty($value) && Yii::$app->zoo->backend) {
+            $baseUrl = Yii::getAlias($this->element->app->baseUrl !== null ? $this->element->app->baseUrl : Yii::$app->zoo->elfinder['baseUrl']);
             $replaces = [];
             if (!empty($baseUrl)) {
                 $doc = new \DOMDocument();
-                $html = parent::getValue();
-                $doc->loadHTML($html);
+                $doc->loadHTML($value);
                 $images = $doc->getElementsByTagName('img');
                 foreach ($images as $img) {
                     $url = $img->getAttribute('src');
@@ -60,12 +57,11 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
                     }
                 }
                 foreach ($replaces as $old => $new) {
-                    str_replace($old, $new, $html);
+                    $value = str_replace($old, $new, $value);
                 }
-                return $html;
+                return $value;
             }
         }
-        return parent::getValue();
     }
 
 }

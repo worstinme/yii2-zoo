@@ -8,6 +8,9 @@ if ($element->editor) {
 
     echo \mihaildev\ckeditor\CKEditor::widget([
         'model' => $model,
+        'options' => [
+            'value'=>$model->prepareTextareaValue($model->{$element->attributeName})
+        ],
         'attribute' => $element->attributeName,
         'editorOptions' => [
             'preset' => 'standart', //разработанны стандартные настройки basic, standard, full данную возможность не обязательно использовать
