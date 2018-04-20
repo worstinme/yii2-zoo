@@ -7,8 +7,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 
-<h1><?=$app->title?></h1>
-
 <h2><?= Yii::t('zoo', 'APPLICATIONS_CONTENTS_TITLE') ?></h2>
 
 <ul class="uk-subnav uk-subnav-divider">
