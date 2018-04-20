@@ -73,6 +73,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'contentOptions' => ['class' => 'uk-text-center'],
         ],
         [
+            'attribute' => 'bolt',
+            'label' => '',
+            'format' => 'raw',
+            'value' => function ($model, $index, $widget) {
+                return Html::a('<i uk-icon="icon: bolt" style="color: green"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'Items[bolt]':0},success: function(data){ if(data.success) { $('.bolt-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "bolt-button-".$model->id.($model->bolt ? null : " uk-hidden")]).
+                    Html::a('<i uk-icon="icon: bolt" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create','app'=>$model->app_id, 'id'=>$model->id]) . "',type:'POST',data: {'Items[bolt]':1},success: function(data){ if(data.success) { $('.bolt-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "bolt-button-".$model->id.($model->bolt ? " uk-hidden" : null)]);
+            },
+            'headerOptions' => ['class' => 'uk-text-center'],
+            'contentOptions' => ['class' => 'uk-text-center'],
+        ],
+        [
             'attribute'=>'language',
             'filter'=>Yii::$app->zoo->languages,
             'value'=>function($model) {
