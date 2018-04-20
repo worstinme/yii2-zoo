@@ -226,4 +226,11 @@ class Component extends \yii\base\Component implements BootstrapInterface
 
     }
 
+    public function getFrontendHost() {
+        if (isset($config['urlRuleComponent']['host'])) {
+            return $config['urlRuleComponent']['host'];
+        }
+        return Yii::$app->request->hostName;
+    }
+
 }
