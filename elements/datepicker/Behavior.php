@@ -19,15 +19,11 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
     public function getValue() {
         $value = parent::getValue();
-        return Yii::$app->formatter->asDate($value == null ? time() : $value,'php:d.m.Y');
+        return Yii::$app->formatter->asDate($value == null ? time() : $value,'php:Y-m-d');
     }
 
     public function setValue($value) {
-        $date = \DateTime::createFromFormat('d.m.Y',$value);
-        if ($date) {
-            return parent::setValue($date->getTimestamp());
-        }
-        return parent::setValue(null);
+        return parent::setValue(strtotime($value));
     }
 
 }
