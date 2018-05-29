@@ -15,29 +15,19 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         ];
     }
 
-    public $value_field = 'value_int';
+    public $field = 'value_int';
 
-    public function getValue($attribute) {
-        if ($this->owner->hasAttribute($attribute.'_at')) {
-            $value = $this->owner->{$attribute.'_at'};
-        }
-        else {
-            $value = parent::getValue($attribute);
-        }
+    public function getValue() {
+        $value = parent::getValue();
         return Yii::$app->formatter->asDate($value == null ? time() : $value,'php:d.m.Y');
     }
 
-    public function setValue($attribute,$value) {
-
-        $value = Yii::$app->formatter->asTimestamp($value);
-
-        if ($this->owner->hasAttribute($attribute.'_at')) {
-            return $this->owner->{$attribute.'_at'} = $value;
+    public function setValue($value) {
+        $date = \DateTime::createFromFormat('d.m.Y',$value);
+        if ($date) {
+            return parent::setValue($date->getTimestamp());
         }
-        else {
-            return parent::setValue($attribute,$value);
-        }
-
+        return parent::setValue(null);
     }
 
 }
