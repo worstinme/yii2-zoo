@@ -34,6 +34,9 @@ class Application extends \yii\base\Component
 
     public $lang;
 
+    /** @var bool toogle categories component in backend */
+    public $categoriesEnable = true;
+
     public function init()
     {
         parent::init();

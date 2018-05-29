@@ -19,12 +19,12 @@ if (Yii::$app->controller->id == 'categories') {
     $subnav[] = ['label' => Yii::t('zoo', 'NAV_CREATE_CATEGORY'), 'url' => ['/zoo/categories/update', 'app' => $app->id]];
 }
 
-$mainnav = [
+$mainnav = array_filter([
     ['label' => Yii::t('zoo', 'NAV_APPLICATION_ITEMS'),'url' => ['/zoo/items/index', 'app' => $app->id]],
-    ['label' => Yii::t('zoo', 'NAV_APPLICATION_CATEGORIES'),'url' => ['/zoo/categories/index', 'app' => $app->id]],
+    $app->categoriesEnable ? ['label' => Yii::t('zoo', 'NAV_APPLICATION_CATEGORIES'),'url' => ['/zoo/categories/index', 'app' => $app->id]] : null,
     ['label' => Yii::t('zoo', 'NAV_APPLICATION_ELEMENTS'),'url' => ['/zoo/elements/index', 'app' => $app->id]],
     ['label' => Yii::t('zoo', 'NAV_APPLICATION_SETTINGS'),'url' => ['/zoo/applications/view', 'app' => $app->id]],
-];
+]);
 
 
 if (isset($items) && is_array($items) && count($items)) {
