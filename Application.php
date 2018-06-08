@@ -7,7 +7,13 @@ use worstinme\zoo\elements\BaseElement;
 use worstinme\zoo\models\ApplicationsContent;
 use worstinme\zoo\models\Items;
 use Yii;
-use worstinme\zoo\backend\models\Elements;
+
+/**
+ * Class Application
+ * @package worstinme\zoo
+ *
+ * @property BaseElement[] $elements
+ */
 
 class Application extends \yii\base\Component
 {

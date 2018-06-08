@@ -27,7 +27,8 @@ class BaseElement extends \yii\db\ActiveRecord
 
             [['name', 'type', 'label'], 'required'],
             [['name', 'type', 'label'], 'string', 'max' => 255],
-            [['hint'], 'string'],
+            [['hint','show_in_table_format'], 'string'],
+            [['show_in_table'], 'boolean'],
             ['name', 'match', 'pattern' => '#^[\w_]+$#i'],
             ['type', 'match', 'pattern' => '#^[\w_]+$#i'],
             [['name', 'app_id'], 'unique', 'targetAttribute' => ['name', 'app_id']],

@@ -71,6 +71,10 @@ $this->registerJs($js, $this::POS_READY);
 
             <?= $form->field($model, 'required')->checkbox(['class'=>'uk-checkbox']) ?>
 
+            <?= $form->field($model, 'show_in_table')->checkbox(['class'=>'uk-checkbox']) ?>
+
+            <?= $form->field($model, 'show_in_table_format')->textInput(['class'=>'uk-input']) ?>
+
             <?php if ($model->itemsStore !== null) : ?>
                 <?= $form->field($model, 'own_column')->checkbox(['class'=>'uk-checkbox']) ?>
             <?php endif; ?>
