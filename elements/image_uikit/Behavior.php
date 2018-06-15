@@ -86,7 +86,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
                 $oldImage = Json::decode($oldImage);
 
-                $file = Yii::getAlias($oldImage['tmp'] == 1 ? $oldImage['source'] : $element->webroot . $oldImage['source']);
+                $file = Yii::getAlias($oldImage['tmp'] == 1 ? $oldImage['source'] : $this->element->webroot . $oldImage['source']);
 
                 if (!in_array($oldImage['source'], $files) && is_file($file)) {
                     unlink($file);
