@@ -2,22 +2,10 @@
 
 use yii\helpers\Html;
 
-$input_id = Html::getInputId($model,$attribute);
+worstinme\zoo\backend\assets\Select2Asset::register($this);
 
-?>
+$input_id = Html::getInputId($model,$element->attributeName);
 
-<?php if (!empty($element->admin_hint)): ?>
-	<i class="uk-icon-info-circle uk-float-right" data-uk-toggle="{target:'.hint-<?=$input_id?>'}"></i>
-	<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
-	<p class="hint-<?=$input_id?> uk-hidden">
-		<?=$element->admin_hint?>
-	</p>
-<?php else: ?>
-	<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
-<?php endif ?>
+$this->registerJs("$('#".$input_id."').select2({width:'100%','placeholder':'Выбрать связанную страницу'});",$this::POS_READY);
 
-
-<div class="uk-from-controls">
-	<?= Html::activeDropDownList($model, $attribute, $element->items, ['prompt' => 'select']); ?>
-	<div class="uk-form-help-block uk-text-danger"></div>
-</div>
+echo Html::activeDropDownList($model, $element->attributeName, $element->items,['multiple'=>'multiple']); ?>
