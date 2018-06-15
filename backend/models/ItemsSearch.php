@@ -32,12 +32,12 @@ class ItemsSearch extends Items
             [['language'],'string'],
         ];
 
-        foreach ($this->getBehaviors() as $behavior) {
+        /* foreach ($this->getBehaviors() as $behavior) {
             if (is_a($behavior, BaseElementBehavior::className())) {
                 /** @var $behavior BaseElementBehavior */
-                $rules = array_merge($rules, $behavior->rules());
-            }
-        }
+        /*      $rules = array_merge($rules, $behavior->rules());
+          }
+      } */
 
         return $rules;
     }

@@ -128,11 +128,24 @@ class ItemsController extends Controller
             }
         }
 
+        $additional_fields = [];
+
+        foreach($this->app->elements as $element) {
+            if ($element->show_in_table) {
+                if (!empty($element->show_in_table_format)) {
+                    $additional_fields[] = $element->attributeName.':'.$element->show_in_table_format;
+                } else {
+                    $additional_fields[] = $element->attributeName;
+                }
+            }
+        }
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'catlist' => $catlist,
             'parentCategories' => $parentCategories,
             'dataProvider' => $dataProvider,
+            'additional_fields'=>$additional_fields,
         ]);
     }
 

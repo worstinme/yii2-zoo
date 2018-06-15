@@ -77,12 +77,19 @@ class BaseElementBehavior extends \yii\base\Behavior
         return str_replace("element_", "", $this->attribute);
     }
 
+    public function getOwnColumn()
+    {
+        return $this->owner->app_id.'_'.$this->ownerAttribute;
+    }
+
     public function getValue()
     {
         // TODO: сделать валидацию JSON строки
 
         if ($this->owner->hasAttribute($this->ownerAttribute)) {
             return $this->json_field ? Json::decode($this->owner->getAttribute($this->ownerAttribute)) : $this->owner->getAttribute($this->ownerAttribute);
+        } elseif ($this->owner->hasAttribute($this->ownColumn)) {
+            return $this->json_field ? Json::decode($this->owner->getAttribute($this->ownColumn)) : $this->owner->getAttribute($this->ownColumn);
         }
 
         if ($this->value === null) {
@@ -122,6 +129,8 @@ class BaseElementBehavior extends \yii\base\Behavior
 
         if ($this->owner->hasAttribute($this->ownerAttribute)) {
             $this->owner->setAttribute($this->ownerAttribute, $value);
+        } elseif ($this->owner->hasAttribute($this->ownColumn)) {
+            $this->owner->setAttribute($this->ownColumn, $value);
         } elseif (is_array($value)) {
             $this->value = array_values($value);
         } else {
@@ -185,7 +194,7 @@ class BaseElementBehavior extends \yii\base\Behavior
 
     public function afterSave()
     {
-        if (!$this->owner->hasAttribute($this->ownerAttribute)) {
+        if (!$this->owner->hasAttribute($this->ownerAttribute) && !$this->owner->hasAttribute($this->ownColumn)) {
 
             $this->getElements();
 
@@ -252,7 +261,7 @@ class BaseElementBehavior extends \yii\base\Behavior
 
     public function afterDelete()
     {
-        if (!$this->owner->hasAttribute($this->ownerAttribute)) {
+        if (!$this->owner->hasAttribute($this->ownerAttribute) && !$this->owner->hasAttribute($this->ownColumn)) {
 
             //удаление всех элементов
             if (count($this->elements)) {

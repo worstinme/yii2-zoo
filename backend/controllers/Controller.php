@@ -7,8 +7,13 @@
 
 namespace worstinme\zoo\backend\controllers;
 
+use worstinme\zoo\Application;
 use Yii;
 use yii\web\NotFoundHttpException;
+
+/**
+ * @property Application $app
+ */
 
 class Controller extends \yii\web\Controller
 {

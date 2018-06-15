@@ -21,6 +21,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         // убираем хост приложения из ссылки к картинкам
         if ($this->element->editor && !empty($value) && Yii::$app->zoo->backend) {
             $baseUrl = Yii::getAlias($this->element->app->baseUrl !== null ? $this->element->app->baseUrl : Yii::$app->zoo->elfinder['baseUrl']);
+            $replaces = [];
             if (!empty($baseUrl)) {
                 $doc = new \DOMDocument();
                 $doc->loadHTML($value);
