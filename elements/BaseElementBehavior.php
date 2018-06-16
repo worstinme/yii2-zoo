@@ -14,6 +14,10 @@ use yii\helpers\Json;
 /**
  * @property array $scenarios
  * @property Items $owner
+ * @property BaseElement $element
+ * @property string $ownerAttribute наименование атрибута без префикса
+ * @property string $attribute наименование атрибута
+ * @property string $field Имя колонки для харнения значения в таблице items_elements
  */
 class BaseElementBehavior extends \yii\base\Behavior
 {

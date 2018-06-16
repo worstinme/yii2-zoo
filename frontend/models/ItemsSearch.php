@@ -2,6 +2,9 @@
 
 namespace worstinme\zoo\frontend\models;
 
+use worstinme\zoo\elements\BaseElement;
+use worstinme\zoo\elements\BaseElementBehavior;
+use worstinme\zoo\models\ItemsElements;
 use Yii;
 use yii\data\ActiveDataProvider;
 
@@ -20,7 +23,6 @@ class ItemsSearch extends Items
     {
         $rules = [
             [['search','element_category'], 'safe'],
-
         ];
 
     /*    foreach ($this->elementsTypes as $behavior_name) {
@@ -57,6 +59,23 @@ class ItemsSearch extends Items
 
         $this->query->andFilterWhere([self::tableName().'.flag'=>$this->flag]);
         $this->query->andFilterWhere([self::tableName().'.state'=>$this->state]);
+
+        foreach ($this->getBehaviors() as $behavior) {
+
+            if (is_a($behavior, BaseElementBehavior::className())) {
+                /** @var $behavior BaseElementBehavior */
+
+                if (is_a($behavior->element, BaseElement::className())) {
+                    //TODO: own column join & filter support
+                    if (!$behavior->element->own_column) {
+                        $this->query->leftJoin([$behavior->ownerAttribute=>ItemsElements::tablename()], $behavior->ownerAttribute.".item_id = ".Items::tablename().".id AND ".$behavior->ownerAttribute.".element = '".$behavior->ownerAttribute."'");
+                        $this->query->andFilterWhere([$behavior->ownerAttribute.'.'.$behavior->field=>$this->{$behavior->attribute}]);
+                    }
+                }
+
+            }
+
+        }
 
      /*   foreach ($this->elements as $element) {
 

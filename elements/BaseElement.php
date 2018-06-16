@@ -2,6 +2,7 @@
 
 namespace worstinme\zoo\elements;
 
+use worstinme\zoo\Application;
 use worstinme\zoo\backend\models\Items;
 use worstinme\zoo\backend\models\ItemsElements;
 use Yii;
@@ -9,6 +10,24 @@ use yii\helpers\Inflector;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 
+/**
+ * Class BaseElement
+ * @package worstinme\zoo\elements
+ * @property boolean $own_column
+ * @property string $name
+ * @property string $hint
+ * @property string $type
+ * @property string $show_in_table_format
+ * @property string $label
+ * @property boolean $show_in_table
+ * @property string $app_id
+ * @property boolean $all_categories
+ * @property array $categories
+ * @property boolean $required
+ * @property string $related
+ * @property array $paramsArray
+ * @property Application $app
+ */
 class BaseElement extends \yii\db\ActiveRecord
 {
     protected $categories;
