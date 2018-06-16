@@ -12,6 +12,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 
 /**
+ * @property array $scenarios
  * @property Items $owner
  */
 class BaseElementBehavior extends \yii\base\Behavior
@@ -55,6 +56,10 @@ class BaseElementBehavior extends \yii\base\Behavior
         } else {
             parent::__set($name, $value);
         }
+    }
+
+    public function getScenarios() {
+        return ['default'=>[$this->attribute]];
     }
 
     public function canGetProperty($name, $checkVars = true)

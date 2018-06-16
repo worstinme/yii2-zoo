@@ -4,6 +4,7 @@ namespace worstinme\zoo\backend\models;
 
 use worstinme\zoo\elements\BaseElementBehavior;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\behaviors\TimestampBehavior;
@@ -32,6 +33,23 @@ class Items extends \worstinme\zoo\models\Items
         }
 
         return $rules;
+    }
+
+    public function scenarios()
+    {
+        $scenarios = [
+            'default'=>['state','flag','bolt'],
+            'states'=>['state','flag','bolt'],
+        ];
+
+        foreach ($this->getBehaviors() as $behavior) {
+            if (is_a($behavior, BaseElementBehavior::className())) {
+                /** @var $behavior BaseElementBehavior */
+                $scenarios = ArrayHelper::merge($scenarios, $behavior->scenarios);
+            }
+        }
+
+        return $scenarios;
     }
 
     public function attributeLabels()

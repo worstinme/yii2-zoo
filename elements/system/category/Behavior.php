@@ -22,6 +22,13 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         ];
     }
 
+    public function getScenarios()
+    {
+        return [
+            'default'=>[$this->attribute,'parent_category_id']
+        ];
+    }
+
     public function getValue()
     {
         if ($this->categories === null && !$this->owner->isNewRecord) {

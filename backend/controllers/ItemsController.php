@@ -226,6 +226,8 @@ class ItemsController extends Controller
 
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
+            $model->scenario = 'states';
+
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return [
                     'success' => true,
