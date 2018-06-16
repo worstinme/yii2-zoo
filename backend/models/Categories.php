@@ -7,6 +7,11 @@ use Yii;
 use yii\db\Query;
 use yii\helpers\Json;
 
+/**
+ * Class Categories
+ * @package worstinme\zoo\backend\models
+ * @property int|null $items_count
+ */
 class Categories extends \worstinme\zoo\models\Categories
 {
     public $alternateIds;

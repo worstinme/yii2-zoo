@@ -13,6 +13,11 @@ class Categories extends \yii\db\ActiveRecord
         return '{{%categories}}';
     }
 
+    public function attributes()
+    {
+        return array_merge(parent::attributes(),['items_count']);
+    }
+
     public function getRelated()
     {
         return $this->hasMany(Categories::className(), ['parent_id' => 'id'])
