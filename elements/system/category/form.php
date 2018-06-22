@@ -19,6 +19,7 @@ $values = $model->{$element->attributeName};
             <?= Html::activeDropDownList($model, $element->attributeName, $items, ['multiple' => true]) ?>
         </div>
         <div class="uk-width-1-3@m">
+            <?= Html::activeHiddenInput($model,'parent_category_id',['id'=>'pcid','value'=>''])?>
             <?= Html::activeDropDownList($model, 'parent_category_id', array_filter($items, function ($key) use ($values) {
                 return is_array($values) && in_array($key, $values);
             }, ARRAY_FILTER_USE_KEY), ['class' => 'uk-select']) ?>
