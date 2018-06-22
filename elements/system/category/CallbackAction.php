@@ -13,7 +13,7 @@ class CallbackAction extends BaseCallbackAction
     {
         $lang = Yii::$app->request->post('lang');
 
-        $items = \worstinme\zoo\backend\models\Categories::buildTree($lang);
+        $items = \worstinme\zoo\backend\models\Categories::buildTree($app, $lang);
 
         foreach ($items as $key=>&$item) {
             $item = [

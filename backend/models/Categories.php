@@ -63,11 +63,11 @@ class Categories extends \worstinme\zoo\models\Categories
         return parent::afterFind();
     }
 
-    public static function buildTree($lang, $categories = null, $array = [], $prefix = null, $parent = 0)
+    public static function buildTree($app_id, $lang, $categories = null, $array = [], $prefix = null, $parent = 0)
     {
 
         if ($categories === null) {
-            $categories = self::find()->select(['id', 'name', 'parent_id'])->where(['lang' => $lang])->indexBy('id')->asArray()->all();
+            $categories = self::find()->select(['id', 'name', 'parent_id'])->where(['lang' => $lang])->andFilterWhere(['app_id'=>$app_id])->indexBy('id')->asArray()->all();
         }
 
         if (count($categories)) {
@@ -75,7 +75,7 @@ class Categories extends \worstinme\zoo\models\Categories
                 if ($category['parent_id'] == $parent) {
                     $array[$category['id']] = ($prefix === null ? '' : $prefix . ' ') . $category['name'];
                     unset($categories[$key]);
-                    $array = self::buildTree($lang, $categories, $array, $prefix . '-', $category['id']);
+                    $array = self::buildTree(null, $lang, $categories, $array, $prefix . '-', $category['id']);
                 }
             }
         }

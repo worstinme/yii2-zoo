@@ -8,7 +8,7 @@ $parent_input_id = Html::getInputId($model, 'parent_category_id');
 
 \worstinme\zoo\backend\assets\Select2Asset::register($this);
 
-$items = \worstinme\zoo\backend\models\Categories::buildTree($model->lang);
+$items = \worstinme\zoo\backend\models\Categories::buildTree($this->context->app->id, $model->lang);
 
 $values = $model->{$element->attributeName};
 
