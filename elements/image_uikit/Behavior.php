@@ -39,65 +39,70 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
     public function afterSave()
     {
-        $images = $this->getValue();
 
-        $files = ArrayHelper::getColumn($images, 'source');
+        if ($this->isAttributeActive) {
 
-        if (count($images)) {
+            $images = $this->getValue();
 
-            foreach ($images as $key => &$image) {
+            $files = ArrayHelper::getColumn($images, 'source');
 
-                if ($image['tmp'] == 1) {
+            if (count($images)) {
 
-                    if (is_file(Yii::getAlias($image['source']))) {
+                foreach ($images as $key => &$image) {
 
-                        $pathInfo = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
-                        $newName = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
-                        $newExtension = strtolower(pathinfo(Yii::getAlias($image['source']), PATHINFO_EXTENSION));
+                    if ($image['tmp'] == 1) {
 
-                        $dir = $this->element->spread ? ($this->element->dir . DIRECTORY_SEPARATOR . $this->owner->id) : $this->element->dir;
+                        if (is_file(Yii::getAlias($image['source']))) {
 
-                        if (!is_dir(Yii::getAlias($dir))) {
-                            mkdir(Yii::getAlias($dir), 0777, true);
-                        }
+                            $pathInfo = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
+                            $newName = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
+                            $newExtension = strtolower(pathinfo(Yii::getAlias($image['source']), PATHINFO_EXTENSION));
 
-                        $newFile = $dir . DIRECTORY_SEPARATOR . $newName . '.' . $newExtension;
+                            $dir = $this->element->spread ? ($this->element->dir . DIRECTORY_SEPARATOR . $this->owner->id) : $this->element->dir;
 
-                        if (rename(Yii::getAlias($image['source']), Yii::getAlias($newFile))) {
-                            $image['source'] = str_replace(Yii::getAlias($this->element->webroot), "", Yii::getAlias($newFile));
-                            $image['tmp'] = 0;
+                            if (!is_dir(Yii::getAlias($dir))) {
+                                mkdir(Yii::getAlias($dir), 0777, true);
+                            }
+
+                            $newFile = $dir . DIRECTORY_SEPARATOR . $newName . '.' . $newExtension;
+
+                            if (rename(Yii::getAlias($image['source']), Yii::getAlias($newFile))) {
+                                $image['source'] = str_replace(Yii::getAlias($this->element->webroot), "", Yii::getAlias($newFile));
+                                $image['tmp'] = 0;
+                            } else {
+                                unset($images[$key]);
+                            }
+
                         } else {
                             unset($images[$key]);
                         }
-
-                    } else {
-                        unset($images[$key]);
                     }
                 }
+
             }
 
-        }
+            $oldImages = $this->old_value;
 
-        $oldImages = $this->old_value;
+            if (is_array($oldImages)) {
 
-        if (is_array($oldImages)) {
+                foreach ($oldImages as $oldImage) {
 
-            foreach ($oldImages as $oldImage) {
+                    $oldImage = Json::decode($oldImage);
 
-                $oldImage = Json::decode($oldImage);
+                    $file = Yii::getAlias($oldImage['tmp'] == 1 ? $oldImage['source'] : $this->element->webroot . $oldImage['source']);
 
-                $file = Yii::getAlias($oldImage['tmp'] == 1 ? $oldImage['source'] : $this->element->webroot . $oldImage['source']);
+                    if (!in_array($oldImage['source'], $files) && is_file($file)) {
+                        unlink($file);
+                    }
 
-                if (!in_array($oldImage['source'], $files) && is_file($file)) {
-                    unlink($file);
                 }
 
             }
 
-        }
+            $this->setValue($images);
+            $this->resetTempImages($this->attribute);
 
-        $this->setValue($images);
-        $this->resetTempImages($this->attribute);
+        }
 
         parent::afterSave();
 

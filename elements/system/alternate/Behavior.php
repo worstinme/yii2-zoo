@@ -29,36 +29,39 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
     public function afterSave()
     {
-        $values = is_array($this->value) ? $this->value : [];
+        if ($this->isAttributeActive) {
 
-        $old_alternates = [];
+            $values = is_array($this->value) ? $this->value : [];
 
-        foreach ($this->owner->alternates as $alternate) {
+            $old_alternates = [];
 
-            if (!in_array($alternate->id, $values)) {
+            foreach ($this->owner->alternates as $alternate) {
 
-                Yii::$app->db->createCommand()->delete('{{%items_alternates}}', ['item_id' => $this->owner->id, 'alternate_id' => $alternate->id])->execute();
-                Yii::$app->db->createCommand()->delete('{{%items_alternates}}', ['item_id' => $alternate->id, 'alternate_id' => $this->owner->id])->execute();
+                if (!in_array($alternate->id, $values)) {
 
-            } else {
+                    Yii::$app->db->createCommand()->delete('{{%items_alternates}}', ['item_id' => $this->owner->id, 'alternate_id' => $alternate->id])->execute();
+                    Yii::$app->db->createCommand()->delete('{{%items_alternates}}', ['item_id' => $alternate->id, 'alternate_id' => $this->owner->id])->execute();
 
-                $old_alternates[] = $alternate->id;
+                } else {
 
-            }
+                    $old_alternates[] = $alternate->id;
 
-        }
-
-        foreach ($values as $alternate_id) {
-
-            if (!in_array($alternate_id, $old_alternates)) {
-
-                Yii::$app->db->createCommand()->batchInsert('{{%items_alternates}}', ['item_id', 'alternate_id'], [
-                    [$this->owner->id, $alternate_id],
-                    [$alternate_id, $this->owner->id],
-                ])->execute();
+                }
 
             }
 
+            foreach ($values as $alternate_id) {
+
+                if (!in_array($alternate_id, $old_alternates)) {
+
+                    Yii::$app->db->createCommand()->batchInsert('{{%items_alternates}}', ['item_id', 'alternate_id'], [
+                        [$this->owner->id, $alternate_id],
+                        [$alternate_id, $this->owner->id],
+                    ])->execute();
+
+                }
+
+            }
         }
     }
 

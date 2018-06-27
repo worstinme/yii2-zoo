@@ -13,6 +13,7 @@ use yii\helpers\Json;
 
 /**
  * @property array $scenarios
+ * @property bool $isAttributeActive
  * @property Items $owner
  * @property BaseElement $element
  * @property string $ownerAttribute наименование атрибута без префикса
@@ -191,6 +192,16 @@ class BaseElementBehavior extends \yii\base\Behavior
         return [];
     }
 
+    public function getIsAttributeActive() {
+
+        if (in_array($this->attribute, $this->owner->activeAttributes())) {
+            return true;
+        }
+
+        return false;
+
+    }
+
     public function events()
     {
         return [
@@ -203,7 +214,7 @@ class BaseElementBehavior extends \yii\base\Behavior
 
     public function afterSave()
     {
-        if (!$this->owner->hasAttribute($this->ownerAttribute) && !$this->owner->hasAttribute($this->ownColumn)) {
+        if ($this->isAttributeActive && !$this->owner->hasAttribute($this->ownerAttribute) && !$this->owner->hasAttribute($this->ownColumn)) {
 
             $this->getElements();
 

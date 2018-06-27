@@ -25,7 +25,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     public function getScenarios()
     {
         return [
-            'default'=>[$this->attribute,'parent_category_id']
+            'default' => [$this->attribute, 'parent_category_id']
         ];
     }
 
@@ -44,39 +44,42 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
     public function afterSave()
     {
-        if (is_array($this->categories)) {
+        if ($this->isAttributeActive) {
 
-            $old_categories = [];
+            if (is_array($this->categories)) {
 
-            foreach ($this->owner->categories as $category) {
+                $old_categories = [];
 
-                if (!in_array($category->id, $this->categories)) {
+                foreach ($this->owner->categories as $category) {
 
-                    Yii::$app->db->createCommand()->delete('{{%items_categories}}', ['item_id' => $this->owner->id, 'category_id' => $category->id])->execute();
+                    if (!in_array($category->id, $this->categories)) {
 
-                } else {
+                        Yii::$app->db->createCommand()->delete('{{%items_categories}}', ['item_id' => $this->owner->id, 'category_id' => $category->id])->execute();
 
-                    $old_categories[] = $category->id;
+                    } else {
 
-                }
+                        $old_categories[] = $category->id;
 
-            }
-
-            foreach ($this->categories as $category_id) {
-
-                if (!in_array($category_id, $old_categories)) {
-
-                    Yii::$app->db->createCommand()->insert('{{%items_categories}}', [
-                        'item_id' => $this->owner->id,
-                        'category_id' => $category_id,
-                    ])->execute();
+                    }
 
                 }
 
-            }
+                foreach ($this->categories as $category_id) {
 
-        } else {
-            Yii::$app->db->createCommand()->delete('{{%items_categories}}', ['item_id' => $this->owner->id])->execute();
+                    if (!in_array($category_id, $old_categories)) {
+
+                        Yii::$app->db->createCommand()->insert('{{%items_categories}}', [
+                            'item_id' => $this->owner->id,
+                            'category_id' => $category_id,
+                        ])->execute();
+
+                    }
+
+                }
+
+            } else {
+                Yii::$app->db->createCommand()->delete('{{%items_categories}}', ['item_id' => $this->owner->id])->execute();
+            }
         }
     }
 
