@@ -55,8 +55,11 @@ class ImageHelper
     {
         $filename = FileHelper::normalizePath(Yii::getAlias($filename));
         if (!is_file($filename)) {
-            Yii::error("File $filename doesn't exist, used fish");
-            $filename = FileHelper::normalizePath(Yii::getAlias('@worstinme/zoo/backend/assets/images/zaglushka.jpg'));
+            if (isset(Yii::$app->params['imageHelperBlankImage'])) {
+                $filename = FileHelper::normalizePath(Yii::getAlias(Yii::$app->params['imageHelperBlankImage']));
+            } else {
+                $filename = FileHelper::normalizePath(Yii::getAlias('@worstinme/zoo/backend/assets/images/zaglushka.jpg'));
+            }
         }
         $cachePath = Yii::getAlias('@webroot/' . self::$cacheAlias);
         $thumbnailFileExt = strrchr($filename, '.');
