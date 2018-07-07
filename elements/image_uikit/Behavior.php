@@ -37,7 +37,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         return Yii::$app->session->remove('images-' . ($this->owner->id ?? '0') . '-' . $attribute);
     }
 
-    public function afterSave()
+    public function afterSave($insert)
     {
 
         if ($this->isAttributeActive) {
@@ -102,9 +102,13 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
             $this->setValue($images);
             $this->resetTempImages($this->attribute);
 
+            if ($insert) {
+                Yii::$app->session->remove('images-0-' . $this->attribute);
+            }
+
         }
 
-        parent::afterSave();
+        parent::afterSave($insert);
 
     }
 

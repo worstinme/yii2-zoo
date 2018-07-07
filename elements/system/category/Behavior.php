@@ -42,7 +42,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         return $this->categories = $value;
     }
 
-    public function afterSave()
+    public function afterSave($insert)
     {
         if ($this->isAttributeActive) {
 

@@ -205,14 +205,22 @@ class BaseElementBehavior extends \yii\base\Behavior
     public function events()
     {
         return [
-            ActiveRecord::EVENT_AFTER_UPDATE => 'afterSave',
+            ActiveRecord::EVENT_AFTER_UPDATE => 'afterUpdate',
             ActiveRecord::EVENT_AFTER_VALIDATE => 'afterValidate',
-            ActiveRecord::EVENT_AFTER_INSERT => 'afterSave',
+            ActiveRecord::EVENT_AFTER_INSERT => 'afterInsert',
             ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ];
     }
 
-    public function afterSave()
+    public function afterInsert() {
+        return $this->afterSave(true);
+    }
+
+    public function afterUpdate() {
+        return $this->afterSave(false);
+    }
+
+    public function afterSave($insert)
     {
         if ($this->isAttributeActive && !$this->owner->hasAttribute($this->ownerAttribute) && !$this->owner->hasAttribute($this->ownColumn)) {
 

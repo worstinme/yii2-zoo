@@ -25,7 +25,7 @@ class CallbackAction extends BaseCallbackAction
 
                 if (is_file(Yii::getAlias($image))) {
 
-                    $sessionName = 'images-' . $this->element->attributeName;
+                    $sessionName = 'images-' . ($model->id ?? '0') . '-' . $this->element->attributeName;
                     $images = Yii::$app->session->get($sessionName, []);
 
                     foreach ($images as $key => $img) {
