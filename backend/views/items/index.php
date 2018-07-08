@@ -51,9 +51,7 @@ $columns = array_merge([
         },
         'headerOptions' => ['class' => 'uk-text-center'],
         'contentOptions' => ['class' => 'uk-text-center'],
-        'filterInputOptions' => [
-            'style' => 'width:20px;',
-        ],
+        'filter'=>false,
     ],
     [
         'attribute' => 'flag',
@@ -65,9 +63,7 @@ $columns = array_merge([
         },
         'headerOptions' => ['class' => 'uk-text-center'],
         'contentOptions' => ['class' => 'uk-text-center'],
-        'filterInputOptions' => [
-            'style' => 'width:20px;',
-        ],
+        'filter'=>false,
     ],
     [
         'attribute' => 'bolt',
@@ -79,9 +75,7 @@ $columns = array_merge([
         },
         'headerOptions' => ['class' => 'uk-text-center'],
         'contentOptions' => ['class' => 'uk-text-center'],
-        'filterInputOptions' => [
-            'style' => 'width:20px;',
-        ],
+        'filter'=>false,
     ],
     [
         'attribute' => 'language',

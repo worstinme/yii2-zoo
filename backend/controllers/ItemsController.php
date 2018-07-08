@@ -132,11 +132,17 @@ class ItemsController extends Controller
 
         foreach($this->app->elements as $element) {
             if ($element->show_in_table) {
+                $row = [
+                    'attribute'=>$element->attributeName,
+                    'label'=>$element->label,
+                    'filter'=>false,
+                    'headerOptions' => ['class' => 'uk-text-center'],
+                    'contentOptions' => ['class' => 'uk-text-center'],
+                ];
                 if (!empty($element->show_in_table_format)) {
-                    $additional_fields[] = $element->attributeName.':'.$element->show_in_table_format;
-                } else {
-                    $additional_fields[] = $element->attributeName;
+                    $row['format'] = $element->show_in_table_format;
                 }
+                $additional_fields[] = $row;
             }
         }
 
