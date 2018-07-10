@@ -44,8 +44,6 @@ class UrlRule extends BaseObject implements UrlRuleInterface
             $this->app_url = $this->app_id;
         }
 
-        Yii::$app->cache->flush();
-
         if ($this->empty_lang === null && count(Yii::$app->zoo->languages) < 2) {
             $this->empty_lang = Yii::$app->language;
         }
