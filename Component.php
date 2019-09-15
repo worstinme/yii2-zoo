@@ -149,12 +149,15 @@ class Component extends \yii\base\Component implements BootstrapInterface
 
             $applications[$application['id']] = Yii::createObject($application);
 
-            $app->urlManager->addRules([
-                ArrayHelper::merge($this->urlRuleComponent, $applications[$application['id']]->urlRuleComponent, [
-                    'app_id' => $application['id'],
-                ])
-            ], true);
+            $app_id = $applications[$application['id']]->app_id;
 
+            if ($this->backend or ($app->id === 'app-basic' || $app->id === 'app-frontend') && $app_id === null or $app_id === $app->id) {
+                $app->urlManager->addRules([
+                    ArrayHelper::merge($this->urlRuleComponent, $applications[$application['id']]->urlRuleComponent, [
+                        'app_id' => $application['id'],
+                    ])
+                ], true);
+            }
         }
 
         $app->zoo->applications = $applications;
