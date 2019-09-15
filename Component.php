@@ -213,8 +213,12 @@ class Component extends \yii\base\Component implements BootstrapInterface
                         'basePath' => $application->basePath,
                     ];
 
-                    if (!is_dir(Yii::getAlias($roots[$application->id]['basePath'] . $root['path']))) {
-                        mkdir(Yii::getAlias($roots[$application->id]['basePath'] . $root['path']), 0757, true);
+                    if (!is_dir(Yii::getAlias($application->basePath . $root['path']))) {
+                        if (!mkdir($concurrentDirectory = Yii::getAlias($application->basePath.$root['path']), 0757,
+                                true) && !is_dir($concurrentDirectory)) {
+                            throw new \RuntimeException(sprintf('Directory "%s" was not created',
+                                $concurrentDirectory));
+                        }
                     }
 
                     $app->controllerMap['elfinder']['roots'][$application->id] = $root;
