@@ -33,8 +33,8 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         	$this->owner->alias = $this->generateSlug($this->owner->name);
         } else {
 			$this->owner->alias = $this->generateSlug($this->owner->alias);
-		} 
-    } 
+		}
+    }
 
     private function generateSlug( $slug )
 	{
@@ -51,19 +51,19 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 	{
         return Inflector::slug($slug);
 	}
-	
-	private function checkUniqueSlug( $slug )
-	{
-		$condition = $this->owner->tablename().'.alias = :out_attribute AND '.$this->owner->tablename().'.lang = :lang';
-		$params = [':out_attribute' => $slug, ':lang' => $this->owner->lang];
-		if ( !$this->owner->isNewRecord ) {
-			$condition .= ' AND '.$this->owner->tablename().'.id != :pk';
-			$params[':pk'] = $this->owner->id;
-		}
 
-		return !$this->owner->find()
-			->where( $condition, $params )
-			->one();
-	}
+    private function checkUniqueSlug( $slug )
+    {
+        $condition = $this->owner->tablename().'.alias = :out_attribute AND '.$this->owner->tablename().'.lang = :lang AND '.$this->owner->tablename().'.app_id = :app';
+        $params = [':out_attribute' => $slug, ':lang' => $this->owner->lang, ':app' => $this->owner->app_id];
+        if ( !$this->owner->isNewRecord ) {
+            $condition .= ' AND '.$this->owner->tablename().'.id != :pk';
+            $params[':pk'] = $this->owner->id;
+        }
+
+        return !$this->owner->find()
+            ->where( $condition, $params )
+            ->one();
+    }
 
 }
