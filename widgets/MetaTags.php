@@ -9,6 +9,12 @@ use worstinme\zoo\models\Items;
 use yii\base\InvalidConfigException;
 use yii\helpers\Url;
 
+/**
+ * Class MetaTags
+ * @package worstinme\zoo\widgets
+ *
+ * @property \yii\web\View $view
+ */
 class MetaTags extends \yii\base\Widget
 {
     public $model;
@@ -43,17 +49,17 @@ class MetaTags extends \yii\base\Widget
         }
 
         if ($this->canonical !== false) {
-            $this->view->registerMetaTag(['rel' => 'canonical', 'href' => Url::to($this->model->url, true)]);
+            $this->view->registerLinkTag(['rel' => 'canonical', 'href' => Url::to($this->model->url, true)]);
         }
 
         if ($this->alternates !== false) {
 
             if (count(Yii::$app->zoo->languages)) {
 
-                $this->view->registerMetaTag(['rel' => 'alternate', 'hreflang' => $this->model->lang, 'href' => Url::to($this->model->url, true)]);
+                $this->view->registerLinkTag(['rel' => 'alternate', 'hreflang' => $this->model->lang, 'href' => Url::to($this->model->url, true)]);
 
                 foreach ($this->model->alternates as $alternate) {
-                    $this->view->registerMetaTag(['rel' => 'alternate', 'hreflang' => $alternate->lang, 'href' => Url::to($alternate->url, true)]);
+                    $this->view->registerLinkTag(['rel' => 'alternate', 'hreflang' => $alternate->lang, 'href' => Url::to($alternate->url, true)]);
                 }
 
             }
