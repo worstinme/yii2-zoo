@@ -1,12 +1,11 @@
 <?php
 
-namespace worstinme\zoo\elements\images;
+namespace worstinme\zoo\elements\textfield_multiple;
 
 use Yii;
 
 class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 {
-
 	public function rules()
 	{
 		return [
@@ -17,5 +16,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     public function getMultiple() {
         return true;
     }
+
+	public $value_field = 'value_string';
 
 }

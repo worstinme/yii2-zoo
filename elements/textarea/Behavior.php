@@ -15,7 +15,6 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 		];
 	}
 
-
     public function setValue($value)
     {
         // убираем хост приложения из ссылки к картинкам

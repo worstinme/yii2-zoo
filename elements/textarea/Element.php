@@ -6,7 +6,6 @@ use Yii;
 
 class Element extends \worstinme\zoo\elements\BaseElement
 {
-
     public function getRules()
     {
         return [

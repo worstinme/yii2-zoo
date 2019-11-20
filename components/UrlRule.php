@@ -109,7 +109,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
                         Yii::endProfile('url', __METHOD__);
 
-                        return $this->AppHost . '/' . $url;
+                        return $this->appHost . '/' . $url;
 
                     }
 
@@ -161,7 +161,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                             $url .= '?' . $query;
                         }
 
-                        $url = $this->AppHost . '/' . $url;
+                        $url = $this->appHost . '/' . $url;
 
                         Yii::endProfile('url', __METHOD__);
 
@@ -213,7 +213,7 @@ class UrlRule extends BaseObject implements UrlRuleInterface
                             $url .= '?' . $query;
                         }
 
-                        $url = $this->AppHost . '/' . $url;
+                        $url = $this->appHost . '/' . $url;
 
                         Yii::endProfile('url', __METHOD__);
 
@@ -443,9 +443,9 @@ class UrlRule extends BaseObject implements UrlRuleInterface
 
     protected function getAppHost()
     {
-        if (Yii::$app->zoo->backend) {
+        if (Yii::$app->zoo->backend && !($this->app_id === 'app-basic' || $this->app_id === 'app-frontend' || $this->app->app_id === null || $this->app->app_id === Yii::$app->id)) {
             if ($this->host === null) {
-                throw new InvalidConfigException('Application`s host should be defined');
+                $this->host = Yii::$app->request->hostName;
             }
             return rtrim($this->host, "/");
         }

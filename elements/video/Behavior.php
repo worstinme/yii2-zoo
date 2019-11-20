@@ -1,6 +1,6 @@
 <?php
 
-namespace worstinme\zoo\elements\image;
+namespace worstinme\zoo\elements\video;
 
 use Yii;
 

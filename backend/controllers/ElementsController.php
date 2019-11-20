@@ -62,16 +62,16 @@ class ElementsController extends Controller
 
         foreach (Yii::$app->zoo->elementsPaths as $namespace => $path) {
 
-            $path = rtrim(Yii::getAlias($path), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+            $path = rtrim(Yii::getAlias($path), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
 
-            $directories = glob($path . '*', GLOB_ONLYDIR);
+            $directories = glob($path.'*', GLOB_ONLYDIR);
 
             foreach ($directories as $directory) {
 
                 $explode = explode(DIRECTORY_SEPARATOR, $directory);
                 $elementName = array_pop($explode);
 
-                if (class_exists($namespace . '\\' . $elementName . '\Element')) {
+                if (class_exists($namespace.'\\'.$elementName.'\Element')) {
                     $elements[] = $elementName;
                 }
 
@@ -88,7 +88,6 @@ class ElementsController extends Controller
 
     public function actionUpdate($element)
     {
-
         $app = $this->getApp();
 
         $model = $this->getElement($element);
@@ -110,11 +109,12 @@ class ElementsController extends Controller
         return $this->render('update', [
             'app' => $app,
             'model' => $model,
-            'catlist'=> $catlist,
+            'catlist' => $catlist,
         ]);
     }
 
-    public function actionSort() {
+    public function actionSort()
+    {
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -123,16 +123,16 @@ class ElementsController extends Controller
         if (is_array($sort)) {
             foreach ($sort as $id => $index) {
                 if (($item = BaseElement::findOne($id)) !== null) {
-                    $item->updateAttributes(['sort'=>$index]);
+                    $item->updateAttributes(['sort' => $index]);
                 }
             }
             return [
-                'message'=>Yii::t('zoo','SORTING_SUCCESSEFUL_MESSAGE'),
+                'message' => Yii::t('zoo', 'SORTING_SUCCESSEFUL_MESSAGE'),
             ];
         }
 
         return [
-            'message'=>Yii::t('zoo','SORTING_FAILED_MESSAGE'),
+            'message' => Yii::t('zoo', 'SORTING_FAILED_MESSAGE'),
         ];
     }
 

@@ -4,8 +4,6 @@
 
 /* @var $content string */
 
-use worstinme\uikit\Breadcrumbs;
-use worstinme\uikit\Nav;
 use yii\helpers\Html;
 use yii\widgets\Menu;
 
@@ -43,7 +41,7 @@ use yii\widgets\Menu;
 <?= $content?>
 
 <section class="uk-container uk-container-expand uk-margin-top">
-    <?= Breadcrumbs::widget(['homeLink' => ['label' => 'Админка', 'url' => ['/zooadmin/default/index'],], 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
+    <?= \yii\widgets\Breadcrumbs::widget(['options' => ['class'=>'uk-breadcrumb'],'homeLink' => ['label' => 'Админка', 'url' => ['/zooadmin/default/index'],], 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : []]) ?>
 </section>
 
 <?php $this->endBody() ?>

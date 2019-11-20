@@ -33,7 +33,7 @@ class Categories extends \worstinme\zoo\models\Categories
     public function getBreadcrumbs($selfUrl = false)
     {
         $crumbs = $selfUrl ? [['label' => $this->name, 'url' => $this->url]] : [$this->name];
-        $parent = $this->parent;
+        $parent = $this->parentCategory;
         while ($parent !== null) {
             $crumbs[] = ['label' => $parent->name, 'url' => $parent->url];
             $parent = $parent->parent;

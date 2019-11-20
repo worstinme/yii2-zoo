@@ -1,20 +1,18 @@
 <?php
 
-namespace worstinme\zoo\elements\image;
+namespace worstinme\zoo\elements\select;
 
 use Yii;
 
 class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 {
+    public $field = 'value_int';
 
 	public function rules()
 	{
 		return [
 			[$this->attribute,'string'],
-			//[$attributes,'required'],
 		];
 	}
-
-	public $multiple = false;
 
 }

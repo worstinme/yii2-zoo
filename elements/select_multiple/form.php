@@ -1,33 +1,21 @@
 <?php
 
 use yii\helpers\Html;
-$input_id = Html::getInputId($model,$attribute);
 
+$input_id = Html::getInputId($model, $element->attributeName);
+
+\worstinme\zoo\backend\assets\Select2Asset::register($this);
 
 ?>
 
-<?php if (!empty($element->admin_hint)): ?>
-	<i class="uk-icon-info-circle uk-float-right" data-uk-toggle="{target:'.hint-<?=$input_id?>'}"></i>
-	<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
-	<p class="hint-<?=$input_id?> uk-hidden">
-		<?=$element->admin_hint?>
-	</p>
-<?php else: ?>
-	<?= Html::activeLabel($model, $attribute,['class'=>'uk-form-label']); ?>
-<?php endif ?>
+<?= Html::activeDropDownList($model, $element->attributeName, $element->variants, [
+    'placeholder' => 'Choose item',
+    'multiple' => true,
+    'class' => 'uk-select'
+]) ?>
 
-<div class="uk-from-controls">
-    <?= \worstinme\zoo\helpers\Select2Widget::widget([
-		'model' => $model,
-		'attribute' =>  $attribute,
-		'options' => [
-			'multiple' => true,
-			'placeholder' => 'Choose item',
-		],
-		'settings' => [
-			'width' => '100%',
-		],
-		'items' => $element->variants,
-	]) ?>
-	<div class="uk-form-help-block uk-text-danger"></div>
-</div>
+<?php $script = <<<JS
+    $('#$input_id').select2({width:'100%'});
+JS;
+
+$this->registerJs($script, $this::POS_READY) ?>

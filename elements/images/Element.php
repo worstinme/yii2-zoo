@@ -13,11 +13,4 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public $_multiple = true;
 
-    public function init() {
-
-        parent::init();
-
-    }
-
-
 }

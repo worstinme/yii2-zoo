@@ -3,77 +3,98 @@
 namespace worstinme\zoo\elements\select_multiple;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\db\BaseActiveRecord;
 
-class Element extends \worstinme\zoo\elements\BaseElementBehavior
+class Element extends \worstinme\zoo\elements\BaseElement
 {
 
-    public function rules()
+    public $iconClass = 'uk-icon-align-left';
+    public $_multiple = true;
+
+    public function getRules()
     {
         return [
-            [$this->attribute, 'safe'],
-            //[$attributes,'required'],
+            ['variant', 'each', 'rule'=>['string','max'=>255]],
+            ['variantsParams','string','max'=>255],
+            ['variantsType', 'integer'],
         ];
     }
 
-    public $multiple = true;
-
-    public $value_field = 'value_int';
-
-    public function LoadAttributesFromElements($attribute)
+    public function getLabels()
     {
-        $value = [];
-
-        foreach ($this->owner->itemsElements as $element) {
-            if ($element->element == $attribute) {
-
-                if ($element->{$this->value_field} !== null)
-
-                    $value[] = [
-                        'id' => $element->id,
-                        'value_text' => $element->value_text,
-                        'value_int' => $element->value_int,
-                        'value_string' => $element->value_string,
-                        'value_float' => $element->value_float,
-                    ];
-            }
-        }
-
-        return $this->owner->values[$attribute] = $value;
+        return [
+            'variant' => Yii::t('backend', 'Варианты значений для выбора из списка'),
+            'variantsType' => Yii::t('backend', 'Типы вариантов'),
+            'variantsParams' => Yii::t('backend', 'Ключ массива значений из Yii::$app->params[key]'),
+        ];
     }
 
-    public function setValue($value)
+    public function getConfigView() {
+        return '@worstinme/zoo/elements/select_multiple/_settings';
+    }
+
+    public function getVariantsType(){
+        return !empty($this->paramsArray['variantsType'])?$this->paramsArray['variantsType']:null;
+    }
+
+    public function setVariantsType($s){
+        $params = $this->paramsArray;
+        $params['variantsType'] = $s;
+        return $this->paramsArray = $params;
+    }
+
+    public function getVariantsTypes() {
+        return [
+            'Yii::$app->params',
+            'Введенные варианты',
+            '-- Массив из настроек ZOO --',
+        ];
+    }
+
+    public function getVariantsParams(){
+        return !empty($this->paramsArray['variantsParams'])?$this->paramsArray['variantsParams']:null;
+    }
+
+    public function setVariantsParams($s){
+        $params = $this->paramsArray;
+        $params['variantsParams'] = $s;
+        return $this->paramsArray = $params;
+    }
+
+    public function getVariants() {
+        if ($this->variantsType == 0 && !empty($this->variantsParams) && !empty(Yii::$app->params[$this->variantsParams]) && is_array(Yii::$app->params[$this->variantsParams])) {
+            return Yii::$app->params[$this->variantsParams];
+        }
+        elseif(is_array($this->variant)) {
+            return $this->variant;
+        }
+        else {
+            return [];
+        }
+    }
+
+    public function getVariant()
     {
+        return !empty($this->paramsArray['variant'])?$this->paramsArray['variant']:[];
+    }
 
-        /*if (!isset($this->owner->values[$attribute])) {
-            $this->loadAttributesFromElements($attribute);
-        }*/
+    public function setVariant($a)
+    {
+        $params = $this->paramsArray;
 
-        $va = [];
-
-        if (is_array($value)) {
-
-            foreach ($value as $key => $v) {
-
-
-                if ($v !== null) {
-
-                    $a = [
-                        'value_text' => null,
-                        'value_int' => null,
-                        'value_string' => null,
-                        'value_float' => null,
-                    ];
-
-                    $a[$this->value_field] = $v;
-
-                    $va[] = $a;
-                }
-            }
-
+        if (is_array($a) && count($a)) {
+	        foreach ($a as $key => $value) {
+	        	if (empty($value)) {
+	        		unset($a[$key]);
+	        	}
+	        }
         }
 
-        $this->owner->values[$attribute] = $va;
+        $params['variant'] = $a;
 
-        return true;
+        return $this->paramsArray = $params;
     }
+
+
 }

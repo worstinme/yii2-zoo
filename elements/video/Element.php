@@ -3,19 +3,17 @@
 namespace worstinme\zoo\elements\video;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\db\BaseActiveRecord;
 
-class Element extends \worstinme\zoo\elements\BaseElementBehavior
+class Element extends \worstinme\zoo\elements\BaseElement
 {
 
-	public function rules()
-	{
-		return [
-			[$this->attribute,'string'],
-			//[$attributes,'required'],
-		];
-	}
+    public $iconClass = 'uk-icon-header';
 
-	public $multiple = false;
-	public $value_field = 'value_string';
+    public $_multiple = false;
 
+    public function getParamsView() {
+        return '@worstinme/zoo/elements/video/params';
+    }
 }

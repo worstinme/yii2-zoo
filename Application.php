@@ -7,6 +7,7 @@ use worstinme\zoo\elements\BaseElement;
 use worstinme\zoo\models\ApplicationsContent;
 use worstinme\zoo\models\Items;
 use Yii;
+use yii\db\Query;
 
 /**
  * Class Application
@@ -119,11 +120,9 @@ class Application extends \yii\base\Component
     {
         return ['/' . $this->id . '/index', 'lang' => $lang === null ? $this->lang : $lang];
     }
-    /*
-    перетащил из предыдущей модели
+
     public function getSchedules() {
         return (new Query())->select(['id','mo','tu','we','th','fr','sa','su','start_at','finish_at'])
             ->from('{{%schedule}}')->indexBy('id')->all();
-    } */
-
+    }
 }

@@ -14,12 +14,11 @@ class ActiveForm extends \yii\widgets\ActiveForm
     {
         if (!isset($this->options['class'])) {
             $this->options['class'] = 'uk-form';
-        }
-        else {
+        } else {
             $this->options['class'] .= ' uk-form';
         }
-
-        parent::run();
+        return parent::run();
     }
+
     public $fieldClass = 'worstinme\zoo\widgets\ActiveField';
 }

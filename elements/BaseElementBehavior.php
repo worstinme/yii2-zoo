@@ -33,14 +33,15 @@ class BaseElementBehavior extends \yii\base\Behavior
 
     protected $_elements;
 
-    public function getMultiple() {
+    public function getMultiple()
+    {
         return false;
     }
 
     public function init()
     {
         if ($this->attribute === null) {
-            throw new InvalidConfigException('Attribute is required for element behavior ' . self::className());
+            throw new InvalidConfigException('Attribute is required for element behavior '.self::className());
         }
         parent::init();
     }
@@ -63,18 +64,21 @@ class BaseElementBehavior extends \yii\base\Behavior
         }
     }
 
-    public function getScenarios() {
-        return ['default'=>[$this->attribute]];
+    public function getScenarios()
+    {
+        return ['default' => [$this->attribute]];
     }
 
     public function canGetProperty($name, $checkVars = true)
     {
-        return method_exists($this, 'get' . $name) || $name == $this->attribute || $checkVars && property_exists($this, $name);
+        return method_exists($this, 'get'.$name) || $name == $this->attribute || $checkVars && property_exists($this,
+                $name);
     }
 
     public function canSetProperty($name, $checkVars = true)
     {
-        return method_exists($this, 'set' . $name) || $name == $this->attribute || $checkVars && property_exists($this, $name);
+        return method_exists($this, 'set'.$name) || $name == $this->attribute || $checkVars && property_exists($this,
+                $name);
     }
 
     public function getIsRendered()
@@ -121,7 +125,7 @@ class BaseElementBehavior extends \yii\base\Behavior
         }
 
         return $this->json_field ? array_map(function ($e) {
-            return $e ? Json::decode($e) : (array)$e;
+            return $e ? Json::decode($e) : (array) $e;
         }, $this->value) : $this->value;
     }
 
@@ -133,7 +137,7 @@ class BaseElementBehavior extends \yii\base\Behavior
                     return $e ? Json::encode($e) : $e;
                 }, $value) : [];
             } else {
-                $value = Json::encode((array)$value);
+                $value = Json::encode((array) $value);
             }
         }
 
@@ -180,10 +184,12 @@ class BaseElementBehavior extends \yii\base\Behavior
 }";
 
                 return [
-                    [$this->attribute, 'required', 'when' => function ($model) {
-                      //  Yii::warning('Атрибут обязателен '.($this->element->isActiveForModel($model)?'1':'0'));
+                    [
+                        $this->attribute, 'required', 'when' => function ($model) {
+                        //  Yii::warning('Атрибут обязателен '.($this->element->isActiveForModel($model)?'1':'0'));
                         return $this->element->isActiveForModel($model);
-                    }, 'whenClient' => $whenClient]
+                    }, 'whenClient' => $whenClient
+                    ]
                 ];
             }
 
@@ -192,7 +198,8 @@ class BaseElementBehavior extends \yii\base\Behavior
         return [];
     }
 
-    public function getIsAttributeActive() {
+    public function getIsAttributeActive()
+    {
 
         if (in_array($this->attribute, $this->owner->activeAttributes())) {
             return true;
@@ -212,77 +219,92 @@ class BaseElementBehavior extends \yii\base\Behavior
         ];
     }
 
-    public function afterInsert() {
+    public function afterInsert()
+    {
         return $this->afterSave(true);
     }
 
-    public function afterUpdate() {
+    public function afterUpdate()
+    {
         return $this->afterSave(false);
     }
 
     public function afterSave($insert)
     {
         if ($this->isAttributeActive && !$this->owner->hasAttribute($this->ownerAttribute) && !$this->owner->hasAttribute($this->ownColumn)) {
+            $this->saveElement();
+        }
+    }
 
-            $this->getElements();
+    /**
+     * Сохранение значения элемента в базу
+     * @param  null  $values
+     */
+    protected function saveElement($values = null)
+    {
+        $this->getElements();
 
-            $values = (array)$this->getValue();
+        if ($values === null) {
+            $values = $this->getValue();
+        }
 
-            if (count($values)) {
+        $values = (array) $values;
 
-                foreach ($values as $key => $value) {
+        if (count($values)) {
 
-                    if ($value !== null && $value !== '') {
+            foreach ($values as $key => $value) {
 
-                        if ($this->json_field) {
-                            $value =  Json::encode((array)$value);
-                        }
+                if ($value !== null && $value !== '') {
 
-                        if (isset($this->_elements[$key])) {
-
-                            //обновим данные имеющихся элементов
-                            $this->_elements[$key]->{$this->field} = $value;
-                            $this->_elements[$key]->save();
-
-
-                        } else {
-                            //или создадим новые элементы
-                            $element = new ItemsElements([
-                                'item_id' => $this->owner->id,
-                                'element' => $this->element->name,
-                            ]);
-
-                            $element->{$this->field} = $value;
-                            $element->save();
-
-                            $this->_elements[] = $element;
-                        }
-
-                    } elseif (isset($this->_elements[$key])) {
-                        // удалим пустой элемент если он есть
-                        $this->_elements[$key]->delete();
-                        unset($this->_elements[$key]);
+                    if ($this->json_field) {
+                        $value = Json::encode((array) $value);
                     }
-                }
 
-                if ($key < count($this->_elements)) {
-                    //удаление лишних элементов
+                    if (isset($this->_elements[$key])) {
+
+                        //обновим данные имеющихся элементов
+                        $this->_elements[$key]->{$this->field} = $value;
+                        $this->_elements[$key]->save();
+
+
+                    } else {
+                        //или создадим новые элементы
+                        $element = new ItemsElements([
+                            'item_id' => $this->owner->id,
+                            'element' => $this->element->name,
+                        ]);
+
+                        $element->{$this->field} = $value;
+                        $element->save();
+
+                        $this->_elements[] = $element;
+                    }
+
+                } elseif (isset($this->_elements[$key])) {
+                    // удалим пустой элемент если он есть
+                    $this->_elements[$key]->delete();
+                    unset($this->_elements[$key]);
+                }
+            }
+
+            if ($key < count($this->_elements)) {
+                //удаление лишних элементов
+                $key++;
+                while (isset($this->_elements[$key])) {
+                    $this->_elements[$key]->delete();
+                    unset($this->_elements[$key]);
                     $key++;
-                    while (isset($this->_elements[$key])) {
-                        $this->_elements[$key]->delete();
-                        unset($this->_elements[$key]);
-                        $key++;
-                    }
                 }
+            }
 
-            } else if (count($this->_elements)) {
+        } else {
+            if (count($this->_elements)) {
                 //удаление лишних элементов
                 foreach ($this->_elements as $key => $element) {
                     $element->delete();
                     unset($this->_elements[$key]);
                 }
             }
-
         }
 
     }
@@ -302,7 +324,8 @@ class BaseElementBehavior extends \yii\base\Behavior
         }
     }
 
-    public function afterValidate() {
+    public function afterValidate()
+    {
         return true;
     }
 
@@ -316,9 +339,10 @@ class BaseElementBehavior extends \yii\base\Behavior
     {
         if ($this->_elements === null) {
             $attribute = $this->ownerAttribute;
-            $this->_elements = array_values(array_filter($this->owner->itemsElements, function ($element) use ($attribute) {
-                return $element->element == $attribute;
-            }));
+            $this->_elements = array_values(array_filter($this->owner->itemsElements,
+                function ($element) use ($attribute) {
+                    return $element->element == $attribute;
+                }));
         }
         return $this->_elements;
     }
