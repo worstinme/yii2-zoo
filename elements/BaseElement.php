@@ -27,6 +27,9 @@ use yii\helpers\ArrayHelper;
  * @property string $related
  * @property array $paramsArray
  * @property Application $app
+ *
+ * @property string $namespace
+ * @property string $formView
  */
 class BaseElement extends \yii\db\ActiveRecord
 {
@@ -289,6 +292,15 @@ class BaseElement extends \yii\db\ActiveRecord
 
     public function getIsAvailable() {
         return true;
+    }
+
+    public function getNamespace() {
+        $class = new \ReflectionClass($this);
+        return $class->getNamespaceName();
+    }
+
+    public function getFormView() {
+        return '@'.str_replace("\\","/", $this->namespace).'/form.php';
     }
 
 }

@@ -67,7 +67,8 @@ class ActiveField extends \yii\widgets\ActiveField
             ];
             $this->options = ArrayHelper::merge($this->options, $opts);
 
-            $this->parts['{hidden}'] = Html::activeHiddenInput($this->model, $element->attributeName, ['value' => '', 'class' => 'caegories-active', 'disabled' => $show]);
+            $this->parts['{hidden}'] = Html::activeHiddenInput($this->model, $element->attributeName,
+                ['value' => '', 'class' => 'caegories-active', 'disabled' => $show]);
 
         }
 
@@ -75,12 +76,12 @@ class ActiveField extends \yii\widgets\ActiveField
         $this->adjustLabelFor($options);
 
         $element_class = $this->attribute;
-        $this->options['class'] .= ' ' . $element_class;
+        $this->options['class'] .= ' '.$element_class;
 
         if (is_a($element, Element::className())) {
-            $viewFile = '@worstinme/zoo/elements/system/' . $element->type . '/form.php';
+            $viewFile = '@worstinme/zoo/elements/system/'.$element->type.'/form.php';
         } else {
-            $viewFile = '@worstinme/zoo/elements/' . $element->type . '/form.php';
+            $viewFile = $element->formView;
         }
 
         if ($element->hint) {

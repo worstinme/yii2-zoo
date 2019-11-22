@@ -24,8 +24,7 @@ class Items extends \yii\db\ActiveRecord
     public function regBehaviors()
     {
         foreach ($this->app->elements as $element) {
-            $class = new \ReflectionClass($element);
-            $behavior_class = $class->getNamespaceName() . '\Behavior';
+            $behavior_class = $element->namespace . '\Behavior';
             $this->attachBehavior($element->name, [
                 'class' => $behavior_class::className(),
                 'attribute' => $element->attributeName,
