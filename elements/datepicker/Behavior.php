@@ -20,12 +20,12 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     public function getValue()
     {
         $value = parent::getValue();
-        return Yii::$app->formatter->asDate($value == null ? time() : $value, 'php:Y-m-d');
+        return Yii::$app->formatter->asDate($value ?? time(), 'php:Y-m-d');
     }
 
     public function setValue($value)
     {
-        return parent::setValue(strtotime($value));
+        return parent::setValue(Yii::$app->formatter->asTimestamp($value));
     }
 
     protected function saveElement($values = null)

@@ -18,6 +18,6 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
         return true;
     }
 
-    public $value_field = 'value_int';
+    public $field = 'value_int';
     
 }
