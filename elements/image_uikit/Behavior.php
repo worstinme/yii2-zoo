@@ -73,8 +73,6 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
                                 unset($images[$key]);
                             }
 
-                        } else {
-                            unset($images[$key]);
                         }
                     }
                 }
