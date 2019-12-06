@@ -31,6 +31,9 @@ class Application extends \yii\base\Component
     public $title;
     public $description = 'worstinme\zoo\Application';
 
+    /** @var string Model class **/
+    public $itemClass = 'worstinme\zoo\models\Items';
+
     /** @var array url component config merged with ZOO component config */
     public $urlRuleComponent = [
 

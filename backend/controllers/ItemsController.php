@@ -160,8 +160,11 @@ class ItemsController extends Controller
 
         $app = $this->getApp($app);
 
-        if ($id === null || ($model = Items::findOne(["id" => $id])) === null) {
-            $model = new Items([
+        $Items = $app->itemClass;
+        // $Items = 'worstinme\zoo\backend\models\Items';
+
+        if ($id === null || ($model = $Items::findOne(["id" => $id])) === null) {
+            $model = new $Items([
                 'app_id' => $this->app->id,
                 'state'=>1,
             ]);
@@ -173,6 +176,7 @@ class ItemsController extends Controller
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
             $model->load(Yii::$app->request->post());
+
 
             if ($model->validate() || true) {
 
