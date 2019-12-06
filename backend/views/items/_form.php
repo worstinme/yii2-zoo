@@ -1,13 +1,13 @@
 <?php
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\backend\models\BackendItems;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use worstinme\zoo\widgets\ActiveForm;
 
-/** @var $model Items */
+/** @var $model BackendItems */
 
-$items = ArrayHelper::map(Items::find()
+$items = ArrayHelper::map(BackendItems::find()
     ->where(['app_id' => $model->app_id])
     ->andFilterWhere(['<>', 'id', $model->id])
     ->orderBy('lang, name')

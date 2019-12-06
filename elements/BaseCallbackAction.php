@@ -9,7 +9,7 @@
 namespace worstinme\zoo\elements;
 
 use Yii;
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\backend\models\BackendItems;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
 use yii\web\NotFoundHttpException;
@@ -35,7 +35,7 @@ class BaseCallbackAction extends Action
     }
 
     public function findModel($model_id) {
-        return Items::findOne($model_id);
+        return BackendItems::findOne($model_id);
     }
 
 }

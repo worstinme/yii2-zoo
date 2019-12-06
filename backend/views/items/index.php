@@ -46,8 +46,8 @@ $columns = array_merge([
         'label' => '',
         'format' => 'raw',
         'value' => function ($model, $index, $widget) {
-            return Html::a('<i uk-icon="icon: check" style="color: darkgreen"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'Items[state]':0},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-" . $model->id . ($model->state ? null : " uk-hidden")]) .
-                Html::a('<i uk-icon="icon: check" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'Items[state]':1},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-" . $model->id . ($model->state ? " uk-hidden" : null)]);
+            return Html::a('<i uk-icon="icon: check" style="color: darkgreen"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'BackendItems[state]':0},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-" . $model->id . ($model->state ? null : " uk-hidden")]) .
+                Html::a('<i uk-icon="icon: check" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'BackendItems[state]':1},success: function(data){ if(data.success) { $('.state-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "state-button-" . $model->id . ($model->state ? " uk-hidden" : null)]);
         },
         'headerOptions' => ['class' => 'uk-text-center'],
         'contentOptions' => ['class' => 'uk-text-center'],
@@ -58,8 +58,8 @@ $columns = array_merge([
         'label' => '',
         'format' => 'raw',
         'value' => function ($model, $index, $widget) {
-            return Html::a('<i uk-icon="icon: star" style="color: gold"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'Items[flag]':0},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-" . $model->id . ($model->flag ? null : " uk-hidden")]) .
-                Html::a('<i uk-icon="icon: star" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'Items[flag]':1},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-" . $model->id . ($model->flag ? " uk-hidden" : null)]);
+            return Html::a('<i uk-icon="icon: star" style="color: gold"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'BackendItems[flag]':0},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-" . $model->id . ($model->flag ? null : " uk-hidden")]) .
+                Html::a('<i uk-icon="icon: star" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'BackendItems[flag]':1},success: function(data){ if(data.success) { $('.flag-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "flag-button-" . $model->id . ($model->flag ? " uk-hidden" : null)]);
         },
         'headerOptions' => ['class' => 'uk-text-center'],
         'contentOptions' => ['class' => 'uk-text-center'],
@@ -70,8 +70,8 @@ $columns = array_merge([
         'label' => '',
         'format' => 'raw',
         'value' => function ($model, $index, $widget) {
-            return Html::a('<i uk-icon="icon: bolt" style="color: green"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'Items[bolt]':0},success: function(data){ if(data.success) { $('.bolt-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "bolt-button-" . $model->id . ($model->bolt ? null : " uk-hidden")]) .
-                Html::a('<i uk-icon="icon: bolt" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'Items[bolt]':1},success: function(data){ if(data.success) { $('.bolt-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "bolt-button-" . $model->id . ($model->bolt ? " uk-hidden" : null)]);
+            return Html::a('<i uk-icon="icon: bolt" style="color: green"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'BackendItems[bolt]':0},success: function(data){ if(data.success) { $('.bolt-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "bolt-button-" . $model->id . ($model->bolt ? null : " uk-hidden")]) .
+                Html::a('<i uk-icon="icon: bolt" style="color: #ccc"></i>', '#', ['onClick' => "var link=$(this);$.ajax({url:'" . \yii\helpers\Url::to(['create', 'app' => $model->app_id, 'id' => $model->id]) . "',type:'POST',data: {'BackendItems[bolt]':1},success: function(data){ if(data.success) { $('.bolt-button-$model->id').toggleClass('uk-hidden'); } }})", 'class' => "bolt-button-" . $model->id . ($model->bolt ? " uk-hidden" : null)]);
         },
         'headerOptions' => ['class' => 'uk-text-center'],
         'contentOptions' => ['class' => 'uk-text-center'],
@@ -145,6 +145,5 @@ $columns = array_merge([
 
 
 
-       
-            
-       
+
+

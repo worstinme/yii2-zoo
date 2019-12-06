@@ -23,6 +23,9 @@ class Component extends \yii\base\Component implements BootstrapInterface
     /** @var boolean load backend module? */
     public $backend = false;
 
+    /** @var array options for backend module class */
+    public $backendModuleOptions = [];
+
     /** @var array loaded applications objects */
     public $applications = [];
 
@@ -181,9 +184,9 @@ class Component extends \yii\base\Component implements BootstrapInterface
 
             $app->urlManager->addRules([$rule], false);
 
-            $app->setModule('zoo', [
+            $app->setModule('zoo', ArrayHelper::merge([
                 'class' => Module::className(),
-            ]);
+            ], $this->backendModuleOptions));
 
             if (!isset($app->get('i18n')->translations['zoo*'])) {
                 $app->get('i18n')->translations['zoo*'] = [

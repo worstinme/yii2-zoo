@@ -2,7 +2,7 @@
 
 namespace worstinme\zoo\elements\image_uikit;
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\backend\models\BackendItems;
 use worstinme\zoo\helpers\ImageHelper;
 use Yii;
 use worstinme\zoo\elements\BaseCallbackAction;
@@ -15,7 +15,7 @@ class CallbackAction extends BaseCallbackAction
     public function run($app, $model_id = null, $element, $act)
     {
         if (($model = $this->findModel($model_id)) === null) {
-            $model = new Items(['app_id' => $app]);
+            $model = new BackendItems(['app_id' => $app]);
             $model->regBehaviors();
         }
 

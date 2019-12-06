@@ -35,6 +35,9 @@ class Controller extends \yii\web\Controller
         ];
     }
 
+    /**
+     * @return Application
+     */
     public function getApp()
     {
         return Yii::$app->zoo->getApplication(Yii::$app->request->get('app'));

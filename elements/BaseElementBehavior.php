@@ -2,7 +2,7 @@
 
 namespace worstinme\zoo\elements;
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\backend\models\BackendItems;
 use worstinme\zoo\backend\models\ItemsElements;
 use Yii;
 use yii\base\InvalidConfigException;
@@ -14,7 +14,7 @@ use yii\helpers\Json;
 /**
  * @property array $scenarios
  * @property bool $isAttributeActive
- * @property Items $owner
+ * @property BackendItems $owner
  * @property BaseElement $element
  * @property string $ownerAttribute наименование атрибута без префикса
  * @property string $attribute наименование атрибута

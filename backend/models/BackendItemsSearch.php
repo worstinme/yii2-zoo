@@ -9,9 +9,9 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 
 /**
- * ItemsSearch represents the model behind the search form about `worstinme\zoo\models\Items`.
+ * BackendItemsSearch represents the model behind the search form about `worstinme\zoo\models\BackendItems`.
  */
-class ItemsSearch extends Items
+class BackendItemsSearch extends BackendItems
 {
 
     public $search;
@@ -54,7 +54,7 @@ class ItemsSearch extends Items
 
     public function search($params)
     {
-        
+
         $this->load($params);
 
         $this->query = parent::find()
@@ -73,7 +73,7 @@ class ItemsSearch extends Items
         $query->orderBy('created_at DESC');
 
         return $dataProvider = new ActiveDataProvider([
-            'query' => $query->groupBy(Items::tablename().'.id'),
+            'query' => $query->groupBy(BackendItems::tablename().'.id'),
             'pagination' => [
                 'pageSize' => Yii::$app->request->get('per-page',30),
             ],
@@ -85,16 +85,16 @@ class ItemsSearch extends Items
         $this->load($params);
 
         if ($this->withoutCategory) {
-            $query = Items::find()->select(Items::tablename().'.id')->where([Items::tablename().'.app_id' => $this->app_id ]);
-            $query->andWhere(Items::tablename().'.id NOT IN (SELECT DISTINCT item_id FROM {{%items_categories}} WHERE category_id > 0)');
+            $query = BackendItems::find()->select(BackendItems::tablename().'.id')->where([BackendItems::tablename().'.app_id' => $this->app_id ]);
+            $query->andWhere(BackendItems::tablename().'.id NOT IN (SELECT DISTINCT item_id FROM {{%items_categories}} WHERE category_id > 0)');
         }
         elseif (!empty($this->category) && count($this->category)) {
-            $query = Items::find()->select(Items::tablename().'.id');
-            $query->leftJoin(['category'=>'{{%items_categories}}'], "category.item_id = ".Items::tablename().".id");
+            $query = BackendItems::find()->select(BackendItems::tablename().'.id');
+            $query->leftJoin(['category'=>'{{%items_categories}}'], "category.item_id = ".BackendItems::tablename().".id");
             $query->andFilterWhere(['category.category_id'=>$this->category]);
         }
         else {
-            $query = Items::find()->select(Items::tablename().'.id')->where([Items::tablename().'.app_id' => $this->app_id ]);
+            $query = BackendItems::find()->select(BackendItems::tablename().'.id')->where([BackendItems::tablename().'.app_id' => $this->app_id ]);
         }
 
         foreach ($this->elements as $element) {
@@ -102,19 +102,19 @@ class ItemsSearch extends Items
             $e = $element->name;
 
             if (!in_array($e, $this->attributes) && $element->filter) {
-                
+
                 if ((!is_array($this->$e) && $this->$e !== null) || (is_array($this->$e) && count($this->$e) > 0)) {
 
-                    $query->leftJoin([$e=>'{{%items_elements}}'], $e.".item_id = ".Items::tablename().".id AND ".$e.".element = '".$e."'");
+                    $query->leftJoin([$e=>'{{%items_elements}}'], $e.".item_id = ".BackendItems::tablename().".id AND ".$e.".element = '".$e."'");
                     $query->andFilterWhere([$e.'.value_string'=>$this->$e]);
                 }
 
             }
         }
 
-        $query->andFilterWhere(['LIKE',Items::tablename().'.name',$this->search]);
+        $query->andFilterWhere(['LIKE',BackendItems::tablename().'.name',$this->search]);
 
-        return $query->groupBy(Items::tablename().'.id')->column();
+        return $query->groupBy(BackendItems::tablename().'.id')->column();
     }
 
     public function formName()

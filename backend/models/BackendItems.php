@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use yii\helpers\Json;
 use yii\behaviors\TimestampBehavior;
 
-class Items extends \worstinme\zoo\models\Items
+class BackendItems extends \worstinme\zoo\models\Items
 {
     public function behaviors()
     {

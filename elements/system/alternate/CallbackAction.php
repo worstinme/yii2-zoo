@@ -2,7 +2,7 @@
 
 namespace worstinme\zoo\elements\system\alternate;
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\backend\models\BackendItems;
 use Yii;
 use worstinme\zoo\elements\BaseCallbackAction;
 use yii\helpers\ArrayHelper;
@@ -13,13 +13,13 @@ class CallbackAction extends BaseCallbackAction
     {
         $lang = Yii::$app->request->post('lang');
 
-        $items = Items::find()
-            ->where([Items::tableName() . '.app_id' => $app])
-            ->andWhere(['not in', Items::tableName() . '.lang', [$lang]])
+        $items = BackendItems::find()
+            ->where([BackendItems::tableName() . '.app_id' => $app])
+            ->andWhere(['not in', BackendItems::tableName() . '.lang', [$lang]])
             ->all();
 
         return ArrayHelper::toArray($items, [
-            'worstinme\zoo\backend\models\Items' => [
+            'worstinme\zoo\backend\models\BackendItems' => [
                 'id',
                 'text'=>function($item) {
                     return $item->name.' / '.$item->lang;

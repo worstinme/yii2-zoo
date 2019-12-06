@@ -18,7 +18,7 @@ foreach ($searchModel->elements as $element) {
 		if ($element->admin_filter) {
 			$elements[$element->name] = $element->label;
 		}
-		
+
 	}
 }
 
@@ -35,7 +35,7 @@ if ($filter['element'] == 'parsed_category') {
 	$variants = [];
 
 	foreach ($categories as $value) {
-	  	
+
 	  	$category = ParserCategories::find()->where(['source_id'=>$value])->one();
 
 	  	$cat_id = $value;
@@ -65,35 +65,35 @@ else {
 	    ->where(['ie.element'=>$filter['element'],'i.app_id'=>Yii::$app->controller->app->id])
 	    ->groupBy('value_string')
 	    ->orderBy('count(item_id) DESC')
-	    ->column() : []; 
+	    ->column() : [];
 
-	$variants = ArrayHelper::index($variants, function ($element) {return $element;});  
+	$variants = ArrayHelper::index($variants, function ($element) {return $element;});
 
 /*	$variants = [];
 
 	if ($filter['element'] !== null) {
-	
+
 		$varQuery = clone $searchModel->query;
 
 		$attribute_sq = $filter['element'].'.value_string';
 
-		$j = false; if(count($varQuery->join) > 0) foreach ($varQuery->join as $join)  if (isset($join[1][$element->name])) $j = true;  
+		$j = false; if(count($varQuery->join) > 0) foreach ($varQuery->join as $join)  if (isset($join[1][$element->name])) $j = true;
 
-		if (!$j) $varQuery->leftJoin([$filter['element']=>'{{%items_elements}}'], $filter['element'].".item_id = a.id AND ".$filter['element'].".element = '".$filter['element']."'"); 
+		if (!$j) $varQuery->leftJoin([$filter['element']=>'{{%items_elements}}'], $filter['element'].".item_id = a.id AND ".$filter['element'].".element = '".$filter['element']."'");
 
 		$variants = $varQuery->select($attribute_sq)
 		                ->groupBy($attribute_sq)
 		                ->andWhere($attribute_sq.' IS NOT NULL')
 		                ->orderBY('count('.$attribute_sq.') DESC')
-		                ->column(); 
+		                ->column();
 
-		$variants = ArrayHelper::index($variants, function ($element) {return $element;}); 
+		$variants = ArrayHelper::index($variants, function ($element) {return $element;});
 
 	} */
 }
 
 
-$search_params = Yii::$app->request->get('ItemsSearch',[]);
+$search_params = Yii::$app->request->get('BackendItemsSearch',[]);
 
 ?>
 
@@ -109,7 +109,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 
 	</div>
 
-	
+
 
 	<?php $form = ActiveForm::begin([
 		'action'=> Url::current(),
@@ -133,17 +133,17 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 					<?php foreach ($value as $v): ?>
 
 						<?php if ($key == 'parsed_category'): ?>
-							
+
 							<?php $pc = ParserCategories::find()->where(['source_id'=>$v])->one() ?>
 
 							<span class="uk-badge uk-badge-notification uk-badge-success">
 								<b><?=$searchModel->elements[$key]->label?></b> : <?=$pc !== null? $pc->name : $v?>
 								<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$v?>">
 									<i class="uk-icon-close"></i></a>
-							</span>	
+							</span>
 
 						<?php else: ?>
-							
+
 						<span class="uk-badge uk-badge-notification uk-badge-success">
 							<b><?=$searchModel->elements[$key]->label?></b> : <?=$v?>
 							<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$v?>">
@@ -164,7 +164,7 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 								<b><?=$searchModel->elements[$key]->label?></b> : <?=$pc !== null? $pc->name : $value?>
 								<a href="#" style="color:#fff" data-name="ItemsSearch[<?=$key?>]" data-value="<?=$value?>">
 									<i class="uk-icon-close"></i></a>
-							</span>	
+							</span>
 
 					<?php else: ?>
 
@@ -182,22 +182,22 @@ $search_params = Yii::$app->request->get('ItemsSearch',[]);
 		</div>
 	<?php endif; ?>
 
-	
+
 
 	<?php if (count($variants)): ?>
-	
-	<div class="uk-grid uk-grid-collapse uk-margin-top">	
-		
+
+	<div class="uk-grid uk-grid-collapse uk-margin-top">
+
 	    <div class="uk-width-5-10">
 			<?= Html::activeDropDownList($searchModel, $filter['element'].'[]', $variants, ['class' => 'uk-width-1-1 ']); ?>
 		</div>
-		
+
 		<div>
 			<?= Html::submitButton('Добавить', ['class' => 'uk-width-1-1 uk-button uk-button-success']) ?>
 		</div>
-	    
-	 </div> 
-	
+
+	 </div>
+
 	<?php endif ?>
 
 	<?php ActiveForm::end(); ?>

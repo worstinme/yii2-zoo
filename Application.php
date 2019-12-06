@@ -21,6 +21,9 @@ class Application extends \yii\base\Component
     /** @var string Yii2 application ID */
     public $app_id;
 
+    /** @var array List of custom models classes */
+    public $modelMap = [];
+
     public $baseUrl;
     public $basePath;
 
@@ -124,5 +127,14 @@ class Application extends \yii\base\Component
     public function getSchedules() {
         return (new Query())->select(['id','mo','tu','we','th','fr','sa','su','start_at','finish_at'])
             ->from('{{%schedule}}')->indexBy('id')->all();
+    }
+
+    /**
+     * @param $class
+     * @param $defaultModelMap
+     * @return string
+     */
+    public function modelClass($class, $defaultModelMap) {
+        return $this->modelMap[$class] ?? $defaultModelMap[$class];
     }
 }

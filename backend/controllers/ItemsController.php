@@ -2,19 +2,18 @@
 
 namespace worstinme\zoo\backend\controllers;
 
+use worstinme\zoo\Application;
 use worstinme\zoo\backend\models\Categories;
 use worstinme\zoo\elements\system\Element;
 use worstinme\zoo\widgets\ActiveForm;
 use Yii;
-use worstinme\zoo\backend\models\Items;
-use worstinme\zoo\backend\models\ItemsSearch;
 use worstinme\zoo\helpers\Inflector;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 
 /**
- * ItemsController implements the CRUD actions for Items model.
+ * ItemsController implements the CRUD actions for BackendItems model.
  */
 class ItemsController extends Controller
 {
@@ -22,11 +21,12 @@ class ItemsController extends Controller
     {
         $request = Yii::$app->request;
 
-        $searchModel = new ItemsSearch([
+        $BackendItemsSearch =  $this->app->modelClass('BackendItemsSearch',$this->module->modelMap);
+        $searchModel = new $BackendItemsSearch([
             'app_id' => $this->app->id,
         ]);
 
-        $searchModel->regBehaviors();
+        $searchModel->regBehaviors( );
 
         \Yii::beginProfile('Categories lists', 'zoo/backend');
 
@@ -78,7 +78,6 @@ class ItemsController extends Controller
                                 ->execute();
 
                         }
-
 
                     }
 
@@ -160,8 +159,10 @@ class ItemsController extends Controller
 
         $app = $this->getApp($app);
 
-        if ($id === null || ($model = Items::findOne(["id" => $id])) === null) {
-            $model = new Items([
+        $BackendItems =  $this->app->modelClass('BackendItems',$this->module->modelMap);
+
+        if ($id === null || ($model = $BackendItems::findOne(["id" => $id])) === null) {
+            $model = new $BackendItems([
                 'app_id' => $this->app->id,
                 'state'=>1,
             ]);
@@ -300,7 +301,9 @@ class ItemsController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Items::find()->where(['id' => $id])->one()) !== null) {
+        $BackendItems =  $this->app->modelClass('BackendItems',$this->module->modelMap);
+
+        if (($model = $BackendItems::find()->where(['id' => $id])->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

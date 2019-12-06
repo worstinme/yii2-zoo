@@ -3,7 +3,7 @@
 namespace worstinme\zoo\elements;
 
 use worstinme\zoo\Application;
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\backend\models\BackendItems;
 use worstinme\zoo\backend\models\ItemsElements;
 use Yii;
 use yii\helpers\Inflector;
@@ -189,12 +189,12 @@ class BaseElement extends \yii\db\ActiveRecord
 
         if ($this->itemsStore !== null && array_key_exists('own_column', $changedAttributes) && $this->own_column != $changedAttributes['own_column']) {
 
-            $table = Yii::$app->db->schema->getTableSchema(Items::tableName());
+            $table = Yii::$app->db->schema->getTableSchema(BackendItems::tableName());
             $name = $this->prepareStoreName($this->name);
 
             if ($this->own_column) {
                 if (!isset($table->columns[$name])) {
-                    Yii::$app->db->createCommand()->addColumn(Items::tableName(), $name, $this->itemsStore)->execute();
+                    Yii::$app->db->createCommand()->addColumn(BackendItems::tableName(), $name, $this->itemsStore)->execute();
                     $elements = ItemsElements::find()
                         ->select(['ie.item_id', 'ie.' . $this->elementsStore])
                         ->from(['ie' => ItemsElements::tableName()])
@@ -202,16 +202,16 @@ class BaseElement extends \yii\db\ActiveRecord
                         ->where(['element' => $this->name, 'e.app_id' => $this->app_id])
                         ->all();
                     foreach ($elements as $element) {
-                        Yii::$app->db->createCommand()->update(Items::tableName(), [$name => $element[$this->elementsStore]], ['id' => $element['item_id']])->execute();
+                        Yii::$app->db->createCommand()->update(BackendItems::tableName(), [$name => $element[$this->elementsStore]], ['id' => $element['item_id']])->execute();
                     }
-                    Yii::$app->db->createCommand()->createIndex('fx-' . $name, Items::tableName(), $name)->execute();
+                    Yii::$app->db->createCommand()->createIndex('fx-' . $name, BackendItems::tableName(), $name)->execute();
                     Yii::$app->db->createCommand()->delete(ItemsElements::tableName(), ['element' => $this->name])->execute();
                 }
             } else {
 
                 if (isset($table->columns[$name])) {
 
-                    $items = Items::find()
+                    $items = BackendItems::find()
                         ->select(['id', $name])
                         ->where(['app_id' => $this->app_id])
                         ->asArray()
@@ -227,7 +227,7 @@ class BaseElement extends \yii\db\ActiveRecord
 
                     }
 
-                    Yii::$app->db->createCommand()->dropColumn(Items::tableName(), $name)->execute();
+                    Yii::$app->db->createCommand()->dropColumn(BackendItems::tableName(), $name)->execute();
 
                 }
             }
@@ -257,10 +257,10 @@ class BaseElement extends \yii\db\ActiveRecord
     {
         parent::afterDelete();
         if ($this->itemsStore !== null && $this->own_column) {
-            $table = Yii::$app->db->schema->getTableSchema(Items::tableName());
+            $table = Yii::$app->db->schema->getTableSchema(BackendItems::tableName());
             $name = $this->prepareStoreName($this->name);
             if (isset($table->columns[$name])) {
-                Yii::$app->db->createCommand()->dropColumn(Items::tableName(), $name)->execute();
+                Yii::$app->db->createCommand()->dropColumn(BackendItems::tableName(), $name)->execute();
             }
         }
         Yii::$app->db->createCommand()->delete('{{%elements_categories}}', ['element_id' => $this->id])->execute();

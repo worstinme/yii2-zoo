@@ -2,7 +2,7 @@
 
 namespace worstinme\zoo\elements\system\category;
 
-use worstinme\zoo\backend\models\Items;
+use worstinme\zoo\backend\models\BackendItems;
 use Yii;
 use worstinme\zoo\elements\BaseCallbackAction;
 use yii\helpers\ArrayHelper;

@@ -12,6 +12,19 @@ use Yii;
 
 class Module extends \yii\base\Module
 {
+    /** @var array Model's map */
+    public $modelMap = [];
+
+    private $_modelMap = [
+        'BackendItems'             => 'worstinme\zoo\backend\models\BackendItems',
+        'BackendItemsSearch'             => 'worstinme\zoo\backend\models\BackendItemsSearch',
+    ];
+
+    public function __construct($id, $parent = null, $config = [])
+    {
+        $config['modelMap'] = array_merge($this->_modelMap,$this->modelMap);
+        parent::__construct($id, $parent, $config);
+    }
 
     /** @inheritdoc */
     public $controllerNamespace = 'worstinme\zoo\backend\controllers';
