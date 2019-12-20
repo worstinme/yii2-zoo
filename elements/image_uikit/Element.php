@@ -14,12 +14,12 @@ class Element extends \worstinme\zoo\elements\BaseElement
     public function getRules()
     {
         return [
-            [['dir','webroot'], 'string','max'=>255],
-            ['spread','integer'],
-            ['rename','integer'],
-            ['horizontalResizeWidth','integer'],
-            ['verticalResizeWidth','integer'],
-            ['maxFileSize','integer'],
+            [['dir', 'webroot'], 'string', 'max' => 255],
+            ['spread', 'integer'],
+            ['rename', 'integer'],
+            ['horizontalResizeWidth', 'integer'],
+            ['verticalResizeWidth', 'integer'],
+            ['maxFileSize', 'integer'],
         ];
     }
 
@@ -30,31 +30,36 @@ class Element extends \worstinme\zoo\elements\BaseElement
             'webroot' => Yii::t('zoo', 'WEBROOT'),
             'spread' => Yii::t('zoo', 'SPREAD'),
             'rename' => Yii::t('zoo', 'RENAME'),
-            'maxFileSize'=>Yii::t('zoo', 'MAX_FILE_SIZE'),
-            'horizontalResizeWidth'=>Yii::t('zoo', 'HORIZONTAL_RESIZE_WIDTH'),
-            'verticalResizeWidth'=>Yii::t('zoo', 'VERTICAL_RESIZE_WIDTH'),
+            'maxFileSize' => Yii::t('zoo', 'MAX_FILE_SIZE'),
+            'horizontalResizeWidth' => Yii::t('zoo', 'HORIZONTAL_RESIZE_WIDTH'),
+            'verticalResizeWidth' => Yii::t('zoo', 'VERTICAL_RESIZE_WIDTH'),
         ];
     }
 
-    public function getConfigView() {
+    public function getConfigView()
+    {
         return '@worstinme/zoo/elements/image_uikit/_settings';
     }
 
-    public function getDir()
+    public function getUploadDir()
     {
-        return isset($this->paramsArray['dir'])?$this->paramsArray['dir']: ( $this->app->basePath . '/images/' );
+        return Yii::getAlias(rtrim($this->app->basePath, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR. trim($this->dir, "\\/"));
+    }
+
+    public function getDir() {
+        return isset($this->paramsArray['dir']) ? $this->paramsArray['dir'] : 'images';
     }
 
     public function setDir($a)
     {
         $params = $this->paramsArray;
-        $params['dir'] = trim($a,"\\/");
+        $params['dir'] = $a;
         return $this->paramsArray = $params;
     }
 
     public function getMaxFileSize()
     {
-        return isset($this->paramsArray['maxFileSize'])?$this->paramsArray['maxFileSize']:4;
+        return isset($this->paramsArray['maxFileSize']) ? $this->paramsArray['maxFileSize'] : 4;
     }
 
     public function setMaxFileSize($a)
@@ -66,7 +71,7 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public function getRename()
     {
-        return isset($this->paramsArray['rename'])?$this->paramsArray['rename']:0;
+        return isset($this->paramsArray['rename']) ? $this->paramsArray['rename'] : 0;
     }
 
     public function setRename($a)
@@ -78,7 +83,7 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public function getHorizontalResizeWidth()
     {
-        return isset($this->paramsArray['horizontalResizeWidth'])?$this->paramsArray['horizontalResizeWidth']:0;
+        return isset($this->paramsArray['horizontalResizeWidth']) ? $this->paramsArray['horizontalResizeWidth'] : 0;
     }
 
     public function setHorizontalResizeWidth($a)
@@ -90,7 +95,7 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public function getVerticalResizeWidth()
     {
-        return isset($this->paramsArray['verticalResizeWidth'])?$this->paramsArray['verticalResizeWidth']:0;
+        return isset($this->paramsArray['verticalResizeWidth']) ? $this->paramsArray['verticalResizeWidth'] : 0;
     }
 
     public function setVerticalResizeWidth($a)
@@ -102,7 +107,7 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public function getSpread()
     {
-        return isset($this->paramsArray['spread'])?$this->paramsArray['spread']:1;
+        return isset($this->paramsArray['spread']) ? $this->paramsArray['spread'] : 1;
     }
 
     public function setSpread($a)
@@ -114,13 +119,13 @@ class Element extends \worstinme\zoo\elements\BaseElement
 
     public function getWebroot()
     {
-        return isset($this->paramsArray['webroot'])?$this->paramsArray['webroot'] : $this->app->basePath;
+        return isset($this->paramsArray['webroot']) ? $this->paramsArray['webroot'] : $this->app->basePath;
     }
 
     public function setWebroot($a)
     {
         $params = $this->paramsArray;
-        $params['webroot'] = trim($a,"\\/");
+        $params['webroot'] = trim($a, "\\/");
         return $this->paramsArray = $params;
     }
 

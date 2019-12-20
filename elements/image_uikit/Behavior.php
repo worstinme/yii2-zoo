@@ -52,22 +52,24 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
                     if ($image['tmp'] == 1) {
 
-                        if (is_file(Yii::getAlias($image['source']))) {
+                        $source = Yii::getAlias($image['source']);
 
-                            $pathInfo = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
-                            $newName = pathinfo(Yii::getAlias($image['source']), PATHINFO_FILENAME);
-                            $newExtension = strtolower(pathinfo(Yii::getAlias($image['source']), PATHINFO_EXTENSION));
+                        if (is_file($source)) {
 
-                            $dir = $this->element->spread ? ($this->element->dir . DIRECTORY_SEPARATOR . $this->owner->id) : $this->element->dir;
+                            $pathInfo = pathinfo($source, PATHINFO_FILENAME);
+                            $newName = pathinfo($source, PATHINFO_FILENAME);
+                            $newExtension = strtolower(pathinfo($source, PATHINFO_EXTENSION));
 
-                            if (!is_dir(Yii::getAlias($dir))) {
-                                mkdir(Yii::getAlias($dir), 0777, true);
+                            $dir = $this->element->spread ? $this->element->uploadDir . DIRECTORY_SEPARATOR . $this->owner->id : $this->element->uploadDir;
+
+                            if (!is_dir($dir)) {
+                                mkdir($dir, 0757, true);
                             }
 
                             $newFile = $dir . DIRECTORY_SEPARATOR . $newName . '.' . $newExtension;
 
                             if (rename(Yii::getAlias($image['source']), Yii::getAlias($newFile))) {
-                                $image['source'] = str_replace(Yii::getAlias($this->element->webroot), "", Yii::getAlias($newFile));
+                                $image['source'] = str_replace(Yii::getAlias($this->element->webroot), "", $newFile);
                                 $image['tmp'] = 0;
                             } else {
                                 unset($images[$key]);
@@ -87,7 +89,7 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
                     $oldImage = Json::decode($oldImage);
 
-                    $file = Yii::getAlias($oldImage['tmp'] == 1 ? $oldImage['source'] : $this->element->webroot . $oldImage['source']);
+                    $file = Yii::getAlias($oldImage['tmp'] == 1 ? $oldImage['source'] : $this->element->webroot . DIRECTORY_SEPARATOR. ltrim($oldImage['source'],DIRECTORY_SEPARATOR));
 
                     if (!in_array($oldImage['source'], $files) && is_file($file)) {
                         unlink($file);

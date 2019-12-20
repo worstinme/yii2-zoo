@@ -19,12 +19,13 @@ if ($image['tmp']) {
            class="uk-display-block">
             <?= ImageHelper::thumbnailImg($file, 250, 250) ?>
         </a>
-        <i uk-icon="icon: trash" data-remove-image="<?= $image['source'] ?>"></i>
-        <i uk-icon="icon: info" data-edit-caption="<?= $image['caption'] ?>"></i>
-        <i uk-icon="icon: commenting" data-edit-alt="<?= $image['alt'] ?>"></i>
     <?php else: ?>
         <span class="uk-text-danger"><?= Yii::t('zoo', 'FILE_NOT_FOUND') ?></span>
     <?php endif ?>
+
+    <i uk-icon="icon: trash" data-remove-image="<?= $image['source'] ?>"></i>
+    <i uk-icon="icon: info" data-edit-caption="<?= $image['caption'] ?>"></i>
+    <i uk-icon="icon: commenting" data-edit-alt="<?= $image['alt'] ?>"></i>
 
     <?= \yii\helpers\Html::activeHiddenInput($model, $element->attributeName . "[" . $key . "][source]", ['value' => $image['source']]) ?>
     <?= \yii\helpers\Html::activeHiddenInput($model, $element->attributeName . "[" . $key . "][alt]", ['class' => 'alt', 'value' => $image['alt']]) ?>
