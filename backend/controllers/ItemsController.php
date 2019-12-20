@@ -288,7 +288,7 @@ class ItemsController extends Controller
         ];
     }
 
-    public function actionDelete($id)
+    public function actionDelete($id, $app)
     {
         $model = $this->findModel($id);
 

@@ -109,7 +109,7 @@ $columns = array_merge([
         'template' => '{delete}',
         'buttons' => [
             'delete' => function ($url, $model) {
-                return Html::a('<i uk-icon="icon: trash"></i>', $url, [
+                return Html::a('<i uk-icon="icon: trash"></i>', ['delete','id'=>$model->id,'app'=>$model->app_id], [
                     'title' => Yii::t('zoo', 'DELETE'),
                     'data' => [
                         'method' => 'post',

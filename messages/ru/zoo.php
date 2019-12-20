@@ -30,4 +30,5 @@ return [
     'SELECT_FILE'=>'выбрать на диске',
 
     'ITEMS_LANGUAGE'=>'Язык',
+    'ITEM_REMOVED_SUCCESS'=>'Успешно удалено',
 ];
