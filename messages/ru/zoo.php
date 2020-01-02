@@ -24,6 +24,9 @@ return [
     'LABEL_ELEMENT_META_KEYWORDS'=>'Meta Keywords',
     'LABEL_ELEMENT_CATEGORY'=>'Категории страницы и основная категория',
 
+    'LABEL_FLAG'=>'Флаг',
+    'LABEL_STATE'=>'Состояние',
+
     'ELEMENTS_UPDATE_SUCCESS'=>'Элемент успешно обновлён',
 
     'UPLOAD_FILE'=>'Перетащите изображение в эту область или нажмите',

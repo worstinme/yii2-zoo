@@ -54,7 +54,10 @@ class BackendItems extends \worstinme\zoo\models\Items
 
     public function attributeLabels()
     {
-        $labels = [];
+        $labels = [
+          'state' => Yii::t('zoo', 'LABEL_STATE'),
+          'flag' => Yii::t('zoo', 'LABEL_FLAG'),
+        ];
         if ($this->app) {
             foreach ($this->app->elements as $key => $element) {
                 $labels[$key] = $element->label;
