@@ -11,7 +11,6 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
     {
         return [
             [$this->attribute, 'string'],
-            //[$attributes,'required'],
         ];
     }
 
@@ -19,8 +18,10 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
     public function getValue()
     {
-        $value = parent::getValue();
-        return Yii::$app->formatter->asDate($value ?? time(), 'php:Y-m-d');
+        if (!($value = parent::getValue()) && $this->element->defaultCurrentDate) {
+            $value = time();
+        }
+        return $value ? Yii::$app->formatter->asDate($value, 'php:Y-m-d') : null;
     }
 
     public function setValue($value)
