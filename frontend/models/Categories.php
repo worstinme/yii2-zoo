@@ -36,7 +36,7 @@ class Categories extends \worstinme\zoo\models\Categories
         $parent = $this->parentCategory;
         while ($parent !== null) {
             $crumbs[] = ['label' => $parent->name, 'url' => $parent->url];
-            $parent = $parent->parent;
+            $parent = $parent->parentCategory;
         }
         $crumbs[] = ['label' => $this->app->title, 'url' => $this->app->url];
         return array_reverse($crumbs);
