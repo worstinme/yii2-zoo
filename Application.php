@@ -109,9 +109,9 @@ class Application extends \yii\base\Component
         return null;
     }
 
-    public function getCategories()
+    public function getCategories($lang = null)
     {
-        return Categories::find()->where(['app_id' => $this->id]);
+        return Categories::find()->where(['app_id' => $this->id, 'lang' => $lang === null ? $this->lang : $lang]);
     }
 
     public function getContent($lang = null)
