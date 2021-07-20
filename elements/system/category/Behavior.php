@@ -11,12 +11,13 @@ class Behavior extends \worstinme\zoo\elements\BaseElementBehavior
 
     public function rules()
     {
+        $registrar = $this;
         return [
             [$this->attribute, 'each', 'rule' => ['integer']],
             ['parent_category_id', 'integer'],
-            [$this->attribute, function ($attribute, $params, $validator) {
-                if (empty($this->owner->parent_category_id) || !in_array($this->owner->parent_category_id, $this->getValue())) {
-                    $this->owner->addError($attribute, 'PARENT_CATEGORY_REQUIRED');
+            [$this->attribute, function ($attribute, $params, $validator) use ($registrar)  {
+                if (empty($registrar->owner->parent_category_id) || !in_array($registrar->owner->parent_category_id, $registrar->getValue())) {
+                    $registrar->owner->addError($attribute, 'PARENT_CATEGORY_REQUIRED');
                 }
             }, 'skipOnEmpty' => true],
         ];
